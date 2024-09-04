@@ -16,8 +16,9 @@ public class StoreEntity {
     @Column(name = "store_id")
     private Integer storeId;
 
-    @Column(name = "user_id", nullable = false)
-    private String userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
 
     @Column(name = "name", nullable = false)
     private String name;
