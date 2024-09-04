@@ -1,9 +1,14 @@
 package com.scit45.kiminomenyuwa.domain.entity;
 
-import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.NoArgsConstructor;
 
 /**
  * 미니게임에서 메뉴에 대한 별점을 저장하는 엔티티 클래스입니다.

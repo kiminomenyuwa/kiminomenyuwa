@@ -15,10 +15,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FoodCategoryEntity {
 
-    @Id
-    @Column(name = "category_name")
-    private String categoryName;
+	@Id
+	@Column(name = "category_name")
+	private String categoryName;
 
-    @Column(name = "type_id", nullable = false)
-    private Integer typeId;
+	@Column(name = "type_id", nullable = false)
+	private Integer typeId;
 }
