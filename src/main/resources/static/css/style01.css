@@ -1,28 +1,5 @@
 @charset "UTF-8";
 
-.item {
-	font-weight: bold;
-	background-color: violet;
-	padding: 5px 30px 5px 5px;
-}
-
-.inputtext {
-	background-color: LavenderBlush;
-}
-
-.submitbox {
-	text-align: center;
-}
-
-#inputaddress {
-	width: 300px;
-}
-
-.centered {
-	width: fit-content;
-	margin: 0 auto;
-}
-
 table, td, th {
 	border: black, 1px, solid;
 	text-align: center;

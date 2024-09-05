@@ -1,5 +1,8 @@
 package com.scit45.kiminomenyuwa.domain.entity;
 
+import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 

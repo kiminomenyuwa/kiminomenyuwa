@@ -1,4 +1,4 @@
-package com.scit45.kiminomenyuwa.domain.controller;
+package com.scit45.kiminomenyuwa.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.scit45.kiminomenyuwa.domain.dto.UserDTO;
-import com.scit45.kiminomenyuwa.domain.service.UserService;
+import com.scit45.kiminomenyuwa.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
