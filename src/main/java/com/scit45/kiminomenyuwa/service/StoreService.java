@@ -17,6 +17,10 @@ public class StoreService {
 	private final StoreRepository storeRepository;
 	private final UserRepository userRepository;
 
+	/**
+	 * 등록 정보를 받아서 storeRepository에 저장한다
+	 * @param storeRegistrationDTO
+	 */
 	public void saveStore(StoreRegistrationDTO storeRegistrationDTO) {
 
 		StoreEntity storeEntity = convertToEntity(storeRegistrationDTO);
@@ -25,6 +29,11 @@ public class StoreService {
 		storeRepository.save(storeEntity);
 	}
 
+	/**
+	 * dto를 entity로 변경해주는 메소드
+	 * @param storeRegistrationDTO 작성한 가게 등록 정보
+	 * @return 작성한 가게 정보를 entity로 변경된 정보를 리턴
+	 */
 	private StoreEntity convertToEntity(StoreRegistrationDTO storeRegistrationDTO) {
 
 		UserEntity user = userRepository.findById(storeRegistrationDTO.getUserId())

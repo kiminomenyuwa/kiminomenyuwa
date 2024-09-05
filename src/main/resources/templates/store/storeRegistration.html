@@ -11,7 +11,7 @@
 	$(document).ready(function() {
 		$('#submitForm').click(function() {
 			let registration = {
-				userId: $('#userId').val(),
+				userId : $('#userId').val(),
 				name : $('#name').val(),
 				certification : $('#certification').val(),
 				roadNameAddress : $('#roadNameAddress').val(),
@@ -43,6 +43,7 @@
 	<h1>가게 등록</h1>
 	<form id="storeForm">
 		<table>
+			<!-- 현재 아이디는 외래키로 가져오는 것이 아닌 임의로 user를 한 명 생성 후 직접 넣어야 돌아감 -->
 			<tr>
 				<td><label for="userId">아이디</label></td>
 				<td><input type="text" id="userId" name="userId" required></td>
