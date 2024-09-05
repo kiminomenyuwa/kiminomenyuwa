@@ -43,7 +43,7 @@ public class UserService {
 			.zipcode(dto.getZipcode())
 			.phoneNumber(dto.getPhoneNumber())
 			//TODO 프로필사진 .profilePhotoUrl(dto.getProfilePhotoUrl())
-			.role(Role.ROLE_USER)    //기본회원 등급 ROLE_USER
+			.role(Role.ROLE_USER) //기본회원 등급 ROLE_USER
 			.enabled(true)
 			.build();
 
