@@ -9,6 +9,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 /**
@@ -18,6 +20,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "user")
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class UserEntity {
 
     @Id
