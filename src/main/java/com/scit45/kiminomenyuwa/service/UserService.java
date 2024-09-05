@@ -63,5 +63,4 @@ public class UserService {
 
 		return !userRepository.existsById(searchId);
 	}
-
 }
