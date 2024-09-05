@@ -79,7 +79,7 @@ public class UserController {
 		log.debug("전달받은 ID : {}", searchId);
 		// 서비스의 메서드로 검색할 아이디를 전달받아서 조회
 		// 해당 아이디를 쓰는 회원이 있으면 false, 없으면 true 리턴받음
-		boolean result = userService.findId(searchId);
+		boolean result = userService.checkIdNotExist(searchId);
 		// 검색한 아이디와 조회결과를 모델에 저장
 		model.addAttribute("searchId", searchId);
 		model.addAttribute("result", result);

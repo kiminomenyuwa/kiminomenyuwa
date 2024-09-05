@@ -3,8 +3,12 @@ package com.scit45.kiminomenyuwa.domain.entity;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
@@ -22,6 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 public class UserEntity {
 
     @Id
@@ -66,6 +71,7 @@ public class UserEntity {
     @Column(name = "enabled", nullable = false)
     private Boolean enabled;
 
+    @CreatedDate
     @Column(name = "created_time")
     private LocalDateTime createdTime;
 }
