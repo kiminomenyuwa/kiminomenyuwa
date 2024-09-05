@@ -35,23 +35,23 @@ public class UserService {
 			.passwordHash(dto.getPasswordHash())
 			//TODO .passwordHash(passwordEncoder.encode(dto.getPasswordHash()))
 			.name(dto.getName())
-            .birthDate(dto.getBirthDate())
-            .gender(dto.getGender())
+			.birthDate(dto.getBirthDate())
+			.gender(dto.getGender())
 			.email(dto.getEmail())
 			.roadNameAddress(dto.getRoadNameAddress())
 			.detailAddress(dto.getDetailAddress())
 			.zipcode(dto.getZipcode())
 			.phoneNumber(dto.getPhoneNumber())
 			//TODO 프로필사진 .profilePhotoUrl(dto.getProfilePhotoUrl())
-			.role(Role.ROLE_USER)	//기본회원 등급 ROLE_USER
+			.role(Role.ROLE_USER) //기본회원 등급 ROLE_USER
 			.enabled(true)
 			.build();
 
 		//리포지토리로 회원정보 DB에 저장
-        userRepository.save(entity);
+		userRepository.save(entity);
 
 		//회원가입성공 로그
-        log.info("User {} joined successfully", dto.getUserId());
+		log.info("User {} joined successfully", dto.getUserId());
 	}
 
 	/**
@@ -63,3 +63,5 @@ public class UserService {
 
 		return !userRepository.existsById(searchId);
 	}
+
+}
