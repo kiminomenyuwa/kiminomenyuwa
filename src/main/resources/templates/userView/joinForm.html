@@ -6,17 +6,33 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <!-- 카카오 도로명주소 서비스 호출 -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <title>회원가입</title>
     <script>
         $(document).ready(function () {
+            //회원가입 폼 유효성검사
             $('#joinForm').submit(validation);
+            //ID 중복확인 팝업
             $('#checkIdBtn').click(checkIdAvailability);
-            $('#searchAddressBtn').click(openRoadAddressAPI);
+            //도로명주소 새창 팝업
+            $('#searchAddressBtn').click(kakaoRoadAddress);
         });
 
         //ID 중복확인 기능
         function checkIdAvailability() {
             let w = window.open('idCheck', 'win', 'location=0,left=500px,top=200px,width=500px,height=400px');
+        }
+
+        //카카오 도로명주소 사용
+        function kakaoRoadAddress() {
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    //카카오 도로명주소에서 받아온 data html에 반영
+                    $('#zipcode').val(data.zonecode);
+                    $('#roadNameAddress').val(data.roadAddress);
+                }
+            }).open();
         }
 
         //유효성 검사
@@ -139,7 +155,7 @@
         <tr>
             <td>우편번호</td>
             <td>
-                <input type="text" id="zipcode" name="zipcode" th:value="${zipcode}" placeholder="주소검색 기능 사용">
+                <input type="text" id="zipcode" name="zipcode" th:value="${zipcode}" readonly placeholder="주소검색 기능 사용">
                 <button type="button" id="searchAddressBtn">주소검색</button>
             </td>
         </tr>
@@ -156,7 +172,7 @@
         <tr>
             <td>상세주소</td>
             <td>
-                <input type="text" id="detailAddress" name="detailAddress" th:value="${detailAddress}" placeholder="상세주소 입력">
+                <input type="text" id="detailAddress" name="detailAddress" th:value="${detailAddress}" placeholder="상세주소를 입력하세요">
             </td>
         </tr>
 
