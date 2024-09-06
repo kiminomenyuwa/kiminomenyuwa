@@ -86,30 +86,4 @@ public class UserController {
 		// 검색한 페이지로 다시 이동
 		return "/userView/idCheck";
 	}
-
-	/**
-	 * 도로명주소 API 팝업 창
-	 * @return 도로명주소 검색 창
-	 */
-	@GetMapping("roadAddressSearchAPI")
-	public String roadAddressSearchAPI() {
-
-		return "/userView/roadAddressSearchAPI";
-	}
-
-	@PostMapping("jusoCallback")
-	public String jusoCallback(@RequestParam("roadFullAddr") String roadFullAddr,
-		@RequestParam("zipNo") String zipNo,
-		@RequestParam(value = "addrDetail", required = false) String addrDetail,
-		Model model) {
-		// 전달받은 주소 데이터를 부모 창에서 사용할 수 있도록 모델에 저장
-		model.addAttribute("roadNameAddress", roadFullAddr);
-		model.addAttribute("zipcode", zipNo);
-		model.addAttribute("detailAddress", addrDetail != null ? addrDetail : "");
-
-		// 결과를 부모 창으로 전달하며 팝업 닫기
-		return "userView/joinForm"; // 부모 창의 회원가입 폼으로 데이터를 전달
-	}
-
-
 }
