@@ -59,7 +59,7 @@ public class UserService {
 	 * @param searchId : idCheckForm.html - PostMapping("idCheck") - 여기
 	 * @return ID존재시 false, 없으면 true return
 	 */
-	public boolean findId(String searchId) {
+	public boolean checkIdNotExist(String searchId) {
 
 		return !userRepository.existsById(searchId);
 	}
