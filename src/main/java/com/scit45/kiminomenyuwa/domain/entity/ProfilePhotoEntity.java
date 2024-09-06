@@ -10,7 +10,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 /**
- * 프로필 사진 엔티티
+ * 프로필 사진을 처리가기 위한 엔티티입니다
  */
 @Entity
 @Table(name = "profile_photo")
@@ -38,7 +38,4 @@ public class ProfilePhotoEntity {
 
 	@Column(name = "upload_date", nullable = false)
 	private LocalDateTime uploadDate;  // 업로드 날짜
-
-	@Column(name = "file_url", nullable = false, length = 255)
-	private String fileUrl;  // 사진이 저장된 URL
 }
