@@ -152,10 +152,9 @@ CREATE TABLE `mini_game_menu_rating`
 CREATE TABLE `profile_photo`
 (
     `photo_id`         INT AUTO_INCREMENT NOT NULL,   -- 사진의 고유 식별자
-    `user_id`          VARCHAR(20)        NOT NULL,   -- 사진을 올린 사용자의 ID
+    `user_id`          VARCHAR(20)        NOT NULL,   -- 사진을 올린 사용자의 ID (외래 키 대신 문자열 필드로 저장)
     `original_name`    VARCHAR(100)       NOT NULL,   -- 원본 파일명
     `saved_name`       VARCHAR(100)       NOT NULL,   -- UUID와 업로드 시간을 조합한 저장 파일명
     `upload_date`      TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 업로드 날짜
-    PRIMARY KEY (`photo_id`),                         -- 기본 키 설정
-    FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+    PRIMARY KEY (`photo_id`)                          -- 기본 키 설정
 );

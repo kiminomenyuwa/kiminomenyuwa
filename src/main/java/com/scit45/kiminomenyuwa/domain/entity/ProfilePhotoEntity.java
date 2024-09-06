@@ -9,8 +9,10 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.CreatedDate;
+
 /**
- * 프로필 사진을 처리가기 위한 엔티티입니다
+ * 프로필 사진을 처리하기 위한 엔티티입니다
  */
 @Entity
 @Table(name = "profile_photo")
@@ -26,9 +28,10 @@ public class ProfilePhotoEntity {
 	@Column(name = "photo_id")
 	private Integer photoId;  // 사진의 고유 식별자
 
-	@ManyToOne(fetch = FetchType.LAZY)  // 다대일 관계 설정
-	@JoinColumn(name = "user_id", nullable = false)  // `user` 테이블의 외래 키 참조
-	private UserEntity user;  // 사진을 올린 사용자의 ID
+	// 회원가입 하기 전에 사진을 올리기 때문에 단순히 String으로 받음
+	// 받는 파라미터: joinForm.html의 userId
+	@Column(name = "user_id", nullable = false)
+	private String userId;  // 사진을 올린 사용자의 ID
 
 	@Column(name = "original_name", nullable = false, length = 100)
 	private String originalName;  // 원본 파일명
@@ -36,6 +39,7 @@ public class ProfilePhotoEntity {
 	@Column(name = "saved_name", nullable = false, length = 100)
 	private String savedName;  // UUID와 업로드 시간을 조합한 저장 파일명
 
+	@CreatedDate
 	@Column(name = "upload_date", nullable = false)
 	private LocalDateTime uploadDate;  // 업로드 날짜
 }
