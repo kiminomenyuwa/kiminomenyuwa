@@ -17,6 +17,8 @@
             $('#checkIdBtn').click(checkIdAvailability);
             //도로명주소 새창 팝업
             $('#searchAddressBtn').click(kakaoRoadAddress);
+            // 프로필 사진 업로드 클릭 이벤트
+            $('#uploadProfileBtn').click(uploadProfileImage);
         });
 
         //ID 중복확인 기능
@@ -33,6 +35,37 @@
                     $('#roadNameAddress').val(data.roadAddress);
                 }
             }).open();
+        }
+
+        // 프로필 사진 업로드 처리 함수
+        function uploadProfileImage(event) {
+            event.preventDefault(); // 기본 동작 방지
+
+            let profileImageFile = $('#profileImage')[0].files[0]; // 파일 선택
+
+            // 파일이 선택되지 않았을 때 경고
+            if (!profileImageFile) {
+                alert("업로드할 프로필 사진을 선택해주세요.");
+                return;
+            }
+
+            let formData = new FormData();
+            formData.append('profileImage', profileImageFile);
+
+            $.ajax({
+                url: '/user/uploadProfileImage',  // 서버에서 프로필 이미지를 처리하는 경로
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    alert("프로필 사진 업로드 성공");
+                    $('#profile_photo_url').val(response.fileUrl); // 서버에서 반환된 URL을 숨겨진 필드에 저장
+                },
+                error: function (error) {
+                    alert("프로필 사진 업로드 중 오류가 발생했습니다.");
+                }
+            });
         }
 
         //유효성 검사
@@ -182,9 +215,14 @@
             <td><input type="tel" id="phoneNumber" name="phoneNumber"></td>
         </tr>
 
-        <!-- 프로필 사진 (미구현) -->
+        <!-- 프로필 사진 업로드 -->
         <tr>
-            <td>프로필사진(미구현)</td>
+            <td>프로필 사진</td>
+            <td>
+                <input type="file" id="profileImage" name="profileImage">
+                <button type="button" id="uploadProfileBtn">프로필 사진 업로드</button>
+                <input type="hidden" id="profile_photo_url" name="profilePhotoUrl"> <!-- 서버에서 반환된 URL을 저장할 hidden 필드 -->
+            </td>
         </tr>
 
         <!-- 제출 버튼 -->
