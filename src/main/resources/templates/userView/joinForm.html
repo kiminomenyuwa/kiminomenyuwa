@@ -1,176 +1,199 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <title>회원가입</title>
     <script>
-        $(document).ready(function () {
-            $('#joinForm').submit(validation);
-            $('#openButton').click(winOpen);
-        });
+      $(document).ready(function () {
+        $("#joinForm").submit(validation);
+        $("#openButton").click(winOpen);
+      });
 
-        //ID 중복확인 기능
-        function winOpen() {
-            let w = window.open('idCheck', 'win', 'location=0,left=500px,top=200px,width=500px,height=400px');
+      //ID 중복확인 기능
+      function winOpen() {
+        let w = window.open(
+          "idCheck",
+          "win",
+          "location=0,left=500px,top=200px,width=500px,height=400px"
+        );
+      }
+
+      //유효성 검사
+      function validation() {
+        let id = $("#id").val();
+        let pw = $("#password").val();
+        let pw2 = $("#password2").val();
+        let name = $("#name").val();
+        let birthDate = $("#birthDate").val();
+        let gender = $('select[name="gender"]').val();
+        let email = $("#email").val();
+        let zipcode = $("#zipcode").val();
+        let phoneNumber = $("#phoneNumber").val();
+
+        //ID 유효성 검사
+        if (id.length < 3 || id.length > 10) {
+          alert("ID는 3~10자로 입력하세요.");
+          return false;
         }
-
-        //유효성 검사
-        function validation() {
-            let id = $('#id').val();
-            let pw = $('#password').val();
-            let pw2 = $('#password2').val();
-            let name = $('#name').val();
-            let birthDate = $('#birthDate').val();
-            let gender = $('select[name="gender"]').val();
-            let email = $('#email').val();
-            let zipcode = $('#zipcode').val();
-            let phoneNumber = $('#phoneNumber').val();
-
-            //ID 유효성 검사
-            if (id.length < 3 || id.length > 10) {
-                alert("ID는 3~10자로 입력하세요.");
-                return false;
-            }
-            //비밀번호 길이 검사
-            if (pw.length < 3 || pw.length > 30) {
-                alert("비밀번호는 3~30자로 입력하세요");
-                return false;
-            }
-            //비밀번호 확인
-            if (pw != pw2) {
-                alert("비밀번호가 일치하지 않습니다.");
-                return false;
-            }
-            //이름 입력 검사
-            if (name == "") {
-                alert("이름을 입력하세요")
-                return false;
-            }
-            // 생년월일 입력 여부 확인
-            if (birthDate == "") {
-                alert("생년월일을 입력하세요.");
-                return false;
-            }
-            //성별 선택 여부 확인
-            if (gender == "") {
-                alert("성별을 선택하세요.");
-                return false;
-            }
-            //이메일 입력 여부 확인
-            if (email == "") {
-                alert("이메일을 입력하세요.")
-                return false;
-            }
-            //우편번호 입력 여부 확인
-            if (zipcode == "") {
-                alert("우편번호를 입력하세요.")
-                return false;
-            }
-            //전화번호 입력 여부 확인
-            if (phoneNumber == "") {
-                alert("전화번호를 입력하세요.")
-                return false;
-            }
-            return true;
+        //비밀번호 길이 검사
+        if (pw.length < 3 || pw.length > 30) {
+          alert("비밀번호는 3~30자로 입력하세요");
+          return false;
         }
+        //비밀번호 확인
+        if (pw != pw2) {
+          alert("비밀번호가 일치하지 않습니다.");
+          return false;
+        }
+        //이름 입력 검사
+        if (name == "") {
+          alert("이름을 입력하세요");
+          return false;
+        }
+        // 생년월일 입력 여부 확인
+        if (birthDate == "") {
+          alert("생년월일을 입력하세요.");
+          return false;
+        }
+        //성별 선택 여부 확인
+        if (gender == "") {
+          alert("성별을 선택하세요.");
+          return false;
+        }
+        //이메일 입력 여부 확인
+        if (email == "") {
+          alert("이메일을 입력하세요.");
+          return false;
+        }
+        //우편번호 입력 여부 확인
+        if (zipcode == "") {
+          alert("우편번호를 입력하세요.");
+          return false;
+        }
+        //전화번호 입력 여부 확인
+        if (phoneNumber == "") {
+          alert("전화번호를 입력하세요.");
+          return false;
+        }
+        return true;
+      }
     </script>
-</head>
-<body>
-<h1>[ 회원가입 ]</h1>
-<form id="joinForm" action="/user/join" method="post">
-    <table>
+  </head>
+  <body>
+    <h1>[ 회원가입 ]</h1>
+    <form id="joinForm" action="/user/join" method="post">
+      <table>
         <!-- ID 입력 -->
         <tr>
-            <td>ID</td>
-            <td class="inputtext">
-                <input type="text" id="id" name="userId" placeholder="ID중복확인 이용" readonly="readonly">
-                <button type="button" id="openButton">ID중복확인</button>
-            </td>
+          <td>ID</td>
+          <td class="inputtext">
+            <input
+              type="text"
+              id="id"
+              name="userId"
+              placeholder="ID중복확인 이용"
+              readonly="readonly"
+            />
+            <button type="button" id="openButton">ID중복확인</button>
+          </td>
         </tr>
 
         <!-- 비밀번호 입력 -->
         <tr>
-            <td>비밀번호</td>
-            <td class="inputtext">
-                <input type="password" id="password" name="passwordHash" placeholder="비밀번호 입력">
-                <br>
-                <input type="password" id="password2" placeholder="비밀번호 다시 입력">
-            </td>
+          <td>비밀번호</td>
+          <td class="inputtext">
+            <input
+              type="password"
+              id="password"
+              name="passwordHash"
+              placeholder="비밀번호 입력"
+            />
+            <br />
+            <input
+              type="password"
+              id="password2"
+              placeholder="비밀번호 다시 입력"
+            />
+          </td>
         </tr>
 
         <!-- 이름 입력 -->
         <tr>
-            <td>이름</td>
-            <td class="inputtext">
-                <input type="text" id="name" name="name" placeholder="이름 입력">
-            </td>
+          <td>이름</td>
+          <td class="inputtext">
+            <input type="text" id="name" name="name" placeholder="이름 입력" />
+          </td>
         </tr>
 
         <!-- 생년월일 입력 -->
         <tr>
-            <td>생년월일</td>
-            <td><input type="date" id="birthDate" name="birthDate"></td>
+          <td>생년월일</td>
+          <td><input type="date" id="birthDate" name="birthDate" /></td>
         </tr>
 
         <!-- 성별 선택 -->
         <tr>
-            <td>성별</td>
-            <td>
-                <select name="gender">
-                    <option value="">선택</option>
-                    <option value="MALE">남</option>
-                    <option value="FEMALE">여</option>
-                </select>
-            </td>
+          <td>성별</td>
+          <td>
+            <select name="gender">
+              <option value="">선택</option>
+              <option value="male">남</option>
+              <option value="female">여</option>
+            </select>
+          </td>
         </tr>
 
         <!-- 이메일 입력 -->
         <tr>
-            <td>이메일</td>
-            <td><input type="email" id="email" name="email"></td>
+          <td>이메일</td>
+          <td><input type="email" id="email" name="email" /></td>
         </tr>
 
         <!-- 우편번호 -->
         <tr>
-            <td>우편번호</td>
-            <td><input type="text" id="zipcode" name="zipcode"></td>
+          <td>우편번호</td>
+          <td><input type="text" id="zipcode" name="zipcode" /></td>
         </tr>
 
         <!-- 도로명 주소 -->
         <tr>
-            <td>도로명주소</td>
-            <td><input type="text" id="roadNameAddress" name="roadNameAddress"></td>
+          <td>도로명주소</td>
+          <td>
+            <input type="text" id="roadNameAddress" name="roadNameAddress" />
+          </td>
         </tr>
 
         <!-- 상세주소 -->
         <tr>
-            <td>상세주소</td>
-            <td><input type="text" id="detailAddress" name="detailAddress"></td>
+          <td>상세주소</td>
+          <td><input type="text" id="detailAddress" name="detailAddress" /></td>
         </tr>
 
         <!-- 전화번호 -->
         <tr>
-            <td>전화번호</td>
-            <td><input type="tel" id="phoneNumber" name="phoneNumber"></td>
+          <td>전화번호</td>
+          <td><input type="tel" id="phoneNumber" name="phoneNumber" /></td>
         </tr>
 
         <!-- 프로필 사진 (미구현) -->
         <tr>
-            <td>프로필사진(미구현)</td>
+          <td>프로필사진(미구현)</td>
         </tr>
 
         <!-- 제출 버튼 -->
         <tr>
-            <td colspan="2" class="submitbox">
-                <input type="submit" value="가입">
-                <input type="reset" value="다시 쓰기">
-            </td>
+          <td colspan="2" class="submitbox">
+            <input type="submit" value="가입" />
+            <input type="reset" value="다시 쓰기" />
+          </td>
         </tr>
-    </table>
-</form>
-</body>
+      </table>
+    </form>
+  </body>
 </html>
