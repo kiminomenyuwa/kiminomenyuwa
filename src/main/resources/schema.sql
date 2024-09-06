@@ -7,8 +7,10 @@ DROP TABLE IF EXISTS `menu_category_mapping`;
 DROP TABLE IF EXISTS `food_category`;
 DROP TABLE IF EXISTS `menu`;
 DROP TABLE IF EXISTS `store`;
-DROP TABLE IF EXISTS `user`; -- 변경된 테이블 이름
+DROP TABLE IF EXISTS `profile_photo`;
+DROP TABLE IF EXISTS `user`;
 DROP TABLE IF EXISTS `category_type`;
+
 
 -- 카테고리 타입 테이블: 카테고리의 종류를 정의 (예: 재료, 나라, 조리 방법)
 CREATE TABLE `category_type`
@@ -144,4 +146,17 @@ CREATE TABLE `mini_game_menu_rating`
     PRIMARY KEY (`rating_id`),                          -- 기본 키 설정
     FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
     FOREIGN KEY (`menu_id`) REFERENCES `menu` (`menu_id`)
+);
+
+-- 프로필 사진 테이블: 사용자가 업로드한 프로필 사진을 저장
+CREATE TABLE `profile_photo`
+(
+    `photo_id`         INT AUTO_INCREMENT NOT NULL,   -- 사진의 고유 식별자
+    `user_id`          VARCHAR(20)        NOT NULL,   -- 사진을 올린 사용자의 ID
+    `original_name`    VARCHAR(100)       NOT NULL,   -- 원본 파일명
+    `saved_name`       VARCHAR(100)       NOT NULL,   -- UUID와 업로드 시간을 조합한 저장 파일명
+    `upload_date`      TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 업로드 날짜
+    `file_url`         VARCHAR(255)       NOT NULL,   -- 사진이 저장된 URL
+    PRIMARY KEY (`photo_id`),                         -- 기본 키 설정
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 );
