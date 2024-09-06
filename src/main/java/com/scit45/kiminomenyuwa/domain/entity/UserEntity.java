@@ -1,10 +1,17 @@
 package com.scit45.kiminomenyuwa.domain.entity;
 
-import jakarta.persistence.*;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 /**
  * 사용자의 정보를 저장하는 엔티티 클래스입니다.
@@ -13,6 +20,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "user")
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class UserEntity {
 
     @Id
