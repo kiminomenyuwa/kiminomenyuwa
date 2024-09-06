@@ -23,15 +23,19 @@
 				enabled : true
 			// 기본적으로 가게는 활성화됨
 			};
+			
+			console.log(registration);
 
 			$.ajax({
 				url : 'storeRegistration',
 				type : 'post',
-				data : registration,
+				contentType: 'application/json',  // JSON 데이터 형식 명시
+			    data: JSON.stringify(registration),  // 데이터를 직렬화
 				success : function() {
 					$("#response").html("가게가 성공적으로 등록되었습니다.");
 				},
 				error : function(e) {
+					console.log(JSON.stringify(e));
 					$("#response").html("가게 등록에 실패했습니다.");
 				}
 			})
