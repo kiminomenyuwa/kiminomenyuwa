@@ -156,7 +156,6 @@ CREATE TABLE `profile_photo`
     `original_name`    VARCHAR(100)       NOT NULL,   -- 원본 파일명
     `saved_name`       VARCHAR(100)       NOT NULL,   -- UUID와 업로드 시간을 조합한 저장 파일명
     `upload_date`      TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 업로드 날짜
-    `file_url`         VARCHAR(255)       NOT NULL,   -- 사진이 저장된 URL
     PRIMARY KEY (`photo_id`),                         -- 기본 키 설정
     FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 );
