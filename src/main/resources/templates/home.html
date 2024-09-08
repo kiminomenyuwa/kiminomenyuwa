@@ -1,15 +1,16 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport"
-	content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 <title>키미노 메뉴와</title>
+<!-- jQuery 라이브러리 로드 -->
+<script src="/js/jquery-3.7.1.min.js"></script>
 </head>
 <body>
-
 	<h1>홈페이지</h1>
+	<!-- 사용자 메뉴 -->
 	<p>
 		<a href="user/loginForm">로그인</a>
 	</p>
@@ -19,5 +20,57 @@
 	<p>
 		<a href="storeRegistration">가게 등록</a>
 	</p>
+
+	<!-- 메뉴가 표시될 영역 -->
+	<div id="menu-section">
+		<!-- 초기 메시지 및 메뉴 결과 표시 -->
+		<div id="selected-menu">
+			<h2 id="menu-header">메뉴 룰렛을 누르세요</h2>
+			<!-- 이 위치에 메뉴 이름이 표시됨 -->
+		</div>
+
+		<!-- 시작/재시작 버튼 -->
+		<div id="menu-controls">
+			<button id="start-game">게임 시작</button>
+		</div>
+	</div>
+
+	<script th:inline="javascript">
+		$(document).ready(function() {
+			// 서버에서 전달된 메뉴의 개수 저장
+			let menuCount = /*[[${menuCount}]]*/0;
+			// 이미 선택된 숫자들을 저장하는 배열
+			let selectedNumbers = [];
+
+			// 게임 시작/재시작 버튼 클릭 시 이벤트 처리
+			$("#start-game").click(function() {
+				// 모든 메뉴가 선택된 경우 경고 메시지 표시
+				if (selectedNumbers.length >= menuCount) {
+					alert("더 이상 메뉴가 없습니다!");
+					return;
+				}
+
+				let randomNumber;
+				// 중복되지 않는 랜덤 숫자를 선택
+				do {
+					randomNumber = Math.floor(Math.random() * menuCount) + 1;
+				} while (selectedNumbers.includes(randomNumber));
+
+				// 서버에 랜덤 숫자를 전송하고, 해당 숫자에 해당하는 메뉴 이름을 받아옴
+				$.post("/save-random-number", {
+					randomNumber : randomNumber
+				}, function(menu) {
+					// 받아온 메뉴 이름을 화면에 표시
+					$("#menu-header").text(menu.name); // 메뉴가 표시될 위치
+
+					// 버튼 텍스트를 '다시 시작'으로 변경
+					$("#start-game").text("다시 시작");
+
+					// 선택된 숫자를 배열에 추가하여 중복 선택 방지
+					selectedNumbers.push(randomNumber);
+				});
+			});
+		});
+	</script>
 </body>
 </html>
