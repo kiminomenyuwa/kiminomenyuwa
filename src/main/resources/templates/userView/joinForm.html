@@ -17,8 +17,8 @@
             $('#checkIdBtn').click(checkIdAvailability);
             //도로명주소 새창 팝업
             $('#searchAddressBtn').click(kakaoRoadAddress);
-            // 프로필 사진 업로드 클릭 이벤트
-            $('#uploadProfileBtn').click(uploadProfileImage);
+            //프로필 사진 선택시 이벤트
+            $('#profileImage').change(saveProfile);
         });
 
         //ID 중복확인 기능
@@ -29,7 +29,7 @@
         //카카오 도로명주소 사용
         function kakaoRoadAddress() {
             new daum.Postcode({
-                oncomplete: function(data) {
+                oncomplete: function (data) {
                     //카카오 도로명주소에서 받아온 data html에 반영
                     $('#zipcode').val(data.zonecode);
                     $('#roadNameAddress').val(data.roadAddress);
@@ -37,35 +37,25 @@
             }).open();
         }
 
-        // 프로필 사진 업로드 처리 함수
-        function uploadProfileImage(event) {
-            event.preventDefault(); // 기본 동작 방지
-
-            let profileImageFile = $('#profileImage')[0].files[0]; // 파일 선택
-
-            // 파일이 선택되지 않았을 때 경고
-            if (!profileImageFile) {
-                alert("업로드할 프로필 사진을 선택해주세요.");
-                return;
-            }
-
+        //프로필 사진 등록
+        function saveProfile() {
             let formData = new FormData();
-            formData.append('profileImage', profileImageFile);
+            formData.append("profileImage", $('#profileImage')[0].files[0]);
+            formData.append("userId", $('#id').val()); // 현재 폼에 입력된 userId도 같이 전송
 
             $.ajax({
-                url: '/user/uploadProfileImage',  // 서버에서 프로필 이미지를 처리하는 경로
-                type: 'POST',
+                url: '/user/uploadProfile',
+                type: 'post',
                 data: formData,
-                contentType: false,
                 processData: false,
-                success: function (response) {
-                    alert("프로필 사진 업로드 성공");
-                    $('#profile_photo_url').val(response.fileUrl); // 서버에서 반환된 URL을 숨겨진 필드에 저장
+                contentType: false,
+                success: function() {
+                    alert('프로필 사진 업로드 성공')
                 },
-                error: function (error) {
-                    alert("프로필 사진 업로드 중 오류가 발생했습니다.");
+                error: function() {
+                    alert('프로필 사진 업로드 실패!')
                 }
-            });
+            })
         }
 
         //유효성 검사
@@ -197,7 +187,8 @@
         <tr>
             <td>도로명주소</td>
             <td>
-                <input type="text" id="roadNameAddress" name="roadNameAddress" th:value="${roadNameAddress}" readonly placeholder="주소검색 기능 사용">
+                <input type="text" id="roadNameAddress" name="roadNameAddress" th:value="${roadNameAddress}" readonly
+                       placeholder="주소검색 기능 사용">
             </td>
         </tr>
 
@@ -205,7 +196,8 @@
         <tr>
             <td>상세주소</td>
             <td>
-                <input type="text" id="detailAddress" name="detailAddress" th:value="${detailAddress}" placeholder="상세주소를 입력하세요">
+                <input type="text" id="detailAddress" name="detailAddress" th:value="${detailAddress}"
+                       placeholder="상세주소를 입력하세요">
             </td>
         </tr>
 
@@ -220,8 +212,7 @@
             <td>프로필 사진</td>
             <td>
                 <input type="file" id="profileImage" name="profileImage">
-                <button type="button" id="uploadProfileBtn">프로필 사진 업로드</button>
-                <input type="hidden" id="profile_photo_url" name="profilePhotoUrl"> <!-- 서버에서 반환된 URL을 저장할 hidden 필드 -->
+                <input type="hidden" id="profileImgUuid" name="profileImgUuid">
             </td>
         </tr>
 

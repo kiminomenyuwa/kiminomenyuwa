@@ -10,6 +10,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  * 프로필 사진을 처리하기 위한 엔티티입니다
@@ -21,6 +22,7 @@ import org.springframework.data.annotation.CreatedDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EntityListeners(AuditingEntityListener.class)
 public class ProfilePhotoEntity {
 
 	@Id

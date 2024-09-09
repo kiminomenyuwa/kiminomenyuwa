@@ -30,7 +30,7 @@ public class UserDTO {
 	String roadNameAddress;		//도로명주소
 	String detailAddress;		//상세주소
 	String phoneNumber;			//핸드폰 번호
-	String profilePhotoUrl;		//프로필 사진 주소
+	String profileImgUuid;		//프로필 사진 주소
 	Role role;					//계정 등급
 	Boolean enabled;			//계정 활성화 여부
 	LocalDateTime createdTime;	//계정 생성 시각

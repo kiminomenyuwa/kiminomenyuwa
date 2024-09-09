@@ -42,7 +42,7 @@ CREATE TABLE `user`
     `detail_address`  VARCHAR(100),                                                                         -- 상세 주소
     `zipcode`         VARCHAR(20),                                                                          -- 우편번호
     `phone_number`    VARCHAR(20),                                                                          -- 전화번호
-    `profile_photo_url` VARCHAR(100),                                                                         -- 프로필 사진 URL
+    `profile_img_uuid` VARCHAR(100),                                                                         -- 프로필 사진 URL
     `role`            ENUM ('ROLE_USER', 'ROLE_MERCHANT', 'ROLE_ADMIN') NOT NULL,                           -- 사용자 역할
     `enabled`         TINYINT(1)                                        NOT NULL DEFAULT 1,                 -- 계정 활성화 여부
     `created_time`    TIMESTAMP                                                  DEFAULT CURRENT_TIMESTAMP, -- 계정 생성 시간
