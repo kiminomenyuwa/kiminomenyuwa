@@ -7,4 +7,5 @@ import com.scit45.kiminomenyuwa.domain.entity.ProfilePhotoEntity;
 
 @Repository
 public interface ProfilePhotoRepository extends JpaRepository<ProfilePhotoEntity, Integer> {
+	ProfilePhotoEntity searchByUserId(String userId);
 }
