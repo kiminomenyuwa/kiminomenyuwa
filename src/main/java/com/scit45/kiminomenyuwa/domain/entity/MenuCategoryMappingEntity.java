@@ -5,7 +5,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
@@ -14,16 +19,21 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "menu_category_mapping")
 @NoArgsConstructor
+@Data
+@AllArgsConstructor
+@Builder
 public class MenuCategoryMappingEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "mapping_id")
-    private Integer mappingId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "mapping_id")
+	private Integer mappingId;
 
-    @Column(name = "menu_id", nullable = false)
-    private Integer menuId;
+	@ManyToOne
+	@JoinColumn(name = "menu_id", nullable = false)
+	private MenuEntity menu;
 
-    @Column(name = "category_name", nullable = false)
-    private String categoryName;
+	@ManyToOne
+	@JoinColumn(name = "category_name", nullable = false)
+	private FoodCategoryEntity foodCategory; // food_category 테이블과 매핑
 }

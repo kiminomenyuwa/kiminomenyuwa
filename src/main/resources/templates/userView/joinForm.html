@@ -1,15 +1,16 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-    <!-- 카카오 도로명주소 서비스 호출 -->
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <title>회원가입</title>
-    <script>
+<meta charset="UTF-8" />
+<meta name="viewport"
+	content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+<!-- 카카오 도로명주소 서비스 호출 -->
+<script
+	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<title>회원가입</title>
+<script>
         $(document).ready(function () {
             //회원가입 폼 유효성검사
             $('#joinForm').submit(validation);
@@ -72,56 +73,58 @@
             let zipcode = $('#zipcode').val();
             let phoneNumber = $('#phoneNumber').val();
 
-            //ID 유효성 검사
-            if (id.length < 3 || id.length > 10) {
-                alert("ID는 3~10자로 입력하세요.");
-                return false;
-            }
-            //비밀번호 길이 검사
-            if (pw.length < 3 || pw.length > 30) {
-                alert("비밀번호는 3~30자로 입력하세요");
-                return false;
-            }
-            //비밀번호 확인
-            if (pw != pw2) {
-                alert("비밀번호가 일치하지 않습니다.");
-                return false;
-            }
-            //이름 입력 검사
-            if (name == "") {
-                alert("이름을 입력하세요")
-                return false;
-            }
-            // 생년월일 입력 여부 확인
-            if (birthDate == "") {
-                alert("생년월일을 입력하세요.");
-                return false;
-            }
-            //성별 선택 여부 확인
-            if (gender == "") {
-                alert("성별을 선택하세요.");
-                return false;
-            }
-            //이메일 입력 여부 확인
-            if (email == "") {
-                alert("이메일을 입력하세요.")
-                return false;
-            }
-            //우편번호 입력 여부 확인
-            if (zipcode == "") {
-                alert("우편번호를 입력하세요.")
-                return false;
-            }
-            //전화번호 입력 여부 확인
-            if (phoneNumber == "") {
-                alert("전화번호를 입력하세요.")
-                return false;
-            }
-            return true;
+
+        //ID 유효성 검사
+        if (id.length < 3 || id.length > 10) {
+          alert("ID는 3~10자로 입력하세요.");
+          return false;
         }
+        //비밀번호 길이 검사
+        if (pw.length < 3 || pw.length > 30) {
+          alert("비밀번호는 3~30자로 입력하세요");
+          return false;
+        }
+        //비밀번호 확인
+        if (pw != pw2) {
+          alert("비밀번호가 일치하지 않습니다.");
+          return false;
+        }
+        //이름 입력 검사
+        if (name == "") {
+          alert("이름을 입력하세요");
+          return false;
+        }
+        // 생년월일 입력 여부 확인
+        if (birthDate == "") {
+          alert("생년월일을 입력하세요.");
+          return false;
+        }
+        //성별 선택 여부 확인
+        if (gender == "") {
+          alert("성별을 선택하세요.");
+          return false;
+        }
+        //이메일 입력 여부 확인
+        if (email == "") {
+          alert("이메일을 입력하세요.");
+          return false;
+        }
+        //우편번호 입력 여부 확인
+        if (zipcode == "") {
+          alert("우편번호를 입력하세요.");
+          return false;
+        }
+        //전화번호 입력 여부 확인
+        if (phoneNumber == "") {
+          alert("전화번호를 입력하세요.");
+          return false;
+        }
+        return true;
+      }
     </script>
 </head>
 <body>
+
 <h1>[ 회원가입 ]</h1>
 <form id="joinForm" action="/user/join" method="post">
     <table>
