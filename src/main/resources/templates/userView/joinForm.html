@@ -47,10 +47,12 @@
                 url: '/user/uploadProfile',
                 type: 'post',
                 data: formData,
+                datatype: 'json',
                 processData: false,
                 contentType: false,
-                success: function() {
+                success: function(profilePhotoDTO) {
                     alert('프로필 사진 업로드 성공')
+                    $('#profileImgUuid').val(profilePhotoDTO.savedName);
                 },
                 error: function() {
                     alert('프로필 사진 업로드 실패!')

@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.scit45.kiminomenyuwa.domain.dto.ProfilePhotoDTO;
 import com.scit45.kiminomenyuwa.domain.dto.UserDTO;
+import com.scit45.kiminomenyuwa.domain.entity.ProfilePhotoEntity;
+import com.scit45.kiminomenyuwa.service.ProfilePhotoService;
 import com.scit45.kiminomenyuwa.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UserController {
 	private final UserService userService;
+	private final ProfilePhotoService profilePhotoService;
 
 	//프로필 사진 저장 경로
 	@Value("${profile.uploadPath}")
@@ -103,7 +107,7 @@ public class UserController {
 	 */
 	@ResponseBody
 	@PostMapping("uploadProfile")
-	public void uploadProfile(
+	public ProfilePhotoDTO uploadProfile(
 		@RequestParam("profileImage") MultipartFile profileImage
 		, @RequestParam("userId") String userId) {
 		log.debug("프사 저장하려는 id : {}", userId);
@@ -116,7 +120,13 @@ public class UserController {
 			log.debug("크기 : {}", profileImage.getSize());
 			log.debug("파일 종류 : {}", profileImage.getContentType());
 		}
+		//프로필 사진 저장 처리
+		profilePhotoService.saveProfileImage(profileImage, userId, uploadPath);
 
-		userService.saveProfileImage(profileImage, userId, uploadPath);
+		//저장된 프로필 사진의 정보 불러오기 (변환된 UUID를 사용하기 위함)
+		ProfilePhotoDTO profilePhotoDTO = profilePhotoService.getUserProfilePhotoInfo(userId);
+
+		//joinForm.html에 프로필 사진 UUID를 리턴하기 위한 객체
+		return profilePhotoDTO;
 	}
 }

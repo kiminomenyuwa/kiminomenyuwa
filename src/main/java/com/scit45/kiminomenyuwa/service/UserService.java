@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 유저
+ * 유저(계정 관련) 서비스
  */
 @Slf4j
 @Service
@@ -30,8 +30,6 @@ import lombok.extern.slf4j.Slf4j;
 public class UserService {
 	//회원정보 DB처리
 	private final UserRepository userRepository;
-	//프로필 사진 DB처리
-	private final ProfilePhotoRepository profilePhotoRepository;
 
 	//TODO 비밀번호 암호화(security)
 	//private final BCryptPasswordEncoder passwordEncoder;
@@ -53,7 +51,7 @@ public class UserService {
 			.detailAddress(dto.getDetailAddress())
 			.zipcode(dto.getZipcode())
 			.phoneNumber(dto.getPhoneNumber())
-			//TODO 프로필사진 .profilePhotoUrl(dto.getProfilePhotoUrl())
+			.profileImgUuid(dto.getProfileImgUuid())
 			.role(Role.ROLE_USER) //기본회원 등급 ROLE_USER
 			.enabled(true)
 			.build();
@@ -75,35 +73,4 @@ public class UserService {
 		return !userRepository.existsById(searchId);
 	}
 
-	/**
-	 * 프로필 사진 저장 메서드 : 파일명 UUID 변환 및 PhotoEntity에 저장
-	 * @param profileImage joinForm.html에서 받은 이미지 파일
-	 * @param userId joinForm.html에서 입력하고 있는 사용자 ID
-	 * @param uploadPath application.properties에서 설정한 파일 저장 경로
-	 */
-	public void saveProfileImage(MultipartFile profileImage, String userId, String uploadPath) {
-		ProfilePhotoEntity profilePhotoEntity = new ProfilePhotoEntity();
-
-		//프사 원래 파일명을 UUID로 변환
-		String originalName = profileImage.getOriginalFilename();
-		String extension = originalName.substring(originalName.lastIndexOf("."));
-		String dateString = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-		String uuidString = UUID.randomUUID().toString();
-		String transformedFileName = dateString + "_" + uuidString + extension;
-
-		// 파일 저장 처리
-		try {
-			File file = new File(uploadPath, transformedFileName);
-			profileImage.transferTo(file);
-
-			// 엔티티에 원래파일명, 프로필 사진을 저장하려는 userId, UUID로 변환된 파일명 저장
-			profilePhotoEntity.setOriginalName(originalName);
-			profilePhotoEntity.setUserId(userId);
-			profilePhotoEntity.setSavedName(transformedFileName);
-
-			profilePhotoRepository.save(profilePhotoEntity);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 }
