@@ -61,8 +61,8 @@ public class UserEntity {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "profile_photo_url")
-    private String profilePhotoUrl;
+    @Column(name = "profile_img_uuid")
+    private String profileImgUuid;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
