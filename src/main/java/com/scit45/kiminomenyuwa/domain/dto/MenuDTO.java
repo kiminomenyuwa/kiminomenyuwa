@@ -1,5 +1,7 @@
 package com.scit45.kiminomenyuwa.domain.dto;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,4 +22,5 @@ public class MenuDTO {
 	private Integer price;
 	private String pictureUrl;
 	private Boolean enabled;
+	private List<String> categories; // 카테고리 리스트
 }

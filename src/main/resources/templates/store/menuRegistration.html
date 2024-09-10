@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>메뉴 등록 페이지</title>
+<script src="/js/jquery-3.7.1.min.js"></script>
+<script>
+	$(document).ready(function() {
+		// 메뉴 등록 버튼 클릭 시 동작
+		$('#registerMenuButton').click(function() {
+			let menuRegistration = {
+				storeId : $('#storeId').val(), // 가게 ID
+				name : $('#name').val(), // 메뉴 이름
+				price : $('#price').val(), // 가격
+				pictureUrl : $('#pictureUrl').val(), // 사진 URL
+				enabled : true, // 활성화 여부
+				categories : []
+			// 선택된 카테고리
+			};
+
+			// 체크된 카테고리 값을 배열에 추가
+			$('input[name="categories"]:checked').each(function() {
+				menuRegistration.categories.push($(this).val());
+			});
+
+			// AJAX 요청으로 서버에 데이터 전송
+			$.ajax({
+				url : '/menuRegistration',
+				type : 'post',
+				contentType : 'application/json',
+				data : JSON.stringify(menuRegistration),
+				success : function(response) {
+					alert('메뉴가 성공적으로 등록되었습니다.');
+					window.location.href = '/menuRegistration'; // 성공 시 메뉴 페이지로 리다이렉트
+				},
+				error : function(e) {
+					alert('메뉴 등록에 실패했습니다.');
+				}
+			});
+		});
+	});
+</script>
+</head>
+<body>
+	<h1>메뉴 등록 페이지</h1>
+
+	<table>
+		<tr>
+			<td><label for="storeId">가게 ID:</label></td>
+			<td><input type="text" id="storeId" name="storeId"
+				th:value="${storeId}"></td>
+		</tr>
+		<tr>
+			<td><label for="name">메뉴 이름:</label></td>
+			<td><input type="text" id="name" name="name" required></td>
+		</tr>
+		<tr>
+			<td><label for="price">가격:</label></td>
+			<td><input type="number" id="price" name="price" required></td>
+		</tr>
+		<tr>
+			<td><label for="pictureUrl">사진 URL:</label></td>
+			<td><input type="text" id="pictureUrl" name="pictureUrl"></td>
+		</tr>
+		<tr>
+			<td><label>카테고리 선택:</label></td>
+			<td>
+				<h4>재료</h4> <input type="checkbox" name="categories" value="고추">
+				고추<br> <input type="checkbox" name="categories" value="돼지고기">
+				돼지고기<br> <input type="checkbox" name="categories" value="양파">
+				양파<br> <input type="checkbox" name="categories" value="마늘">
+				마늘<br> <input type="checkbox" name="categories" value="버섯">
+				버섯<br> <input type="checkbox" name="categories" value="당근">
+				당근<br> <input type="checkbox" name="categories" value="대파">
+				대파<br> <input type="checkbox" name="categories" value="양배추">
+				양배추<br> <input type="checkbox" name="categories" value="토마토">
+				토마토<br> <input type="checkbox" name="categories" value="감자">
+				감자<br>
+
+				<h4>나라</h4> <input type="checkbox" name="categories" value="중식">
+				중식<br> <input type="checkbox" name="categories" value="일식">
+				일식<br> <input type="checkbox" name="categories" value="한식">
+				한식<br> <input type="checkbox" name="categories" value="양식">
+				양식<br> <input type="checkbox" name="categories" value="태국식">
+				태국식<br> <input type="checkbox" name="categories" value="인도식">
+				인도식<br> <input type="checkbox" name="categories" value="베트남식">
+				베트남식<br> <input type="checkbox" name="categories" value="멕시코식">
+				멕시코식<br> <input type="checkbox" name="categories" value="지중해식">
+				지중해식<br> <input type="checkbox" name="categories" value="프랑스식">
+				프랑스식<br>
+
+				<h4>조리 방법</h4> <input type="checkbox" name="categories" value="구이">
+				구이<br> <input type="checkbox" name="categories" value="찜">
+				찜<br> <input type="checkbox" name="categories" value="볶음">
+				볶음<br> <input type="checkbox" name="categories" value="튀김">
+				튀김<br> <input type="checkbox" name="categories" value="삶음">
+				삶음<br> <input type="checkbox" name="categories" value="조림">
+				조림<br> <input type="checkbox" name="categories" value="훈제">
+				훈제<br> <input type="checkbox" name="categories" value="찌개">
+				찌개<br> <input type="checkbox" name="categories" value="베이킹">
+				베이킹<br>
+
+				<h4>음식 종류</h4> <input type="checkbox" name="categories" value="스프">
+				스프<br> <input type="checkbox" name="categories" value="샌드위치">
+				샌드위치<br> <input type="checkbox" name="categories" value="파스타">
+				파스타<br> <input type="checkbox" name="categories" value="피자">
+				피자<br> <input type="checkbox" name="categories" value="햄버거">
+				햄버거<br> <input type="checkbox" name="categories" value="스튜">
+				스튜<br> <input type="checkbox" name="categories" value="볶음밥">
+				볶음밥<br> <input type="checkbox" name="categories" value="스무디">
+				스무디<br> <input type="checkbox" name="categories" value="디저트">
+				디저트<br> <input type="checkbox" name="categories" value="롤">
+				롤<br>
+
+				<h4>식사 시간</h4> <input type="checkbox" name="categories" value="아침">
+				아침<br> <input type="checkbox" name="categories" value="점심">
+				점심<br> <input type="checkbox" name="categories" value="저녁">
+				저녁<br> <input type="checkbox" name="categories" value="간식">
+				간식<br> <input type="checkbox" name="categories" value="브런치">
+				브런치<br> <input type="checkbox" name="categories" value="야식">
+				야식<br> <input type="checkbox" name="categories" value="콜드브루">
+				콜드브루<br> <input type="checkbox" name="categories" value="오후 간식">
+				오후 간식<br>
+
+				<h4>식이 제한</h4> <input type="checkbox" name="categories" value="채식">
+				채식<br> <input type="checkbox" name="categories" value="비건">
+				비건<br> <input type="checkbox" name="categories" value="글루텐 프리">
+				글루텐 프리<br> <input type="checkbox" name="categories" value="무유당">
+				무유당<br> <input type="checkbox" name="categories" value="저염">
+				저염<br> <input type="checkbox" name="categories" value="저칼로리">
+				저칼로리<br> <input type="checkbox" name="categories" value="무설탕">
+				무설탕<br> <input type="checkbox" name="categories" value="오가닉">
+				오가닉<br>
+
+				<h4>음식 특성</h4> <input type="checkbox" name="categories" value="매운">
+				매운<br> <input type="checkbox" name="categories" value="짠">
+				짠<br> <input type="checkbox" name="categories" value="단">
+				단<br> <input type="checkbox" name="categories" value="신">
+				신<br> <input type="checkbox" name="categories" value="쓴">
+				쓴<br> <input type="checkbox" name="categories" value="고소한">
+				고소한<br> <input type="checkbox" name="categories" value="새콤달콤">
+				새콤달콤<br> <input type="checkbox" name="categories" value="풍미 가득">
+				풍미 가득<br>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<button type="button" id="registerMenuButton">메뉴 등록</button>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>
