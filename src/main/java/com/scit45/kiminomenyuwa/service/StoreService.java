@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.StoreRegistrationDTO;
+import com.scit45.kiminomenyuwa.domain.entity.FoodCategoryEntity;
 import com.scit45.kiminomenyuwa.domain.entity.MenuCategoryMappingEntity;
 import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
 import com.scit45.kiminomenyuwa.domain.entity.StoreEntity;
@@ -19,7 +20,9 @@ import com.scit45.kiminomenyuwa.domain.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 @Transactional
@@ -30,6 +33,25 @@ public class StoreService {
 	private final MenuRepository menuRepository;
 	private final MenuCategoryMappingRepository menuCategoryMappingRepository;
 	private final FoodCategoryRepository foodCategoryRepository;
+
+	// 모든 가게 리스트를 가져오는 메소드
+	public List<StoreRegistrationDTO> getAllStores() {
+		// StoreEntity를 StoreDTO로 변환하여 리스트로 반환
+		return storeRepository.findAll().stream()
+			.map(store -> {
+				log.debug(store.getName());
+				return StoreRegistrationDTO.builder()
+					.name(store.getName())
+					.phoneNumber(store.getPhoneNumber())
+					.zipcode(store.getZipcode())
+					.roadNameAddress(store.getRoadNameAddress())
+					.detailAddress(store.getDetailAddress())
+					.userId(store.getUser().getUserId())
+					.storeId(store.getStoreId())
+					.build();
+			})
+			.collect(Collectors.toList());
+	}
 
 	/**
 	 * 등록 정보를 받아서 storeRepository에 저장한다
@@ -83,7 +105,7 @@ public class StoreService {
 		List<MenuCategoryMappingEntity> categoryMappings = menuDTO.getCategories().stream()
 			.map(categoryName -> {
 				// 카테고리 이름을 기반으로 FoodCategory 엔티티를 조회
-				var foodCategory = foodCategoryRepository.findByCategoryName(categoryName)
+				FoodCategoryEntity foodCategory = foodCategoryRepository.findByCategoryName(categoryName)
 					.orElseThrow(() -> new RuntimeException("카테고리를 찾을 수 없습니다: " + categoryName));
 
 				// MenuCategoryMappingEntity 객체를 생성하여 메뉴와 카테고리 간 매핑을 저장
@@ -96,5 +118,15 @@ public class StoreService {
 
 		// 4. 카테고리 매핑 엔티티들을 저장
 		menuCategoryMappingRepository.saveAll(categoryMappings);
+	}
+
+	// 가게 ID로 메뉴 목록 조회
+	public List<MenuDTO> getMenusByStoreId(Integer storeId) {
+		List<MenuEntity> menus = menuRepository.findByStoreId(storeId);
+		// Entity를 DTO로 변환하여 반환
+		return menus.stream()
+			.map(menu -> new MenuDTO(menu.getMenuId(), menu.getStoreId(), menu.getName(), menu.getPrice(),
+				menu.getPictureUrl(), menu.getEnabled()))
+			.collect(Collectors.toList());
 	}
 }

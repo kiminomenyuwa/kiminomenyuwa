@@ -2,19 +2,59 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>가게 페이지</title>
+<title>Insert title here</title>
 
 <script src="/js/jquery-3.7.1.min.js"></script>
+
 <script>
-	$(document).ready(function() {
-		$('#registerMenuButton').click(function() {
-			window.location.href = '/menuRegistration'; // 메뉴 등록 페이지로 이동
-		});
+$(document).ready(function() {
+	
+	$('#registerMenuButton').click(function() {
+		window.location.href = '/menuRegistration'; // 메뉴 등록 페이지로 이동
 	});
+	
+    const storeId = window.location.pathname.split('/').pop();
+
+    // 가게 정보를 불러오기 위한 Ajax 호출
+    $.ajax({
+        url: '/api/store/' + storeId,
+        method: 'GET',
+        success: function(store) {
+        	console.log(store);
+            $('#storeName').text(store.name);
+
+            // 가게의 메뉴 리스트를 불러오기 위한 Ajax 호출
+            $.ajax({
+                url: '/api/store/' + storeId + '/menus',
+                method: 'GET',
+                success: function(menus) {
+                	console.log(menus);
+                    const menuList = $('#menuList');
+                    menus.forEach(menu => {
+                        const listItem = $('<li></li>').text(menu.name + ' - ' + menu.price + '원');
+                        menuList.append(listItem);
+                    });
+                },
+                error: function(e) {
+              
+                    alert('메뉴 리스트를 불러오는데 실패했습니다.');
+                }
+            });
+        },
+        error: function(e) {
+        	console.log(JSON.stringify(e));
+            alert('가게 정보를 불러오는데 실패했습니다.');
+        }
+    });
+});
 </script>
 </head>
 <body>
-	<h1>[가게 페이지]</h1>
+	<h1 id="storeName"></h1>
+
+	<ul id="menuList">
+		<!-- 여기에 메뉴 리스트가 표시됩니다 -->
+	</ul>
 
 	<!-- 메뉴 등록 페이지로 이동 -->
 	<button id="registerMenuButton">메뉴 등록하기</button>
