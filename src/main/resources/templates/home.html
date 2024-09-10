@@ -9,14 +9,18 @@
 <script src="/js/jquery-3.7.1.min.js"></script>
 </head>
 <body>
-	<h1>홈페이지</h1>
-	<!-- 사용자 메뉴 -->
-	<p>
-		<a href="user/loginForm">로그인</a>
-	</p>
-	<p>
-		<a href="user/joinForm">회원가입</a>
-	</p>
+<h1>홈페이지</h1>
+<h2 sec:authorize="isAuthenticated()" th:text="|${#authentication.principal.name}님 환영합니다|"></h2>
+
+<div sec:authorize="not isAuthenticated()">
+  <p><a href="user/joinForm">회원가입</a></p>
+  <p><a href="user/loginForm">로그인</a></p>
+</div>
+<div sec:authorize="isAuthenticated()">
+  <p><a href="user/logout">로그아웃</a></p>
+  <!--      <p><a href="/mypage">마이페이지</a></p>-->
+</div>
+
 	<p>
 		<a href="storeRegistration">가게 등록</a>
 	</p>
