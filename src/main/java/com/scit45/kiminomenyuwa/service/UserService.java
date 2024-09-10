@@ -1,10 +1,19 @@
 package com.scit45.kiminomenyuwa.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.scit45.kiminomenyuwa.domain.dto.UserDTO;
+import com.scit45.kiminomenyuwa.domain.entity.ProfilePhotoEntity;
 import com.scit45.kiminomenyuwa.domain.entity.Role;
 import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
+import com.scit45.kiminomenyuwa.domain.repository.ProfilePhotoRepository;
 import com.scit45.kiminomenyuwa.domain.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -12,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 유저
+ * 유저(계정 관련) 서비스
  */
 @Slf4j
 @Service
@@ -42,7 +51,7 @@ public class UserService {
 			.detailAddress(dto.getDetailAddress())
 			.zipcode(dto.getZipcode())
 			.phoneNumber(dto.getPhoneNumber())
-			//TODO 프로필사진 .profilePhotoUrl(dto.getProfilePhotoUrl())
+			.profileImgUuid(dto.getProfileImgUuid())
 			.role(Role.ROLE_USER) //기본회원 등급 ROLE_USER
 			.enabled(true)
 			.build();
@@ -63,4 +72,5 @@ public class UserService {
 
 		return !userRepository.existsById(searchId);
 	}
+
 }

@@ -6,9 +6,14 @@
 <title>가게 등록</title>
 
 <script src="/js/jquery-3.7.1.min.js"></script>
-
+<!-- 카카오 도로명주소 서비스 호출 -->
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
 	$(document).ready(function() {
+		//도로명주소 새창 팝업
+		$('#searchAddressBtn').click(kakaoRoadAddress);
+
+		//회원가입 데이터 보냄
 		$('#submitForm').click(function() {
 			let registration = {
 				userId : $('#userId').val(),
@@ -43,6 +48,17 @@
 			})
 		})
 	})
+
+	//카카오 도로명주소 사용
+	function kakaoRoadAddress() {
+		new daum.Postcode({
+			oncomplete: function (data) {
+				//카카오 도로명주소에서 받아온 data html에 반영
+				$('#zipcode').val(data.zonecode);
+				$('#roadNameAddress').val(data.roadAddress);
+			}
+		}).open();
+	}
 </script>
 </head>
 <body>
@@ -64,17 +80,18 @@
 					required></td>
 			</tr>
 			<tr>
+				<td><label for="zipcode">우편번호:</label></td>
+				<td><input type="text" id="zipcode" name="zipcode" readonly placeholder="주소 검색 기능 사용">
+					<button type="button" id="searchAddressBtn">주소검색</button></td>
+			</tr>
+			<tr>
 				<td><label for="roadNameAddress">도로명 주소:</label></td>
 				<td><input type="text" id="roadNameAddress"
-					name="roadNameAddress"></td>
+					name="roadNameAddress" readonly placeholder="주소 검색 기능 사용"></td>
 			</tr>
 			<tr>
 				<td><label for="detailAddress">상세 주소:</label></td>
 				<td><input type="text" id="detailAddress" name="detailAddress"></td>
-			</tr>
-			<tr>
-				<td><label for="zipcode">우편번호:</label></td>
-				<td><input type="text" id="zipcode" name="zipcode"></td>
 			</tr>
 			<tr>
 				<td><label for="phoneNumber">전화번호:</label></td>

@@ -7,8 +7,10 @@ DROP TABLE IF EXISTS `menu_category_mapping`;
 DROP TABLE IF EXISTS `food_category`;
 DROP TABLE IF EXISTS `menu`;
 DROP TABLE IF EXISTS `store`;
-DROP TABLE IF EXISTS `user`; -- 변경된 테이블 이름
+DROP TABLE IF EXISTS `profile_photo`;
+DROP TABLE IF EXISTS `user`;
 DROP TABLE IF EXISTS `category_type`;
+
 
 -- 카테고리 타입 테이블: 카테고리의 종류를 정의 (예: 재료, 나라, 조리 방법)
 CREATE TABLE `category_type`
@@ -40,7 +42,7 @@ CREATE TABLE `user`
     `detail_address`  VARCHAR(100),                                                                         -- 상세 주소
     `zipcode`         VARCHAR(20),                                                                          -- 우편번호
     `phone_number`    VARCHAR(20),                                                                          -- 전화번호
-    `profile_photo_url` VARCHAR(100),                                                                         -- 프로필 사진 URL
+    `profile_img_uuid` VARCHAR(100),                                                                         -- 프로필 사진 URL
     `role`            ENUM ('ROLE_USER', 'ROLE_MERCHANT', 'ROLE_ADMIN') NOT NULL,                           -- 사용자 역할
     `enabled`         TINYINT(1)                                        NOT NULL DEFAULT 1,                 -- 계정 활성화 여부
     `created_time`    TIMESTAMP                                                  DEFAULT CURRENT_TIMESTAMP, -- 계정 생성 시간
@@ -144,4 +146,15 @@ CREATE TABLE `mini_game_menu_rating`
     PRIMARY KEY (`rating_id`),                          -- 기본 키 설정
     FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
     FOREIGN KEY (`menu_id`) REFERENCES `menu` (`menu_id`)
+);
+
+-- 프로필 사진 테이블: 사용자가 업로드한 프로필 사진을 저장
+CREATE TABLE `profile_photo`
+(
+    `photo_id`         INT AUTO_INCREMENT NOT NULL,   -- 사진의 고유 식별자
+    `user_id`          VARCHAR(20)        NOT NULL,   -- 사진을 올린 사용자의 ID (외래 키 대신 문자열 필드로 저장)
+    `original_name`    VARCHAR(100)       NOT NULL,   -- 원본 파일명
+    `saved_name`       VARCHAR(100)       NOT NULL,   -- UUID와 업로드 시간을 조합한 저장 파일명
+    `upload_date`      TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 업로드 날짜
+    PRIMARY KEY (`photo_id`)                          -- 기본 키 설정
 );
