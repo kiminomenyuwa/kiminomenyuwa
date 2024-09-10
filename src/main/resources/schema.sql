@@ -141,7 +141,7 @@ CREATE TABLE `mini_game_menu_rating`
     `user_id`      VARCHAR(20)        NOT NULL,         -- 별점을 매긴 사용자의 ID (변경된 필드 이름)
     `mini_game_id` INT                NOT NULL,         -- 미니게임의 ID
     `menu_id`      INT                NOT NULL,         -- 별점을 부여한 메뉴의 ID
-    `rating`       TINYINT            NOT NULL,         -- 별점 (0~5)
+    `rating`       FLOAT         	  NOT NULL,         -- 별점 (0~5)
     `rating_date`  TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 별점 부여 일시
     PRIMARY KEY (`rating_id`),                          -- 기본 키 설정
     FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
