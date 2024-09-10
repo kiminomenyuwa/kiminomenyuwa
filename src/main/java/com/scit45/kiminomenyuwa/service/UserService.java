@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,8 +32,8 @@ public class UserService {
 	//회원정보 DB처리
 	private final UserRepository userRepository;
 
-	//TODO 비밀번호 암호화(security)
-	//private final BCryptPasswordEncoder passwordEncoder;
+	//비밀번호 암호화(security)
+	private final BCryptPasswordEncoder passwordEncoder;
 
 	/**
 	 * 회원가입 처리 메서드
@@ -41,8 +42,7 @@ public class UserService {
 	public void join(UserDTO dto) {
 		UserEntity entity = UserEntity.builder()
 			.userId(dto.getUserId())
-			.passwordHash(dto.getPasswordHash())
-			//TODO .passwordHash(passwordEncoder.encode(dto.getPasswordHash()))
+			.passwordHash(passwordEncoder.encode(dto.getPasswordHash()))
 			.name(dto.getName())
 			.birthDate(dto.getBirthDate())
 			.gender(dto.getGender())

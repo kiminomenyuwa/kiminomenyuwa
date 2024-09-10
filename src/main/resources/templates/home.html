@@ -66,6 +66,7 @@
 					// 버튼 텍스트를 '다시 시작'으로 변경
 					$("#start-game").text("다시 시작");
 
+<<<<<<< HEAD
 					// 선택된 숫자를 배열에 추가하여 중복 선택 방지
 					selectedNumbers.push(randomNumber);
 				});
@@ -73,4 +74,38 @@
 		});
 	</script>
 </body>
+=======
+        // 다시 시작 버튼 클릭 시 새로운 랜덤 메뉴를 표시
+        $("#restart").click(function () {
+          showRandomMenu();
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <h1>홈페이지</h1>
+    <h2 sec:authorize="isAuthenticated()" th:text="|${#authentication.principal.name}님 환영합니다|"></h2>
+
+    <div sec:authorize="not isAuthenticated()">
+      <p><a href="user/joinForm">회원가입</a></p>
+      <p><a href="user/loginForm">로그인</a></p>
+    </div>
+    <div sec:authorize="isAuthenticated()">
+      <p><a href="user/logout">로그아웃</a></p>
+<!--      <p><a href="/mypage">마이페이지</a></p>-->
+    </div>
+
+    <p>
+      <a href="storeRegistration">가게 등록</a>
+    </p>
+
+    <!-- 메뉴를 랜덤으로 표시할 영역 -->
+    <div id="random-menu">
+      <p>랜덤 메뉴를 불러오는 중...</p>
+    </div>
+
+    <!-- 다시 시작 버튼 -->
+    <button id="restart">다시시작</button>
+  </body>
+>>>>>>> 1ee3481 (feat: 시큐리티 기능 추가)
 </html>
