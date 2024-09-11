@@ -40,7 +40,6 @@ public class StoreController {
 		// 서비스에서 가게 리스트를 가져와서 모델에 추가
 		List<StoreRegistrationDTO> storeList = storeService.getAllStores();
 
-		// storeList.html 페이지를 반환
 		return storeList;
 	}
 
@@ -93,18 +92,38 @@ public class StoreController {
 		return ResponseEntity.ok().body(menuDTO);
 	}
 
+	@GetMapping("/store/{storeId}")
+	public String merchantsPage() {
+		return "store/merchantsPage";
+	}
+
+	/**
+	 * 가게 이름 불러오기
+	 * @param storeId
+	 * @return
+	 */
+	@ResponseBody
+	@GetMapping("/api/store/{storeId}")
+	public StoreRegistrationDTO getStoreName(@PathVariable("storeId")
+	Integer storeId) {
+		String storeName = storeService.getStoreNameById(storeId);
+		log.debug(storeName);
+		return StoreRegistrationDTO.builder()
+			.name(storeName)
+			.build();
+	}
+
 	/**
 	 * 
 	 * @param storeId
 	 * @return 지정 가게에 등록된 메뉴 리스트 가져옴
 	 */
 	@ResponseBody
-	@GetMapping("/store/{storeId}")
-	public List<MenuDTO> getStoreMenu(@PathVariable("storeId")
+	@GetMapping("/api/store/{storeId}/menus")
+	public ResponseEntity<List<MenuDTO>> getMenusByStoreId(@PathVariable("storeId")
 	Integer storeId) {
-		// 메뉴 목록을 가져옴
-		List<MenuDTO> menuList = storeService.getMenusByStoreId(storeId);
-
-		return menuList;
+		List<MenuDTO> menus = storeService.getMenusByStoreId(storeId);
+		log.debug(menus.toString());
+		return ResponseEntity.ok(menus);
 	}
 }
