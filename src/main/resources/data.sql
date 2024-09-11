@@ -112,6 +112,7 @@ VALUES
 (1, '김치찌개', 7000, 'http://example.com/kimchijjigae.jpg', 1),
 (1, '잡채', 9000, 'http://example.com/japchae.jpg', 1);
 
+-- menu 테이블의 메뉴에 카테고리를 부여
 insert into menu_category_mapping (`menu_id`, `category_name`)
 values
 (1, '한식'), -- 비빔밥
@@ -124,6 +125,11 @@ values
 (4, '찌개'), -- 김치찌개
 (5, '한식'), -- 잡채
 (5, '볶음'); -- 잡채
+
+--
+INSERT INTO user_dining_history (`user_id`, `menu_id`, `dining_date`)
+VALUES
+    ('aaa', 1, '2024-09-10');
 
 -- 메뉴 전체 정보 확인
 SELECT 

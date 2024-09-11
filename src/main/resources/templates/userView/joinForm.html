@@ -1,271 +1,271 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
+<head>
+    <meta charset="UTF-8"/>
     <meta
-      name="viewport"
-      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+            name="viewport"
+            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <!-- 카카오 도로명주소 서비스 호출 -->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <title>회원가입</title>
     <script>
-      $(document).ready(function () {
-        //회원가입 폼 유효성검사
-        $("#joinForm").submit(validation);
-        //ID 중복확인 팝업
-        $("#checkIdBtn").click(checkIdAvailability);
-        //도로명주소 새창 팝업
-        $("#searchAddressBtn").click(kakaoRoadAddress);
-        //프로필 사진 선택시 이벤트
-        $("#profileImage").change(saveProfile);
-      });
-
-      //ID 중복확인 기능
-      function checkIdAvailability() {
-        let w = window.open(
-          "idCheck",
-          "win",
-          "location=0,left=500px,top=200px,width=500px,height=400px"
-        );
-      }
-
-      //카카오 도로명주소 사용
-      function kakaoRoadAddress() {
-        new daum.Postcode({
-          oncomplete: function (data) {
-            //카카오 도로명주소에서 받아온 data html에 반영
-            $("#zipcode").val(data.zonecode);
-            $("#roadNameAddress").val(data.roadAddress);
-          },
-        }).open();
-      }
-
-      //프로필 사진 등록
-      function saveProfile() {
-        let formData = new FormData();
-        formData.append("profileImage", $("#profileImage")[0].files[0]);
-        formData.append("userId", $("#id").val()); // 현재 폼에 입력된 userId도 같이 전송
-
-        $.ajax({
-          url: "/user/uploadProfile",
-          type: "post",
-          data: formData,
-          datatype: "json",
-          processData: false,
-          contentType: false,
-          success: function (profilePhotoDTO) {
-            alert("프로필 사진 업로드 성공");
-            $("#profileImgUuid").val(profilePhotoDTO.savedName);
-          },
-          error: function () {
-            alert("프로필 사진 업로드 실패!");
-          },
+        $(document).ready(function () {
+            //회원가입 폼 유효성검사
+            $("#joinForm").submit(validation);
+            //ID 중복확인 팝업
+            $("#checkIdBtn").click(checkIdAvailability);
+            //도로명주소 새창 팝업
+            $("#searchAddressBtn").click(kakaoRoadAddress);
+            //프로필 사진 선택시 이벤트
+            $("#profileImage").change(saveProfile);
         });
-      }
 
-      //유효성 검사
-      function validation() {
-        let id = $("#id").val();
-        let pw = $("#password").val();
-        let pw2 = $("#password2").val();
-        let name = $("#name").val();
-        let birthDate = $("#birthDate").val();
-        let gender = $('select[name="gender"]').val();
-        let email = $("#email").val();
-        let zipcode = $("#zipcode").val();
-        let phoneNumber = $("#phoneNumber").val();
+        //ID 중복확인 기능
+        function checkIdAvailability() {
+            let w = window.open(
+                "idCheck",
+                "win",
+                "location=0,left=500px,top=200px,width=500px,height=400px"
+            );
+        }
 
-        //ID 유효성 검사
-        if (id.length < 3 || id.length > 10) {
-          alert("ID는 3~10자로 입력하세요.");
-          return false;
+        //카카오 도로명주소 사용
+        function kakaoRoadAddress() {
+            new daum.Postcode({
+                oncomplete: function (data) {
+                    //카카오 도로명주소에서 받아온 data html에 반영
+                    $("#zipcode").val(data.zonecode);
+                    $("#roadNameAddress").val(data.roadAddress);
+                },
+            }).open();
         }
-        //비밀번호 길이 검사
-        if (pw.length < 3 || pw.length > 30) {
-          alert("비밀번호는 3~30자로 입력하세요");
-          return false;
+
+        //프로필 사진 등록
+        function saveProfile() {
+            let formData = new FormData();
+            formData.append("profileImage", $("#profileImage")[0].files[0]);
+            formData.append("userId", $("#id").val()); // 현재 폼에 입력된 userId도 같이 전송
+
+            $.ajax({
+                url: "/user/uploadProfile",
+                type: "post",
+                data: formData,
+                datatype: "json",
+                processData: false,
+                contentType: false,
+                success: function (profilePhotoDTO) {
+                    alert("프로필 사진 업로드 성공");
+                    $("#profileImgUuid").val(profilePhotoDTO.savedName);
+                },
+                error: function () {
+                    alert("프로필 사진 업로드 실패!");
+                },
+            });
         }
-        //비밀번호 확인
-        if (pw != pw2) {
-          alert("비밀번호가 일치하지 않습니다.");
-          return false;
+
+        //유효성 검사
+        function validation() {
+            let id = $("#id").val();
+            let pw = $("#password").val();
+            let pw2 = $("#password2").val();
+            let name = $("#name").val();
+            let birthDate = $("#birthDate").val();
+            let gender = $('select[name="gender"]').val();
+            let email = $("#email").val();
+            let zipcode = $("#zipcode").val();
+            let phoneNumber = $("#phoneNumber").val();
+
+            //ID 유효성 검사
+            if (id.length < 3 || id.length > 10) {
+                alert("ID는 3~10자로 입력하세요.");
+                return false;
+            }
+            //비밀번호 길이 검사
+            if (pw.length < 3 || pw.length > 30) {
+                alert("비밀번호는 3~30자로 입력하세요");
+                return false;
+            }
+            //비밀번호 확인
+            if (pw != pw2) {
+                alert("비밀번호가 일치하지 않습니다.");
+                return false;
+            }
+            //이름 입력 검사
+            if (name == "") {
+                alert("이름을 입력하세요");
+                return false;
+            }
+            // 생년월일 입력 여부 확인
+            if (birthDate == "") {
+                alert("생년월일을 입력하세요.");
+                return false;
+            }
+            //성별 선택 여부 확인
+            if (gender == "") {
+                alert("성별을 선택하세요.");
+                return false;
+            }
+            //이메일 입력 여부 확인
+            if (email == "") {
+                alert("이메일을 입력하세요.");
+                return false;
+            }
+            //우편번호 입력 여부 확인
+            if (zipcode == "") {
+                alert("우편번호를 입력하세요.");
+                return false;
+            }
+            //전화번호 입력 여부 확인
+            if (phoneNumber == "") {
+                alert("전화번호를 입력하세요.");
+                return false;
+            }
+            return true;
         }
-        //이름 입력 검사
-        if (name == "") {
-          alert("이름을 입력하세요");
-          return false;
-        }
-        // 생년월일 입력 여부 확인
-        if (birthDate == "") {
-          alert("생년월일을 입력하세요.");
-          return false;
-        }
-        //성별 선택 여부 확인
-        if (gender == "") {
-          alert("성별을 선택하세요.");
-          return false;
-        }
-        //이메일 입력 여부 확인
-        if (email == "") {
-          alert("이메일을 입력하세요.");
-          return false;
-        }
-        //우편번호 입력 여부 확인
-        if (zipcode == "") {
-          alert("우편번호를 입력하세요.");
-          return false;
-        }
-        //전화번호 입력 여부 확인
-        if (phoneNumber == "") {
-          alert("전화번호를 입력하세요.");
-          return false;
-        }
-        return true;
-      }
     </script>
-  </head>
-  <body>
-    <h1>[ 회원가입 ]</h1>
-    <form id="joinForm" action="/user/join" method="post">
-      <table>
+</head>
+<body>
+<h1>[ 회원가입 ]</h1>
+<form id="joinForm" action="/user/join" method="post">
+    <table>
         <!-- ID 입력 -->
         <tr>
-          <td>ID</td>
-          <td class="inputtext">
-            <input
-              type="text"
-              id="id"
-              name="userId"
-              placeholder="ID중복확인 이용"
-              readonly="readonly"
-            />
-            <button type="button" id="checkIdBtn">ID중복확인</button>
-          </td>
+            <td>ID</td>
+            <td class="inputtext">
+                <input
+                        type="text"
+                        id="id"
+                        name="userId"
+                        placeholder="ID중복확인 이용"
+                        readonly="readonly"
+                />
+                <button type="button" id="checkIdBtn">ID중복확인</button>
+            </td>
         </tr>
 
         <!-- 비밀번호 입력 -->
         <tr>
-          <td>비밀번호</td>
-          <td class="inputtext">
-            <input
-              type="password"
-              id="password"
-              name="passwordHash"
-              placeholder="비밀번호 입력"
-            />
-            <br />
-            <input
-              type="password"
-              id="password2"
-              placeholder="비밀번호 다시 입력"
-            />
-          </td>
+            <td>비밀번호</td>
+            <td class="inputtext">
+                <input
+                        type="password"
+                        id="password"
+                        name="passwordHash"
+                        placeholder="비밀번호 입력"
+                />
+                <br/>
+                <input
+                        type="password"
+                        id="password2"
+                        placeholder="비밀번호 다시 입력"
+                />
+            </td>
         </tr>
 
         <!-- 이름 입력 -->
         <tr>
-          <td>이름</td>
-          <td class="inputtext">
-            <input type="text" id="name" name="name" placeholder="이름 입력" />
-          </td>
+            <td>이름</td>
+            <td class="inputtext">
+                <input type="text" id="name" name="name" placeholder="이름 입력"/>
+            </td>
         </tr>
 
         <!-- 생년월일 입력 -->
         <tr>
-          <td>생년월일</td>
-          <td><input type="date" id="birthDate" name="birthDate" /></td>
+            <td>생년월일</td>
+            <td><input type="date" id="birthDate" name="birthDate"/></td>
         </tr>
 
         <!-- 성별 선택 -->
         <tr>
-          <td>성별</td>
-          <td>
-            <select name="gender">
-              <option value="">선택</option>
-              <option value="male">남</option>
-              <option value="female">여</option>
-            </select>
-          </td>
+            <td>성별</td>
+            <td>
+                <select name="gender">
+                    <option value="">선택</option>
+                    <option value="male">남</option>
+                    <option value="female">여</option>
+                </select>
+            </td>
 
         </tr>
 
         <!-- 이메일 입력 -->
         <tr>
-          <td>이메일</td>
-          <td><input type="email" id="email" name="email" /></td>
+            <td>이메일</td>
+            <td><input type="email" id="email" name="email"/></td>
         </tr>
 
         <!-- 우편번호 -->
         <tr>
-          <td>우편번호</td>
-          <td>
-            <input
-              type="text"
-              id="zipcode"
-              name="zipcode"
-              th:value="${zipcode}"
-              readonly
-              placeholder="주소검색 기능 사용"
-            />
-            <button type="button" id="searchAddressBtn">주소검색</button>
-          </td>
+            <td>우편번호</td>
+            <td>
+                <input
+                        type="text"
+                        id="zipcode"
+                        name="zipcode"
+                        th:value="${zipcode}"
+                        readonly
+                        placeholder="주소검색 기능 사용"
+                />
+                <button type="button" id="searchAddressBtn">주소검색</button>
+            </td>
         </tr>
 
         <!-- 도로명 주소 -->
         <tr>
-          <td>도로명주소</td>
-          <td>
-            <input
-              type="text"
-              id="roadNameAddress"
-              name="roadNameAddress"
-              th:value="${roadNameAddress}"
-              readonly
-              placeholder="주소검색 기능 사용"
-            />
-          </td>
+            <td>도로명주소</td>
+            <td>
+                <input
+                        type="text"
+                        id="roadNameAddress"
+                        name="roadNameAddress"
+                        th:value="${roadNameAddress}"
+                        readonly
+                        placeholder="주소검색 기능 사용"
+                />
+            </td>
         </tr>
 
         <!-- 상세주소 -->
         <tr>
-          <td>상세주소</td>
-          <td>
-            <input
-              type="text"
-              id="detailAddress"
-              name="detailAddress"
-              th:value="${detailAddress}"
-              placeholder="상세주소를 입력하세요"
-            />
-          </td>
+            <td>상세주소</td>
+            <td>
+                <input
+                        type="text"
+                        id="detailAddress"
+                        name="detailAddress"
+                        th:value="${detailAddress}"
+                        placeholder="상세주소를 입력하세요"
+                />
+            </td>
         </tr>
 
         <!-- 전화번호 -->
         <tr>
-          <td>전화번호</td>
-          <td><input type="tel" id="phoneNumber" name="phoneNumber" /></td>
+            <td>전화번호</td>
+            <td><input type="tel" id="phoneNumber" name="phoneNumber"/></td>
         </tr>
 
         <!-- 프로필 사진 업로드 -->
         <tr>
-          <td>프로필 사진</td>
-          <td>
-            <input type="file" id="profileImage" name="profileImage" />
-            <input type="hidden" id="profileImgUuid" name="profileImgUuid" />
-          </td>
+            <td>프로필 사진</td>
+            <td>
+                <input type="file" id="profileImage" name="profileImage"/>
+                <input type="hidden" id="profileImgUuid" name="profileImgUuid"/>
+            </td>
         </tr>
 
         <!-- 제출 버튼 -->
         <tr>
-          <td colspan="2" class="submitbox">
-            <input type="submit" value="가입" />
-            <input type="reset" value="다시 쓰기" />
-          </td>
+            <td colspan="2" class="submitbox">
+                <input type="submit" value="가입"/>
+                <input type="reset" value="다시 쓰기"/>
+            </td>
         </tr>
-      </table>
-    </form>
-  </body>
+    </table>
+</form>
+</body>
 </html>
