@@ -21,4 +21,10 @@ public class StoreRegistrationDTO {
 	String category;
 	String description;
 	Boolean enabled;
+
+	public StoreRegistrationDTO(String name) {
+		super();
+		this.name = name;
+	}
+
 }

@@ -120,6 +120,17 @@ public class StoreService {
 		menuCategoryMappingRepository.saveAll(categoryMappings);
 	}
 
+	/**
+	 * 가게이름 받아오기
+	 * @param storeId
+	 * @return
+	 */
+	public String getStoreNameById(Integer storeId) {
+		return storeRepository.findById(storeId)
+			.map(store -> store.getName())
+			.orElseThrow(() -> new IllegalArgumentException("Store not found"));
+	}
+
 	// 가게 ID로 메뉴 목록 조회
 	public List<MenuDTO> getMenusByStoreId(Integer storeId) {
 		List<MenuEntity> menus = menuRepository.findByStoreId(storeId);
@@ -129,4 +140,5 @@ public class StoreService {
 				menu.getPictureUrl(), menu.getEnabled()))
 			.collect(Collectors.toList());
 	}
+
 }
