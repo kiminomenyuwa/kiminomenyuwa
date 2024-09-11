@@ -8,9 +8,6 @@
 <script src="/js/jquery-3.7.1.min.js"></script>
 <script>
 	$(document).ready(function() {
-		$('#registerMenuButton').click(function() {
-			window.location.href = '/menuRegistration'; // 메뉴 등록 페이지로 이동
-		});
 
 		 $.ajax({
              url: '/api/stores', // 가게 리스트를 불러오는 API 엔드포인트
@@ -48,7 +45,5 @@
 		<!-- 여기에 가게 리스트가 표시됩니다 -->
 	</ul>
 
-	<!-- 메뉴 등록 페이지로 이동 -->
-	<button id="registerMenuButton">메뉴 등록하기</button>
 </body>
 </html>
