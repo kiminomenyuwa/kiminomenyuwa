@@ -126,7 +126,7 @@ values
 (5, '한식'), -- 잡채
 (5, '볶음'); -- 잡채
 
---
+-- 테스트용 사용자 음식 먹은 내역
 INSERT INTO user_dining_history (`user_id`, `menu_id`, `dining_date`)
 VALUES
     ('aaa', 1, '2024-09-10');
