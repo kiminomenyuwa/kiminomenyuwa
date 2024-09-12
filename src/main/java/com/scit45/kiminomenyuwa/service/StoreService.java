@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.scit45.kiminomenyuwa.domain.dto.FoodCategoryDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.StoreRegistrationDTO;
 import com.scit45.kiminomenyuwa.domain.entity.FoodCategoryEntity;
@@ -138,6 +139,14 @@ public class StoreService {
 		return menus.stream()
 			.map(menu -> new MenuDTO(menu.getMenuId(), menu.getStoreId(), menu.getName(), menu.getPrice(),
 				menu.getPictureUrl(), menu.getEnabled()))
+			.collect(Collectors.toList());
+	}
+
+	public List<FoodCategoryDTO> getAllCategories() {
+		List<FoodCategoryEntity> categories = foodCategoryRepository.findAll();
+		log.debug(categories.toString());
+		return categories.stream()
+			.map(category -> new FoodCategoryDTO(category.getCategoryName(), category.getTypeId()))
 			.collect(Collectors.toList());
 	}
 
