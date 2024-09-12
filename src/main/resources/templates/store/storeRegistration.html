@@ -38,8 +38,8 @@
 				data : JSON.stringify(registration), // 데이터를 직렬화
 				success : function() {
 					alert('가게가 정상 등록되었습니다.');
-				    // 성공하면 페이지 리다이렉트
-				    window.location.href = '/merchantsPage';  // 리다이렉트할 페이지 경로
+					// 성공하면 페이지 리다이렉트
+					window.location.href = '/storePage'; // 리다이렉트할 페이지 경로
 				},
 				error : function(e) {
 					console.log(JSON.stringify(e));
