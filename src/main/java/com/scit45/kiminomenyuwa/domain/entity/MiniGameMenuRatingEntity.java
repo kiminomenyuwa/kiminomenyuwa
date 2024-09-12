@@ -8,6 +8,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
@@ -16,25 +19,25 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "mini_game_menu_rating")
 @NoArgsConstructor
+@AllArgsConstructor
+@Data
+@Builder
 public class MiniGameMenuRatingEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "rating_id")
-    private Integer ratingId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "rating_id")
+	private Integer ratingId;
 
-    @Column(name = "user_id", nullable = false)
-    private String userId;
+	@Column(name = "user_id", nullable = false)
+	private String userId;
 
-    @Column(name = "mini_game_id", nullable = false)
-    private Integer miniGameId;
+	@Column(name = "menu_id", nullable = false)
+	private Integer menuId;
 
-    @Column(name = "menu_id", nullable = false)
-    private Integer menuId;
+	@Column(name = "rating", nullable = false)
+	private Float rating;
 
-    @Column(name = "rating", nullable = false)
-    private Float rating;
-
-    @Column(name = "rating_date")
-    private LocalDateTime ratingDate;
+	@Column(name = "rating_date")
+	private LocalDateTime ratingDate;
 }

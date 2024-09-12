@@ -139,7 +139,6 @@ CREATE TABLE `mini_game_menu_rating`
 (
     `rating_id`    INT AUTO_INCREMENT NOT NULL,         -- 별점 기록의 고유 식별자
     `user_id`      VARCHAR(20)        NOT NULL,         -- 별점을 매긴 사용자의 ID (변경된 필드 이름)
-    `mini_game_id` INT                NOT NULL,         -- 미니게임의 ID
     `menu_id`      INT                NOT NULL,         -- 별점을 부여한 메뉴의 ID
     `rating`       FLOAT         	  NOT NULL,         -- 별점 (0~5)
     `rating_date`  TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 별점 부여 일시
