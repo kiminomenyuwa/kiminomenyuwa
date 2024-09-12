@@ -10,15 +10,21 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StoreRegistrationDTO {
-	private Integer storeId;
-	private String userId; // UserEntity가 아닌 userId로 설정
-	private String name;
-	private String certification;
-	private String roadNameAddress;
-	private String detailAddress;
-	private String zipcode;
-	private String phoneNumber;
-	private String category;
-	private String description;
-	private Boolean enabled;
+	Integer storeId;
+	String userId; // UserEntity가 아닌 userId로 설정
+	String name;
+	String certification;
+	String roadNameAddress;
+	String detailAddress;
+	String zipcode;
+	String phoneNumber;
+	String category;
+	String description;
+	Boolean enabled;
+
+	public StoreRegistrationDTO(String name) {
+		super();
+		this.name = name;
+	}
+
 }
