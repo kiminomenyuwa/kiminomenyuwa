@@ -95,13 +95,10 @@ VALUES ('매운', 7),
        ('풍미 가득', 7);
 
 -- test 데이터 저장
--- 유저 추가
-INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`, `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
-VALUES ('testuser01', '$2y$10$abcdefghijklmnopqrstuvwx', '김철수', '1985-10-15', 'male', 'testuser01@example.com', '서울시 강남구', '테헤란로 123', '06234', '010-1234-5678', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
-
+-- 회원가입 할때 아이디는 'aaa' 로 직접 만드시고 상점 추가 실행
 -- 상점 추가
 INSERT INTO `store` (`user_id`, `name`, `certification`, `road_name_address`, `detail_address`, `zipcode`, `phone_number`, `category`, `description`, `enabled`)
-VALUES ('testuser01', '철수네 식당', '인증 정보', '서울시 강남구', '테헤란로 123', '06234', '010-8765-4321', '한식', '서울에서 가장 맛있는 한식당입니다.', 1);
+VALUES ('aaa', '철수네 식당', '인증 정보', '서울시 강남구', '테헤란로 123', '06234', '010-8765-4321', '한식', '서울에서 가장 맛있는 한식당입니다.', 1);
 
 -- 메뉴 추가
 INSERT INTO `menu` (`store_id`, `name`, `price`, `picture_url`, `enabled`)
@@ -152,4 +149,23 @@ LEFT JOIN
     food_category fc ON mcm.category_name = fc.category_name
 GROUP BY 
     m.menu_id, m.name, m.price, m.picture_url, s.name, u.name;
-    
+
+SELECT * FROM USER;
+
+
+-- 아래 sql은 그때 그때 미니게임을 다시 해보고 싶을 때 기록해둔 점수 초기화 하기 위한 sql
+DROP TABLE IF EXISTS `mini_game_menu_rating`;
+-- 미니게임에서 메뉴에 대한 별점 기록 테이블: 미니게임을 통해 메뉴에 대한 별점을 저장
+CREATE TABLE `mini_game_menu_rating`
+(
+    `rating_id`    INT AUTO_INCREMENT NOT NULL,         -- 별점 기록의 고유 식별자
+    `user_id`      VARCHAR(20)        NOT NULL,         -- 별점을 매긴 사용자의 ID (변경된 필드 이름)
+    `menu_id`      INT                NOT NULL,         -- 별점을 부여한 메뉴의 ID
+    `rating`       FLOAT         	  NOT NULL,         -- 별점 (0~5)
+    `rating_date`  TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 별점 부여 일시
+    PRIMARY KEY (`rating_id`),                          -- 기본 키 설정
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
+    FOREIGN KEY (`menu_id`) REFERENCES `menu` (`menu_id`)
+);
+select * from mini_game_menu_rating mgmr;
+-- 여기까지
