@@ -37,7 +37,7 @@ public class MiniGameMenuRatingEntity {
 
 	@Column(name = "rating", nullable = false)
 	private Float rating;
-
+  
 	@Column(name = "rating_date")
 	private LocalDateTime ratingDate;
 }

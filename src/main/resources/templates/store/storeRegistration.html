@@ -7,7 +7,8 @@
 
 <script src="/js/jquery-3.7.1.min.js"></script>
 <!-- 카카오 도로명주소 서비스 호출 -->
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script
+	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
 	$(document).ready(function() {
 		//도로명주소 새창 팝업
@@ -52,7 +53,7 @@
 	//카카오 도로명주소 사용
 	function kakaoRoadAddress() {
 		new daum.Postcode({
-			oncomplete: function (data) {
+			oncomplete : function(data) {
 				//카카오 도로명주소에서 받아온 data html에 반영
 				$('#zipcode').val(data.zonecode);
 				$('#roadNameAddress').val(data.roadAddress);
@@ -81,7 +82,8 @@
 			</tr>
 			<tr>
 				<td><label for="zipcode">우편번호:</label></td>
-				<td><input type="text" id="zipcode" name="zipcode" readonly placeholder="주소 검색 기능 사용">
+				<td><input type="text" id="zipcode" name="zipcode" readonly
+					placeholder="주소 검색 기능 사용">
 					<button type="button" id="searchAddressBtn">주소검색</button></td>
 			</tr>
 			<tr>

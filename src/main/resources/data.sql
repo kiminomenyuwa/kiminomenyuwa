@@ -97,7 +97,13 @@ VALUES ('매운', 7),
        ('풍미 가득', 7);
 
 -- test 데이터 저장
+
+-- 유저 추가
+INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`, `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
+VALUES ('testuser01', '$2y$10$abcdefghijklmnopqrstuvwx', '김철수', '1985-10-15', 'male', 'testuser01@example.com', '서울시 강남구', '테헤란로 123', '06234', '010-1234-5678', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
+
 -- 회원가입 할때 아이디는 'aaa' 로 직접 만드시고 상점 추가 실행
+
 -- 상점 추가
 INSERT INTO `store` (`user_id`, `name`, `certification`, `road_name_address`, `detail_address`, `zipcode`,
                      `phone_number`, `category`, `description`, `enabled`)
