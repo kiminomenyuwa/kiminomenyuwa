@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <title>메뉴 추천 테스트</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style01.css}"/>
+</head>
+<body>
+<h1>[ 메뉴 추천 테스트용 페이지 ]</h1>
+
+<p>일단 여기에 전체 메뉴 표시</p>
+<table>
+    <tr>
+        <th>menuId</th>
+        <th>storeId</th>
+        <th>name</th>
+        <th>price</th>
+        <th>pictureUrl</th>
+        <th>enabled</th>
+    </tr>
+    <tr th:each="menuList : ${menuList}">
+        <td th:text="${menuList.menuId}"></td>
+        <td th:text="${menuList.storeId}"></td>
+        <td th:text="${menuList.name}"></td>
+        <td th:text="${menuList.price}"></td>
+        <td th:text="${menuList.pictureUrl}"></td>
+        <td th:text="${menuList.enabled}"></td>
+    </tr>
+</table>
+<p th:text="|${#authentication.principal.name}님의 음식 내역|"></p>
+<table>
+    <tr>
+        <th>diningId</th>
+        <th>userId</th>
+        <th>menuId</th>
+        <th>diningDate</th>
+    </tr>
+    <tr th:each="dhList : ${diningHistoryList}">
+        <td th:text="${dhList.diningId}"></td>
+        <td th:text="${dhList.userId}"></td>
+        <td th:text="${dhList.menuId}"></td>
+        <td th:text="${dhList.diningDate}"></td>
+    </tr>
+</table>
+
+</body>
+</html>

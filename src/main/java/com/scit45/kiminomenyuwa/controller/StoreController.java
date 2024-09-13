@@ -78,7 +78,7 @@ public class StoreController {
 
 	/**
 	 * 새로운 메뉴를 등록하는 엔드포인트
-	 * 
+	 *
 	 * @param menuDTO 클라이언트에서 전달된 메뉴 등록 정보
 	 * @return 성공 여부에 대한 응답
 	 */

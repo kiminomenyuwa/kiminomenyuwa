@@ -1,3 +1,5 @@
+-- IMPORTANT! DATA 생성 SQL문 실행 전에 프로젝트 실행해서 id를 aaa로 회원 가입 후 실행할 것!
+-- 현재 모든 테스트 데이터가 userID : 'aaa'를 기준으로 되어있고. 회원가입의 경우 비밀번호 암호화때문에 직접 해줘야하는 듯
 use kiminomenyuwa;
 
 -- 카테고리 타입 테이블에 데이터 추가
@@ -103,54 +105,116 @@ VALUES ('testuser01', '$2y$10$abcdefghijklmnopqrstuvwx', '김철수', '1985-10-1
 -- 회원가입 할때 아이디는 'aaa' 로 직접 만드시고 상점 추가 실행
 
 -- 상점 추가
-INSERT INTO `store` (`user_id`, `name`, `certification`, `road_name_address`, `detail_address`, `zipcode`, `phone_number`, `category`, `description`, `enabled`)
+INSERT INTO `store` (`user_id`, `name`, `certification`, `road_name_address`, `detail_address`, `zipcode`,
+                     `phone_number`, `category`, `description`, `enabled`)
 VALUES ('aaa', '철수네 식당', '인증 정보', '서울시 강남구', '테헤란로 123', '06234', '010-8765-4321', '한식', '서울에서 가장 맛있는 한식당입니다.', 1);
 
--- 메뉴 추가
+-- 메뉴 추가 (20개로 늘림)
 INSERT INTO `menu` (`store_id`, `name`, `price`, `picture_url`, `enabled`)
-VALUES 
-(1, '비빔밥', 8000, 'http://example.com/bibimbap.jpg', 1),
-(1, '된장찌개', 7000, 'http://example.com/doenjangjjigae.jpg', 1),
-(1, '불고기', 12000, 'http://example.com/bulgogi.jpg', 1),
-(1, '김치찌개', 7000, 'http://example.com/kimchijjigae.jpg', 1),
-(1, '잡채', 9000, 'http://example.com/japchae.jpg', 1);
+VALUES (1, '비빔밥', 8000, 'http://example.com/bibimbap.jpg', 1),
+       (1, '된장찌개', 7000, 'http://example.com/doenjangjjigae.jpg', 1),
+       (1, '불고기', 12000, 'http://example.com/bulgogi.jpg', 1),
+       (1, '김치찌개', 7000, 'http://example.com/kimchijjigae.jpg', 1),
+       (1, '잡채', 9000, 'http://example.com/japchae.jpg', 1),
+       (1, '제육볶음', 9000, 'http://example.com/jeyukbokkeum.jpg', 1),
+       (1, '콩나물국밥', 6000, 'http://example.com/kongnamulgukbap.jpg', 1),
+       (1, '갈비탕', 12000, 'http://example.com/galbitang.jpg', 1),
+       (1, '떡볶이', 5000, 'http://example.com/tteokbokki.jpg', 1),
+       (1, '비빔국수', 7000, 'http://example.com/bibimguksu.jpg', 1),
+       (1, '삼겹살', 15000, 'http://example.com/samgyeopsal.jpg', 1),
+       (1, '냉면', 8000, 'http://example.com/naengmyeon.jpg', 1),
+       (1, '우동', 7000, 'http://example.com/udon.jpg', 1),
+       (1, '라면', 4000, 'http://example.com/ramen.jpg', 1),
+       (1, '초밥', 10000, 'http://example.com/sushi.jpg', 1),
+       (1, '튀김', 5000, 'http://example.com/fried.jpg', 1),
+       (1, '볶음우동', 9000, 'http://example.com/yakisoba.jpg', 1),
+       (1, '파스타', 12000, 'http://example.com/pasta.jpg', 1),
+       (1, '햄버거', 8000, 'http://example.com/burger.jpg', 1),
+       (1, '피자', 15000, 'http://example.com/pizza.jpg', 1);
 
+-- menu 테이블의 메뉴에 카테고리를 부여
 insert into menu_category_mapping (`menu_id`, `category_name`)
-values
-(1, '한식'), -- 비빔밥
-(1, '볶음밥'), -- 비빔밥
-(2, '한식'), -- 된장찌개
-(2, '찌개'), -- 된장찌개
-(3, '한식'), -- 불고기
-(3, '구이'), -- 불고기
-(4, '한식'), -- 김치찌개
-(4, '찌개'), -- 김치찌개
-(5, '한식'), -- 잡채
-(5, '볶음'); -- 잡채
+values (1, '한식'),    -- 비빔밥
+       (1, '볶음밥'),   -- 비빔밥
+       (2, '한식'),    -- 된장찌개
+       (2, '찌개'),    -- 된장찌개
+       (3, '한식'),    -- 불고기
+       (3, '구이'),    -- 불고기
+       (4, '한식'),    -- 김치찌개
+       (4, '찌개'),    -- 김치찌개
+       (5, '한식'),    -- 잡채
+       (5, '볶음'),    -- 잡채
+       (6, '한식'),    -- 제육볶음
+       (6, '볶음'),    -- 제육볶음
+       (7, '한식'),    -- 콩나물국밥
+       (7, '스프'),    -- 콩나물국밥
+       (8, '한식'),    -- 갈비탕
+       (8, '스프'),    -- 갈비탕
+       (9, '한식'),    -- 떡볶이
+       (9, '볶음'),    -- 떡볶이
+       (10, '한식'),   -- 비빔국수
+       (10, '볶음'),   -- 비빔국수
+       (11, '한식'),   -- 삼겹살
+       (11, '구이'),   -- 삼겹살
+       (12, '한식'),   -- 냉면
+       (12, '스프'),   -- 냉면
+       (13, '일식'),   -- 우동
+       (13, '스프'),   -- 우동
+       (14, '일식'),   -- 라면
+       (14, '스프'),   -- 라면
+       (15, '일식'),   -- 초밥
+       (15, '롤'),    -- 초밥
+       (16, '일식'),   -- 튀김
+       (16, '튀김'),   -- 튀김
+       (17, '일식'),   -- 볶음우동
+       (17, '볶음'),   -- 볶음우동
+       (18, '양식'),   -- 파스타
+       (18, '볶음'),   -- 파스타
+       (19, '양식'),   -- 햄버거
+       (19, '샌드위치'), -- 햄버거
+       (20, '양식'),   -- 피자
+       (20, '피자');   -- 피자
+
+-- 테스트용 사용자 음식 먹은 내역
+INSERT INTO user_dining_history (`user_id`, `menu_id`, `dining_date`)
+VALUES
+    ('aaa', 1, '2024-09-01 12:30:45'),
+    ('aaa', 2, '2024-09-02 08:15:30'),
+    ('aaa', 3, '2024-09-03 14:22:10'),
+    ('aaa', 4, '2024-09-04 18:45:00'),
+    ('aaa', 5, '2024-09-05 09:10:25'),
+    ('aaa', 1, '2024-09-06 19:05:50'), -- menu_id 1 다시 사용
+    ('aaa', 6, '2024-09-07 11:55:35'),
+    ('aaa', 2, '2024-09-08 07:30:20'), -- menu_id 2 다시 사용
+    ('aaa', 7, '2024-09-09 15:45:40'),
+    ('aaa', 8, '2024-09-10 13:20:15'),
+    ('aaa', 3, '2024-09-11 16:40:05'), -- menu_id 3 다시 사용
+    ('aaa', 9, '2024-09-12 10:00:50'),
+    ('aaa', 10, '2024-09-13 17:35:00');
+
+select * from user_dining_history;
 
 -- 메뉴 전체 정보 확인
-SELECT 
-    m.menu_id,                -- 메뉴 ID
-    m.name AS menu_name,      -- 메뉴 이름
-    m.price,                  -- 메뉴 가격
-    m.picture_url,            -- 메뉴 사진 URL
-    s.name AS store_name,     -- 상점 이름
-    u.name AS owner_name,     -- 상점 주인 이름
-    GROUP_CONCAT(fc.category_name SEPARATOR ', ') AS categories -- 메뉴의 카테고리들
-FROM 
-    menu m
-JOIN 
-    store s ON m.store_id = s.store_id
-JOIN 
-    user u ON s.user_id = u.user_id
-LEFT JOIN 
-    menu_category_mapping mcm ON m.menu_id = mcm.menu_id
-LEFT JOIN 
-    food_category fc ON mcm.category_name = fc.category_name
-GROUP BY 
-    m.menu_id, m.name, m.price, m.picture_url, s.name, u.name;
+SELECT m.menu_id,                                                   -- 메뉴 ID
+       m.name                                        AS menu_name,  -- 메뉴 이름
+       m.price,                                                     -- 메뉴 가격
+       m.picture_url,                                               -- 메뉴 사진 URL
+       s.name                                        AS store_name, -- 상점 이름
+       u.name                                        AS owner_name, -- 상점 주인 이름
+       GROUP_CONCAT(fc.category_name SEPARATOR ', ') AS categories  -- 메뉴의 카테고리들
+FROM menu m
+         JOIN
+     store s ON m.store_id = s.store_id
+         JOIN
+     user u ON s.user_id = u.user_id
+         LEFT JOIN
+     menu_category_mapping mcm ON m.menu_id = mcm.menu_id
+         LEFT JOIN
+     food_category fc ON mcm.category_name = fc.category_name
+GROUP BY m.menu_id, m.name, m.price, m.picture_url, s.name, u.name;
 
-SELECT * FROM USER;
+SELECT *
+FROM USER;
 
 
 -- 아래 sql은 그때 그때 미니게임을 다시 해보고 싶을 때 기록해둔 점수 초기화 하기 위한 sql
@@ -158,14 +222,15 @@ DROP TABLE IF EXISTS `mini_game_menu_rating`;
 -- 미니게임에서 메뉴에 대한 별점 기록 테이블: 미니게임을 통해 메뉴에 대한 별점을 저장
 CREATE TABLE `mini_game_menu_rating`
 (
-    `rating_id`    INT AUTO_INCREMENT NOT NULL,         -- 별점 기록의 고유 식별자
-    `user_id`      VARCHAR(20)        NOT NULL,         -- 별점을 매긴 사용자의 ID (변경된 필드 이름)
-    `menu_id`      INT                NOT NULL,         -- 별점을 부여한 메뉴의 ID
-    `rating`       FLOAT         	  NOT NULL,         -- 별점 (0~5)
-    `rating_date`  TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 별점 부여 일시
-    PRIMARY KEY (`rating_id`),                          -- 기본 키 설정
+    `rating_id`   INT AUTO_INCREMENT NOT NULL,         -- 별점 기록의 고유 식별자
+    `user_id`     VARCHAR(20)        NOT NULL,         -- 별점을 매긴 사용자의 ID (변경된 필드 이름)
+    `menu_id`     INT                NOT NULL,         -- 별점을 부여한 메뉴의 ID
+    `rating`      FLOAT              NOT NULL,         -- 별점 (0~5)
+    `rating_date` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 별점 부여 일시
+    PRIMARY KEY (`rating_id`),                         -- 기본 키 설정
     FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
     FOREIGN KEY (`menu_id`) REFERENCES `menu` (`menu_id`)
 );
-select * from mini_game_menu_rating mgmr;
+select *
+from mini_game_menu_rating mgmr;
 -- 여기까지
