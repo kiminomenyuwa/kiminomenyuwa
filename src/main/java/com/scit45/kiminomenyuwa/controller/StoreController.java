@@ -130,7 +130,7 @@ public class StoreController {
 		log.debug(menus.toString());
 		return ResponseEntity.ok(menus);
 	}
-
+  
 	/**
 	 * 
 	 * @return 카테고리 타입을 불러옴
@@ -147,5 +147,4 @@ public class StoreController {
 	Integer typeId) {
 		return storeService.getAllCategories(typeId);
 	}
-
 }

@@ -3,6 +3,7 @@ package com.scit45.kiminomenyuwa.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -85,5 +86,60 @@ public class HomeController {
 	public void resetSession(HttpSession session) {
 		// 세션 초기화: 선택된 메뉴 번호 리스트를 제거
 		session.removeAttribute("selectedNumbers");
+	}
+
+	/**
+	 * 사용자가 메뉴 추천을 요청했을 때, DB에서 랜덤으로 메뉴를 가져와 반환하는 메서드입니다.
+	 *
+	 * @param session 사용자 세션을 관리하는 HttpSession 객체
+	 * @return 랜덤으로 선택된 메뉴의 정보를 담은 MenuDTO 객체
+	 */
+	@PostMapping("/get-random-menu")
+	@ResponseBody
+	public MenuDTO getRandomMenu(HttpSession session) {
+		// MiniGameService를 통해 랜덤으로 메뉴를 선택
+		MenuDTO randomMenu = miniGameService.getRandomMenu();
+
+		// 이미 선택된 숫자를 세션에서 가져오기
+		List<Integer> selectedNumbers = (List<Integer>)session.getAttribute("selectedNumbers");
+		if (selectedNumbers == null) {
+			selectedNumbers = new ArrayList<>();
+		}
+
+		// 선택된 메뉴 ID를 리스트에 추가
+		selectedNumbers.add(randomMenu.getMenuId());
+		session.setAttribute("selectedNumbers", selectedNumbers);
+
+		// 선택된 메뉴 정보를 반환
+		return randomMenu;
+	}
+
+	/**
+	 * 사용자가 메뉴에 대한 평가를 제출했을 때, 평가를 저장하고, 평가되지 않은 다음 메뉴를 추천하는 메서드입니다.
+	 *
+	 * @param menuId 평가된 메뉴의 ID
+	 * @param rating 사용자가 부여한 평가 점수
+	 * @param authentication 현재 로그인한 사용자의 인증 정보
+	 * @return 평가되지 않은 다음 메뉴의 정보를 담은 MenuDTO 객체
+	 */
+	@PostMapping("/rate-menu")
+	@ResponseBody
+	public MenuDTO rateMenu(@RequestParam("menuId")
+	int menuId, @RequestParam("rating")
+	float rating, Authentication authentication) {
+		String userId = authentication.getName(); // 로그인한 사용자 ID를 가져옴
+		log.info("rateMenu 요청 - userId: {}, menuId: {}, rating: {}", userId, menuId, rating);
+
+		try {
+			// 평가를 저장
+			miniGameService.rateMenu(userId, menuId, rating);
+			log.info("평가 저장 성공");
+
+			// 점수가 매겨지지 않은 다음 메뉴를 추천
+			return miniGameService.getNextUnratedMenu(userId);
+		} catch (Exception e) {
+			log.error("평가 저장 중 오류 발생", e);
+			throw e;
+		}
 	}
 }
