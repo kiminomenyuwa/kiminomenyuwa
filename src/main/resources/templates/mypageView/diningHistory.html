@@ -7,10 +7,28 @@
             content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <!-- 테이블용 간단 css 호출 -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style01.css}"/>
     <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
     <title>먹은 음식 내역</title>
 </head>
 <body>
-    <h1>[ 내가 먹은 음식 내역 ]</h1>
+<h1>[ 내가 먹은 음식 내역 ]</h1>
+
+<p th:text="|${#authentication.principal.name}님의 음식 내역|"></p>
+
+<table>
+    <tr>
+        <th>diningId</th>
+        <th>userId</th>
+        <th>menuId</th>
+        <th>diningDate</th>
+    </tr>
+    <tr th:each="dhList : ${diningHistoryList}">
+        <td th:text="${dhList.diningId}"></td>
+        <td th:text="${dhList.userId}"></td>
+        <td th:text="${dhList.menuId}"></td>
+        <td th:text="${dhList.diningDate}"></td>
+    </tr>
 </body>
 </html>
