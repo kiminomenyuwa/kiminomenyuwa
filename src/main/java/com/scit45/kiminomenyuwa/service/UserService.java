@@ -1,11 +1,19 @@
 package com.scit45.kiminomenyuwa.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.scit45.kiminomenyuwa.domain.dto.UserDTO;
+import com.scit45.kiminomenyuwa.domain.entity.ProfilePhotoEntity;
 import com.scit45.kiminomenyuwa.domain.entity.Role;
 import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
+import com.scit45.kiminomenyuwa.domain.repository.ProfilePhotoRepository;
 import com.scit45.kiminomenyuwa.domain.repository.UserRepository;
 
 import jakarta.transaction.Transactional;

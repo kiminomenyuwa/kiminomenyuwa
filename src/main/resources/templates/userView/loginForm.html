@@ -9,12 +9,16 @@
 <title>로그인</title>
 </head>
 <body>
-    <h1>[ 로그인 ]</h1>
-    <!-- 로그인 처리는 WebSecurityConfig의 loginProcessingUrl 확인 -->
-    <form action="/user/login" method="post">
-        <p>ID : <input type="text" name="id"></p>
-        <p>PW : <input type="password" name="password"></p>
-        <input type="submit" value="로그인">
-    </form>
+	<h1>[ 로그인 ]</h1>
+	<!-- 로그인 처리는 WebSecurityConfig의 loginProcessingUrl 확인 -->
+	<form action="/user/login" method="post">
+		<p>
+			ID : <input type="text" name="id">
+		</p>
+		<p>
+			PW : <input type="password" name="password">
+		</p>
+		<input type="submit" value="로그인">
+	</form>
 </body>
 </html>

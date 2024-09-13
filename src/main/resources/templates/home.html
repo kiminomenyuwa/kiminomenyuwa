@@ -15,7 +15,8 @@
 	<h1>홈페이지</h1>
 
 	<!-- 로그인한 사용자에게 환영 메시지 표시 -->
-	<h2 sec:authorize="isAuthenticated()" th:text="|${#authentication.principal.name}님 환영합니다|"></h2>
+	<h2 sec:authorize="isAuthenticated()"
+		th:text="|${#authentication.principal.name}님 환영합니다|"></h2>
 
 	<!-- 로그인되지 않은 사용자를 위한 회원가입/로그인 링크 -->
 	<div sec:authorize="not isAuthenticated()">
@@ -36,7 +37,7 @@
 
 	<!-- 가게 등록 링크 -->
 	<p>
-		<a href="storeRegistration">가게 등록</a>
+		<a href="storePage">사장님 가게 페이지</a>
 	</p>
 
 	<!-- 비회원용 메뉴 추천 섹션 -->
@@ -72,8 +73,10 @@
 			<div id="user-like-button">
 				좋아요
 				<div class="stars">
-					<span class="star" data-value="1">★</span> <span class="star" data-value="2">★</span> <span class="star" data-value="3">★</span> <span
-						class="star" data-value="4">★</span> <span class="star" data-value="5">★</span>
+					<span class="star" data-value="1">★</span> <span class="star"
+						data-value="2">★</span> <span class="star" data-value="3">★</span>
+					<span class="star" data-value="4">★</span> <span class="star"
+						data-value="5">★</span>
 				</div>
 			</div>
 

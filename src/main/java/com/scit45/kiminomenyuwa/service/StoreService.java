@@ -5,13 +5,17 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.scit45.kiminomenyuwa.domain.dto.CategoryTypeDTO;
+import com.scit45.kiminomenyuwa.domain.dto.FoodCategoryDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.StoreRegistrationDTO;
+import com.scit45.kiminomenyuwa.domain.entity.CategoryTypeEntity;
 import com.scit45.kiminomenyuwa.domain.entity.FoodCategoryEntity;
 import com.scit45.kiminomenyuwa.domain.entity.MenuCategoryMappingEntity;
 import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
 import com.scit45.kiminomenyuwa.domain.entity.StoreEntity;
 import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
+import com.scit45.kiminomenyuwa.domain.repository.CategoryTypeRepository;
 import com.scit45.kiminomenyuwa.domain.repository.FoodCategoryRepository;
 import com.scit45.kiminomenyuwa.domain.repository.MenuCategoryMappingRepository;
 import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
@@ -33,6 +37,26 @@ public class StoreService {
 	private final MenuRepository menuRepository;
 	private final MenuCategoryMappingRepository menuCategoryMappingRepository;
 	private final FoodCategoryRepository foodCategoryRepository;
+	private final CategoryTypeRepository categoryTypeRepository;
+
+	// 모든 가게 리스트를 가져오는 메소드
+	public List<StoreRegistrationDTO> getAllStores() {
+		// StoreEntity를 StoreDTO로 변환하여 리스트로 반환
+		return storeRepository.findAll().stream()
+			.map(store -> {
+				log.debug(store.getName());
+				return StoreRegistrationDTO.builder()
+					.name(store.getName())
+					.phoneNumber(store.getPhoneNumber())
+					.zipcode(store.getZipcode())
+					.roadNameAddress(store.getRoadNameAddress())
+					.detailAddress(store.getDetailAddress())
+					.userId(store.getUser().getUserId())
+					.storeId(store.getStoreId())
+					.build();
+			})
+			.collect(Collectors.toList());
+	}
 
 	// 모든 가게 리스트를 가져오는 메소드
 	public List<StoreRegistrationDTO> getAllStores() {
@@ -141,4 +165,20 @@ public class StoreService {
 			.collect(Collectors.toList());
 	}
 
+	public List<CategoryTypeDTO> getAllCategoryTypes() {
+		List<CategoryTypeEntity> entities = categoryTypeRepository.findAll();
+		return entities.stream()
+			.map(entity -> CategoryTypeDTO.builder()
+				.typeId(entity.getTypeId())
+				.typeName(entity.getTypeName())
+				.build())
+			.collect(Collectors.toList());
+	}
+
+	public List<FoodCategoryDTO> getAllCategories(Integer typeId) {
+		List<FoodCategoryEntity> categories = foodCategoryRepository.findByTypeId(typeId);
+		return categories.stream()
+			.map(category -> new FoodCategoryDTO(category.getCategoryName(), category.getTypeId()))
+			.collect(Collectors.toList());
+	}
 }

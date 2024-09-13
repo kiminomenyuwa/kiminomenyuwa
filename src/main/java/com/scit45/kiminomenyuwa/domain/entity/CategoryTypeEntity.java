@@ -6,6 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
@@ -15,13 +17,15 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "category_type")
 @NoArgsConstructor
+@AllArgsConstructor
+@Data
 public class CategoryTypeEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "type_id")
-    private Integer typeId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "type_id")
+	private Integer typeId;
 
-    @Column(name = "type_name", nullable = false)
-    private String typeName;
+	@Column(name = "type_name", nullable = false)
+	private String typeName;
 }
