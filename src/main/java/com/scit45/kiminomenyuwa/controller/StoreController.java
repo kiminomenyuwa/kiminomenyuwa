@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.scit45.kiminomenyuwa.domain.dto.CategoryTypeDTO;
 import com.scit45.kiminomenyuwa.domain.dto.FoodCategoryDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.StoreRegistrationDTO;
@@ -129,9 +131,21 @@ public class StoreController {
 		return ResponseEntity.ok(menus);
 	}
 
+	/**
+	 * 
+	 * @return 카테고리 타입을 불러옴
+	 */
+	@ResponseBody
+	@GetMapping("/api/category-types")
+	public List<CategoryTypeDTO> getCategoryTypes() {
+		return storeService.getAllCategoryTypes();
+	}
+
 	@ResponseBody
 	@GetMapping("/api/categories")
-	public List<FoodCategoryDTO> getCategories() {
-		return storeService.getAllCategories();
+	public List<FoodCategoryDTO> getCategories(@RequestParam("typeId")
+	Integer typeId) {
+		return storeService.getAllCategories(typeId);
 	}
+
 }

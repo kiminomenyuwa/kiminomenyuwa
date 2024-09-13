@@ -7,6 +7,43 @@
 <script src="/js/jquery-3.7.1.min.js"></script>
 <script>
 	$(document).ready(function() {
+		// 카테고리 구분과 항목을 DB에서 불러와 표시
+        $.ajax({
+            url: '/api/category-types', // 카테고리 구분을 가져오는 엔드포인트
+            method: 'GET',
+            success: function(categoryTypes) {
+                categoryTypes.forEach(categoryType => {
+                    // 카테고리 구분 (예: '재료')를 동적으로 추가
+                    const categoryHeader = $('<h4></h4>').attr('id', categoryType.typeId).text(categoryType.typeName).append('<br>');
+                    $('#categoriesContainer').append(categoryHeader);
+                    console.log('categoryType: ' + categoryType);
+                    console.log('categoryType.typeId : ' + categoryType.typeId);
+                    // 해당 구분의 카테고리 항목 (예: '고추', '돼지고기' 등)을 가져와서 추가
+                    $.ajax({
+                        url: '/api/categories?typeId=' + categoryType.typeId, // 해당 구분의 카테고리 항목 가져오기
+                        method: 'GET',
+                        success: function(categories) {
+                        	console.log(categories);
+                            categories.forEach(category => {
+                                const categoryCheckbox = $('<input>').attr('type', 'checkbox')
+                                                                     .attr('name', 'categories')
+                                                                     .val(category.categoryName);
+                                console.log(category.categoryName);
+                                const label = $('<label></label>').text(category.categoryName);
+                                $('#'+category.typeId).append(categoryCheckbox).append(label).append('<br>');
+                            });
+                        },
+                        error: function(e) {
+                        	console.log(JSON.stringify(e));
+                            alert('카테고리 항목을 불러오는 데 실패했습니다.');
+                        }
+                    });
+                });
+            },
+            error: function() {
+                alert('카테고리 구분을 불러오는 데 실패했습니다.');
+            }
+        });
 		// 메뉴 등록 버튼 클릭 시 동작
 		$('#registerMenuButton').click(function() {
 			let menuRegistration = {
@@ -39,60 +76,6 @@
 				}
 			});
 		});
-		// 카테고리를 DB에서 조회
-		$.ajax({
-			url : '/api/categories',
-			method : 'get',
-			success : function(data) {
-				console.log(data);
-				// 각 카테고리를 삽입할 div 요소들
-                const ingredientCategories = $('#ingredientCategories');
-                const countryCategories = $('#countryCategories');
-                const cookingMethodCategories = $('#cookingMethodCategories');
-                const foodTypeCategories = $('#foodTypeCategories');
-                const mealTimeCategories = $('#mealTimeCategories');
-                const dietaryRestrictionCategories = $('#dietaryRestrictionCategories');
-                const foodCharacteristicCategories = $('#foodCharacteristicCategories');
-             // 카테고리 데이터를 순회하면서 해당하는 구분에 맞게 추가
-                data.forEach(category => {
-                    let categoryHtml = '<input type="checkbox" name="categories" value="' + category.categoryName + '">' + category.categoryName + '<br>';
-                    
-                    switch(category.typeId) {
-                        case 1: // 재료
-                            ingredientCategories.append(categoryHtml);
-                            break;
-                        case 2: // 나라
-                            countryCategories.append(categoryHtml);
-                            break;
-                        case 3: // 조리 방법
-                            cookingMethodCategories.append(categoryHtml);
-                            break;
-                        case 4: // 음식 종류
-                            foodTypeCategories.append(categoryHtml);
-                            break;
-                        case 5: // 식사 시간
-                            mealTimeCategories.append(categoryHtml);
-                            break;
-                        case 6: // 식이 제한
-                            dietaryRestrictionCategories.append(categoryHtml);
-                            break;
-                        case 7: // 음식 특성
-                            foodCharacteristicCategories.append(categoryHtml);
-                            break;
-                        default:
-                            console.log("알 수 없는 typeId: " + category.typeId);
-                    }
-                });
-            },
-            error: function(e) {
-           	 console.log(JSON.stringify(e));
-                alert('카테고리 리스트를 불러오는데 실패했습니다.');
-            }
-		});
-		
-		$.ajax({
-			
-		})
 	});
 </script>
 </head>
@@ -119,27 +102,8 @@
 		</tr>
 		<tr>
 			<td><label>카테고리 선택:</label></td>
-			<td>
-				<h4>재료</h4>
-				<div id="ingredientCategories"></div>
-
-				<h4>나라</h4>
-				<div id="countryCategories"></div>
-
-				<h4>조리 방법</h4>
-				<div id="cookingMethodCategories"></div>
-
-				<h4>음식 종류</h4>
-				<div id="foodTypeCategories"></div>
-
-				<h4>식사 시간</h4>
-				<div id="mealTimeCategories"></div>
-
-				<h4>식이 제한</h4>
-				<div id="dietaryRestrictionCategories"></div>
-
-				<h4>음식 특성</h4>
-				<div id="foodCharacteristicCategories"></div>
+			<td id="categoriesContainer">
+				<!-- 카테고리 구분과 항목이 이곳에 동적으로 추가됩니다 -->
 			</td>
 		</tr>
 		<tr>

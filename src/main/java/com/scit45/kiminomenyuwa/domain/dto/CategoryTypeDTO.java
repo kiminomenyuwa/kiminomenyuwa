@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class CategoryTypeDTO {
-
-    private Integer typeId;
-    private String typeName;
+	Integer typeId;
+	String typeName;
 }
