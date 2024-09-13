@@ -58,25 +58,6 @@ public class StoreService {
 			.collect(Collectors.toList());
 	}
 
-	// 모든 가게 리스트를 가져오는 메소드
-	public List<StoreRegistrationDTO> getAllStores() {
-		// StoreEntity를 StoreDTO로 변환하여 리스트로 반환
-		return storeRepository.findAll().stream()
-			.map(store -> {
-				log.debug(store.getName());
-				return StoreRegistrationDTO.builder()
-					.name(store.getName())
-					.phoneNumber(store.getPhoneNumber())
-					.zipcode(store.getZipcode())
-					.roadNameAddress(store.getRoadNameAddress())
-					.detailAddress(store.getDetailAddress())
-					.userId(store.getUser().getUserId())
-					.storeId(store.getStoreId())
-					.build();
-			})
-			.collect(Collectors.toList());
-	}
-
 	/**
 	 * 등록 정보를 받아서 storeRepository에 저장한다
 	 * @param storeRegistrationDTO
