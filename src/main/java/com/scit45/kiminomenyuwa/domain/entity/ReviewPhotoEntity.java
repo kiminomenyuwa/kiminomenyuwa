@@ -31,14 +31,21 @@ public class ReviewPhotoEntity {
 	@Column(name = "photo_id", updatable = false, nullable = false, length = 36)
 	private Integer photoId;
 
+	@Setter
 	@ManyToOne
 	@JoinColumn(name = "review_id", nullable = false)
 	private ReviewEntity review;
 
+	@Setter
 	@Column(name = "photo_url", nullable = false)
 	private String photoUrl;
 
 	@CreatedDate
 	@Column(name = "uploaded_time")
 	private LocalDateTime uploadedTime;
+
+	public ReviewPhotoEntity(ReviewEntity review, String photoUrl) {
+		this.review = review;
+		this.photoUrl = photoUrl;
+	}
 }
