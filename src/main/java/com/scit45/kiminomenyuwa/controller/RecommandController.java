@@ -12,6 +12,7 @@ import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.UserDiningHistoryDTO;
 import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
 import com.scit45.kiminomenyuwa.service.MenuService;
+import com.scit45.kiminomenyuwa.service.UserDiningHistoryService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 public class RecommandController {
 
 	private final MenuService menuService;
+	private final UserDiningHistoryService userDiningHistoryService;
 
 	/**
 	 * 추천기능 테스트용 페이지
@@ -36,15 +38,15 @@ public class RecommandController {
 		model.addAttribute("menuList", menuDTOList);
 
 		//현재 로그인 중인 사용자의 먹은 음식 내역
-		List<UserDiningHistoryDTO> diningHistoryDTOList = menuService.getDiningHistory(user.getId());
+		List<UserDiningHistoryDTO> diningHistoryDTOList = userDiningHistoryService.getDiningHistory(user.getId());
 		model.addAttribute("diningHistoryList", diningHistoryDTOList);
 
 		//현재 로그인 중인 사용자의 중복 제거 먹은 음식 내역
-		List<Long> distinctDiningHistory = menuService.getDistinctDiningHistory(user.getId());
+		List<Long> distinctDiningHistory = userDiningHistoryService.getDistinctDiningHistory(user.getId());
 		model.addAttribute("distinctDiningHistoryList", distinctDiningHistory);
 
 		// 사용자가 먹지 않은 메뉴 리스트
-		List<MenuDTO> notTriedMenuList = menuService.getMenusNotTried(user.getId());
+		List<MenuDTO> notTriedMenuList = userDiningHistoryService.getMenusNotTried(user.getId());
 		model.addAttribute("notTriedMenuList", notTriedMenuList);
 
 		return "recommandView/recTest";

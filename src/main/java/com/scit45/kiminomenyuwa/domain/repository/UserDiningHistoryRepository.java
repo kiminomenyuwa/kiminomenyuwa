@@ -17,4 +17,13 @@ public interface UserDiningHistoryRepository extends JpaRepository<UserDiningHis
 	//음식 내역중 중복으로 먹은 내역 제거
 	@Query("SELECT DISTINCT udh.menuId FROM UserDiningHistoryEntity udh WHERE udh.userId = :userId")
 	List<Long> findDistinctMenuIdsByUserId(@Param("userId") String userId);
+
+	//사용자가 먹은 음식 내역의 카테고리 카운트 TOP 10
+	@Query("SELECT mcm.foodCategory.categoryName, COUNT(mcm.foodCategory.categoryName) AS categoryCount " +
+		"FROM UserDiningHistoryEntity udh " +
+		"JOIN MenuCategoryMappingEntity mcm ON udh.menuId = mcm.menu.menuId " +
+		"WHERE udh.userId = :userId " +
+		"GROUP BY mcm.foodCategory.categoryName " +
+		"ORDER BY categoryCount DESC")
+	List<Object[]> findTopCategoriesByUserId(@Param("userId") String userId);
 }
