@@ -78,4 +78,43 @@ public class MenuService {
 		//현재 로그인한 사용자의 먹은 음식내역 DTOList를 리턴
 		return diningHistoryDTOs;
 	}
+
+	/**
+	 * 현재 로그인 중인 사용자의 먹은 내역 중 중복이 제거된 menuId만 출력
+	 * @param userId 로그인 중인 사용자의 id
+	 * @return 중복이 제거된 음식 내역의 menuId들
+	 */
+	public List<Long> getDistinctDiningHistory(String userId) {
+		List<Long> distinctDiningHistory = userDiningHistoryRepository.findDistinctMenuIdsByUserId(userId);
+
+		return distinctDiningHistory;
+	}
+
+	/**
+	 * 사용자가 먹지 않은 메뉴 리스트를 가져오는 메서드
+	 * @param userId 로그인 중인 사용자의 id
+	 * @return 사용자가 먹지 않은 메뉴 리스트
+	 */
+	public List<MenuDTO> getMenusNotTried(String userId) {
+		// 사용자가 먹은 메뉴 ID 리스트를 가져오기
+		List<Long> eatenMenuIds = userDiningHistoryRepository.findDistinctMenuIdsByUserId(userId);
+
+		// 사용자가 먹지 않은 메뉴들을 MenuRepository에서 가져오기
+		List<MenuEntity> availableMenus = menuRepository.findMenusNotInMenuIds(eatenMenuIds);
+
+		// MenuEntity 리스트를 MenuDTO 리스트로 변환하여 반환
+		List<MenuDTO> menuDTOs = new ArrayList<>();
+		for (MenuEntity menuEntity : availableMenus) {
+			menuDTOs.add(MenuDTO.builder()
+				.menuId(menuEntity.getMenuId())
+				.storeId(menuEntity.getStoreId())
+				.name(menuEntity.getName())
+				.price(menuEntity.getPrice())
+				.pictureUrl(menuEntity.getPictureUrl())
+				.enabled(menuEntity.getEnabled())
+				.build());
+		}
+
+		return menuDTOs;
+	}
 }

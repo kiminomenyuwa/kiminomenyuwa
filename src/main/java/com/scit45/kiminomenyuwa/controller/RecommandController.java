@@ -39,6 +39,13 @@ public class RecommandController {
 		List<UserDiningHistoryDTO> diningHistoryDTOList = menuService.getDiningHistory(user.getId());
 		model.addAttribute("diningHistoryList", diningHistoryDTOList);
 
+		//현재 로그인 중인 사용자의 중복 제거 먹은 음식 내역
+		List<Long> distinctDiningHistory = menuService.getDistinctDiningHistory(user.getId());
+		model.addAttribute("distinctDiningHistoryList", distinctDiningHistory);
+
+		// 사용자가 먹지 않은 메뉴 리스트
+		List<MenuDTO> notTriedMenuList = menuService.getMenusNotTried(user.getId());
+		model.addAttribute("notTriedMenuList", notTriedMenuList);
 
 		return "recommandView/recTest";
 	}
