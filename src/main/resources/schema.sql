@@ -98,15 +98,14 @@ CREATE TABLE `review`
 (
     `review_id`    INT AUTO_INCREMENT NOT NULL,         -- 리뷰의 고유 식별자
     `store_id`     INT                NOT NULL,         -- 리뷰가 속한 상점의 ID
-    `user_id`      VARCHAR(20),                         -- 리뷰 작성자의 사용자 ID (변경된 필드 이름)
-    `menu_id`      INT                NOT NULL,         -- 리뷰 대상 메뉴의 ID
+    `user_id`       VARCHAR(20) NOT NULL,               -- 리뷰 작성자의 사용자 ID (변경된 필드 이름)
     `rating`       TINYINT            NOT NULL,         -- 리뷰 평점
     `comment`      TEXT,                                -- 리뷰 내용
     `created_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 리뷰 작성 시간
+    `modified_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 리뷰 작성 시간
     PRIMARY KEY (`review_id`),                          -- 기본 키 설정
     FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`),
-    FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
-    FOREIGN KEY (`menu_id`) REFERENCES `menu` (`menu_id`)
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 );
 
 -- 사용자의 식사 내역 테이블: 사용자가 소비한 식사의 기록을 저장
