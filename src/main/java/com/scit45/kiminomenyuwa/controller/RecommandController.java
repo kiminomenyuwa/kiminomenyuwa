@@ -49,8 +49,11 @@ public class RecommandController {
 		List<MenuDTO> notTriedMenuList = userDiningHistoryService.getMenusNotTried(user.getId());
 		model.addAttribute("notTriedMenuList", notTriedMenuList);
 
+		// 사용자가 먹은 음식 내역 중 카테고리 TOP 10
+		List<Object[]> categoryTop10 = userDiningHistoryService.getTopCategoriesByUserId(user.getId());
+		model.addAttribute("categoryTop10List", categoryTop10);
+
 		return "recommandView/recTest";
 	}
-
 
 }

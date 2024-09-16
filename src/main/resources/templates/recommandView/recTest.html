@@ -32,7 +32,7 @@
     </tr>
 </table>
 
-<p th:text="|${#authentication.principal.name}님의 음식 내역|"></p>
+<p th:text="|${#authentication.principal.name}님의 먹은 음식 내역|"></p>
 <table>
     <tr>
         <th>diningId</th>
@@ -71,5 +71,16 @@
     </tr>
 </table>
 
+<p>사용자가 먹은 음식 내역 중 카테고리 TOP 10</p>
+<table>
+    <tr>
+        <th>카테고리</th>
+        <th>횟수</th>
+    </tr>
+    <tr th:each="category : ${categoryTop10List}">
+        <td th:text="${category[0]}"></td>  <!-- categoryName -->
+        <td th:text="${category[1]}"></td>  <!-- categoryCount -->
+    </tr>
+</table>
 </body>
 </html>
