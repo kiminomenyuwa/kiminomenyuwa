@@ -50,18 +50,20 @@ public class ReviewController {
 	public String createReview(@ModelAttribute ReviewRequestDTO reviewRequestDTO
 		, RedirectAttributes redirectAttributes) throws IOException {
 		// 리뷰와 사진을 한 번에 저장
-		log.debug("reviewRequestDTO = {}", reviewRequestDTO);
 		ReviewResponseDTO savedReview = reviewService.saveReviewWithPhotos(reviewRequestDTO);
-		redirectAttributes.addFlashAttribute("review", savedReview);
-		return "redirect:/reviews/success"; // 성공 시 보여줄 뷰 템플릿 이름
+		redirectAttributes.addFlashAttribute("message", "리뷰가 저장되었습니다!");
+		return "redirect:/reviews/" + savedReview.getReviewId();
 	}
 
-	/**
-	 * 리뷰 작성 성공 페이지로 이동하는 메서드
-	 */
-	@GetMapping("/success")
-	public String showReviewSuccessPage() {
-		return "review/review-success"; // review-success.html 페이지를 반환
+	// 리뷰 조회 메서드
+	@GetMapping("/{reviewId}")
+	public String getReview(@PathVariable Integer reviewId, Model model) {
+		// 리뷰 ID를 기반으로 리뷰 조회
+		ReviewResponseDTO review = reviewService.getReviewById(reviewId);
+
+		// 조회된 리뷰 정보를 모델에 추가하여 뷰에 전달
+		model.addAttribute("review", review);
+		return "review/review-detail"; // 리뷰 상세 화면 뷰 템플릿 이름
 	}
 
 	/**
