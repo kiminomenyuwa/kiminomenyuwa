@@ -59,13 +59,15 @@ public class RecommandController {
 
 	@GetMapping("recommendUntriedFood")
 	public String recommendUntriedFood(Model model, @AuthenticationPrincipal AuthenticatedUser user) {
-		// 전체 메뉴 리스트 출력 (이미 먹지 않은 메뉴)
+		// 전체 먹지 않은 메뉴 리스트 출력
 		List<MenuDTO> notTriedMenuList = userDiningHistoryService.getMenusNotTried(user.getId());
+		log.debug("notTriedMenuList: {}", notTriedMenuList);
 
 		// 사용자가 먹은 음식 내역 중 카테고리 TOP 10
 		List<Object[]> categoryTop10 = userDiningHistoryService.getTopCategoriesByUserId(user.getId());
+		log.debug("categoryTop10: {}", categoryTop10);
 
-		// 추천할 메뉴 리스트
+		// 추천할 메뉴 리스트 (최종 결과)
 		List<MenuDTO> recommendedMenus = new ArrayList<>();
 
 		// 카테고리 TOP 10을 기준으로 아직 먹지 않은 메뉴 추천
@@ -74,17 +76,18 @@ public class RecommandController {
 
 			// 해당 카테고리에 속한 메뉴 필터링
 			for (MenuDTO menu : notTriedMenuList) {
-				// categories 필드가 null이 아닌지 확인한 후 contains 호출
+				// 메뉴의 categories 필드가 null이 아닌지 확인한 후 contains 호출
 				if (menu.getCategories() != null && menu.getCategories().contains(categoryName)) {
 					recommendedMenus.add(menu);
 				}
 			}
 		}
 
-		// 추천 메뉴 리스트를 모델에 추가
+		// 추천된 메뉴 리스트를 모델에 추가
 		model.addAttribute("recommendedMenus", recommendedMenus);
 
-		return "recommandView/untriedMenu"; // 추천 결과를 보여줄 페이지
+		return "recommandView/untriedMenu"; // 추천 결과를 보여줄 페이지로 이동
 	}
+
 
 }
