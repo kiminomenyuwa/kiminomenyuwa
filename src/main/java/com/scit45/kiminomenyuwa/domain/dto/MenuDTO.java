@@ -32,6 +32,17 @@ public class MenuDTO {
 		this.price = price;
 		this.pictureUrl = pictureUrl;
 		this.enabled = enabled;
+	};
+
+	public MenuDTO(Integer menuId, String name) {
+		this.menuId = menuId;
+		this.name = name;
 	}
 
+	public MenuDTO(Integer menuId, String name, Integer price, String pictureUrl) {
+		this.menuId = menuId;
+        this.name = name;
+        this.price = price;
+        this.pictureUrl = pictureUrl;
+	}
 }

@@ -27,4 +27,7 @@ public interface MenuRepository extends JpaRepository<MenuEntity, Integer> {
 
 	// 가게 ID로 메뉴 목록 조회
 	List<MenuEntity> findByStoreId(Integer storeId);
+
+	@Query("SELECT m FROM MenuEntity m JOIN StoreEntity s ON m.storeId = s.storeId WHERE s.name = :storeName")
+	List<MenuEntity> findMenusByStoreName(@Param("storeName") String storeName);
 }

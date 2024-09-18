@@ -63,15 +63,15 @@ public class MenuService {
 	 */
 	public List<UserDiningHistoryDTO> getDiningHistory(String userId) {
 		//먹은 음식 내역 태이블에서 현재 로그인 중인 id로 select
-		List<UserDiningHistoryEntity> diningHistoryEntities = userDiningHistoryRepository.findByUserId(userId);
+		List<UserDiningHistoryEntity> diningHistoryEntities = userDiningHistoryRepository.findByUser_UserId(userId);
 
 		//불러온 내역 EntityList를 dtoList로 변환
 		List<UserDiningHistoryDTO> diningHistoryDTOs = new ArrayList<>();
 		for (UserDiningHistoryEntity dining : diningHistoryEntities) {
 			diningHistoryDTOs.add(UserDiningHistoryDTO.builder()
 				.diningId(dining.getDiningId())
-				.userId(dining.getUserId())
-				.menuId(dining.getMenuId())
+				.userId(dining.getUser().getUserId())
+				.menuId(dining.getMenu().getMenuId())
 				.diningDate(dining.getDiningDate())
 				.build());
 		}
