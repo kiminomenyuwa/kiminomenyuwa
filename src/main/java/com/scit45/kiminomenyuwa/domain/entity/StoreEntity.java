@@ -60,4 +60,5 @@ public class StoreEntity {
 
 	@Column(name = "enabled", nullable = false)
 	private Boolean enabled;
+
 }

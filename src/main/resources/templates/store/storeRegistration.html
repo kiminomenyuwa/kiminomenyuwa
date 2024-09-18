@@ -6,9 +6,15 @@
 <title>가게 등록</title>
 
 <script src="/js/jquery-3.7.1.min.js"></script>
-
+<!-- 카카오 도로명주소 서비스 호출 -->
+<script
+	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
 	$(document).ready(function() {
+		//도로명주소 새창 팝업
+		$('#searchAddressBtn').click(kakaoRoadAddress);
+
+		//회원가입 데이터 보냄
 		$('#submitForm').click(function() {
 			let registration = {
 				userId : $('#userId').val(),
@@ -23,16 +29,18 @@
 				enabled : true
 			// 기본적으로 가게는 활성화됨
 			};
-			
+
 			console.log(registration);
 
 			$.ajax({
 				url : 'storeRegistration',
 				type : 'post',
-				contentType: 'application/json',  // JSON 데이터 형식 명시
-			    data: JSON.stringify(registration),  // 데이터를 직렬화
+				contentType : 'application/json', // JSON 데이터 형식 명시
+				data : JSON.stringify(registration), // 데이터를 직렬화
 				success : function() {
-					$("#response").html("가게가 성공적으로 등록되었습니다.");
+					alert('가게가 정상 등록되었습니다.');
+					// 성공하면 페이지 리다이렉트
+					window.location.href = '/storePage'; // 리다이렉트할 페이지 경로
 				},
 				error : function(e) {
 					console.log(JSON.stringify(e));
@@ -41,6 +49,17 @@
 			})
 		})
 	})
+
+	//카카오 도로명주소 사용
+	function kakaoRoadAddress() {
+		new daum.Postcode({
+			oncomplete : function(data) {
+				//카카오 도로명주소에서 받아온 data html에 반영
+				$('#zipcode').val(data.zonecode);
+				$('#roadNameAddress').val(data.roadAddress);
+			}
+		}).open();
+	}
 </script>
 </head>
 <body>
@@ -62,17 +81,19 @@
 					required></td>
 			</tr>
 			<tr>
+				<td><label for="zipcode">우편번호:</label></td>
+				<td><input type="text" id="zipcode" name="zipcode" readonly
+					placeholder="주소 검색 기능 사용">
+					<button type="button" id="searchAddressBtn">주소검색</button></td>
+			</tr>
+			<tr>
 				<td><label for="roadNameAddress">도로명 주소:</label></td>
 				<td><input type="text" id="roadNameAddress"
-					name="roadNameAddress"></td>
+					name="roadNameAddress" readonly placeholder="주소 검색 기능 사용"></td>
 			</tr>
 			<tr>
 				<td><label for="detailAddress">상세 주소:</label></td>
 				<td><input type="text" id="detailAddress" name="detailAddress"></td>
-			</tr>
-			<tr>
-				<td><label for="zipcode">우편번호:</label></td>
-				<td><input type="text" id="zipcode" name="zipcode"></td>
 			</tr>
 			<tr>
 				<td><label for="phoneNumber">전화번호:</label></td>

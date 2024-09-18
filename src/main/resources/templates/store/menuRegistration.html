@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>메뉴 등록 페이지</title>
+<script src="/js/jquery-3.7.1.min.js"></script>
+<script>
+	$(document).ready(function() {
+		// 카테고리 구분과 항목을 DB에서 불러와 표시
+        $.ajax({
+            url: '/api/category-types', // 카테고리 구분을 가져오는 엔드포인트
+            method: 'GET',
+            success: function(categoryTypes) {
+                categoryTypes.forEach(categoryType => {
+                    // 카테고리 구분 (예: '재료')를 동적으로 추가
+                    const categoryHeader = $('<h4></h4>').attr('id', categoryType.typeId).text(categoryType.typeName).append('<br>');
+                    $('#categoriesContainer').append(categoryHeader);
+                    console.log('categoryType: ' + categoryType);
+                    console.log('categoryType.typeId : ' + categoryType.typeId);
+                    // 해당 구분의 카테고리 항목 (예: '고추', '돼지고기' 등)을 가져와서 추가
+                    $.ajax({
+                        url: '/api/categories?typeId=' + categoryType.typeId, // 해당 구분의 카테고리 항목 가져오기
+                        method: 'GET',
+                        success: function(categories) {
+                        	console.log(categories);
+                            categories.forEach(category => {
+                                const categoryCheckbox = $('<input>').attr('type', 'checkbox')
+                                                                     .attr('name', 'categories')
+                                                                     .val(category.categoryName);
+                                console.log(category.categoryName);
+                                const label = $('<label></label>').text(category.categoryName);
+                                $('#'+category.typeId).append(categoryCheckbox).append(label).append('<br>');
+                            });
+                        },
+                        error: function(e) {
+                        	console.log(JSON.stringify(e));
+                            alert('카테고리 항목을 불러오는 데 실패했습니다.');
+                        }
+                    });
+                });
+            },
+            error: function() {
+                alert('카테고리 구분을 불러오는 데 실패했습니다.');
+            }
+        });
+		// 메뉴 등록 버튼 클릭 시 동작
+		$('#registerMenuButton').click(function() {
+			let menuRegistration = {
+				storeId : $('#storeId').val(), // 가게 ID
+				name : $('#name').val(), // 메뉴 이름
+				price : $('#price').val(), // 가격
+				pictureUrl : $('#pictureUrl').val(), // 사진 URL
+				enabled : true, // 활성화 여부
+				categories : []
+			// 선택된 카테고리
+			};
+
+			// 체크된 카테고리 값을 배열에 추가
+			$('input[name="categories"]:checked').each(function() {
+				menuRegistration.categories.push($(this).val());
+			});
+
+			// AJAX 요청으로 서버에 데이터 전송
+			$.ajax({
+				url : '/menuRegistration',
+				type : 'post',
+				contentType : 'application/json',
+				data : JSON.stringify(menuRegistration),
+				success : function(response) {
+					alert('메뉴가 성공적으로 등록되었습니다.');
+					window.location.href = '/menuRegistration'; // 성공 시 메뉴 페이지로 리다이렉트
+				},
+				error : function(e) {
+					alert('메뉴 등록에 실패했습니다.');
+				}
+			});
+		});
+	});
+</script>
+</head>
+<body>
+	<h1>메뉴 등록 페이지</h1>
+
+	<table>
+		<tr>
+			<td><label for="storeId">가게 ID:</label></td>
+			<td><input type="text" id="storeId" name="storeId"
+				th:value="${storeId}"></td>
+		</tr>
+		<tr>
+			<td><label for="name">메뉴 이름:</label></td>
+			<td><input type="text" id="name" name="name" required></td>
+		</tr>
+		<tr>
+			<td><label for="price">가격:</label></td>
+			<td><input type="number" id="price" name="price" required></td>
+		</tr>
+		<tr>
+			<td><label for="pictureUrl">사진 URL:</label></td>
+			<td><input type="text" id="pictureUrl" name="pictureUrl"></td>
+		</tr>
+		<tr>
+			<td><label>카테고리 선택:</label></td>
+			<td id="categoriesContainer">
+				<!-- 카테고리 구분과 항목이 이곳에 동적으로 추가됩니다 -->
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<button type="button" id="registerMenuButton">메뉴 등록</button>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

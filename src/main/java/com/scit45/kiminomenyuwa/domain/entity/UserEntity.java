@@ -15,63 +15,67 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
  * 사용자의 정보를 저장하는 엔티티 클래스입니다.
  * 로그인 자격 증명 및 개인 정보를 포함합니다.
  */
+@Getter
 @Entity
 @Table(name = "user")
-@NoArgsConstructor
+@Data
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class UserEntity {
 
-    @Id
-    @Column(name = "user_id")
-    private String userId;
+	@Id
+	@Column(name = "user_id")
+	private String userId;
 
-    @Column(name = "password_hash", nullable = false)
-    private String passwordHash;
+	@Column(name = "password_hash", nullable = false)
+	private String passwordHash;
 
-    @Column(name = "name")
-    private String name;
+	@Column(name = "name")
+	private String name;
 
-    @Column(name = "birth_date")
-    private LocalDate birthDate;
+	@Column(name = "birth_date")
+	private LocalDate birthDate;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "gender", nullable = false)
-    private Gender gender;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "gender", nullable = false)
+	private Gender gender;
 
-    @Column(name = "email")
-    private String email;
+	@Column(name = "email")
+	private String email;
 
-    @Column(name = "road_name_address")
-    private String roadNameAddress;
+	@Column(name = "road_name_address")
+	private String roadNameAddress;
 
-    @Column(name = "detail_address")
-    private String detailAddress;
+	@Column(name = "detail_address")
+	private String detailAddress;
 
-    @Column(name = "zipcode")
-    private String zipcode;
+	@Column(name = "zipcode")
+	private String zipcode;
 
-    @Column(name = "phone_number")
-    private String phoneNumber;
+	@Column(name = "phone_number")
+	private String phoneNumber;
 
-    @Column(name = "profile_photo_url")
-    private String profilePhotoUrl;
+	@Column(name = "profile_img_uuid")
+	private String profileImgUuid;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
-    private Role role;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "role", nullable = false)
+	private Role role;
 
-    @Column(name = "enabled", nullable = false)
-    private Boolean enabled;
+	@Column(name = "enabled", nullable = false)
+	private Boolean enabled;
 
-    @CreatedDate
-    @Column(name = "created_time")
-    private LocalDateTime createdTime;
+	@CreatedDate
+	@Column(name = "created_time")
+	private LocalDateTime createdTime;
 }

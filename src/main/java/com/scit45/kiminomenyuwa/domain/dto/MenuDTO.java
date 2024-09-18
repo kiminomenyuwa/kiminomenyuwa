@@ -1,5 +1,8 @@
 package com.scit45.kiminomenyuwa.domain.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,4 +23,15 @@ public class MenuDTO {
 	private Integer price;
 	private String pictureUrl;
 	private Boolean enabled;
+	private List<String> categories = new ArrayList<>(); // 카테고리 리스트
+
+	public MenuDTO(Integer menuId, Integer storeId, String name, Integer price, String pictureUrl, Boolean enabled) {
+		this.menuId = menuId;
+		this.storeId = storeId;
+		this.name = name;
+		this.price = price;
+		this.pictureUrl = pictureUrl;
+		this.enabled = enabled;
+	}
+
 }

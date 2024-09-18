@@ -32,22 +32,27 @@
 <h1>[ ID 중복 확인 ]</h1>
 <section>
     <form id="searchForm" action="idCheck" method="post">
-        검색할 ID <input type="text" name="searchId" id="searchId">
-        <input type="submit" value="검색">
+        검색할 ID <input type="text" name="searchId" id="searchId"> <input
+            type="submit" value="검색">
     </form>
 
     <!-- 검색 후에만 출력 -->
     <div th:if="${searchId != null}">
         <!-- 사용 가능한 경우에만 출력 -->
         <div th:if="${result}">
-            <p><span th:text="${searchId}"></span>
-                <span> : 사용할 수 있는 ID입니다.</span></p>
-            <p><input type="button" value="ID사용하기"
-                      id="inputbutton" th:data-id="${searchId}"></p>
+            <p>
+                <span th:text="${searchId}"></span> <span> : 사용할 수 있는 ID입니다.</span>
+            </p>
+            <p>
+                <input type="button" value="ID사용하기" id="inputbutton"
+                       th:data-id="${searchId}">
+            </p>
         </div>
         <!-- 사용 불가능한 경우에만 출력 -->
         <div th:if="${not result}">
-            <p><span th:text="${searchId}"></span><span> : 이미 사용중인 ID입니다.</span></p>
+            <p>
+                <span th:text="${searchId}"></span><span> : 이미 사용중인 ID입니다.</span>
+            </p>
         </div>
     </div>
 </section>
