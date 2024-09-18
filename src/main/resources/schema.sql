@@ -2,6 +2,7 @@
 DROP TABLE IF EXISTS `mini_game_menu_rating`;
 DROP TABLE IF EXISTS `user_activity`;
 DROP TABLE IF EXISTS `user_dining_history`;
+DROP TABLE IF EXISTS `review_photo`;
 DROP TABLE IF EXISTS `review`;
 DROP TABLE IF EXISTS `menu_category_mapping`;
 DROP TABLE IF EXISTS `food_category`;
@@ -96,17 +97,27 @@ CREATE TABLE `menu_category_mapping`
 -- 리뷰 테이블: 사용자 리뷰를 저장
 CREATE TABLE `review`
 (
-    `review_id`    INT AUTO_INCREMENT NOT NULL,         -- 리뷰의 고유 식별자
-    `store_id`     INT                NOT NULL,         -- 리뷰가 속한 상점의 ID
-    `user_id`      VARCHAR(20),                         -- 리뷰 작성자의 사용자 ID (변경된 필드 이름)
-    `menu_id`      INT                NOT NULL,         -- 리뷰 대상 메뉴의 ID
-    `rating`       TINYINT            NOT NULL,         -- 리뷰 평점
-    `comment`      TEXT,                                -- 리뷰 내용
-    `created_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 리뷰 작성 시간
-    PRIMARY KEY (`review_id`),                          -- 기본 키 설정
+    `review_id`    INT AUTO_INCREMENT NOT NULL,          -- 리뷰의 고유 식별자
+    `store_id`     INT                NOT NULL,          -- 리뷰가 속한 상점의 ID
+    `user_id`      VARCHAR(20)        NOT NULL,          -- 리뷰 작성자의 사용자 ID (변경된 필드 이름)
+    `rating`       TINYINT            NOT NULL,          -- 리뷰 평점
+    `comment`      TEXT,                                 -- 리뷰 내용
+    `created_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- 리뷰 작성 시간
+    `modified_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 리뷰 작성 시간
+    PRIMARY KEY (`review_id`),                           -- 기본 키 설정
     FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`),
-    FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
-    FOREIGN KEY (`menu_id`) REFERENCES `menu` (`menu_id`)
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
+);
+
+-- 리뷰 사진 테이블 생성
+CREATE TABLE `review_photo`
+(
+    `photo_id`      INT AUTO_INCREMENT NOT NULL,         -- 사진의 고유 식별자
+    `review_id`     INT                NOT NULL,         -- 사진이 속한 리뷰의 ID
+    `photo_url`     VARCHAR(255)       NOT NULL,         -- 사진의 URL 또는 경로
+    `uploaded_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 사진 업로드 시간
+    PRIMARY KEY (`photo_id`),                            -- 기본 키 설정
+    FOREIGN KEY (`review_id`) REFERENCES `review` (`review_id`) ON DELETE CASCADE
 );
 
 -- 사용자의 식사 내역 테이블: 사용자가 소비한 식사의 기록을 저장
