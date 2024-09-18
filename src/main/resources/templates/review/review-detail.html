@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>리뷰 상세 정보</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <h1>리뷰 상세 정보</h1>
+    <p th:if="${message != null}" th:text="${message}"></p>
+    <p><strong>상점 ID:</strong> <span th:text="${review.storeId}"></span></p>
+    <p><strong>사용자 ID:</strong> <span th:text="${review.userId}"></span></p>
+    <p><strong>평점:</strong> <span th:text="${review.rating}"></span></p>
+    <p><strong>리뷰 내용:</strong> <span th:text="${review.comment}"></span></p>
+    <p><strong>작성 시간:</strong> <span th:text="${review.createdTime}"></span></p>
+
+    <!-- 업로드된 사진을 갤러리 형태로 표시 -->
+    <h3>리뷰 사진</h3>
+    <div class="row">
+        <div class="col-4" th:each="photoUrl : ${review.photoUrls}">
+            <img th:src="@{${photoUrl}}" class="img-fluid img-thumbnail" alt="리뷰 사진">
+        </div>
+    </div>
+
+    <!-- 리뷰 목록으로 돌아가기 버튼 -->
+    <a href="/reviews" class="btn btn-primary mt-3">리뷰 목록으로 돌아가기</a>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
