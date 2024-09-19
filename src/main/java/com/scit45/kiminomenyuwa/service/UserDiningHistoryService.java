@@ -11,6 +11,7 @@ import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.UserDiningHistoryDTO;
 import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
 import com.scit45.kiminomenyuwa.domain.entity.UserDiningHistoryEntity;
+import com.scit45.kiminomenyuwa.domain.repository.MenuCategoryMappingRepository;
 import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
 import com.scit45.kiminomenyuwa.domain.repository.UserDiningHistoryRepository;
 
@@ -25,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UserDiningHistoryService {
 	private final MenuRepository menuRepository;
 	private final UserDiningHistoryRepository userDiningHistoryRepository;
+	private final MenuCategoryMappingRepository menuCategoryMappingRepository;
 
 	/**
 	 * 현재 로그인 중인 사용자의 음식 먹은 내역을 List로 가져오는 메서드
@@ -75,6 +77,10 @@ public class UserDiningHistoryService {
 		// MenuEntity 리스트를 MenuDTO 리스트로 변환하여 반환
 		List<MenuDTO> menuDTOs = new ArrayList<>();
 		for (MenuEntity menuEntity : availableMenus) {
+			// 각 메뉴에 해당하는 카테고리 리스트 가져오기
+			List<String> categories = menuCategoryMappingRepository.findCategoriesByMenuId(menuEntity.getMenuId());
+
+			// MenuDTO에 카테고리 리스트를 추가하여 생성
 			menuDTOs.add(MenuDTO.builder()
 				.menuId(menuEntity.getMenuId())
 				.storeId(menuEntity.getStoreId())
@@ -82,6 +88,7 @@ public class UserDiningHistoryService {
 				.price(menuEntity.getPrice())
 				.pictureUrl(menuEntity.getPictureUrl())
 				.enabled(menuEntity.getEnabled())
+				.categories(categories) // 카테고리 리스트 추가
 				.build());
 		}
 

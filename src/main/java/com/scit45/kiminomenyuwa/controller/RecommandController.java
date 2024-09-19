@@ -1,7 +1,9 @@
 package com.scit45.kiminomenyuwa.controller;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -71,15 +73,34 @@ public class RecommandController {
 		// 추천할 메뉴 리스트 (최종 결과)
 		List<MenuDTO> recommendedMenus = new ArrayList<>();
 
+		// 각 카테고리당 추천할 메뉴 수 제한 (각 카테고리에서 최대 3개 추천)
+		int maxRecommendationsPerCategory = 3;
+
+		// 추천된 메뉴를 중복해서 추가하지 않도록 Set 사용
+		Set<Integer> addedMenuIds = new HashSet<>();
+
 		// 카테고리 TOP 10을 기준으로 아직 먹지 않은 메뉴 추천
 		for (CategoryCountDTO category : categoryTop10) {
 			String categoryName = category.getCategoryName();  // 카테고리 이름
+			int count = 0; // 현재 카테고리에서 추천된 메뉴 수
 
 			// 해당 카테고리에 속한 메뉴 필터링
 			for (MenuDTO menu : notTriedMenuList) {
+				// 이미 추천된 메뉴는 제외
+				if (addedMenuIds.contains(menu.getMenuId())) {
+					continue;
+				}
+
 				// 메뉴의 categories 필드가 null이 아닌지 확인한 후 contains 호출
 				if (menu.getCategories() != null && menu.getCategories().contains(categoryName)) {
 					recommendedMenus.add(menu);
+					addedMenuIds.add(menu.getMenuId());
+					count++;
+
+					// 해당 카테고리에서 최대 추천 개수를 초과하면 루프 종료
+					if (count >= maxRecommendationsPerCategory) {
+						break;
+					}
 				}
 			}
 		}
@@ -89,6 +110,4 @@ public class RecommandController {
 
 		return "recommandView/untriedMenu"; // 추천 결과를 보여줄 페이지로 이동
 	}
-
-
 }
