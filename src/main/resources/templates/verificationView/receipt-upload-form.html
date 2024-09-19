@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Receipt Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        p {
+            font-size: 16px;
+            color: #555;
+        }
+
+        .store-info {
+            background-color: #f8f9fa;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        .file-upload {
+            margin-top: 20px;
+        }
+
+        input[type="file"] {
+            margin: 10px 0;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>영수증 인증 페이지</h1>
+
+    <!-- 로그인한 사용자 정보 -->
+    <p>환영합니다, <strong th:text="${username}"></strong>님!</p>
+
+    <!-- 영수증 업로드 폼 -->
+    <form action="/receipt/recognize" class="file-upload" enctype="multipart/form-data" method="post">
+        <input name="storeId" th:value="${storeId}" type="hidden"/>
+        <label for="receiptImage">영수증을 업로드하세요:</label>
+        <input name="receiptImage" required type="file"/>
+        <button type="submit">영수증 업로드</button>
+    </form>
+</div>
+
+</body>
+</html>
