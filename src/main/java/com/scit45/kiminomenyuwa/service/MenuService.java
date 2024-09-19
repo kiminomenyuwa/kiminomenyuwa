@@ -13,6 +13,7 @@ import com.scit45.kiminomenyuwa.domain.entity.UserDiningHistoryEntity;
 import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
 import com.scit45.kiminomenyuwa.domain.repository.UserDiningHistoryRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -82,5 +83,11 @@ public class MenuService {
 		}
 
 		return menuDTOs;
+	}
+
+	public MenuDTO getMenuById(int menuId) {
+		MenuEntity menu = menuRepository.findById(menuId)
+			.orElseThrow(() -> new EntityNotFoundException("Menu not found with id: " + menuId));
+		return MenuDTO.builder().menuId(menu.getMenuId()).name(menu.getName()).price(menu.getPrice()).build();
 	}
 }
