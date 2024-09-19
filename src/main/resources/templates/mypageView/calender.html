@@ -100,8 +100,13 @@
                     url: 'api/dining-history',
                     method: 'GET',
                     success: function (data) {
+                        console.log(data);
                         data.forEach(record => {
-                            const diningDate = new Date(record.diningDate);
+                            const diningDateArray = record.diningDate; // 배열로 전달된 날짜
+                            const diningDate = new Date(
+                                diningDateArray[0], diningDateArray[1] - 1, diningDateArray[2]
+                            );
+                            console.log(record.diningDate);
                             const day = diningDate.getDate();
                             const month = diningDate.getMonth(); // 월 정보 추가
                             const year = diningDate.getFullYear(); // 연도 정보 추가
@@ -113,6 +118,7 @@
                                 success: function (menu) {
                                     const menuName = menu.name;  // 가져온 메뉴 이름
                                     const cell = $(`td[data-day="${day}"]`);
+                                    console.log(menu);
 
                                     if (cell.length) {
                                         // 해당 연도와 월에 맞는 셀을 찾아서 추가

@@ -45,4 +45,10 @@ public class MenuDTO {
         this.price = price;
         this.pictureUrl = pictureUrl;
 	}
+
+	public MenuDTO(Integer menuId, String name, Integer price) {
+		this.menuId = menuId;
+        this.name = name;
+        this.price = price;
+	}
 }

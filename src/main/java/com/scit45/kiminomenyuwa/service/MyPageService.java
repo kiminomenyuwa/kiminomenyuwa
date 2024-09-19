@@ -44,7 +44,7 @@ public class MyPageService {
 
 		// MenuEntity를 MenuDTO로 변환
 		return menus.stream()
-			.map(menu -> new MenuDTO(menu.getMenuId(), menu.getName(), menu.getPrice(), menu.getPictureUrl()))
+			.map(menu -> new MenuDTO(menu.getMenuId(), menu.getName(), menu.getPrice()))
 			.collect(Collectors.toList());
 	}
 
@@ -70,7 +70,7 @@ public class MyPageService {
 	public MenuDTO getMenuById(int menuId) {
 		MenuEntity menu = menuRepository.findById(menuId)
 			.orElseThrow(() -> new EntityNotFoundException("Menu not found with id: " + menuId));
-		return MenuDTO.builder().menuId(menu.getMenuId()).name(menu.getName()).price(menu.getPrice()).build();
+		return MenuDTO.builder().menuId(menu.getMenuId()).name(menu.getName()).build();
 	}
 
 	public List<UserDiningHistoryDTO> getDiningHistoryByUserId(String userId) {
