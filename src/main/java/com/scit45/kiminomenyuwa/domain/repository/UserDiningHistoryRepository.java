@@ -1,5 +1,6 @@
 package com.scit45.kiminomenyuwa.domain.repository;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
