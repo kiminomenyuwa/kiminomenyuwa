@@ -38,6 +38,9 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // 영수증, 사업자등록증 OCR을 위한 azure document intelligence
+    implementation 'com.azure:azure-ai-formrecognizer:4.1.10'
 }
 
 tasks.named('test') {

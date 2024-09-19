@@ -1,16 +1,24 @@
--- 기존 테이블이 있으면 삭제
-DROP TABLE IF EXISTS `mini_game_menu_rating`;
-DROP TABLE IF EXISTS `user_activity`;
-DROP TABLE IF EXISTS `user_dining_history`;
-DROP TABLE IF EXISTS `review_photo`;
-DROP TABLE IF EXISTS `review`;
-DROP TABLE IF EXISTS `menu_category_mapping`;
-DROP TABLE IF EXISTS `food_category`;
-DROP TABLE IF EXISTS `menu`;
-DROP TABLE IF EXISTS `store`;
-DROP TABLE IF EXISTS `profile_photo`;
-DROP TABLE IF EXISTS `user`;
-DROP TABLE IF EXISTS `category_type`;
+-- 외래 키 제약을 비활성화
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- 테이블 삭제
+DROP TABLE IF EXISTS purchased_menu;
+DROP TABLE IF EXISTS receipt_verification;
+DROP TABLE IF EXISTS profile_photo;
+DROP TABLE IF EXISTS mini_game_menu_rating;
+DROP TABLE IF EXISTS user_activity;
+DROP TABLE IF EXISTS user_dining_history;
+DROP TABLE IF EXISTS review_photo;
+DROP TABLE IF EXISTS review;
+DROP TABLE IF EXISTS menu_category_mapping;
+DROP TABLE IF EXISTS menu;
+DROP TABLE IF EXISTS store;
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS food_category;
+DROP TABLE IF EXISTS category_type;
+
+-- 외래 키 제약을 다시 활성화
+SET FOREIGN_KEY_CHECKS = 1;
 
 
 -- 카테고리 타입 테이블: 카테고리의 종류를 정의 (예: 재료, 나라, 조리 방법)
@@ -167,4 +175,28 @@ CREATE TABLE `profile_photo`
     `saved_name`    VARCHAR(100)       NOT NULL,         -- UUID와 업로드 시간을 조합한 저장 파일명
     `upload_date`   TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 업로드 날짜
     PRIMARY KEY (`photo_id`)                             -- 기본 키 설정
+);
+
+-- 영수증 인증 정보를 저장하는 테이블
+CREATE TABLE receipt_verification
+(
+    receipt_verification_id BIGINT AUTO_INCREMENT PRIMARY KEY,  -- 고유 ID (자동 증가)
+    user_id                 VARCHAR(20) NOT NULL,               -- 사용자 ID (UserEntity와 외래키 관계)
+    store_id                INT         NOT NULL,               -- 가게 ID (StoreEntity와 외래키 관계)
+    verification_date       DATETIME DEFAULT CURRENT_TIMESTAMP, -- 인증 날짜 (기본값: 현재 시간)
+
+    CONSTRAINT FK_user FOREIGN KEY (user_id) REFERENCES User (user_id),
+    CONSTRAINT FK_store FOREIGN KEY (store_id) REFERENCES Store (store_id)
+);
+
+-- 사용자가 구매한 메뉴 정보를 저장하는 테이블
+CREATE TABLE purchased_menu
+(
+    purchased_menu_id       BIGINT AUTO_INCREMENT PRIMARY KEY, -- 고유 ID (자동 증가)
+    receipt_verification_id BIGINT NOT NULL,                   -- 영수증 인증 ID (ReceiptVerificationEntity와 외래키 관계)
+    menu_id                 INT    NOT NULL,                   -- 메뉴 ID (MenuEntity와 외래키 관계)
+    quantity                INT,                               -- 구매 수량
+
+    CONSTRAINT FK_receipt_verification FOREIGN KEY (receipt_verification_id) REFERENCES receipt_verification (receipt_verification_id),
+    CONSTRAINT FK_menu FOREIGN KEY (menu_id) REFERENCES `menu` (menu_id)
 );

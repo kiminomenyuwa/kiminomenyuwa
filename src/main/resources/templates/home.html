@@ -1,33 +1,31 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ko" xmlns:th="http://thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>키미노 메뉴와</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>키미노 메뉴와</title>
 
-    <!-- CSS 파일 링크 -->
-    <link rel="stylesheet" href="/css/home.css"/>
+<!-- CSS 파일 링크 -->
+<link rel="stylesheet" href="/css/home.css" />
 
-    <!-- jQuery 라이브러리 로드 -->
-    <script src="/js/jquery-3.7.1.min.js"></script>
+<!-- jQuery 라이브러리 로드 -->
+<script src="/js/jquery-3.7.1.min.js"></script>
 </head>
 <body>
-<h1>홈페이지</h1>
+	<h1>홈페이지</h1>
 
-<!-- 로그인한 사용자에게 환영 메시지 표시 -->
-<h2 sec:authorize="isAuthenticated()"
-    th:text="|${#authentication.principal.name}님 환영합니다|"></h2>
+	<!-- 로그인한 사용자에게 환영 메시지 표시 -->
+	<h2 sec:authorize="isAuthenticated()" th:text="|${#authentication.principal.name}님 환영합니다|"></h2>
 
-<!-- 로그인되지 않은 사용자를 위한 회원가입/로그인 링크 -->
-<div sec:authorize="not isAuthenticated()">
-    <p>
-        <a href="user/joinForm">회원가입</a>
-    </p>
-    <p>
-        <a href="user/loginForm">로그인</a>
-    </p>
-</div>
+	<!-- 로그인되지 않은 사용자를 위한 회원가입/로그인 링크 -->
+	<div sec:authorize="not isAuthenticated()">
+		<p>
+			<a href="user/joinForm">회원가입</a>
+		</p>
+		<p>
+			<a href="user/loginForm">로그인</a>
+		</p>
+	</div>
 
 <!-- 로그인된 사용자용 메뉴-->
 <div sec:authorize="isAuthenticated()">
@@ -45,58 +43,79 @@
     </p>
 </div>
 
-<!-- 가게 등록 링크 -->
-<p>
-    <a href="storePage">사장님 가게 페이지</a>
-</p>
+	<!-- 가게 등록 링크 -->
+	<p>
+		<a href="storePage">사장님 가게 페이지</a>
+	</p>
+	<script th:inline="javascript">
+		$(document).ready(function() {
+			let menuCount = /*[[${menuCount}]]*/0;
+			let selectedNumbers = [];
+			$("#start-game").click(function() {
+				if (selectedNumbers.length >= menuCount) {
+					alert("더 이상 메뉴가 없습니다!");
+					return;
+				}
 
-<!-- 비회원용 메뉴 추천 섹션 -->
-<div sec:authorize="not isAuthenticated()" id="menu-section">
-    <!-- 메뉴 추천 메시지 및 결과 표시 -->
-    <div id="selected-menu">
-        <h2 id="menu-header">메뉴 룰렛을 누르세요</h2>
-    </div>
+				let randomNumber;
+				do {
+					randomNumber = Math.floor(Math.random() * menuCount) + 1;
+				} while (selectedNumbers.includes(randomNumber));
 
-    <!-- 게임 시작 버튼 -->
-    <div id="menu-controls">
-        <button id="start-game">게임 시작</button>
-    </div>
-</div>
+				$.post("/save-random-number", {
+					randomNumber : randomNumber,
+				}, function(menu) {
+					$("#menu-header").text(menu.name);
+					$("#start-game").text("다시 시작");
+					selectedNumbers.push(randomNumber);
+				});
+			});
+		});
+	</script>
+	<!-- 비회원용 메뉴 추천 섹션 -->
+	<div sec:authorize="not isAuthenticated()" id="menu-section">
+		<!-- 메뉴 추천 메시지 및 결과 표시 -->
+		<div id="selected-menu">
+			<h2 id="menu-header">메뉴 룰렛을 누르세요</h2>
+		</div>
 
-<!-- 회원용 메뉴 추천 섹션 -->
-<div sec:authorize="isAuthenticated()" id="user-menu-section">
-    <h2>[ 회원용 ]</h2>
+		<!-- 게임 시작 버튼 (임시주석처리)-->
+		<div id="menu-controls">
+			<button id="start-game">게임 시작</button>
+		</div>
+	</div>
 
-    <!-- 메뉴 추천 메시지 및 결과 표시 -->
-    <div id="user-selected-menu">
-        <h2 id="user-menu-header">메뉴 룰렛을 누르세요</h2>
-    </div>
+	<!-- 회원용 메뉴 추천 섹션 -->
+	<div sec:authorize="isAuthenticated()" id="user-menu-section">
+		<h2>[ 회원용 ]</h2>
 
-    <!-- 회원용 게임 시작 버튼 -->
-    <div id="user-menu-controls">
-        <button id="user-start-game">게임 시작</button>
-    </div>
+		<!-- 메뉴 추천 메시지 및 결과 표시 -->
+		<div id="user-selected-menu">
+			<h2 id="user-menu-header">메뉴 룰렛을 누르세요</h2>
+		</div>
 
-    <!-- 회원용 좋아요/싫어요 버튼 -->
-    <div id="user-rating-controls" style="display: none">
-        <!-- 좋아요 버튼과 별점 컨트롤 -->
-        <div id="user-like-button">
-            좋아요
-            <div class="stars">
-                <span class="star" data-value="1">★</span> <span class="star"
-                                                                 data-value="2">★</span> <span class="star"
-                                                                                               data-value="3">★</span>
-                <span class="star" data-value="4">★</span> <span class="star"
-                                                                 data-value="5">★</span>
-            </div>
-        </div>
+		<!-- 회원용 게임 시작 버튼 -->
+		<div id="user-menu-controls">
+			<button id="user-start-game">게임 시작</button>
+		</div>
 
-        <!-- 싫어요 버튼 -->
-        <button id="user-dislike-button">싫어요</button>
-    </div>
-</div>
+		<!-- 회원용 좋아요/싫어요 버튼 -->
+		<div id="user-rating-controls" style="display: none">
+			<!-- 좋아요 버튼과 별점 컨트롤 -->
+			<div id="user-like-button">
+				좋아요
+				<div class="stars">
+					<span class="star" data-value="1">★</span> <span class="star" data-value="2">★</span> <span class="star" data-value="3">★</span> <span
+						class="star" data-value="4">★</span> <span class="star" data-value="5">★</span>
+				</div>
+			</div>
 
-<!-- JavaScript 파일 링크 -->
-<script src="/js/home.js"></script>
+			<!-- 싫어요 버튼 -->
+			<button id="user-dislike-button">싫어요</button>
+		</div>
+	</div>
+
+	<!-- JavaScript 파일 링크 -->
+	<script src="/js/home.js"></script>
 </body>
 </html>
