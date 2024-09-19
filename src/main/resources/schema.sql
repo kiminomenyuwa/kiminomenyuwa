@@ -1,3 +1,4 @@
+use kiminomenyuwa;
 -- 외래 키 제약을 비활성화
 SET FOREIGN_KEY_CHECKS = 0;
 
