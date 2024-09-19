@@ -50,4 +50,9 @@ public class ReceiptVerificationEntity {
 	@CreatedDate
 	@Column(name = "verification_date")
 	private LocalDateTime verificationDate;
+
+	public void setUserAndStore(UserEntity userEntity, StoreEntity storeEntity) {
+		this.reviewer = userEntity;
+		this.targetStore = storeEntity;
+	}
 }
