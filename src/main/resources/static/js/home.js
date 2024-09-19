@@ -40,7 +40,7 @@ $(document).ready(function() {
 		// 별을 클릭했을 때 별점 평가와 알림 표시
 		star.addEventListener("click", function() {
 			const value = parseInt(star.getAttribute("data-value")); // 클릭한 별의 값 가져오기
-//			alert(`${value}개의 별을 선택하셨습니다.`); // 선택된 별의 수를 알림으로 표시
+			alert(`${value}개의 별을 선택하셨습니다.`); // 선택된 별의 수를 알림으로 표시
 			rateMenu(window.menuId, value); // 선택된 별의 수로 메뉴 평가
 		});
 	});
