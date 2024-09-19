@@ -31,7 +31,8 @@
         <td th:text="${menuList.enabled}"></td>
     </tr>
 </table>
-<p th:text="|${#authentication.principal.name}님의 음식 내역|"></p>
+
+<p th:text="|${#authentication.principal.name}님의 먹은 음식 내역|"></p>
 <table>
     <tr>
         <th>diningId</th>
@@ -47,5 +48,39 @@
     </tr>
 </table>
 
+<p>먹은 내역 중 중복을 제거한 메뉴Id 도출</p>
+[[${distinctDiningHistoryList}]]
+
+<p>사용자가 먹지 않은 메뉴들</p>
+<table>
+    <tr>
+        <th>menuId</th>
+        <th>storeId</th>
+        <th>name</th>
+        <th>price</th>
+        <th>pictureUrl</th>
+        <th>enabled</th>
+    </tr>
+    <tr th:each="menu : ${notTriedMenuList}">
+        <td th:text="${menu.menuId}"></td>
+        <td th:text="${menu.storeId}"></td>
+        <td th:text="${menu.name}"></td>
+        <td th:text="${menu.price}"></td>
+        <td th:text="${menu.pictureUrl}"></td>
+        <td th:text="${menu.enabled}"></td>
+    </tr>
+</table>
+
+<p>사용자가 먹은 음식 내역 중 카테고리 TOP 10</p>
+<table>
+    <tr>
+        <th>카테고리</th>
+        <th>횟수</th>
+    </tr>
+    <tr th:each="category : ${categoryTop10List}">
+        <td th:text="${category.categoryName}"></td>  <!-- categoryName -->
+        <td th:text="${category.categoryCount}"></td>  <!-- categoryCount -->
+    </tr>
+</table>
 </body>
 </html>

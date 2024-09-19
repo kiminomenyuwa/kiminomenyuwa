@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.scit45.kiminomenyuwa.domain.dto.UserDiningHistoryDTO;
 import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
 import com.scit45.kiminomenyuwa.service.MenuService;
+import com.scit45.kiminomenyuwa.service.UserDiningHistoryService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class MypageController {
 	private final MenuService menuService;
+	private final UserDiningHistoryService userDiningHistoryService;
 
 	/**
 	 * 마이페이지 메인화면
@@ -39,7 +41,7 @@ public class MypageController {
 	public String diningHistory(Model model, @AuthenticationPrincipal AuthenticatedUser user) {
 
 		//현재 로그인 중인 사용자의 먹은 음식 내역
-		List<UserDiningHistoryDTO> diningHistoryDTOList = menuService.getDiningHistory(user.getId());
+		List<UserDiningHistoryDTO> diningHistoryDTOList = userDiningHistoryService.getDiningHistory(user.getId());
 		model.addAttribute("diningHistoryList", diningHistoryDTOList);
 
 		return "mypageView/diningHistory";
