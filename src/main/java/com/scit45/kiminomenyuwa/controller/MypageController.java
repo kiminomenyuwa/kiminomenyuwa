@@ -2,10 +2,12 @@ package com.scit45.kiminomenyuwa.controller;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -82,10 +84,22 @@ public class MypageController {
 		myPageService.saveDiningHistory(userDiningHistoryDTO);
 	}
 
+	/**
+	 * 캘린더에서 선택한 음식을 dining_history에 저장
+	 * @param user
+	 * @return
+	 */
 	@ResponseBody
 	@GetMapping("/api/dining-history")
 	public List<UserDiningHistoryDTO> getDiningHistory(@AuthenticationPrincipal AuthenticatedUser user) {
 		String userId = user.getUsername();
 		return myPageService.getDiningHistoryByUserId(userId);
+	}
+
+	@ResponseBody
+	@GetMapping("/api/menus/{menuId}")
+	public ResponseEntity<MenuDTO> getMenuById(@PathVariable int menuId) {
+		MenuDTO menu = menuService.getMenuById(menuId);
+		return ResponseEntity.ok(menu);
 	}
 }

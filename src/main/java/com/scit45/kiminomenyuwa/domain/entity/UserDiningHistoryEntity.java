@@ -28,7 +28,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @Builder
-@EntityListeners(AuditingEntityListener.class)
 public class UserDiningHistoryEntity {
 
 	@Id
@@ -44,7 +43,6 @@ public class UserDiningHistoryEntity {
 	@JoinColumn(name = "menu_id", nullable = false)
 	private MenuEntity menu;
 
-	@CreatedDate
 	@Column(name = "dining_date", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private LocalDateTime diningDate;
 }
