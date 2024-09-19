@@ -1,21 +1,5 @@
 package com.scit45.kiminomenyuwa.service.verification;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.azure.ai.formrecognizer.documentanalysis.DocumentAnalysisClient;
 import com.azure.ai.formrecognizer.documentanalysis.DocumentAnalysisClientBuilder;
 import com.azure.ai.formrecognizer.documentanalysis.models.AnalyzeResult;
@@ -27,8 +11,22 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.scit45.kiminomenyuwa.domain.dto.ItemDTO;
 import com.scit45.kiminomenyuwa.domain.dto.ReceiptDTO;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Slf4j
 @Service
@@ -108,9 +106,9 @@ public class ReceiptRecognitionService {
 
 			// 아이템 목록 추출
 			List<ItemDTO> itemsList = extractItems(fieldsNode.get("Items"));
-			if (itemsList.isEmpty()) {
-				throw new IllegalArgumentException("구매한 아이템 목록이 제공되지 않았습니다.");
-			}
+//			if (itemsList.isEmpty()) {
+//				throw new IllegalArgumentException("구매한 아이템 목록이 제공되지 않았습니다.");
+//			}
 			receipt.setItems(itemsList);
 
 			// 총액 추출
