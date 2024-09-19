@@ -78,8 +78,8 @@
         <th>횟수</th>
     </tr>
     <tr th:each="category : ${categoryTop10List}">
-        <td th:text="${category[0]}"></td>  <!-- categoryName -->
-        <td th:text="${category[1]}"></td>  <!-- categoryCount -->
+        <td th:text="${category.categoryName}"></td>  <!-- categoryName -->
+        <td th:text="${category.categoryCount}"></td>  <!-- categoryCount -->
     </tr>
 </table>
 </body>

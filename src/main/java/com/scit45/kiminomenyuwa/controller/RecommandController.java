@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.scit45.kiminomenyuwa.domain.dto.CategoryCountDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.UserDiningHistoryDTO;
 import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
@@ -51,7 +52,7 @@ public class RecommandController {
 		model.addAttribute("notTriedMenuList", notTriedMenuList);
 
 		// 사용자가 먹은 음식 내역 중 카테고리 TOP 10
-		List<Object[]> categoryTop10 = userDiningHistoryService.getTopCategoriesByUserId(user.getId());
+		List<CategoryCountDTO> categoryTop10 = userDiningHistoryService.getTopCategoriesByUserId(user.getId());
 		model.addAttribute("categoryTop10List", categoryTop10);
 
 		return "recommandView/recTest";
@@ -64,15 +65,15 @@ public class RecommandController {
 		log.debug("notTriedMenuList: {}", notTriedMenuList);
 
 		// 사용자가 먹은 음식 내역 중 카테고리 TOP 10
-		List<Object[]> categoryTop10 = userDiningHistoryService.getTopCategoriesByUserId(user.getId());
+		List<CategoryCountDTO> categoryTop10 = userDiningHistoryService.getTopCategoriesByUserId(user.getId());
 		log.debug("categoryTop10: {}", categoryTop10);
 
 		// 추천할 메뉴 리스트 (최종 결과)
 		List<MenuDTO> recommendedMenus = new ArrayList<>();
 
 		// 카테고리 TOP 10을 기준으로 아직 먹지 않은 메뉴 추천
-		for (Object[] category : categoryTop10) {
-			String categoryName = (String) category[0];  // 카테고리 이름
+		for (CategoryCountDTO category : categoryTop10) {
+			String categoryName = category.getCategoryName();  // 카테고리 이름
 
 			// 해당 카테고리에 속한 메뉴 필터링
 			for (MenuDTO menu : notTriedMenuList) {

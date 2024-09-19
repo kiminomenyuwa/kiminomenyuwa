@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.scit45.kiminomenyuwa.domain.dto.CategoryCountDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.UserDiningHistoryDTO;
 import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
@@ -92,7 +93,7 @@ public class UserDiningHistoryService {
 	 * @param userId 현재 로그인 중인 ID
 	 * @return 사용자가 먹은 음식들의 카테고리 중 중복되는 TOP10 키워드 리스트
 	 */
-	public List<Object[]> getTopCategoriesByUserId(String userId) {
+	public List<CategoryCountDTO> getTopCategoriesByUserId(String userId) {
 		return userDiningHistoryRepository.findTopCategoriesByUserId(userId)
 			.stream()
 			.limit(10)
