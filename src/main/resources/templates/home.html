@@ -17,6 +17,11 @@
 	<!-- 로그인한 사용자에게 환영 메시지 표시 -->
 	<h2 sec:authorize="isAuthenticated()" th:text="|${#authentication.principal.name}님 환영합니다|"></h2>
 
+	<!-- 로그인한 사용자의 프로필 사진을 표시 -->
+	<div sec:authorize="isAuthenticated()">
+		<img th:src="${profilePhotoUrl}" alt="프로필 사진" style="width: 100px; height: 100px; border-radius: 50%;" />
+	</div>
+
 	<!-- 로그인되지 않은 사용자를 위한 회원가입/로그인 링크 -->
 	<div sec:authorize="not isAuthenticated()">
 		<p>
