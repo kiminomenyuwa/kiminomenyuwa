@@ -77,12 +77,9 @@ public class MenuService {
 				.build());
 		}
 		//현재 로그인한 사용자의 먹은 음식내역 DTOList를 리턴
+		//여기가 이상해
 		return diningHistoryDTOs;
 	}
 
-	public MenuDTO getMenuById(int menuId) {
-		MenuEntity menu = menuRepository.findById(menuId)
-			.orElseThrow(() -> new EntityNotFoundException("Menu not found with id: " + menuId));
-		return MenuDTO.builder().menuId(menu.getMenuId()).name(menu.getName()).price(menu.getPrice()).build();
-	}
+
 }

@@ -99,7 +99,7 @@ public class MypageController {
 	@ResponseBody
 	@GetMapping("/api/menus/{menuId}")
 	public ResponseEntity<MenuDTO> getMenuById(@PathVariable int menuId) {
-		MenuDTO menu = menuService.getMenuById(menuId);
+		MenuDTO menu = myPageService.getMenuById(menuId);
 		return ResponseEntity.ok(menu);
 	}
 }
