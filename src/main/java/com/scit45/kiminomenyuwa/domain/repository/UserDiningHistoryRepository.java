@@ -20,11 +20,15 @@ public interface UserDiningHistoryRepository extends JpaRepository<UserDiningHis
 	List<Long> findDistinctMenuIdsByUserId(@Param("userId") String userId);
 
 	//사용자가 먹은 음식 내역의 카테고리 카운트 TOP 10
-	@Query("SELECT new com.scit45.kiminomenyuwa.domain.dto.CategoryCountDTO(mcm.foodCategory.categoryName, COUNT(mcm.foodCategory.categoryName)) " +
-		"FROM UserDiningHistoryEntity udh " +
-		"JOIN MenuCategoryMappingEntity mcm ON udh.menuId = mcm.menu.menuId " +
-		"WHERE udh.userId = :userId " +
-		"GROUP BY mcm.foodCategory.categoryName " +
-		"ORDER BY COUNT(mcm.foodCategory.categoryName) DESC")
+	@Query(
+		"SELECT new com.scit45.kiminomenyuwa.domain.dto.CategoryCountDTO(mcm.foodCategory.categoryName, COUNT(mcm.foodCategory.categoryName)) "
+			+
+			"FROM UserDiningHistoryEntity udh " +
+			"JOIN MenuCategoryMappingEntity mcm ON udh.menuId = mcm.menu.menuId " +
+			"WHERE udh.userId = :userId " +
+			"GROUP BY mcm.foodCategory.categoryName " +
+			"ORDER BY COUNT(mcm.foodCategory.categoryName) DESC")
 	List<CategoryCountDTO> findTopCategoriesByUserId(@Param("userId") String userId);
+	
+	List<UserDiningHistoryEntity> findByUser_UserId(String userId);
 }

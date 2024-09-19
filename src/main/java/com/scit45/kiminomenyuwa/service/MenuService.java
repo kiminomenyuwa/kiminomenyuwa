@@ -64,8 +64,8 @@ public class MenuService {
 
 		List<MenuDTO> menuDTOs = new ArrayList<>();
 		for (Object[] row : menuWithCategories) {
-			MenuEntity menuEntity = (MenuEntity) row[0];
-			String categories = (String) row[1];
+			MenuEntity menuEntity = (MenuEntity)row[0];
+			String categories = (String)row[1];
 
 			// MenuEntity를 MenuDTO로 변환하고 카테고리 리스트 추가
 			MenuDTO menuDTO = MenuDTO.builder()
@@ -83,6 +83,4 @@ public class MenuService {
 
 		return menuDTOs;
 	}
-
-
 }

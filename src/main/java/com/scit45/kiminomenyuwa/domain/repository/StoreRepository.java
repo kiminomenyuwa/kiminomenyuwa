@@ -11,4 +11,5 @@ import com.scit45.kiminomenyuwa.domain.entity.StoreEntity;
 @Repository
 public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
 	List<MenuEntity> findByStoreId(Integer storeId);
+	StoreEntity findByName(String name);
 }

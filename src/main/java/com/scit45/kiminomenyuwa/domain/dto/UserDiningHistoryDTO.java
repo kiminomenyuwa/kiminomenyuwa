@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDiningHistoryDTO {
-	Integer diningId;
-	String userId;
-	Integer menuId;
+	int diningId;
+	String userId; // UserEntity의 userId
+	int menuId; // MenuEntity의 menuId
 	LocalDateTime diningDate;
 }
