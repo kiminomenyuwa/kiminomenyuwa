@@ -65,4 +65,16 @@ public class MyPageService {
 		// 엔티티 저장
 		userDiningHistoryRepository.save(diningHistoryEntity);
 	}
+
+	public List<UserDiningHistoryDTO> getDiningHistoryByUserId(String userId) {
+		return userDiningHistoryRepository.findByUser_UserId(userId)
+			.stream()
+			.map(history -> UserDiningHistoryDTO.builder()
+				.diningId(history.getDiningId())
+				.userId(history.getUser().getUserId())
+				.menuId(history.getMenu().getMenuId())
+				.diningDate(history.getDiningDate())
+				.build())
+			.collect(Collectors.toList());
+	}
 }

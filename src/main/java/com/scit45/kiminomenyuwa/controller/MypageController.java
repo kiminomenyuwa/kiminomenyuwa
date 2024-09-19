@@ -81,4 +81,11 @@ public class MypageController {
 		log.debug("로그인한 유저: {}", user.getId());
 		myPageService.saveDiningHistory(userDiningHistoryDTO);
 	}
+
+	@ResponseBody
+	@GetMapping("/api/dining-history")
+	public List<UserDiningHistoryDTO> getDiningHistory(@AuthenticationPrincipal AuthenticatedUser user) {
+		String userId = user.getUsername();
+		return myPageService.getDiningHistoryByUserId(userId);
+	}
 }
