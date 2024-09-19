@@ -81,13 +81,8 @@ public class MenuService {
 
 			menuDTOs.add(menuDTO);
 		}
-
 		return menuDTOs;
 	}
 
-	public MenuDTO getMenuById(int menuId) {
-		MenuEntity menu = menuRepository.findById(menuId)
-			.orElseThrow(() -> new EntityNotFoundException("Menu not found with id: " + menuId));
-		return MenuDTO.builder().menuId(menu.getMenuId()).name(menu.getName()).price(menu.getPrice()).build();
-	}
+
 }
