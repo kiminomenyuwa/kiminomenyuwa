@@ -1,3 +1,4 @@
+use kiminomenyuwa;
 -- 외래 키 제약을 비활성화
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -200,3 +201,4 @@ CREATE TABLE purchased_menu
     CONSTRAINT FK_receipt_verification FOREIGN KEY (receipt_verification_id) REFERENCES receipt_verification (receipt_verification_id),
     CONSTRAINT FK_menu FOREIGN KEY (menu_id) REFERENCES `menu` (menu_id)
 );
+select * from user_dining_history;

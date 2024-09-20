@@ -28,6 +28,9 @@ public interface MenuRepository extends JpaRepository<MenuEntity, Integer> {
 	// 가게 ID로 메뉴 목록 조회
 	List<MenuEntity> findByStoreId(Integer storeId);
 
+	@Query("SELECT m FROM MenuEntity m JOIN StoreEntity s ON m.storeId = s.storeId WHERE s.name = :storeName")
+	List<MenuEntity> findMenusByStoreName(@Param("storeName") String storeName);
+
 	// 이미 먹은 메뉴들(eatenMenuIds 리스트)을 제외한 나머지 메뉴들을 가져오는 쿼리
 	@Query("SELECT m FROM MenuEntity m WHERE m.menuId NOT IN :eatenMenuIds")
 	List<MenuEntity> findMenusNotInMenuIds(@Param("eatenMenuIds") List<Long> eatenMenuIds);

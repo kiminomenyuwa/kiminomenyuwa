@@ -13,6 +13,7 @@ import com.scit45.kiminomenyuwa.domain.entity.UserDiningHistoryEntity;
 import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
 import com.scit45.kiminomenyuwa.domain.repository.UserDiningHistoryRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -64,8 +65,8 @@ public class MenuService {
 
 		List<MenuDTO> menuDTOs = new ArrayList<>();
 		for (Object[] row : menuWithCategories) {
-			MenuEntity menuEntity = (MenuEntity) row[0];
-			String categories = (String) row[1];
+			MenuEntity menuEntity = (MenuEntity)row[0];
+			String categories = (String)row[1];
 
 			// MenuEntity를 MenuDTO로 변환하고 카테고리 리스트 추가
 			MenuDTO menuDTO = MenuDTO.builder()
@@ -80,7 +81,6 @@ public class MenuService {
 
 			menuDTOs.add(menuDTO);
 		}
-
 		return menuDTOs;
 	}
 

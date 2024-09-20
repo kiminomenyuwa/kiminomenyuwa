@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class MenuCategoryMappingDTO {
 
-    private Integer mappingId;
-    private Integer menuId;
-    private String categoryName;
+    Integer mappingId;
+    Integer menuId;
+    String categoryName;
 }
