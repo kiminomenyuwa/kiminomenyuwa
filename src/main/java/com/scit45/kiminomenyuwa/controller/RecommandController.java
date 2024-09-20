@@ -63,6 +63,11 @@ public class RecommandController {
 		// 사용자의 미니게임 내역
 		List<MiniGameMenuRatingDTO> miniGameRatingList = miniGameService.getUsersMiniGameRatingAll(user.getId());
 		model.addAttribute("miniGameRatingList", miniGameRatingList);
+
+		// 사용자 ID를 가져와서 카테고리 점수를 계산
+		List<CategoryCountDTO> categoryScores = miniGameService.getCategoryScoresByUserId(user.getId());
+		model.addAttribute("categoryScores", categoryScores);
+
 		return "recommandView/recTest";
 	}
 
@@ -115,5 +120,14 @@ public class RecommandController {
 		model.addAttribute("recommendedMenus", recommendedMenus);
 
 		return "recommandView/untriedMenu"; // 추천 결과를 보여줄 페이지로 이동
+	}
+
+	@GetMapping("recommandByMinigame")
+	public String recommendByMinigameScore(Model model, @AuthenticationPrincipal AuthenticatedUser user) {
+		// 사용자 ID를 기반으로 추천 메뉴 리스트 가져오기
+		List<MenuDTO> recommendedMenus = miniGameService.recommendMenusByCategoryScores(user.getId());
+		model.addAttribute("recommendedMenus", recommendedMenus);
+
+		return "recommandView/recommandByMinigame";
 	}
 }

@@ -48,6 +48,19 @@
         <td th:text="${mgrList.ratingDate}"></td>
     </tr>
 </table>
+<p>미니게임 내역을 통한 메뉴 점수 배율을 통한 카테고리 점수 도출(카운트)</p>
+<table border="1">
+    <tr>
+        <th>카테고리</th>
+        <th>점수</th>
+    </tr>
+    <tr th:each="score : ${categoryScores}">
+        <td th:text="${score.categoryName}"></td>
+        <td th:text="${score.categoryCount}"></td>
+    </tr>
+</table>
+
+
 
 <br><hr>
 <p th:text="|${#authentication.principal.name}님의 먹은 음식 내역|"></p>
