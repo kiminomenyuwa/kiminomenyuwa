@@ -51,4 +51,9 @@ public class MenuDTO {
         this.name = name;
         this.price = price;
 	}
+
+	public List<String> getCategories() {
+		// categories 필드가 null일 경우 빈 리스트 반환
+		return categories != null ? categories : new ArrayList<>();
+	}
 }

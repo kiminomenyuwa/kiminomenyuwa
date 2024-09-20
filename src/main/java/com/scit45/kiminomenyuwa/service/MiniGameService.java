@@ -265,6 +265,7 @@ public class MiniGameService {
 
 			// 해당 카테고리에 속하는 메뉴들만 필터링하여 추천 리스트에 추가
 			for (MenuDTO menu : allMenus) {
+				// categories가 null이 아니도록 수정된 getCategories() 메서드 호출
 				if (menu.getCategories().contains(categoryName)) {
 					recommendedMenus.add(menu);
 				}
@@ -283,5 +284,6 @@ public class MiniGameService {
 
 		return uniqueRecommendedMenus;
 	}
+
 
 }
