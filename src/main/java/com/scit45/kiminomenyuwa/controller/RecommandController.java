@@ -13,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.scit45.kiminomenyuwa.domain.dto.CategoryCountDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
+import com.scit45.kiminomenyuwa.domain.dto.MiniGameMenuRatingDTO;
 import com.scit45.kiminomenyuwa.domain.dto.UserDiningHistoryDTO;
 import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
 import com.scit45.kiminomenyuwa.service.MenuService;
+import com.scit45.kiminomenyuwa.service.MiniGameService;
 import com.scit45.kiminomenyuwa.service.UserDiningHistoryService;
 
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ public class RecommandController {
 
 	private final MenuService menuService;
 	private final UserDiningHistoryService userDiningHistoryService;
+	private final MiniGameService miniGameService;
 
 	/**
 	 * 추천기능 테스트용 페이지
@@ -57,6 +60,9 @@ public class RecommandController {
 		List<CategoryCountDTO> categoryTop10 = userDiningHistoryService.getTopCategoriesByUserId(user.getId());
 		model.addAttribute("categoryTop10List", categoryTop10);
 
+		// 사용자의 미니게임 내역
+		List<MiniGameMenuRatingDTO> miniGameRatingList = miniGameService.getUsersMiniGameRatingAll(user.getId());
+		model.addAttribute("miniGameRatingList", miniGameRatingList);
 		return "recommandView/recTest";
 	}
 

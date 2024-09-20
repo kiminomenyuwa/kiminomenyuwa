@@ -31,7 +31,25 @@
         <td th:text="${menuList.enabled}"></td>
     </tr>
 </table>
+<p th:text="|${#authentication.principal.name}님의 미니게임 내역|"></p>
+<table>
+    <tr>
+        <th>ratingId</th>
+        <th>userId</th>
+        <th>menuId</th>
+        <th>rating</th>
+        <th>ratingDate</th>
+    </tr>
+    <tr th:each="mgrList : ${miniGameRatingList}">
+        <td th:text="${mgrList.ratingId}"></td>
+        <td th:text="${mgrList.userId}"></td>
+        <td th:text="${mgrList.menuId}"></td>
+        <td th:text="${mgrList.rating}"></td>
+        <td th:text="${mgrList.ratingDate}"></td>
+    </tr>
+</table>
 
+<br><hr>
 <p th:text="|${#authentication.principal.name}님의 먹은 음식 내역|"></p>
 <table>
     <tr>

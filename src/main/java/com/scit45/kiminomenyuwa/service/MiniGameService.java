@@ -9,6 +9,7 @@ import java.util.Random;
 import org.springframework.stereotype.Service;
 
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
+import com.scit45.kiminomenyuwa.domain.dto.MiniGameMenuRatingDTO;
 import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
 import com.scit45.kiminomenyuwa.domain.entity.MiniGameMenuRatingEntity;
 import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
@@ -172,5 +173,25 @@ public class MiniGameService {
 			.menuId(selectedMenu.getMenuId())
 			.name(selectedMenu.getName())
 			.build();
+	}
+
+	/**
+	 * 사용자의 미니게임 전체 점수 내역을 가져오는 메서드
+	 * @param userId 현재 로그인 중인 userId
+	 * @return 미니게임 점수 List
+	 */
+	public List<MiniGameMenuRatingDTO> getUsersMiniGameRatingAll(String userId) {
+		List<MiniGameMenuRatingEntity> ratingEntities = ratingRepository.findByUserId(userId);
+        List<MiniGameMenuRatingDTO> miniGameRatingList = new ArrayList<>();
+        for (MiniGameMenuRatingEntity entity : ratingEntities) {
+			miniGameRatingList.add(MiniGameMenuRatingDTO.builder()
+				.ratingId(entity.getRatingId())
+                .userId(entity.getUserId())
+                .menuId(entity.getMenuId())
+                .rating(entity.getRating())
+                .ratingDate(entity.getRatingDate())
+                .build());
+        }
+        return miniGameRatingList;
 	}
 }
