@@ -184,10 +184,12 @@ CREATE TABLE receipt_verification
     receipt_verification_id BIGINT AUTO_INCREMENT PRIMARY KEY,  -- 고유 ID (자동 증가)
     user_id                 VARCHAR(20) NOT NULL,               -- 사용자 ID (UserEntity와 외래키 관계)
     store_id                INT         NOT NULL,               -- 가게 ID (StoreEntity와 외래키 관계)
+    review_id INT,                                              -- 리뷰 ID (ReviewEntity와 외래키 관계)
     verification_date       DATETIME DEFAULT CURRENT_TIMESTAMP, -- 인증 날짜 (기본값: 현재 시간)
 
     CONSTRAINT FK_user FOREIGN KEY (user_id) REFERENCES User (user_id),
-    CONSTRAINT FK_store FOREIGN KEY (store_id) REFERENCES Store (store_id)
+    CONSTRAINT FK_store FOREIGN KEY (store_id) REFERENCES Store (store_id),
+    CONSTRAINT FK_review FOREIGN KEY (review_id) REFERENCES review (review_id)
 );
 
 -- 사용자가 구매한 메뉴 정보를 저장하는 테이블
