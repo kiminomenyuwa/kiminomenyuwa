@@ -1,5 +1,12 @@
 package com.scit45.kiminomenyuwa.service.verification;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.scit45.kiminomenyuwa.domain.dto.ItemDTO;
 import com.scit45.kiminomenyuwa.domain.dto.ReceiptDTO;
 import com.scit45.kiminomenyuwa.domain.entity.StoreEntity;
@@ -9,14 +16,9 @@ import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
 import com.scit45.kiminomenyuwa.domain.repository.ReceiptVerificationRepository;
 import com.scit45.kiminomenyuwa.domain.repository.StoreRepository;
 import com.scit45.kiminomenyuwa.domain.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 @Slf4j
 @Transactional
@@ -46,17 +48,17 @@ public class ReceiptVerificationService {
 		validateReceiptDTO(receipt);
 
 		UserEntity userEntity = validateUser(loggedInUserId);
-		// StoreEntity storeEntity = validateStore(
-		// 	receipt.getMerchantName(),
-		// 	receipt.getMerchantAddress(),
-		// 	receipt.getMerchantPhoneNumber()
-		// );
-		// validateItems(receipt.getItems(), storeEntity.getStoreId());
-//		if (receipt.getTransactionDate() != null) {
-//			validateReceiptDate(receipt.getTransactionDate());
-//		}
+		StoreEntity storeEntity = validateStore(
+			receipt.getMerchantName(),
+			receipt.getMerchantAddress(),
+			receipt.getMerchantPhoneNumber()
+		);
+		validateItems(receipt.getItems(), storeEntity.getStoreId());
+		if (receipt.getTransactionDate() != null) {
+			validateReceiptDate(receipt.getTransactionDate());
+		}
 		// 검증 성공 시 영수증 인증 정보를 저장
-		// saveReceiptVerification(userEntity, storeEntity);
+		saveReceiptVerification(userEntity, storeEntity);
 
 		return true;
 	}
