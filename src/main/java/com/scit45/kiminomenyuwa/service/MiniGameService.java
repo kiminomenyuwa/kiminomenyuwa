@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
@@ -181,7 +182,10 @@ public class MiniGameService {
 	 * @return 미니게임 점수 List
 	 */
 	public List<MiniGameMenuRatingDTO> getUsersMiniGameRatingAll(String userId) {
-		List<MiniGameMenuRatingEntity> ratingEntities = ratingRepository.findByUserId(userId);
+		// 별점 기준 내림차순으로 정렬
+		Sort sort = Sort.by(Sort.Direction.DESC, "rating");
+
+		List<MiniGameMenuRatingEntity> ratingEntities = ratingRepository.findByUserId(userId,sort);
         List<MiniGameMenuRatingDTO> miniGameRatingList = new ArrayList<>();
         for (MiniGameMenuRatingEntity entity : ratingEntities) {
 			miniGameRatingList.add(MiniGameMenuRatingDTO.builder()
