@@ -6,15 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 메뉴와 카테고리 간의 관계 데이터를 전송하기 위한 DTO 클래스입니다.
+ * UserDiningHistoryService에서 사용자가 먹은 음식 내역의
+ * 카테고리 카운트 TOP 10를 조작하기 위한 DTO
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MenuCategoryMappingDTO {
-
-    Integer mappingId;
-    Integer menuId;
-    String categoryName;
+public class CategoryCountDTO {
+	String categoryName;
+	Long categoryCount;
 }

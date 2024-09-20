@@ -44,4 +44,6 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
 		@Param("roadNameAddress") String roadNameAddress,
 		@Param("detailAddress") String detailAddress,
 		@Param("phoneNumber") String phoneNumber);
+	List<MenuEntity> findByStoreId(Integer storeId);
+	StoreEntity findByName(String name);
 }

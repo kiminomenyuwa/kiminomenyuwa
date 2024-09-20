@@ -1,6 +1,7 @@
 package com.scit45.kiminomenyuwa.service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import com.scit45.kiminomenyuwa.domain.entity.UserDiningHistoryEntity;
 import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
 import com.scit45.kiminomenyuwa.domain.repository.UserDiningHistoryRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +27,6 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 @RequiredArgsConstructor
 public class MenuService {
-
 	private final MenuRepository menuRepository;
 	private final UserDiningHistoryRepository userDiningHistoryRepository;
 
@@ -56,26 +57,32 @@ public class MenuService {
 		return menuDTOs;
 	}
 
-	/**
-	 * 현재 로그인 중인 사용자의 음식 먹은 내역을 List로 가져오는 메서드
-	 * @param userId 현재 로그인 중인 유져의 userId
-	 * @return 음식내역 List
-	 */
-	public List<UserDiningHistoryDTO> getDiningHistory(String userId) {
-		//먹은 음식 내역 태이블에서 현재 로그인 중인 id로 select
-		List<UserDiningHistoryEntity> diningHistoryEntities = userDiningHistoryRepository.findByUserId(userId);
+	public List<MenuDTO> getMenusNotTried(String userId) {
+		List<Long> eatenMenuIds = userDiningHistoryRepository.findDistinctMenuIdsByUserId(userId);
 
-		//불러온 내역 EntityList를 dtoList로 변환
-		List<UserDiningHistoryDTO> diningHistoryDTOs = new ArrayList<>();
-		for (UserDiningHistoryEntity dining : diningHistoryEntities) {
-			diningHistoryDTOs.add(UserDiningHistoryDTO.builder()
-				.diningId(dining.getDiningId())
-				.userId(dining.getUserId())
-				.menuId(dining.getMenuId())
-				.diningDate(dining.getDiningDate())
-				.build());
+		// 메뉴와 카테고리 정보를 함께 가져오기
+		List<Object[]> menuWithCategories = menuRepository.findMenusWithCategoriesNotInMenuIds(eatenMenuIds);
+
+		List<MenuDTO> menuDTOs = new ArrayList<>();
+		for (Object[] row : menuWithCategories) {
+			MenuEntity menuEntity = (MenuEntity)row[0];
+			String categories = (String)row[1];
+
+			// MenuEntity를 MenuDTO로 변환하고 카테고리 리스트 추가
+			MenuDTO menuDTO = MenuDTO.builder()
+				.menuId(menuEntity.getMenuId())
+				.storeId(menuEntity.getStoreId())
+				.name(menuEntity.getName())
+				.price(menuEntity.getPrice())
+				.pictureUrl(menuEntity.getPictureUrl())
+				.enabled(menuEntity.getEnabled())
+				.categories(Arrays.asList(categories.split(", ")))  // 카테고리 추가
+				.build();
+
+			menuDTOs.add(menuDTO);
 		}
-		//현재 로그인한 사용자의 먹은 음식내역 DTOList를 리턴
-		return diningHistoryDTOs;
+		return menuDTOs;
 	}
+
+
 }

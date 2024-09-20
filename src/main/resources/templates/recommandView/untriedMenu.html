@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <title>안먹어본 음식 추천</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style01.css}"/>
+</head>
+<body>
+<h1>아직 먹어보지 않은 메뉴 추천</h1>
+
+<table>
+    <tr>
+        <th>Menu ID</th>
+        <th>Store ID</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Picture</th>
+        <th>Categories</th>
+    </tr>
+    <tr th:each="menu : ${recommendedMenus}">
+        <td th:text="${menu.menuId}"></td>
+        <td th:text="${menu.storeId}"></td>
+        <td th:text="${menu.name}"></td>
+        <td th:text="${menu.price}"></td>
+        <td>
+            <img th:src="@{${menu.pictureUrl}}" alt="메뉴 이미지" style="width:100px; height:auto;">
+        </td>
+        <td th:text="${menu.categories}"></td> <!-- 카테고리 필드 추가 -->
+    </tr>
+</table>
+
+</body>
+</html>

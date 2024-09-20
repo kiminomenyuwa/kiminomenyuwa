@@ -82,6 +82,11 @@ public class ProfilePhotoService {
 	public ProfilePhotoDTO getUserProfilePhotoInfo(String userId) {
 		//userId로 저장된 프로필 사진 불러옴
 		ProfilePhotoEntity profilePhotoEntity = profilePhotoRepository.searchByUserId(userId);
+
+		// 프로필 사진이 없을 경우 null 반환
+		if (profilePhotoEntity == null) {
+			return null;
+		}
 		//불러온 엔티티를 DTO로 변환
 		ProfilePhotoDTO profilePhotoDTO = convertEntityToDTO(profilePhotoEntity);
 
