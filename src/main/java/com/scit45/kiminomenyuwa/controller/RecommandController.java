@@ -71,6 +71,15 @@ public class RecommandController {
 		return "recommandView/recTest";
 	}
 
+	/**
+	 * 먹지 않은 메뉴 추천
+	 * 전체 메뉴에서 여태 먹은 메뉴를 제외한 후
+	 * 여태 먹은 메뉴들에서 중복되는 카테고리를 count 하여 카테고리 TOP 10을 구합니다
+	 * 추려진 카테고리를 사용하여 해당 카테고리에 맞는 메뉴를 추천합니다
+	 * @param model 모델에 담아 html에 출력
+	 * @param user 현재 로그인 중인 userId
+	 * @return untriedMenu.html
+	 */
 	@GetMapping("recommendUntriedFood")
 	public String recommendUntriedFood(Model model, @AuthenticationPrincipal AuthenticatedUser user) {
 		// 전체 먹지 않은 메뉴 리스트 출력
@@ -122,6 +131,12 @@ public class RecommandController {
 		return "recommandView/untriedMenu"; // 추천 결과를 보여줄 페이지로 이동
 	}
 
+	/**
+	 * 미니게임 점수 기반 추천
+	 * @param model 모델에 담아 출력
+	 * @param user 현재 로그인 중인 userId
+	 * @return recommandByMinigame.html
+	 */
 	@GetMapping("recommandByMinigame")
 	public String recommendByMinigameScore(Model model, @AuthenticationPrincipal AuthenticatedUser user) {
 		// 사용자 ID를 기반으로 추천 메뉴 리스트 가져오기
