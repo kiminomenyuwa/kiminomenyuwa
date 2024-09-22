@@ -23,37 +23,39 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("files")
 public class FileController {
 
-	// 파일이 저장된 기본 디렉토리
-	@Value("${file.storage.location}")
-	private String uploadDir;
+    // 파일이 저장된 기본 디렉토리
+    @Value("${file.storage.location}")
+    private String uploadDir;
 
-	/**
-	 * 파일을 반환하는 메서드
-	 *
-	 * @param reviewId 리뷰 ID
-	 * @param filename 파일 이름
-	 * @return 파일 리소스
-	 */
-	@GetMapping("/{reviewId}/{filename:.+}") // 파일 경로: /files/{reviewId}/{filename}
-	public ResponseEntity<Resource> getFile(@PathVariable String reviewId, @PathVariable String filename) throws
-		IOException {
-		try {
-			// 파일 경로 설정: {uploadDir}/{reviewId}/{filename}
-			Path filePath = Paths.get(uploadDir).resolve(reviewId).resolve(filename).normalize();
-			Resource resource = new UrlResource(filePath.toUri());
+    /**
+     * 파일을 반환하는 메서드
+     *
+     * @param Id       리뷰 ID
+     * @param filename 파일 이름
+     * @return 파일 리소스
+     */
+    @GetMapping("/{folderName}/{Id}/{filename:.+}") // 파일 경로: /files/{reviewId}/{filename}
+    public ResponseEntity<Resource> getFile(
+            @PathVariable String folderName
+            , @PathVariable String Id, @PathVariable String filename) throws
+            IOException {
+        try {
+            // 파일 경로 설정: {uploadDir}/{reviewId}/{filename}
+            Path filePath = Paths.get(uploadDir).resolve(folderName).resolve(Id).resolve(filename).normalize();
+            Resource resource = new UrlResource(filePath.toUri());
 
-			// 파일이 존재하고 읽을 수 있는지 확인
-			if (resource.exists() && resource.isReadable()) {
-				String contentType = Files.probeContentType(filePath); // 파일의 MIME 타입을 자동으로 설정
-				return ResponseEntity.ok()
-					.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
-					.header(HttpHeaders.CONTENT_TYPE, contentType != null ? contentType : "application/octet-stream")
-					.body(resource);
-			} else {
-				throw new RuntimeException("파일을 찾을 수 없거나 읽을 수 없습니다: " + filename);
-			}
-		} catch (MalformedURLException e) {
-			throw new RuntimeException("파일 경로 오류: " + filename, e);
-		}
-	}
+            // 파일이 존재하고 읽을 수 있는지 확인
+            if (resource.exists() && resource.isReadable()) {
+                String contentType = Files.probeContentType(filePath); // 파일의 MIME 타입을 자동으로 설정
+                return ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + resource.getFilename() + "\"")
+                        .header(HttpHeaders.CONTENT_TYPE, contentType != null ? contentType : "application/octet-stream")
+                        .body(resource);
+            } else {
+                throw new RuntimeException("파일을 찾을 수 없거나 읽을 수 없습니다: " + filename);
+            }
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("파일 경로 오류: " + filename, e);
+        }
+    }
 }
