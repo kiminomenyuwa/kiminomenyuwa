@@ -4,9 +4,8 @@ import lombok.Data;
 
 @Data
 public class ItemDTO {
-	Double quantity;
-	Double price;
-	String itemName;
-	String description;
-	Double totalPrice;
+	String description;   // 상품명
+	Double quantity;      // 수량
+	Double price;         // 단가
+	Double totalPrice;    // 총액
 }
