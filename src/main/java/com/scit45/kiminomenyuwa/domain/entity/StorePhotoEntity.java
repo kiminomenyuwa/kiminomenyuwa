@@ -32,4 +32,10 @@ public class StorePhotoEntity {
     // 대표 사진 여부를 나타내는 필드
     @Column(name = "is_main")
     private Boolean isMain = false;
+
+    public StorePhotoEntity(StoreEntity store, String photoUrl) {
+        this.store = store;
+        this.photoUrl = photoUrl;
+    }
+
 }
