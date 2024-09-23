@@ -156,4 +156,27 @@ public class MypageController {
 
 		return ResponseEntity.ok(response);
 	}
+
+	/**
+	 * 특정 연도와 월의 예산을 초기화하는 API
+	 * @param year 연도
+	 * @param month 월
+	 * @param user 인증된 사용자
+	 * @return ResponseEntity
+	 */
+	@ResponseBody
+	@PostMapping("/api/budget/initialize")
+	public ResponseEntity<String> initializeBudget(
+		@RequestParam Integer year,
+		@RequestParam Integer month,
+		@AuthenticationPrincipal AuthenticatedUser user) {
+		try {
+			String userId = user.getUsername();
+			myPageService.initializeBudget(userId, year, month);
+			return ResponseEntity.ok("예산이 초기화되었습니다.");
+		} catch (Exception e) {
+			log.error("예산 초기화 실패: ", e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("예산 초기화에 실패했습니다.");
+		}
+	}
 }
