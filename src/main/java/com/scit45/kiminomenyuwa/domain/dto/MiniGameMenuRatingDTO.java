@@ -15,10 +15,10 @@ import lombok.NoArgsConstructor;
 @Builder
 public class MiniGameMenuRatingDTO {
 
-	private Integer ratingId;
-	private String userId;
-	private Integer menuId;
-	private float rating;
+	Integer ratingId;
+	String userId;
+	Integer menuId;
+	Float rating;
 	LocalDateTime ratingDate;
 
 }
