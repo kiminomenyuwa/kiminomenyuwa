@@ -1,6 +1,7 @@
 package com.scit45.kiminomenyuwa.domain.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -40,4 +41,6 @@ public interface MenuRepository extends JpaRepository<MenuEntity, Integer> {
 		"WHERE m.menuId NOT IN :eatenMenuIds " +
 		"GROUP BY m.menuId")
 	List<Object[]> findMenusWithCategoriesNotInMenuIds(@Param("eatenMenuIds") List<Long> eatenMenuIds);
+
+	Optional<MenuEntity> findByNameAndStoreId(String name, Integer storeId);
 }

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.scit45.kiminomenyuwa.domain.entity.ReviewEntity;
 import com.scit45.kiminomenyuwa.domain.entity.StoreEntity;
 import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
 
@@ -16,11 +17,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @EntityListeners(AuditingEntityListener.class)
 @Entity
+@Getter
 @NoArgsConstructor
 @Table(name = "receipt_verification")
 public class ReceiptVerificationEntity {
@@ -44,10 +48,19 @@ public class ReceiptVerificationEntity {
 	@JoinColumn(name = "store_id", nullable = false)
 	private StoreEntity targetStore;
 
+	@OneToOne
+	@JoinColumn(name = "review_id")
+	private ReviewEntity review;
+
 	/**
 	 *  인증 시각
 	 */
 	@CreatedDate
 	@Column(name = "verification_date")
 	private LocalDateTime verificationDate;
+
+	public void setUserAndStore(UserEntity userEntity, StoreEntity storeEntity) {
+		this.reviewer = userEntity;
+		this.targetStore = storeEntity;
+	}
 }

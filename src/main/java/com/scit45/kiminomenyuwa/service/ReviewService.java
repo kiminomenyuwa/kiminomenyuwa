@@ -17,6 +17,8 @@ import com.scit45.kiminomenyuwa.domain.entity.ReviewEntity;
 import com.scit45.kiminomenyuwa.domain.entity.ReviewPhotoEntity;
 import com.scit45.kiminomenyuwa.domain.entity.StoreEntity;
 import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
+import com.scit45.kiminomenyuwa.domain.entity.verification.ReceiptVerificationEntity;
+import com.scit45.kiminomenyuwa.domain.repository.ReceiptVerificationRepository;
 import com.scit45.kiminomenyuwa.domain.repository.ReviewPhotoRepository;
 import com.scit45.kiminomenyuwa.domain.repository.ReviewRepository;
 import com.scit45.kiminomenyuwa.domain.repository.StoreRepository;
@@ -35,24 +37,37 @@ public class ReviewService {
 	private final ReviewPhotoRepository reviewPhotoRepository;
 	private final StoreRepository storeRepository;
 	private final UserRepository userRepository;
+	private final ReceiptVerificationRepository receiptVerificationRepository;
 
 	// application.properties에서 파일 업로드 경로를 읽어옴
 	@Value("${file.storage.location}")
 	private String uploadDir;
 
-	public ReviewResponseDTO saveReviewWithPhotos(ReviewRequestDTO reviewRequestDTO) throws IOException {
+	public ReviewResponseDTO saveReviewWithPhotos(ReviewRequestDTO reviewRequestDTO, String loggedUserId) throws
+		IOException {
 		// 1. 상점 및 사용자 엔티티 조회
 		StoreEntity store = storeRepository.findById(reviewRequestDTO.getStoreId())
 			.orElseThrow(() -> new IllegalArgumentException("Store not found"));
-		UserEntity user = userRepository.findById(reviewRequestDTO.getUserId())
+		UserEntity reviewer = userRepository.findById(loggedUserId)
 			.orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-		// 2. 리뷰 생성 및 저장
-		ReviewEntity reviewEntity = new ReviewEntity(store, user, reviewRequestDTO.getRating(),
+		// 2. 영수증 인증 내역 조회
+		// 인증 내역이 존재하지 않으면 리뷰 작성 불가
+		ReceiptVerificationEntity receiptVerification = receiptVerificationRepository.findByReviewerAndTargetStore(
+				reviewer, store)
+			.orElseThrow(() -> new IllegalArgumentException("Receipt verification not found"));
+
+		// 3. 이미 리뷰가 작성된 인증 내역인지 확인
+		if (receiptVerification.getReview() != null) {
+			throw new IllegalArgumentException("A review has already been submitted for this receipt verification.");
+		}
+
+		// 4. 리뷰 생성 및 저장
+		ReviewEntity reviewEntity = new ReviewEntity(store, reviewer, reviewRequestDTO.getRating(),
 			reviewRequestDTO.getComment());
 		ReviewEntity savedReview = reviewRepository.save(reviewEntity);
 
-		// 3. 사진 파일 저장 및 리뷰와 연결
+		// 5. 사진 파일 저장 및 리뷰와 연결
 		List<ReviewPhotoEntity> photoEntities = new ArrayList<>();
 		List<String> photoUrls = new ArrayList<>();
 		for (MultipartFile file : reviewRequestDTO.getPhotos()) {
@@ -64,10 +79,10 @@ public class ReviewService {
 			photoEntities.add(photoEntity);
 		}
 
-		// 4. 리뷰 사진 저장
+		// 6. 리뷰 사진 저장
 		reviewPhotoRepository.saveAll(photoEntities);
 
-		// 5. ReviewResponseDTO 생성 및 반환
+		// 7. ReviewResponseDTO 생성 및 반환
 		ReviewResponseDTO responseDTO = new ReviewResponseDTO();
 		responseDTO.setReviewId(savedReview.getReviewId());
 		responseDTO.setStoreId(savedReview.getStore().getStoreId());
