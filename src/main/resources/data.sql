@@ -389,3 +389,324 @@ LIMIT 10;
 select * from store;
 select * from menu;
 select * from user_dining_history;
+
+-- 상점 테이블에 테스트 상점 추가
+INSERT INTO `store` (`user_id`,
+                     `name`,
+                     `certification`,
+                     `road_name_address`,
+                     `detail_address`,
+                     `zipcode`,
+                     `phone_number`,
+                     `category`,
+                     `description`,
+                     `enabled`,
+                     `location`)
+VALUES ('aaa', -- user_id
+        '테스트 상점 A', -- name
+        '인증 완료', -- certification
+        '서울특별시 강남구 테헤란로 123', -- road_name_address
+        '빌딩 456호', -- detail_address
+        '06134', -- zipcode
+        '010-1234-5678', -- phone_number
+        '카페', -- category
+        '서울 강남에 위치한 테스트 카페입니다.', -- description
+        1, -- enabled (1: 활성화)
+        ST_PointFromText('POINT(126.9855771 37.5728571)') -- location (경도, 위도)
+       );
+
+
+-- 다른 위치의 테스트 상점 추가
+INSERT INTO `store` (`user_id`,
+                     `name`,
+                     `certification`,
+                     `road_name_address`,
+                     `detail_address`,
+                     `zipcode`,
+                     `phone_number`,
+                     `category`,
+                     `description`,
+                     `enabled`,
+                     `location`)
+VALUES ('aaa', -- user_id
+        '테스트 상점 B', -- name
+        '인증 완료', -- certification
+        '서울특별시 마포구 월드컵로 789', -- road_name_address
+        '오피스 101호', -- detail_address
+        '03912', -- zipcode
+        '010-9876-5432', -- phone_number
+        '서점', -- category
+        '서울 마포에 위치한 테스트 서점입니다.', -- description
+        1, -- enabled (1: 활성화)
+        ST_PointFromText('POINT(126.9012345 37.5500000)') -- location (경도, 위도)
+       );
+
+-- 트랜잭션 시작 (선택 사항)
+START TRANSACTION;
+
+-- 1. 펜앤커피
+INSERT INTO store (user_id,
+                   name,
+                   certification,
+                   road_name_address,
+                   detail_address,
+                   phone_number,
+                   category,
+                   description,
+                   zipcode,
+                   enabled,
+                   location)
+VALUES ('aaa',
+        '펜앤커피',
+        '인증 완료',
+        '서울특별시 종로구 인사동5길 12',
+        '서울특별시 종로구 관훈동 198-10',
+        '02-725-0062',
+        '기타',
+        '서울특별시 종로구에서 가 볼 만한 식당을 찾으신다면? 종각역 근처에 있는 "펜앤커피"를 추천합니다!',
+        NULL,
+        1,
+        ST_GeomFromText('POINT(126.9855771 37.5728571)'));
+
+-- 2. 배초향
+INSERT INTO store (user_id,
+                   name,
+                   certification,
+                   road_name_address,
+                   detail_address,
+                   phone_number,
+                   category,
+                   description,
+                   zipcode,
+                   enabled,
+                   location)
+VALUES ('aaa',
+        '배초향',
+        '인증 완료',
+        '서울특별시 강남구 도산대로55길 20',
+        '서울특별시 강남구 청담동 88-5',
+        NULL,
+        '한식',
+        '서울특별시 강남구에 가신다면 "배초향"에 방문해보세요~',
+        NULL,
+        1,
+        ST_GeomFromText('POINT(127.0406235 37.5247878)'));
+
+-- 3. 토담토담
+INSERT INTO store (user_id,
+                   name,
+                   certification,
+                   road_name_address,
+                   detail_address,
+                   phone_number,
+                   category,
+                   description,
+                   zipcode,
+                   enabled,
+                   location)
+VALUES ('aaa',
+        '토담토담',
+        '인증 완료',
+        '서울특별시 종로구 수표로 121',
+        '서울특별시 종로구 낙원동 218-1',
+        '02-744-7934',
+        '분식',
+        '"토담토담"은 서울특별시 종로구에 있는 맛집으로, 가장 가까운 지하철역은 종로3가역입니다.',
+        NULL,
+        1,
+        ST_GeomFromText('POINT(126.9888548 37.5719979)'));
+
+-- 4. 또와참숯돼지갈비
+INSERT INTO store (user_id,
+                   name,
+                   certification,
+                   road_name_address,
+                   detail_address,
+                   phone_number,
+                   category,
+                   description,
+                   zipcode,
+                   enabled,
+                   location)
+VALUES ('aaa',
+        '또와참숯돼지갈비',
+        '인증 완료',
+        '서울특별시 종로구 돈화문로11가길 48',
+        '서울특별시 종로구 와룡동 166',
+        '02-6760-0399',
+        '한식',
+        '"또와참숯돼지갈비"는 서울특별시 종로구에 있는 맛집으로, 가장 가까운 지하철역은 안국역입니다. 100년 이상의 전통을 자랑합니다.',
+        NULL,
+        1,
+        ST_GeomFromText('POINT(126.9906518 37.5747270)'));
+
+-- 5. 동성각
+INSERT INTO store (user_id,
+                   name,
+                   certification,
+                   road_name_address,
+                   detail_address,
+                   phone_number,
+                   category,
+                   description,
+                   zipcode,
+                   enabled,
+                   location)
+VALUES ('aaa',
+        '동성각',
+        '인증 완료',
+        '서울특별시 종로구 새문안로9길 29-2',
+        '서울특별시 종로구 당주동 18',
+        '02-735-0107',
+        '중국식',
+        '"동성각"은 서울특별시 종로구에 있는 맛집으로, 가장 가까운 지하철역은 광화문역입니다. 지방자치단체 인증을 받은 농림축산식품부 제공 안심식당입니다. 100년 이상의 전통을 자랑합니다.',
+        NULL,
+        1,
+        ST_GeomFromText('POINT(126.9752718 37.5714440)'));
+
+-- 6. 불이아
+INSERT INTO store (user_id,
+                   name,
+                   certification,
+                   road_name_address,
+                   detail_address,
+                   phone_number,
+                   category,
+                   description,
+                   zipcode,
+                   enabled,
+                   location)
+VALUES ('aaa',
+        '불이아',
+        '인증 완료',
+        '서울특별시 종로구 동숭길 98',
+        '서울특별시 종로구 동숭동 25-10',
+        '02-765-6392',
+        '분식',
+        '"불이아"는 서울특별시 종로구에 있습니다. 100년 이상의 전통을 자랑합니다.',
+        NULL,
+        1,
+        ST_GeomFromText('POINT(127.0043477 37.5825836)'));
+
+-- 7. 이레
+INSERT INTO store (user_id,
+                   name,
+                   certification,
+                   road_name_address,
+                   detail_address,
+                   phone_number,
+                   category,
+                   description,
+                   zipcode,
+                   enabled,
+                   location)
+VALUES ('aaa',
+        '이레',
+        '인증 완료',
+        '서울특별시 종로구 북촌로7길 11-22',
+        '서울특별시 종로구 가회동 123-1',
+        '02-747-6708',
+        '한식',
+        '어디 가야 할지 고민이시라고요? 그럼 서울특별시 종로구 맛집, "이레"를 추천합니다! 100년 이상의 전통을 자랑합니다.',
+        NULL,
+        1,
+        ST_GeomFromText('POINT(126.9841173 37.5799412)'));
+
+-- 8. 카페 극동
+INSERT INTO store (user_id,
+                   name,
+                   certification,
+                   road_name_address,
+                   detail_address,
+                   phone_number,
+                   category,
+                   description,
+                   zipcode,
+                   enabled,
+                   location)
+VALUES ('aaa',
+        '카페 극동',
+        '인증 완료',
+        '서울특별시 중구 퇴계로 173',
+        '서울특별시 중구 충무로3가 60-1',
+        '02-2673-3248',
+        '경양식',
+        '어디 가야 할지 고민이시라고요? 그럼 서울특별시 중구 맛집, "카페 극동"을 추천합니다! 100년 이상의 전통을 자랑합니다.',
+        NULL,
+        1,
+        ST_GeomFromText('POINT(126.9910760 37.5618272)'));
+
+-- 9. 후렌드치킨
+INSERT INTO store (user_id,
+                   name,
+                   certification,
+                   road_name_address,
+                   detail_address,
+                   phone_number,
+                   category,
+                   description,
+                   zipcode,
+                   enabled,
+                   location)
+VALUES ('aaa',
+        '후렌드치킨',
+        '인증 완료',
+        '서울특별시 용산구 회나무로13길 10',
+        '서울특별시 용산구 이태원동 225-112',
+        '02-796-4642',
+        '한식',
+        '"후렌드치킨"은 서울특별시 용산구에 있습니다. 가장 가까운 지하철역은 녹사평역입니다. 100년 이상의 전통을 자랑합니다.',
+        NULL,
+        1,
+        ST_GeomFromText('POINT(126.9895910 37.5397771)'));
+
+-- 10. 은하수가든
+INSERT INTO store (user_id,
+                   name,
+                   certification,
+                   road_name_address,
+                   detail_address,
+                   phone_number,
+                   category,
+                   description,
+                   zipcode,
+                   enabled,
+                   location)
+VALUES ('aaa',
+        '은하수가든',
+        '인증 완료',
+        '서울특별시 도봉구 해등로34길 63',
+        '서울특별시 도봉구 방학동 535-2',
+        '02-4914-4790',
+        '한식',
+        '서울특별시 도봉구에서 맛집을 찾으신다면 "은하수가든"을 추천합니다. 100년 이상의 전통을 자랑합니다.',
+        NULL,
+        1,
+        ST_GeomFromText('POINT(127.0202847 37.6592852)'));
+
+-- 11. 동호숯불바베큐
+INSERT INTO store (user_id,
+                   name,
+                   certification,
+                   road_name_address,
+                   detail_address,
+                   phone_number,
+                   category,
+                   description,
+                   zipcode,
+                   enabled,
+                   location)
+VALUES ('aaa',
+        '동호숯불바베큐',
+        '인증 완료',
+        '서울특별시 노원구 동일로 1541',
+        '서울특별시 노원구 상계동 651',
+        '02-932-1090',
+        '분식',
+        '"동호숯불바베큐"는 서울특별시 노원구에 있는 맛집으로, 가장 가까운 지하철역은 마들역입니다. 100년 이상의 전통을 자랑합니다.',
+        NULL,
+        1,
+        ST_GeomFromText('POINT(127.0570860 37.6656560)'));
+
+-- 트랜잭션 커밋 (선택 사항)
+COMMIT;

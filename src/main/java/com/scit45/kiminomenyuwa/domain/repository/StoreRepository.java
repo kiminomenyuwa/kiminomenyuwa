@@ -12,18 +12,6 @@ import com.scit45.kiminomenyuwa.domain.entity.StoreEntity;
 @Repository
 public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
 
-	// 가게 이름을 기준으로 검색 (부분 일치)
-	List<StoreEntity> findByNameContainingIgnoreCase(String name);
-
-	// 도로명 주소를 기준으로 검색 (부분 일치)
-	List<StoreEntity> findByRoadNameAddressContainingIgnoreCase(String roadNameAddress);
-
-	// 상세 주소를 기준으로 검색 (부분 일치)
-	List<StoreEntity> findByDetailAddressContainingIgnoreCase(String detailAddress);
-
-	// 전화번호를 기준으로 검색 (부분 일치)
-	List<StoreEntity> findByPhoneNumberContaining(String phoneNumber);
-
 	/**
 	 * 가게 이름, 도로명 주소, 상세 주소, 전화번호를 기준으로 두 개 이상의 필드가 일치하는 가게를 검색
 	 *
@@ -46,4 +34,18 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
 		@Param("phoneNumber") String phoneNumber);
 
 	StoreEntity findByName(String name);
+
+	/**
+	 * 특정 위치 주변의 상점을 검색합니다.
+	 *
+	 * @param pointWKT 중심점의 WKT 형식 포인트
+	 * @param radius   반경 (미터 단위)
+	 * @return 반경 내의 상점 목록
+	 */
+	@Query(value = "SELECT s.* FROM store s " +
+		"WHERE ST_Distance_Sphere(s.location, ST_GeomFromText(:point)) <= :radius " +
+		"ORDER BY ST_Distance_Sphere(s.location, ST_GeomFromText(:point)) ASC", nativeQuery = true)
+	List<StoreEntity> findStoresWithinRadius(
+		@Param("point") String pointWKT,
+		@Param("radius") double radius);
 }
