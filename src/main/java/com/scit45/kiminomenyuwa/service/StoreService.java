@@ -1,30 +1,21 @@
 package com.scit45.kiminomenyuwa.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.scit45.kiminomenyuwa.domain.dto.*;
+import com.scit45.kiminomenyuwa.domain.entity.*;
+import com.scit45.kiminomenyuwa.domain.repository.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import com.scit45.kiminomenyuwa.domain.dto.CategoryTypeDTO;
-import com.scit45.kiminomenyuwa.domain.dto.FoodCategoryDTO;
-import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
-import com.scit45.kiminomenyuwa.domain.dto.StoreRegistrationDTO;
-import com.scit45.kiminomenyuwa.domain.entity.CategoryTypeEntity;
-import com.scit45.kiminomenyuwa.domain.entity.FoodCategoryEntity;
-import com.scit45.kiminomenyuwa.domain.entity.MenuCategoryMappingEntity;
-import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
-import com.scit45.kiminomenyuwa.domain.entity.StoreEntity;
-import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
-import com.scit45.kiminomenyuwa.domain.repository.CategoryTypeRepository;
-import com.scit45.kiminomenyuwa.domain.repository.FoodCategoryRepository;
-import com.scit45.kiminomenyuwa.domain.repository.MenuCategoryMappingRepository;
-import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
-import com.scit45.kiminomenyuwa.domain.repository.StoreRepository;
-import com.scit45.kiminomenyuwa.domain.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,134 +23,195 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 public class StoreService {
 
-	private final StoreRepository storeRepository;
-	private final UserRepository userRepository;
-	private final MenuRepository menuRepository;
-	private final MenuCategoryMappingRepository menuCategoryMappingRepository;
-	private final FoodCategoryRepository foodCategoryRepository;
-	private final CategoryTypeRepository categoryTypeRepository;
+    private final StoreRepository storeRepository;
+    private final UserRepository userRepository;
+    private final MenuRepository menuRepository;
+    private final MenuCategoryMappingRepository menuCategoryMappingRepository;
+    private final FoodCategoryRepository foodCategoryRepository;
+    private final CategoryTypeRepository categoryTypeRepository;
+    private final StorePhotoRepository storePhotoRepository;
 
-	// 모든 가게 리스트를 가져오는 메소드
-	public List<StoreRegistrationDTO> getAllStores() {
-		// StoreEntity를 StoreDTO로 변환하여 리스트로 반환
-		return storeRepository.findAll().stream()
-			.map(store -> {
-				log.debug(store.getName());
-				return StoreRegistrationDTO.builder()
-					.name(store.getName())
-					.phoneNumber(store.getPhoneNumber())
-					.zipcode(store.getZipcode())
-					.roadNameAddress(store.getRoadNameAddress())
-					.detailAddress(store.getDetailAddress())
-					.userId(store.getUser().getUserId())
-					.storeId(store.getStoreId())
-					.build();
-			})
-			.collect(Collectors.toList());
-	}
+    // application.properties에서 파일 업로드 경로를 읽어옴
+    @Value("${file.storage.location}")
+    private String uploadDir;
 
-	/**
-	 * 등록 정보를 받아서 storeRepository에 저장한다
-	 * @param storeRegistrationDTO
-	 */
-	public void saveStore(StoreRegistrationDTO storeRegistrationDTO) {
+    // 모든 가게 리스트를 가져오는 메소드
+    public List<StoreRegistrationDTO> getAllStores() {
+        // StoreEntity를 StoreDTO로 변환하여 리스트로 반환
 
-		StoreEntity storeEntity = convertToEntity(storeRegistrationDTO);
+        List<StoreRegistrationDTO> storeList = storeRepository.findAll().stream()
+                .map(store -> {
+                    log.debug(store.getName());
+                    return StoreRegistrationDTO.builder()
+                            .name(store.getName())
+                            .phoneNumber(store.getPhoneNumber())
+                            .zipcode(store.getZipcode())
+                            .roadNameAddress(store.getRoadNameAddress())
+                            .detailAddress(store.getDetailAddress())
+                            .userId(store.getUser().getUserId())
+                            .storeId(store.getStoreId())
+                            .build();
+                })
+                .collect(Collectors.toList());
 
-		// 엔티티를 DB에 저장
-		storeRepository.save(storeEntity);
-	}
+        // set photoList
+        storeList.forEach(store ->
+                store.setPhotosDTO(storePhotoRepository.findAllByStoreStoreId(store.getStoreId())
+                        .stream().map(photo -> StorePhotoDTO.builder()
+                                .photoId(photo.getPhotoId())
+                                .photoUrl(photo.getPhotoUrl())
+                                .isMain(photo.getIsMain())
+                                .build()).toList()));
 
-	/**
-	 * dto를 entity로 변경해주는 메소드
-	 * @param storeRegistrationDTO 작성한 가게 등록 정보
-	 * @return 작성한 가게 정보를 entity로 변경된 정보를 리턴
-	 */
-	private StoreEntity convertToEntity(StoreRegistrationDTO storeRegistrationDTO) {
+        return storeList;
+    }
 
-		UserEntity user = userRepository.findById(storeRegistrationDTO.getUserId())
-			.orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다: " + storeRegistrationDTO.getUserId()));
-		return StoreEntity.builder()
-			.user(user)
-			.name(storeRegistrationDTO.getName())
-			.certification(storeRegistrationDTO.getCertification())
-			.roadNameAddress(storeRegistrationDTO.getRoadNameAddress())
-			.detailAddress(storeRegistrationDTO.getDetailAddress())
-			.zipcode(storeRegistrationDTO.getZipcode())
-			.phoneNumber(storeRegistrationDTO.getPhoneNumber())
-			.category(storeRegistrationDTO.getCategory())
-			.description(storeRegistrationDTO.getDescription())
-			.enabled(storeRegistrationDTO.getEnabled())
-			.build();
-	}
+    /**
+     * 등록 정보를 받아서 storeRepository에 저장한다
+     *
+     * @param storeRegistrationDTO
+     */
+    public void saveStore(StoreRegistrationDTO storeRegistrationDTO) throws IOException {
+        StoreEntity storeEntity = convertToEntity(storeRegistrationDTO);
+        // 엔티티를 DB에 저장
+        StoreEntity savedStore = storeRepository.save(storeEntity);
 
-	public void saveMenu(MenuDTO menuDTO) {
-		// 1. MenuEntity를 생성하고 필드 값을 설정
-		MenuEntity menuEntity = MenuEntity.builder()
-			.storeId(menuDTO.getStoreId())
-			.name(menuDTO.getName())
-			.price(menuDTO.getPrice())
-			.pictureUrl(menuDTO.getPictureUrl())
-			.enabled(menuDTO.getEnabled())
-			.build();
+        List<StorePhotoEntity> photoEntities = new ArrayList<>();
+        for (MultipartFile file : storeRegistrationDTO.getPhotos()) {
+            String photoUrl = saveFile(file, savedStore.getStoreId()); // 파일 저장 후 URL 반환
 
-		// 2. 메뉴 엔티티를 저장하여 menuId 생성
-		MenuEntity savedMenu = menuRepository.save(menuEntity);
+            StorePhotoEntity photoEntity = new StorePhotoEntity(savedStore, photoUrl);
+            photoEntities.add(photoEntity);
+        }
+        photoEntities.get(0).setIsMain(true);
 
-		// 3. 카테고리 매핑 생성
-		List<MenuCategoryMappingEntity> categoryMappings = menuDTO.getCategories().stream()
-			.map(categoryName -> {
-				// 카테고리 이름을 기반으로 FoodCategory 엔티티를 조회
-				FoodCategoryEntity foodCategory = foodCategoryRepository.findByCategoryName(categoryName)
-					.orElseThrow(() -> new RuntimeException("카테고리를 찾을 수 없습니다: " + categoryName));
+        storePhotoRepository.saveAll(photoEntities);
+    }
 
-				// MenuCategoryMappingEntity 객체를 생성하여 메뉴와 카테고리 간 매핑을 저장
-				MenuCategoryMappingEntity mapping = new MenuCategoryMappingEntity();
-				mapping.setMenu(savedMenu);
-				mapping.setFoodCategory(foodCategory);
-				return mapping;
-			})
-			.collect(Collectors.toList());
+    /**
+     * dto를 entity로 변경해주는 메소드
+     *
+     * @param storeRegistrationDTO 작성한 가게 등록 정보
+     * @return 작성한 가게 정보를 entity로 변경된 정보를 리턴
+     */
+    private StoreEntity convertToEntity(StoreRegistrationDTO storeRegistrationDTO) {
 
-		// 4. 카테고리 매핑 엔티티들을 저장
-		menuCategoryMappingRepository.saveAll(categoryMappings);
-	}
+        UserEntity user = userRepository.findById(storeRegistrationDTO.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다: " + storeRegistrationDTO.getUserId()));
+        return StoreEntity.builder()
+                .user(user)
+                .name(storeRegistrationDTO.getName())
+                .certification(storeRegistrationDTO.getCertification())
+                .roadNameAddress(storeRegistrationDTO.getRoadNameAddress())
+                .detailAddress(storeRegistrationDTO.getDetailAddress())
+                .zipcode(storeRegistrationDTO.getZipcode())
+                .phoneNumber(storeRegistrationDTO.getPhoneNumber())
+                .category(storeRegistrationDTO.getCategory())
+                .description(storeRegistrationDTO.getDescription())
+                .enabled(storeRegistrationDTO.getEnabled())
+                .build();
+    }
 
-	/**
-	 * 가게이름 받아오기
-	 * @param storeId
-	 * @return
-	 */
-	public String getStoreNameById(Integer storeId) {
-		return storeRepository.findById(storeId)
-			.map(store -> store.getName())
-			.orElseThrow(() -> new IllegalArgumentException("Store not found"));
-	}
+    public void saveMenu(MenuDTO menuDTO) {
+        // 1. MenuEntity를 생성하고 필드 값을 설정
+        MenuEntity menuEntity = MenuEntity.builder()
+                .storeId(menuDTO.getStoreId())
+                .name(menuDTO.getName())
+                .price(menuDTO.getPrice())
+                .pictureUrl(menuDTO.getPictureUrl())
+                .enabled(menuDTO.getEnabled())
+                .build();
 
-	// 가게 ID로 메뉴 목록 조회
-	public List<MenuDTO> getMenusByStoreId(Integer storeId) {
-		List<MenuEntity> menus = menuRepository.findByStoreId(storeId);
-		// Entity를 DTO로 변환하여 반환
-		return menus.stream()
-			.map(menu -> new MenuDTO(menu.getMenuId(), menu.getStoreId(), menu.getName(), menu.getPrice(),
-				menu.getPictureUrl(), menu.getEnabled()))
-			.collect(Collectors.toList());
-	}
+        // 2. 메뉴 엔티티를 저장하여 menuId 생성
+        MenuEntity savedMenu = menuRepository.save(menuEntity);
 
-	public List<CategoryTypeDTO> getAllCategoryTypes() {
-		List<CategoryTypeEntity> entities = categoryTypeRepository.findAll();
-		return entities.stream()
-			.map(entity -> CategoryTypeDTO.builder()
-				.typeId(entity.getTypeId())
-				.typeName(entity.getTypeName())
-				.build())
-			.collect(Collectors.toList());
-	}
+        // 3. 카테고리 매핑 생성
+        List<MenuCategoryMappingEntity> categoryMappings = menuDTO.getCategories().stream()
+                .map(categoryName -> {
+                    // 카테고리 이름을 기반으로 FoodCategory 엔티티를 조회
+                    FoodCategoryEntity foodCategory = foodCategoryRepository.findByCategoryName(categoryName)
+                            .orElseThrow(() -> new RuntimeException("카테고리를 찾을 수 없습니다: " + categoryName));
 
-	public List<FoodCategoryDTO> getAllCategories(Integer typeId) {
-		List<FoodCategoryEntity> categories = foodCategoryRepository.findByTypeId(typeId);
-		return categories.stream()
-			.map(category -> new FoodCategoryDTO(category.getCategoryName(), category.getTypeId()))
-			.collect(Collectors.toList());
-	}
+                    // MenuCategoryMappingEntity 객체를 생성하여 메뉴와 카테고리 간 매핑을 저장
+                    MenuCategoryMappingEntity mapping = new MenuCategoryMappingEntity();
+                    mapping.setMenu(savedMenu);
+                    mapping.setFoodCategory(foodCategory);
+                    return mapping;
+                })
+                .collect(Collectors.toList());
+
+        // 4. 카테고리 매핑 엔티티들을 저장
+        menuCategoryMappingRepository.saveAll(categoryMappings);
+    }
+
+    /**
+     * 가게이름 받아오기
+     *
+     * @param storeId
+     * @return
+     */
+    public String getStoreNameById(Integer storeId) {
+        return storeRepository.findById(storeId)
+                .map(store -> store.getName())
+                .orElseThrow(() -> new IllegalArgumentException("Store not found"));
+    }
+
+    // 가게 ID로 메뉴 목록 조회
+    public List<MenuDTO> getMenusByStoreId(Integer storeId) {
+        List<MenuEntity> menus = menuRepository.findByStoreId(storeId);
+        // Entity를 DTO로 변환하여 반환
+        return menus.stream()
+                .map(menu -> new MenuDTO(menu.getMenuId(), menu.getStoreId(), menu.getName(), menu.getPrice(),
+                        menu.getPictureUrl(), menu.getEnabled()))
+                .collect(Collectors.toList());
+    }
+
+    public List<CategoryTypeDTO> getAllCategoryTypes() {
+        List<CategoryTypeEntity> entities = categoryTypeRepository.findAll();
+        return entities.stream()
+                .map(entity -> CategoryTypeDTO.builder()
+                        .typeId(entity.getTypeId())
+                        .typeName(entity.getTypeName())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    public List<FoodCategoryDTO> getAllCategories(Integer typeId) {
+        List<FoodCategoryEntity> categories = foodCategoryRepository.findByTypeId(typeId);
+        return categories.stream()
+                .map(category -> new FoodCategoryDTO(category.getCategoryName(), category.getTypeId()))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 파일을 저장하고 저장된 파일의 경로를 반환하는 메서드
+     *
+     * @param file    저장할 파일
+     * @param storeId 가게 ID
+     * @return 저장된 파일의 상대 경로 (예: "{storeId}/{uniqueFileName}")
+     * @throws IOException 파일 저장 중 오류 발생 시
+     */
+    private String saveFile(MultipartFile file, Integer storeId) throws IOException {
+        // store ID로 폴더 경로 설정
+        String storePhotos = uploadDir + File.separator + "store" + File.separator + storeId;
+
+        // 폴더가 존재하지 않으면 생성
+        File directory = new File(storePhotos);
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+
+        // 파일 이름 생성 (파일 이름이 중복되지 않도록 처리)
+        String originalFileName = file.getOriginalFilename();
+        String uniqueFileName = System.currentTimeMillis() + "_" + originalFileName; // 고유한 파일 이름 생성
+        String filePath = storePhotos + File.separator + uniqueFileName;
+
+        // 파일 저장
+        File destFile = new File(filePath);
+        file.transferTo(destFile); // 파일 저장
+        log.debug("filePath = {}", filePath);
+
+        // 저장된 파일의 경로 반환 (예: "{storeId}/{uniqueFileName}")
+        return "files/store/" + storeId + "/" + uniqueFileName;
+    }
 }

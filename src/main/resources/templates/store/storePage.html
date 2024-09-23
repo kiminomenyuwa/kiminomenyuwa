@@ -4,7 +4,13 @@
 <head>
 <meta charset="UTF-8">
 <title>가게 페이지</title>
-
+	<style>
+		.main-photo {
+			width: 100px;
+			height: 100px;
+			border-radius: 5px;
+		}
+	</style>
 <script src="/js/jquery-3.7.1.min.js"></script>
 <script>
 	$(document).ready(function() {
@@ -23,7 +29,17 @@
                          // 리스트 항목 클릭 시 해당 가게의 메뉴 페이지로 이동
                          window.location.href = '/store/' + store.storeId; // 가게 ID를 URL에 포함
                      });
-                     storeList.append(listItem); // 생성된 리스트 항목을 <ul> 요소에 추가
+					 // 가게 사진 섹션
+					 store.photosDTO.forEach(photo => {
+						 if (photo.isMain) {
+							 const img = $('<img>')
+									 .attr('src', photo.photoUrl)
+									 .attr('alt', store.name + ' 대표 사진')
+									 .addClass('main-photo'); // 스타일 적용을 위한 클래스 추가
+							 listItem.append(img);
+						 }
+					 });
+                     storeList.append(listItem);
                  });
              },
              error: function(e) {

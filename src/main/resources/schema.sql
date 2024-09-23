@@ -17,6 +17,7 @@ DROP TABLE IF EXISTS store;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS food_category;
 DROP TABLE IF EXISTS category_type;
+DROP TABLE IF EXISTS store_photo;
 
 -- 외래 키 제약을 다시 활성화
 SET FOREIGN_KEY_CHECKS = 1;
@@ -75,6 +76,7 @@ CREATE TABLE `store`
     `category`          VARCHAR(30),                           -- 상점 카테고리
     `description`       TEXT,                                  -- 상점 설명
     `enabled`           TINYINT(1)         NOT NULL DEFAULT 1, -- 상점 활성화 여부
+    `location` POINT,
     PRIMARY KEY (`store_id`),                                  -- 기본 키 설정
     FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 );
@@ -106,12 +108,12 @@ CREATE TABLE `menu_category_mapping`
 -- 리뷰 테이블: 사용자 리뷰를 저장
 CREATE TABLE `review`
 (
-    `review_id`    INT AUTO_INCREMENT NOT NULL,          -- 리뷰의 고유 식별자
-    `store_id`     INT                NOT NULL,          -- 리뷰가 속한 상점의 ID
-    `user_id`      VARCHAR(20)        NOT NULL,          -- 리뷰 작성자의 사용자 ID (변경된 필드 이름)
-    `rating`       TINYINT            NOT NULL,          -- 리뷰 평점
-    `comment`      TEXT,                                 -- 리뷰 내용
-    `created_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- 리뷰 작성 시간
+    `review_id`     INT AUTO_INCREMENT NOT NULL,         -- 리뷰의 고유 식별자
+    `store_id`      INT                NOT NULL,         -- 리뷰가 속한 상점의 ID
+    `user_id`       VARCHAR(20)        NOT NULL,         -- 리뷰 작성자의 사용자 ID (변경된 필드 이름)
+    `rating`        TINYINT            NOT NULL,         -- 리뷰 평점
+    `comment`       TEXT,                                -- 리뷰 내용
+    `created_time`  TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 리뷰 작성 시간
     `modified_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 리뷰 작성 시간
     PRIMARY KEY (`review_id`),                           -- 기본 키 설정
     FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`),
@@ -184,7 +186,7 @@ CREATE TABLE receipt_verification
     receipt_verification_id BIGINT AUTO_INCREMENT PRIMARY KEY,  -- 고유 ID (자동 증가)
     user_id                 VARCHAR(20) NOT NULL,               -- 사용자 ID (UserEntity와 외래키 관계)
     store_id                INT         NOT NULL,               -- 가게 ID (StoreEntity와 외래키 관계)
-    review_id INT,                                              -- 리뷰 ID (ReviewEntity와 외래키 관계)
+    review_id               INT,                                -- 리뷰 ID (ReviewEntity와 외래키 관계)
     verification_date       DATETIME DEFAULT CURRENT_TIMESTAMP, -- 인증 날짜 (기본값: 현재 시간)
 
     CONSTRAINT FK_user FOREIGN KEY (user_id) REFERENCES User (user_id),
@@ -203,3 +205,14 @@ CREATE TABLE purchased_menu
     CONSTRAINT FK_receipt_verification FOREIGN KEY (receipt_verification_id) REFERENCES receipt_verification (receipt_verification_id),
     CONSTRAINT FK_menu FOREIGN KEY (menu_id) REFERENCES `menu` (menu_id)
 );
+
+CREATE TABLE store_photo
+(
+    photo_id  INT AUTO_INCREMENT PRIMARY KEY,
+    store_id  INT          NOT NULL,
+    photo_url VARCHAR(255) NOT NULL,
+    is_main BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (store_id) REFERENCES store (store_id) ON DELETE CASCADE
+);
+
+
