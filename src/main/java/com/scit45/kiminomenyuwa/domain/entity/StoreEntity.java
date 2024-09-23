@@ -1,5 +1,7 @@
 package com.scit45.kiminomenyuwa.domain.entity;
 
+import org.locationtech.jts.geom.Geometry;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -23,6 +25,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+
 public class StoreEntity {
 
 	@Id
@@ -61,4 +64,7 @@ public class StoreEntity {
 	@Column(name = "enabled", nullable = false)
 	private Boolean enabled;
 
+	// 공간 정보 필드 추가
+	@Column(name = "location", columnDefinition = "POINT")
+	private Geometry location;
 }

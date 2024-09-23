@@ -76,6 +76,7 @@ CREATE TABLE `store`
     `category`          VARCHAR(30),                           -- 상점 카테고리
     `description`       TEXT,                                  -- 상점 설명
     `enabled`           TINYINT(1)         NOT NULL DEFAULT 1, -- 상점 활성화 여부
+    `location` POINT,
     PRIMARY KEY (`store_id`),                                  -- 기본 키 설정
     FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 );
@@ -210,7 +211,7 @@ CREATE TABLE store_photo
     photo_id  INT AUTO_INCREMENT PRIMARY KEY,
     store_id  INT          NOT NULL,
     photo_url VARCHAR(255) NOT NULL,
-    is_main   BOOLEAN       DEFAULT FALSE,
+    is_main BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (store_id) REFERENCES store (store_id) ON DELETE CASCADE
 );
 
