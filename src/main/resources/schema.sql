@@ -18,6 +18,7 @@ DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS food_category;
 DROP TABLE IF EXISTS category_type;
 DROP TABLE IF EXISTS store_photo;
+DROP TABLE IF EXISTS favorite;
 
 -- 외래 키 제약을 다시 활성화
 SET FOREIGN_KEY_CHECKS = 1;
@@ -215,4 +216,14 @@ CREATE TABLE store_photo
     FOREIGN KEY (store_id) REFERENCES store (store_id) ON DELETE CASCADE
 );
 
-
+CREATE TABLE `favorite`
+(
+    `favorite_id` INT AUTO_INCREMENT NOT NULL,         -- 찜 항목의 고유 식별자
+    `user_id`     VARCHAR(20)        NOT NULL,         -- 찜한 사용자의 ID
+    `store_id`    INT                NOT NULL,         -- 찜한 상점의 ID
+    `created_at`  TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 찜한 날짜와 시간
+    PRIMARY KEY (`favorite_id`),                       -- 기본 키 설정
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE,
+    FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`) ON DELETE CASCADE,
+    UNIQUE KEY unique_favorite (user_id, store_id)
+);

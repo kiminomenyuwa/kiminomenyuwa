@@ -5,17 +5,9 @@
     <meta charset="UTF-8">
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- 네이버 지도 API 스크립트 (클라이언트 ID 삽입) -->
+    <!-- 네이버 지도 API 스크립트 로드 -->
     <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=t06c4jgb48&submodules=geocoder"
             type="text/javascript"></script>
-
-    <style>
-        /* 지도 컨테이너의 높이를 명확히 설정 */
-        #map {
-            width: 100%;
-            height: 400px;
-        }
-    </style>
 </head>
 <body>
 <div class="container mt-5">
@@ -37,6 +29,7 @@
                 <th>전화번호</th>
                 <th>설명</th>
                 <th>위치 (경도, 위도)</th>
+                <th>찜</th>
                 <th>상세 보기</th>
             </tr>
             </thead>
@@ -50,20 +43,28 @@
                 <td th:text="${store.description}">설명</td>
                 <td th:text="${store.longitude} + ', ' + ${store.latitude}">126.9855771, 37.5728571</td>
                 <td>
+                    <!-- 찜 버튼 -->
+                    <button class="btn btn-outline-primary favorite-btn" data-store-id="${store.storeId}"
+                            th:data-favorited="${store.favorited}"
+                            type="button">
+                        <span th:text="${store.favorited} ? '찜 취소' : '찜 하기'">찜 하기</span>
+                    </button>
+                </td>
+                <td>
                     <!-- 상세 보기 버튼 -->
                     <button class="btn btn-primary" data-target="#storeModal"
                             data-toggle="modal"
                             th:data-category="${store.category}"
                             th:data-certification="${store.certification}"
+                            th:data-name="${store.name}"
                             th:data-description="${store.description}"
+                            th:data-road-name-address="${store.roadNameAddress}"
                             th:data-detail-address="${store.detailAddress}"
+                            th:data-zipcode="${store.zipcode}"
                             th:data-latitude="${store.latitude}"
                             th:data-longitude="${store.longitude}"
-                            th:data-name="${store.name}"
                             th:data-phone-number="${store.phoneNumber}"
-                            th:data-road-name-address="${store.roadNameAddress}"
                             th:data-store-id="${store.storeId}"
-                            th:data-zipcode="${store.zipcode}"
                             type="button">
                         상세 보기
                     </button>
@@ -94,7 +95,7 @@
                 <p><strong>전화번호:</strong> <span id="modalPhoneNumber"></span></p>
                 <p><strong>설명:</strong> <span id="modalDescription"></span></p>
                 <!-- 네이버 지도 -->
-                <div id="map"></div>
+                <div id="map" style="width:100%; height:400px;"></div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" data-dismiss="modal" type="button">닫기</button>
@@ -104,44 +105,84 @@
 </div>
 
 <!-- jQuery, Popper.js, Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+<!-- 네이버 지도 API -->
+<script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=YOUR_NCP_CLIENT_ID&submodules=geocoder"
+        type="text/javascript"></script>
+
 <!-- 커스텀 JavaScript -->
 <script type="text/javascript">
-    // 모달이 열릴 때 실행되는 이벤트 핸들러
-    $('#storeModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget); // 버튼 요소
-        var storeId = button.data('store-id');
-        var name = button.data('name');
-        var certification = button.data('certification');
-        var roadNameAddress = button.data('road-name-address');
-        var detailAddress = button.data('detail-address');
-        var zipcode = button.data('zipcode');
-        var phoneNumber = button.data('phone-number');
-        var category = button.data('category');
-        var description = button.data('description');
-        var longitude = button.data('longitude');
-        var latitude = button.data('latitude');
+    $(document).ready(function () {
+        // 찜 버튼 클릭 이벤트
+        $('.favorite-btn').click(function () {
+            var button = $(this);
+            var storeId = button.data('store-id');
+            var favorited = button.data('favorited');
 
-        // 모달 요소 가져오기
-        var modal = $(this);
-        modal.find('#modalStoreName').text(name);
-        modal.find('#modalStoreId').text(storeId);
-        modal.find('#modalCategory').text(category);
-        modal.find('#modalCertification').text(certification);
-        modal.find('#modalAddress').text(roadNameAddress + ', ' + detailAddress + ', ' + zipcode);
-        modal.find('#modalPhoneNumber').text(phoneNumber);
-        modal.find('#modalDescription').text(description);
+            if (favorited) {
+                // 찜 취소
+                $.ajax({
+                    url: '/api/favorites/' + storeId,
+                    type: 'DELETE',
+                    success: function (response) {
+                        alert(response);
+                        button.data('favorited', false);
+                        button.html('<span>찜 하기</span>');
+                    },
+                    error: function (xhr) {
+                        alert(xhr.responseText);
+                    }
+                });
+            } else {
+                // 찜 추가
+                $.ajax({
+                    url: '/api/favorites/' + storeId,
+                    type: 'POST',
+                    success: function (response) {
+                        alert(response);
+                        button.data('favorited', true);
+                        button.html('<span>찜 취소</span>');
+                    },
+                    error: function (xhr) {
+                        alert(xhr.responseText);
+                    }
+                });
+            }
+        });
 
-        // 네이버 지도 초기화 (모달이 완전히 열린 후에 초기화)
-        setTimeout(function () {
-            var mapOptions = {
+        // 모달 창이 열릴 때 상점 정보 및 지도 초기화
+        $('#storeModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // 버튼 요소
+            var storeId = button.data('store-id');
+            var name = button.data('name');
+            var certification = button.data('certification');
+            var roadNameAddress = button.data('road-name-address');
+            var detailAddress = button.data('detail-address');
+            var zipcode = button.data('zipcode');
+            var phoneNumber = button.data('phone-number');
+            var category = button.data('category');
+            var description = button.data('description');
+            var longitude = button.data('longitude');
+            var latitude = button.data('latitude');
+
+            // 모달 요소 가져오기
+            var modal = $(this);
+            modal.find('#modalStoreName').text(name);
+            modal.find('#modalStoreId').text(storeId);
+            modal.find('#modalCategory').text(category);
+            modal.find('#modalCertification').text(certification);
+            modal.find('#modalAddress').text(roadNameAddress + ', ' + detailAddress + ', ' + zipcode);
+            modal.find('#modalPhoneNumber').text(phoneNumber);
+            modal.find('#modalDescription').text(description);
+
+            // 네이버 지도 초기화
+            var map = new naver.maps.Map('map', {
                 center: new naver.maps.LatLng(latitude, longitude),
                 zoom: 16
-            };
-            var map = new naver.maps.Map('map', mapOptions);
+            });
 
             // 마커 추가
             var marker = new naver.maps.Marker({
@@ -149,14 +190,14 @@
                 map: map
             });
 
-            // 지도 리사이즈 (필요 시)
-            naver.maps.Event.trigger(map, 'resize');
-        }, 500); // 500ms 후에 초기화 (모달 애니메이션이 완료된 후)
-    });
+            // 지도 중심 변경 (필요 시)
+            map.setCenter(new naver.maps.LatLng(latitude, longitude));
+        });
 
-    // 모달이 닫힐 때 지도 초기화 (지도 리소스 해제)
-    $('#storeModal').on('hidden.bs.modal', function () {
-        $('#map').empty();
+        // 모달이 닫힐 때 지도 초기화 (지도 리소스 해제)
+        $('#storeModal').on('hidden.bs.modal', function () {
+            $('#map').empty();
+        });
     });
 </script>
 </body>
