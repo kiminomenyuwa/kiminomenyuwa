@@ -17,11 +17,11 @@ DROP TABLE IF EXISTS store;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS food_category;
 DROP TABLE IF EXISTS category_type;
+DROP TABLE IF EXISTS friendships;
 DROP TABLE IF EXISTS store_photo;
 
 -- 외래 키 제약을 다시 활성화
 SET FOREIGN_KEY_CHECKS = 1;
-
 
 -- 카테고리 타입 테이블: 카테고리의 종류를 정의 (예: 재료, 나라, 조리 방법)
 CREATE TABLE `category_type`
@@ -206,6 +206,19 @@ CREATE TABLE purchased_menu
     CONSTRAINT FK_menu FOREIGN KEY (menu_id) REFERENCES `menu` (menu_id)
 );
 
+-- 친구관계도 테이블
+CREATE TABLE friendships (
+    friendship_id INT PRIMARY KEY AUTO_INCREMENT,  -- 고유한 친구 관계 ID
+    user_id VARCHAR(20) NOT NULL,                 -- 친구 요청을 보낸 사용자 ID
+    friend_id VARCHAR(20) NOT NULL,               -- 친구 요청을 받은 사용자 ID
+    status ENUM('PENDING', 'ACCEPTED', 'DECLINED', 'BLOCKED') DEFAULT 'PENDING', -- 친구 관계 상태
+    FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE,   -- user_id 외래 키
+    FOREIGN KEY (friend_id) REFERENCES user(user_id) ON DELETE CASCADE  -- friend_id 외래 키
+);
+
+-- user_id와 friend_id 쌍의 중복을 방지하는 고유 인덱스 추가
+CREATE UNIQUE INDEX friendship_unique_index ON friendships(user_id, friend_id);
+
 CREATE TABLE store_photo
 (
     photo_id  INT AUTO_INCREMENT PRIMARY KEY,
@@ -214,5 +227,3 @@ CREATE TABLE store_photo
     is_main BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (store_id) REFERENCES store (store_id) ON DELETE CASCADE
 );
-
-
