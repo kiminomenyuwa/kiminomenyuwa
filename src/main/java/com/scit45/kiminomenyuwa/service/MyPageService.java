@@ -1,16 +1,20 @@
 package com.scit45.kiminomenyuwa.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.scit45.kiminomenyuwa.domain.dto.BudgetDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.UserDiningHistoryDTO;
+import com.scit45.kiminomenyuwa.domain.entity.BudgetEntity;
 import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
 import com.scit45.kiminomenyuwa.domain.entity.StoreEntity;
 import com.scit45.kiminomenyuwa.domain.entity.UserDiningHistoryEntity;
 import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
+import com.scit45.kiminomenyuwa.domain.repository.BudgetRepository;
 import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
 import com.scit45.kiminomenyuwa.domain.repository.StoreRepository;
 import com.scit45.kiminomenyuwa.domain.repository.UserDiningHistoryRepository;
@@ -32,6 +36,7 @@ public class MyPageService {
 	private final StoreRepository storeRepository;
 	private final UserDiningHistoryRepository userDiningHistoryRepository;
 	private final UserRepository userRepository;
+	private final BudgetRepository budgetRepository;
 
 	public List<MenuDTO> getMenusByStoreName(String storeName) {
 		// 상점 이름으로 상점 찾기
@@ -86,18 +91,81 @@ public class MyPageService {
 			.collect(Collectors.toList());
 	}
 
-	public void saveBudget(String userId, Integer budget) {
-		UserEntity user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
-		user.setMonthlyBudget(budget); // 예산 업데이트
-		userRepository.save(user); // 변경 사항 저장
+	/**
+	 * 예산을 저장하는 메서드입니다.
+	 *
+	 * @param budgetDTO 저장할 예산 정보
+	 */
+	public void saveBudget(BudgetDTO budgetDTO) {
+		// 사용자 정보 조회
+		UserEntity user = userRepository.findById(budgetDTO.getUserId())
+			.orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+		// 예산 조회
+		Optional<BudgetEntity> existingBudgetOpt = budgetRepository.findByUserAndMonthAndYear(user,
+			budgetDTO.getMonth(), budgetDTO.getYear());
+
+		BudgetEntity budgetEntity;
+		if (existingBudgetOpt.isPresent()) {
+			// 기존 예산 업데이트
+			budgetEntity = existingBudgetOpt.get();
+			budgetEntity.setBudget(budgetDTO.getBudget());
+		} else {
+			// 새로운 예산 생성
+			budgetEntity = new BudgetEntity();
+			budgetEntity.setUser(user);
+			budgetEntity.setMonth(budgetDTO.getMonth());
+			budgetEntity.setYear(budgetDTO.getYear());
+			budgetEntity.setBudget(budgetDTO.getBudget());
+		}
+
+		// 예산 저장
+		budgetRepository.save(budgetEntity);
 	}
 
-	public Integer getRemainingBudget(AuthenticatedUser user) {
-		if (user == null) {
-			return 0; // 인증 실패 시 예산 0 반환
+	/**
+	 * 특정 연도와 월의 예산을 조회하거나, 존재하지 않으면 이전 달의 남은 예산으로 초기화
+	 *
+	 * @param userId 사용자 ID
+	 * @param year 연도
+	 * @param month 월
+	 * @return 예산 정보
+	 */
+	public BudgetDTO getRemainingBudget(String userId, int year, int month) {
+		// 사용자 정보 조회
+		UserEntity userEntity = userRepository.findById(userId)
+			.orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+		// 해당 연도와 월의 예산 조회
+		Optional<BudgetEntity> budgetOpt = budgetRepository.findByUserAndMonthAndYear(userEntity, month, year);
+		if (budgetOpt.isPresent()) {
+			BudgetEntity budgetEntity = budgetOpt.get();
+			return BudgetDTO.builder()
+				.budgetId(budgetEntity.getBudgetId())
+				.userId(userId)
+				.month(budgetEntity.getMonth())
+				.year(budgetEntity.getYear())
+				.budget(budgetEntity.getBudget())
+				.build();
+		} else {
+			// 새로운 월의 예산을 설정 (고정 값)
+			int defaultBudget = 200000; // 원하는 기본 예산 금액
+
+			BudgetEntity newBudget = new BudgetEntity();
+			newBudget.setUser(userEntity);
+			newBudget.setMonth(month);
+			newBudget.setYear(year);
+			newBudget.setBudget(defaultBudget); // 기본 예산 설정
+
+			budgetRepository.save(newBudget);
+
+			return BudgetDTO.builder()
+				.budgetId(newBudget.getBudgetId())
+				.userId(userId)
+				.month(newBudget.getMonth())
+				.year(newBudget.getYear())
+				.budget(newBudget.getBudget())
+				.build();
 		}
-		return userRepository.findById(user.getUsername())
-			.map(UserEntity::getMonthlyBudget)
-			.orElse(0); // 예산이 없으면 0 반환
 	}
 }
