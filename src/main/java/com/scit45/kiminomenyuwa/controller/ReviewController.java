@@ -1,23 +1,26 @@
 package com.scit45.kiminomenyuwa.controller;
 
+import java.util.List;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.ReviewRequestDTO;
 import com.scit45.kiminomenyuwa.domain.dto.StoreRegistrationDTO;
 import com.scit45.kiminomenyuwa.service.MenuService;
 import com.scit45.kiminomenyuwa.service.ReviewService;
 import com.scit45.kiminomenyuwa.service.StoreService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.List;
 
 @Slf4j
 @Controller
@@ -46,7 +49,8 @@ public class ReviewController {
      * 리뷰 제출 처리
      */
     @PostMapping("/write")
-    public String submitReview(ReviewRequestDTO reviewDTO, Model model, RedirectAttributes redirectAttributes) {
+    public String submitReview(@ModelAttribute ReviewRequestDTO reviewDTO, Model model,
+        RedirectAttributes redirectAttributes) {
         // Spring Security를 통해 현재 로그인된 사용자 정보 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String loggedInUserId = authentication.getName(); // 사용자 ID 또는 username
