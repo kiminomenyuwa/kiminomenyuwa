@@ -233,4 +233,12 @@ CREATE TABLE `mini_game_menu_rating`
 );
 select *
 from mini_game_menu_rating mgmr;
+
+-- aaa 유저와 bbb 유저가 친구 관계로 추가되는 SQL
+INSERT INTO friendships (user_id, friend_id, status)
+VALUES 
+('aaa', 'bbb', 'ACCEPTED'),  -- aaa가 bbb에게 친구 요청을 보내고, bbb가 수락한 경우
+('bbb', 'aaa', 'ACCEPTED');  -- 양방향 친구 관계를 저장
+
+select * from friendships;
 -- 여기까지
