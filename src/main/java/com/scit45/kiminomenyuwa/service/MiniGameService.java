@@ -252,11 +252,9 @@ public class MiniGameService {
 	public List<MenuDTO> recommendMenusByCategoryScores(String userId) {
 		// 1. 사용자 카테고리 점수 불러오기 (내림차순으로 정렬됨)
 		List<CategoryCountDTO> categoryScores = getCategoryScoresByUserId(userId);
-		log.debug("categoryScores: {}", categoryScores);
 
 		// 2. 모든 메뉴 불러오기
 		List<MenuDTO> allMenus = menuService.getAllMenus();
-		log.debug("allMenus: {}", allMenus);
 
 		// 3. 카테고리 점수를 빠르게 조회하기 위한 Map 생성
 		Map<String, Integer> categoryScoreMap = new HashMap<>();
@@ -288,7 +286,6 @@ public class MiniGameService {
 		List<MenuDTO> recommendedMenus = new ArrayList<>(menuScoreMap.keySet());
 		recommendedMenus.sort((m1, m2) -> menuScoreMap.get(m2) - menuScoreMap.get(m1));
 
-		log.debug("recommendedMenus: {}", recommendedMenus);
 		return recommendedMenus;
 	}
 
