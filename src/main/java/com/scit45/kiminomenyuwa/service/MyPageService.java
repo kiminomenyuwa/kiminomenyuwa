@@ -102,8 +102,7 @@ public class MyPageService {
 			.orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
 		// 예산 조회
-		Optional<BudgetEntity> existingBudgetOpt = budgetRepository.findByUserAndMonthAndYear(user,
-			budgetDTO.getMonth(), budgetDTO.getYear());
+		Optional<BudgetEntity> existingBudgetOpt = budgetRepository.findByUserAndMonthAndYear(user, budgetDTO.getMonth(), budgetDTO.getYear());
 
 		BudgetEntity budgetEntity;
 		if (existingBudgetOpt.isPresent()) {
@@ -124,7 +123,7 @@ public class MyPageService {
 	}
 
 	/**
-	 * 특정 연도와 월의 예산을 조회하거나, 존재하지 않으면 이전 달의 남은 예산으로 초기화
+	 * 특정 연도와 월의 예산을 조회합니다.
 	 *
 	 * @param userId 사용자 ID
 	 * @param year 연도
@@ -148,24 +147,40 @@ public class MyPageService {
 				.budget(budgetEntity.getBudget())
 				.build();
 		} else {
-			// 새로운 월의 예산을 설정 (고정 값)
-			int defaultBudget = 200000; // 원하는 기본 예산 금액
-
-			BudgetEntity newBudget = new BudgetEntity();
-			newBudget.setUser(userEntity);
-			newBudget.setMonth(month);
-			newBudget.setYear(year);
-			newBudget.setBudget(defaultBudget); // 기본 예산 설정
-
-			budgetRepository.save(newBudget);
-
+			// 예산이 설정되지 않은 경우, 0으로 반환
 			return BudgetDTO.builder()
-				.budgetId(newBudget.getBudgetId())
 				.userId(userId)
-				.month(newBudget.getMonth())
-				.year(newBudget.getYear())
-				.budget(newBudget.getBudget())
+				.year(year)
+				.month(month)
+				.budget(0)
 				.build();
 		}
+	}
+
+	/**
+	 * 특정 연도와 월의 예산을 초기화하는 메서드입니다.
+	 *
+	 * @param userId 사용자 ID
+	 * @param year 연도
+	 * @param month 월
+	 */
+	@Transactional
+	public void initializeBudget(String userId, int year, int month) {
+		// 사용자 정보 조회
+		UserEntity userEntity = userRepository.findById(userId)
+			.orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+		// 기존 예산 삭제 (선택 사항)
+		Optional<BudgetEntity> existingBudgetOpt = budgetRepository.findByUserAndMonthAndYear(userEntity, month, year);
+		existingBudgetOpt.ifPresent(budgetRepository::delete);
+
+		// 예산을 0으로 설정
+		BudgetEntity newBudget = new BudgetEntity();
+		newBudget.setUser(userEntity);
+		newBudget.setMonth(month);
+		newBudget.setYear(year);
+		newBudget.setBudget(0); // 예산 초기화
+
+		budgetRepository.save(newBudget);
 	}
 }

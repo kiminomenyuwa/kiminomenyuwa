@@ -229,4 +229,5 @@ CREATE TABLE budget (
 );
 
 select * from budget;
+TRUNCATE TABLE `budget`;
 select * from user;
