@@ -41,6 +41,9 @@ dependencies {
 
     // 영수증, 사업자등록증 OCR을 위한 azure document intelligence
     implementation 'com.azure:azure-ai-formrecognizer:4.1.10'
+
+    // Hibernate Spatial
+    implementation 'org.hibernate.orm:hibernate-spatial:6.2.7.Final'
 }
 
 tasks.named('test') {
