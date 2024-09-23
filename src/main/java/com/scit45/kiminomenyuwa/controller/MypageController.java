@@ -1,6 +1,8 @@
 package com.scit45.kiminomenyuwa.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -95,6 +97,7 @@ public class MypageController {
 	@GetMapping("/api/dining-history")
 	public List<UserDiningHistoryDTO> getDiningHistory(@AuthenticationPrincipal AuthenticatedUser user) {
 		String userId = user.getUsername();
+		log.debug("유저 아이디 {}", userId);
 		return myPageService.getDiningHistoryByUserId(userId);
 	}
 
@@ -103,5 +106,25 @@ public class MypageController {
 	public ResponseEntity<MenuDTO> getMenuById(@PathVariable int menuId) {
 		MenuDTO menu = myPageService.getMenuById(menuId);
 		return ResponseEntity.ok(menu);
+	}
+
+	/**
+	 * 사용자의 월 예산을 저장하는 메서드
+	 * @param budget 예산 금액
+	 */
+	@ResponseBody
+	@PostMapping("/api/budget")
+	public ResponseEntity<Void> saveMonthlyBudget(@RequestParam String userId, @RequestParam Integer budget) {
+		myPageService.saveBudget(userId, budget);
+		return ResponseEntity.ok().build(); // 200 OK 응답
+	}
+
+	@ResponseBody
+	@GetMapping("/api/budget/remaining")
+	public ResponseEntity<Map<String, Integer>> getRemainingBudget(@AuthenticationPrincipal AuthenticatedUser user) {
+		Integer budget = myPageService.getRemainingBudget(user); // 서비스 메서드 호출
+		Map<String, Integer> response = new HashMap<>();
+		response.put("budget", budget);
+		return ResponseEntity.ok(response);
 	}
 }

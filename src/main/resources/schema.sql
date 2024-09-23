@@ -61,6 +61,10 @@ CREATE TABLE `user`
     CONSTRAINT `chk_role` CHECK (`role` IN ('ROLE_USER', 'ROLE_MERCHANT', 'ROLE_ADMIN'))                      -- 역할 값에 대한 제약 조건
 );
 
+-- user테이블 예산 칼럼 추가
+ALTER TABLE `user`
+    ADD COLUMN `monthly_budget` INTEGER DEFAULT 0 NOT NULL;
+
 -- 상점 테이블: 사용자가 소유한 상점 정보를 저장
 CREATE TABLE `store`
 (
@@ -202,3 +206,4 @@ CREATE TABLE purchased_menu
     CONSTRAINT FK_menu FOREIGN KEY (menu_id) REFERENCES `menu` (menu_id)
 );
 select * from user_dining_history;
+select * from user;
