@@ -15,6 +15,7 @@ import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
 import com.scit45.kiminomenyuwa.domain.repository.StoreRepository;
 import com.scit45.kiminomenyuwa.domain.repository.UserDiningHistoryRepository;
 import com.scit45.kiminomenyuwa.domain.repository.UserRepository;
+import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -70,7 +71,7 @@ public class MyPageService {
 	public MenuDTO getMenuById(int menuId) {
 		MenuEntity menu = menuRepository.findById(menuId)
 			.orElseThrow(() -> new EntityNotFoundException("Menu not found with id: " + menuId));
-		return MenuDTO.builder().menuId(menu.getMenuId()).name(menu.getName()).build();
+		return MenuDTO.builder().menuId(menu.getMenuId()).name(menu.getName()).price(menu.getPrice()).build();
 	}
 
 	public List<UserDiningHistoryDTO> getDiningHistoryByUserId(String userId) {
@@ -83,5 +84,20 @@ public class MyPageService {
 				.diningDate(history.getDiningDate())
 				.build())
 			.collect(Collectors.toList());
+	}
+
+	public void saveBudget(String userId, Integer budget) {
+		UserEntity user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+		user.setMonthlyBudget(budget); // 예산 업데이트
+		userRepository.save(user); // 변경 사항 저장
+	}
+
+	public Integer getRemainingBudget(AuthenticatedUser user) {
+		if (user == null) {
+			return 0; // 인증 실패 시 예산 0 반환
+		}
+		return userRepository.findById(user.getUsername())
+			.map(UserEntity::getMonthlyBudget)
+			.orElse(0); // 예산이 없으면 0 반환
 	}
 }

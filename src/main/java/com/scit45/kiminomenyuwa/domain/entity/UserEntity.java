@@ -75,6 +75,9 @@ public class UserEntity {
 	@Column(name = "enabled", nullable = false)
 	private Boolean enabled;
 
+	@Column(name = "monthly_budget")
+	private Integer monthlyBudget; // 한 달 예산 필드 추가
+
 	@CreatedDate
 	@Column(name = "created_time")
 	private LocalDateTime createdTime;

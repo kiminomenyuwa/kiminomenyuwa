@@ -33,6 +33,7 @@ public class UserDTO {
 	String profileImgUuid;		//프로필 사진 주소
 	Role role;					//계정 등급
 	Boolean enabled;			//계정 활성화 여부
+	Integer monthlyBudget;		//한달 예산
 	LocalDateTime createdTime;	//계정 생성 시각
 
 }
