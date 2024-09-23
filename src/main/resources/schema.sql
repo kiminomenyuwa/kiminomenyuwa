@@ -62,9 +62,6 @@ CREATE TABLE `user`
     CONSTRAINT `chk_role` CHECK (`role` IN ('ROLE_USER', 'ROLE_MERCHANT', 'ROLE_ADMIN'))                      -- 역할 값에 대한 제약 조건
 );
 
--- user테이블 예산 칼럼 추가
-ALTER TABLE `user`
-    ADD COLUMN `monthly_budget` INTEGER DEFAULT 0 NOT NULL;
 
 -- 상점 테이블: 사용자가 소유한 상점 정보를 저장
 CREATE TABLE `store`
@@ -221,4 +218,15 @@ CREATE TABLE store_photo
 
 
 select * from user_dining_history;
+-- 사용자가 입력한 예산 테이블
+CREATE TABLE budget (
+                        budget_id INT AUTO_INCREMENT PRIMARY KEY,  -- 예산의 고유 ID
+                        user_id VARCHAR(20),                        -- 사용자 ID
+                        month INT,                                  -- 예산의 해당 월 (1 ~ 12)
+                        year INT,                                   -- 예산의 해당 연도 (예: 2024)
+                        budget INT,                                 -- 해당 월의 예산 금액
+                        FOREIGN KEY (user_id) REFERENCES user(user_id)  -- 사용자 테이블과의 외래키 관계
+);
+
+select * from budget;
 select * from user;
