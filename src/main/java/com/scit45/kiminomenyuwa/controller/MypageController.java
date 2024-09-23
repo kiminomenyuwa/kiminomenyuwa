@@ -123,10 +123,9 @@ public class MypageController {
 			// 예산 DTO에 사용자 ID 설정
 			budgetDTO.setUserId(user.getUsername());
 
-			// 현재 연도와 월 설정
-			java.time.LocalDate today = java.time.LocalDate.now();
-			budgetDTO.setYear(today.getYear());
-			budgetDTO.setMonth(today.getMonthValue());
+			// 클라이언트가 전송한 year와 month를 사용 (덮어쓰지 않음)
+			// budgetDTO.setYear(today.getYear());
+			// budgetDTO.setMonth(today.getMonthValue());
 
 			// 예산 저장 서비스 호출
 			myPageService.saveBudget(budgetDTO);
@@ -166,9 +165,7 @@ public class MypageController {
 	 */
 	@ResponseBody
 	@PostMapping("/api/budget/initialize")
-	public ResponseEntity<String> initializeBudget(
-		@RequestParam Integer year,
-		@RequestParam Integer month,
+	public ResponseEntity<String> initializeBudget(@RequestParam Integer year, @RequestParam Integer month,
 		@AuthenticationPrincipal AuthenticatedUser user) {
 		try {
 			String userId = user.getUsername();

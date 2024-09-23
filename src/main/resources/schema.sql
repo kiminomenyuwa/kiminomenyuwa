@@ -212,7 +212,7 @@ CREATE TABLE budget (
                         budget INT,                                 -- 해당 월의 예산 금액
                         FOREIGN KEY (user_id) REFERENCES user(user_id)  -- 사용자 테이블과의 외래키 관계
 );
-
+commit;
 select * from budget;
 TRUNCATE TABLE `budget`;
 select * from user;

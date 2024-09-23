@@ -97,6 +97,7 @@ public class MyPageService {
 	 * @param budgetDTO 저장할 예산 정보
 	 */
 	public void saveBudget(BudgetDTO budgetDTO) {
+		log.debug("saveBudget 메서드: {}", budgetDTO);
 		// 사용자 정보 조회
 		UserEntity user = userRepository.findById(budgetDTO.getUserId())
 			.orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
@@ -138,6 +139,7 @@ public class MyPageService {
 		// 해당 연도와 월의 예산 조회
 		Optional<BudgetEntity> budgetOpt = budgetRepository.findByUserAndMonthAndYear(userEntity, month, year);
 		if (budgetOpt.isPresent()) {
+			log.debug("조회된 예산: {}", budgetOpt);
 			BudgetEntity budgetEntity = budgetOpt.get();
 			return BudgetDTO.builder()
 				.budgetId(budgetEntity.getBudgetId())
@@ -173,6 +175,7 @@ public class MyPageService {
 		// 기존 예산 삭제 (선택 사항)
 		Optional<BudgetEntity> existingBudgetOpt = budgetRepository.findByUserAndMonthAndYear(userEntity, month, year);
 		existingBudgetOpt.ifPresent(budgetRepository::delete);
+		log.debug("예산 정상 삭제: {}", existingBudgetOpt);
 
 		// 예산을 0으로 설정
 		BudgetEntity newBudget = new BudgetEntity();
@@ -180,6 +183,7 @@ public class MyPageService {
 		newBudget.setMonth(month);
 		newBudget.setYear(year);
 		newBudget.setBudget(0); // 예산 초기화
+		log.debug("예산 초기화: {}", newBudget);
 
 		budgetRepository.save(newBudget);
 	}
