@@ -3,6 +3,7 @@ package com.scit45.kiminomenyuwa.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -42,6 +43,11 @@ public class MenuService {
 		// 조회된 엔티티 리스트를 DTO 리스트로 변환
 		List<MenuDTO> menuDTOs = new ArrayList<>();
 		for (MenuEntity menuEntity : menuEntities) {
+			// 각 메뉴의 카테고리 리스트 가져오기
+			List<String> categories = menuEntity.getCategoryMappings().stream()
+				.map(mapping -> mapping.getFoodCategory().getCategoryName())
+				.collect(Collectors.toList());
+
 			// MenuEntity를 MenuDTO로 변환하여 리스트에 추가
 			menuDTOs.add(MenuDTO.builder()
 				.menuId(menuEntity.getMenuId())
@@ -50,12 +56,14 @@ public class MenuService {
 				.price(menuEntity.getPrice())
 				.pictureUrl(menuEntity.getPictureUrl())
 				.enabled(menuEntity.getEnabled())
+				.categories(categories) // 카테고리 리스트 추가
 				.build());
 		}
 
 		// 변환된 DTO 리스트를 호출자에게 반환
 		return menuDTOs;
 	}
+
 
 	public List<MenuDTO> getMenusNotTried(String userId) {
 		List<Long> eatenMenuIds = userDiningHistoryRepository.findDistinctMenuIdsByUserId(userId);
