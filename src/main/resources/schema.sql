@@ -216,7 +216,6 @@ CREATE TABLE store_photo
     FOREIGN KEY (store_id) REFERENCES store (store_id) ON DELETE CASCADE
 );
 
-
 select * from user_dining_history;
 -- 사용자가 입력한 예산 테이블
 CREATE TABLE budget (

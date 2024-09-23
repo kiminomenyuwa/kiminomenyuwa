@@ -120,6 +120,7 @@ public class MypageController {
 		model.addAttribute("miniGameRatingList", miniGameRatingList);
         return "mypageView/minigameHistory";
     }
+
 	/**
 	 * 예산을 저장하는 API
 	 * @param budgetDTO 예산 정보
