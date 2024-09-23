@@ -3,6 +3,7 @@ package com.scit45.kiminomenyuwa.controller;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.scit45.kiminomenyuwa.domain.dto.CategoryCountDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
+import com.scit45.kiminomenyuwa.domain.dto.MiniGameMenuRatingDTO;
 import com.scit45.kiminomenyuwa.domain.dto.UserDiningHistoryDTO;
 import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
 import com.scit45.kiminomenyuwa.service.MenuService;
+import com.scit45.kiminomenyuwa.service.MiniGameService;
 import com.scit45.kiminomenyuwa.service.UserDiningHistoryService;
 
 import lombok.RequiredArgsConstructor;
@@ -29,6 +32,7 @@ public class RecommandController {
 
 	private final MenuService menuService;
 	private final UserDiningHistoryService userDiningHistoryService;
+	private final MiniGameService miniGameService;
 
 	/**
 	 * 추천기능 테스트용 페이지
@@ -57,9 +61,26 @@ public class RecommandController {
 		List<CategoryCountDTO> categoryTop10 = userDiningHistoryService.getTopCategoriesByUserId(user.getId());
 		model.addAttribute("categoryTop10List", categoryTop10);
 
+		// 사용자의 미니게임 내역
+		List<MiniGameMenuRatingDTO> miniGameRatingList = miniGameService.getUsersMiniGameRatingAll(user.getId());
+		model.addAttribute("miniGameRatingList", miniGameRatingList);
+
+		// 사용자 ID를 가져와서 카테고리 점수를 계산
+		List<CategoryCountDTO> categoryScores = miniGameService.getCategoryScoresByUserId(user.getId());
+		model.addAttribute("categoryScores", categoryScores);
+
 		return "recommandView/recTest";
 	}
 
+	/**
+	 * 먹지 않은 메뉴 추천
+	 * 전체 메뉴에서 여태 먹은 메뉴를 제외한 후
+	 * 여태 먹은 메뉴들에서 중복되는 카테고리를 count 하여 카테고리 TOP 10을 구합니다
+	 * 추려진 카테고리를 사용하여 해당 카테고리에 맞는 메뉴를 추천합니다
+	 * @param model 모델에 담아 html에 출력
+	 * @param user 현재 로그인 중인 userId
+	 * @return untriedMenu.html
+	 */
 	@GetMapping("recommendUntriedFood")
 	public String recommendUntriedFood(Model model, @AuthenticationPrincipal AuthenticatedUser user) {
 		// 전체 먹지 않은 메뉴 리스트 출력
@@ -109,5 +130,31 @@ public class RecommandController {
 		model.addAttribute("recommendedMenus", recommendedMenus);
 
 		return "recommandView/untriedMenu"; // 추천 결과를 보여줄 페이지로 이동
+	}
+
+	/**
+	 * 미니게임 점수 기반 추천
+	 * @param model 모델에 담아 출력
+	 * @param user 현재 로그인 중인 userId
+	 * @return recommandByMinigame.html
+	 */
+	@GetMapping("recommandByMinigame")
+	public String recommendByMinigameScore(Model model, @AuthenticationPrincipal AuthenticatedUser user) {
+		// 사용자의 미니게임 기반 카테고리 점수
+		List<CategoryCountDTO> minigameCategoryScoreList = miniGameService.getCategoryScoresByUserId(user.getId());
+		model.addAttribute("minigameCategoryScoreList", minigameCategoryScoreList);
+
+		// 메뉴의 총 점수를 서비스에서 가져옴
+		Map<MenuDTO, Integer> menuScoreMap = miniGameService.getMenuScoreMap(user.getId());
+		// menuScoreMap을 정렬된 리스트로 변환 (Map 구조라서 아래의 별도 작업이 필요했음ㄷㄷ)
+		List<Map.Entry<MenuDTO, Integer>> sortedMenuList = new ArrayList<>(menuScoreMap.entrySet());
+		sortedMenuList.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue())); // 내림차순 정렬
+		model.addAttribute("sortedMenuList", sortedMenuList); // 정렬된 리스트 추가
+
+		// 사용자 ID를 기반으로 추천 메뉴 리스트 가져오기
+		List<MenuDTO> recommendedMenus = miniGameService.recommendMenusByCategoryScores(user.getId());
+		model.addAttribute("recommendedMenus", recommendedMenus);
+
+		return "recommandView/recommandByMinigame";
 	}
 }

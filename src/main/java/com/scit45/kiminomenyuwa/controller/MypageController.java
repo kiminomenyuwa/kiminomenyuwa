@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
+import com.scit45.kiminomenyuwa.domain.dto.MiniGameMenuRatingDTO;
 import com.scit45.kiminomenyuwa.domain.dto.UserDiningHistoryDTO;
 import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
 import com.scit45.kiminomenyuwa.service.MenuService;
+import com.scit45.kiminomenyuwa.service.MiniGameService;
 import com.scit45.kiminomenyuwa.service.UserDiningHistoryService;
 import com.scit45.kiminomenyuwa.service.MyPageService;
 
@@ -32,6 +34,7 @@ public class MypageController {
 	private final MenuService menuService;
 	private final UserDiningHistoryService userDiningHistoryService;
 	private final MyPageService myPageService;
+	private final MiniGameService miniGameService;
 
 	/**
 	 * 마이페이지 메인화면
@@ -104,4 +107,12 @@ public class MypageController {
 		MenuDTO menu = myPageService.getMenuById(menuId);
 		return ResponseEntity.ok(menu);
 	}
+
+	@GetMapping("minigameHistory")
+	public String minigameHistory(Model model, @AuthenticationPrincipal AuthenticatedUser user) {
+		// 사용자의 미니게임 내역
+		List<MiniGameMenuRatingDTO> miniGameRatingList = miniGameService.getUsersMiniGameRatingAll(user.getId());
+		model.addAttribute("miniGameRatingList", miniGameRatingList);
+        return "mypageView/minigameHistory";
+    }
 }

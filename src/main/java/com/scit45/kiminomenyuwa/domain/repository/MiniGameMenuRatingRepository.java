@@ -2,6 +2,7 @@ package com.scit45.kiminomenyuwa.domain.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -20,5 +21,5 @@ public interface MiniGameMenuRatingRepository extends JpaRepository<MiniGameMenu
 	 * @param userId 평가를 조회할 사용자 ID
 	 * @return 해당 사용자가 평가한 메뉴 평가 기록 리스트
 	 */
-	List<MiniGameMenuRatingEntity> findByUserId(String userId);
+	List<MiniGameMenuRatingEntity> findByUserId(String userId, Sort sort);
 }

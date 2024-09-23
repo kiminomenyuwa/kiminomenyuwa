@@ -2,15 +2,23 @@ package com.scit45.kiminomenyuwa.service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.scit45.kiminomenyuwa.domain.dto.CategoryCountDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
+import com.scit45.kiminomenyuwa.domain.dto.MiniGameMenuRatingDTO;
 import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
 import com.scit45.kiminomenyuwa.domain.entity.MiniGameMenuRatingEntity;
+import com.scit45.kiminomenyuwa.domain.repository.MenuCategoryMappingRepository;
 import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
 import com.scit45.kiminomenyuwa.domain.repository.MiniGameMenuRatingRepository;
 
@@ -33,6 +41,8 @@ public class MiniGameService {
 	// 메뉴 데이터베이스 접근을 위한 Repository 인스턴스.
 	private final MenuRepository menuRepository;
 	private final MiniGameMenuRatingRepository ratingRepository;
+	private final MenuCategoryMappingRepository menuCategoryMappingRepository;
+	private final MenuService menuService;
 
 	/**
 	 * 모든 메뉴를 조회하고, DTO 리스트로 변환하여 반환하는 메서드.
@@ -172,5 +182,157 @@ public class MiniGameService {
 			.menuId(selectedMenu.getMenuId())
 			.name(selectedMenu.getName())
 			.build();
+	}
+
+	/**
+	 * 사용자의 미니게임 전체 점수 내역을 가져오는 메서드
+	 * @param userId 현재 로그인 중인 userId
+	 * @return 미니게임 점수 List
+	 */
+	public List<MiniGameMenuRatingDTO> getUsersMiniGameRatingAll(String userId) {
+		// 별점 기준 내림차순으로 정렬
+		Sort sort = Sort.by(Sort.Direction.DESC, "rating");
+
+		List<MiniGameMenuRatingEntity> ratingEntities = ratingRepository.findByUserId(userId, sort);
+		List<MiniGameMenuRatingDTO> miniGameRatingList = new ArrayList<>();
+		for (MiniGameMenuRatingEntity entity : ratingEntities) {
+			miniGameRatingList.add(MiniGameMenuRatingDTO.builder()
+				.ratingId(entity.getRatingId())
+				.userId(entity.getUserId())
+				.menuId(entity.getMenuId())
+				.rating(entity.getRating())
+				.ratingDate(entity.getRatingDate())
+				.build());
+		}
+		return miniGameRatingList;
+	}
+
+	/**
+	 * 사용자의 미니게임 내역에서 카테고리 점수(횟수)를 도출
+	 * @param userId 현재 로그인 중인 userId
+	 * @return 미니게임 점수 배율에 따른 카테고리별 점수(횟수)List
+	 */
+	public List<CategoryCountDTO> getCategoryScoresByUserId(String userId) {
+		// 1. 미니게임 내역을 불러옴
+		Sort sort = Sort.by(Sort.Direction.DESC, "rating");
+		List<MiniGameMenuRatingEntity> ratingEntities = ratingRepository.findByUserId(userId, sort);
+
+		// 2. 카테고리별 점수 저장을 위한 Map 생성
+		Map<String, Long> categoryScores = new HashMap<>();
+
+		// 3. 각 미니게임 내역을 돌면서 카테고리 점수 계산
+		for (MiniGameMenuRatingEntity entity : ratingEntities) {
+			int rating = Math.round(entity.getRating()); // 평가 점수
+			Integer menuId = entity.getMenuId();
+
+			// 메뉴 ID로 해당 메뉴의 카테고리를 조회
+			List<String> categories = menuCategoryMappingRepository.findCategoriesByMenuId(menuId);
+
+			// 카테고리 점수를 평가 점수만큼 증가시킴
+			for (String category : categories) {
+				categoryScores.put(category, categoryScores.getOrDefault(category, 0L) + rating);
+			}
+		}
+
+		// 4. Map을 List<CategoryCountDTO>로 변환
+		List<CategoryCountDTO> categoryScoreList = new ArrayList<>();
+		for (Map.Entry<String, Long> entry : categoryScores.entrySet()) {
+			categoryScoreList.add(CategoryCountDTO.builder()
+				.categoryName(entry.getKey())
+				.categoryCount(entry.getValue())
+				.build());
+		}
+
+		// 5. 내림차순으로 정렬 (점수가 높은 순서대로)
+		categoryScoreList.sort((a, b) -> Long.compare(b.getCategoryCount(), a.getCategoryCount()));
+
+		return categoryScoreList;
+	}
+
+	/**
+	 * 미니게임 점수 기반으로 사용자의 메뉴 점수 측정표
+	 * @param userId 현재 로그인 중인 userId
+	 * @return 사용자 맞춤 메뉴 점수
+	 */
+	public Map<MenuDTO, Integer> getMenuScoreMap(String userId) {
+		// 1. 사용자 카테고리 점수 불러오기 (내림차순으로 정렬됨)
+		List<CategoryCountDTO> categoryScores = getCategoryScoresByUserId(userId);
+
+		// 2. 모든 메뉴 불러오기
+		List<MenuDTO> allMenus = menuService.getAllMenus();
+
+		// 3. 카테고리 점수를 빠르게 조회하기 위한 Map 생성
+		Map<String, Integer> categoryScoreMap = new HashMap<>();
+		for (CategoryCountDTO categoryScore : categoryScores) {
+			categoryScoreMap.put(categoryScore.getCategoryName(), categoryScore.getCategoryCount().intValue());
+		}
+
+		// 4. 각 메뉴별 점수를 저장할 Map 생성
+		Map<MenuDTO, Integer> menuScoreMap = new HashMap<>();
+
+		// 5. 각 메뉴의 카테고리 점수를 합산하여 메뉴 점수 계산
+		for (MenuDTO menu : allMenus) {
+			int totalScore = 0;
+
+			if (menu.getCategories() != null) {
+				for (String category : menu.getCategories()) {
+					// 카테고리가 categoryScoreMap에 존재하면 해당 카테고리의 점수를 더함
+					if (categoryScoreMap.containsKey(category)) {
+						totalScore += categoryScoreMap.get(category);
+					}
+				}
+			}
+
+			// 메뉴의 총 점수를 Map에 저장
+			menuScoreMap.put(menu, totalScore);
+		}
+
+		// 6. menuScoreMap을 반환
+		return menuScoreMap;
+	}
+
+	/**
+	 * 미니게임 점수 메뉴 추천 최종 메서드
+	 * @param userId 로그인 중인 userId
+	 * @return 미니게임 점수 기반 추천된 메뉴(미니게임 점수 기반 내림차순 정렬)
+	 */
+	public List<MenuDTO> recommendMenusByCategoryScores(String userId) {
+		// 1. 사용자 카테고리 점수 불러오기 (내림차순으로 정렬됨)
+		List<CategoryCountDTO> categoryScores = getCategoryScoresByUserId(userId);
+
+		// 2. 모든 메뉴 불러오기
+		List<MenuDTO> allMenus = menuService.getAllMenus();
+
+		// 3. 카테고리 점수를 빠르게 조회하기 위한 Map 생성
+		Map<String, Integer> categoryScoreMap = new HashMap<>();
+		for (CategoryCountDTO categoryScore : categoryScores) {
+			categoryScoreMap.put(categoryScore.getCategoryName(), categoryScore.getCategoryCount().intValue());
+		}
+
+		// 4. 각 메뉴별 점수를 저장할 Map 생성
+		Map<MenuDTO, Integer> menuScoreMap = new HashMap<>();
+
+		// 5. 각 메뉴의 카테고리 점수를 합산하여 메뉴 점수 계산
+		for (MenuDTO menu : allMenus) {
+			int totalScore = 0;
+
+			if (menu.getCategories() != null) {
+				for (String category : menu.getCategories()) {
+					// 카테고리가 categoryScoreMap에 존재하면 해당 카테고리의 점수를 더함
+					if (categoryScoreMap.containsKey(category)) {
+						totalScore += categoryScoreMap.get(category);
+					}
+				}
+			}
+
+			// 메뉴의 총 점수를 Map에 저장
+			menuScoreMap.put(menu, totalScore);
+		}
+		log.debug("menuScoreMap: {}", menuScoreMap);
+		// 6. 점수에 따라 메뉴를 내림차순으로 정렬
+		List<MenuDTO> recommendedMenus = new ArrayList<>(menuScoreMap.keySet());
+		recommendedMenus.sort((m1, m2) -> menuScoreMap.get(m2) - menuScoreMap.get(m1));
+
+		return recommendedMenus;
 	}
 }
