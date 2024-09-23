@@ -249,7 +249,12 @@ public class MiniGameService {
 		return categoryScoreList;
 	}
 
-	public List<MenuDTO> recommendMenusByCategoryScores(String userId) {
+	/**
+	 * 미니게임 점수 기반으로 사용자의 메뉴 점수 측정표
+	 * @param userId 현재 로그인 중인 userId
+	 * @return 사용자 맞춤 메뉴 점수
+	 */
+	public Map<MenuDTO, Integer> getMenuScoreMap(String userId) {
 		// 1. 사용자 카테고리 점수 불러오기 (내림차순으로 정렬됨)
 		List<CategoryCountDTO> categoryScores = getCategoryScoresByUserId(userId);
 
@@ -282,11 +287,52 @@ public class MiniGameService {
 			menuScoreMap.put(menu, totalScore);
 		}
 
+		// 6. menuScoreMap을 반환
+		return menuScoreMap;
+	}
+
+	/**
+	 * 미니게임 점수 메뉴 추천 최종 메서드
+	 * @param userId 로그인 중인 userId
+	 * @return 미니게임 점수 기반 추천된 메뉴(미니게임 점수 기반 내림차순 정렬)
+	 */
+	public List<MenuDTO> recommendMenusByCategoryScores(String userId) {
+		// 1. 사용자 카테고리 점수 불러오기 (내림차순으로 정렬됨)
+		List<CategoryCountDTO> categoryScores = getCategoryScoresByUserId(userId);
+
+		// 2. 모든 메뉴 불러오기
+		List<MenuDTO> allMenus = menuService.getAllMenus();
+
+		// 3. 카테고리 점수를 빠르게 조회하기 위한 Map 생성
+		Map<String, Integer> categoryScoreMap = new HashMap<>();
+		for (CategoryCountDTO categoryScore : categoryScores) {
+			categoryScoreMap.put(categoryScore.getCategoryName(), categoryScore.getCategoryCount().intValue());
+		}
+
+		// 4. 각 메뉴별 점수를 저장할 Map 생성
+		Map<MenuDTO, Integer> menuScoreMap = new HashMap<>();
+
+		// 5. 각 메뉴의 카테고리 점수를 합산하여 메뉴 점수 계산
+		for (MenuDTO menu : allMenus) {
+			int totalScore = 0;
+
+			if (menu.getCategories() != null) {
+				for (String category : menu.getCategories()) {
+					// 카테고리가 categoryScoreMap에 존재하면 해당 카테고리의 점수를 더함
+					if (categoryScoreMap.containsKey(category)) {
+						totalScore += categoryScoreMap.get(category);
+					}
+				}
+			}
+
+			// 메뉴의 총 점수를 Map에 저장
+			menuScoreMap.put(menu, totalScore);
+		}
+		log.debug("menuScoreMap: {}", menuScoreMap);
 		// 6. 점수에 따라 메뉴를 내림차순으로 정렬
 		List<MenuDTO> recommendedMenus = new ArrayList<>(menuScoreMap.keySet());
 		recommendedMenus.sort((m1, m2) -> menuScoreMap.get(m2) - menuScoreMap.get(m1));
 
 		return recommendedMenus;
 	}
-
 }

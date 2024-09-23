@@ -385,7 +385,3 @@ WHERE udh.user_id = 'aaa' -- 여기에서 'aaa'는 사용자의 user_id
 GROUP BY mcm.category_name
 ORDER BY category_count DESC
 LIMIT 10;
-
-select * from store;
-select * from menu;
-select * from user_dining_history;

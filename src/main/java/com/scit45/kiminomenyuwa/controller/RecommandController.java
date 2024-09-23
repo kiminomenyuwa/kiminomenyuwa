@@ -3,6 +3,7 @@ package com.scit45.kiminomenyuwa.controller;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -139,6 +140,17 @@ public class RecommandController {
 	 */
 	@GetMapping("recommandByMinigame")
 	public String recommendByMinigameScore(Model model, @AuthenticationPrincipal AuthenticatedUser user) {
+		// 사용자의 미니게임 기반 카테고리 점수
+		List<CategoryCountDTO> minigameCategoryScoreList = miniGameService.getCategoryScoresByUserId(user.getId());
+		model.addAttribute("minigameCategoryScoreList", minigameCategoryScoreList);
+
+		// 메뉴의 총 점수를 서비스에서 가져옴
+		Map<MenuDTO, Integer> menuScoreMap = miniGameService.getMenuScoreMap(user.getId());
+		// menuScoreMap을 정렬된 리스트로 변환
+		List<Map.Entry<MenuDTO, Integer>> sortedMenuList = new ArrayList<>(menuScoreMap.entrySet());
+		sortedMenuList.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue())); // 내림차순 정렬
+		model.addAttribute("sortedMenuList", sortedMenuList); // 정렬된 리스트 추가
+
 		// 사용자 ID를 기반으로 추천 메뉴 리스트 가져오기
 		List<MenuDTO> recommendedMenus = miniGameService.recommendMenusByCategoryScores(user.getId());
 		model.addAttribute("recommendedMenus", recommendedMenus);
