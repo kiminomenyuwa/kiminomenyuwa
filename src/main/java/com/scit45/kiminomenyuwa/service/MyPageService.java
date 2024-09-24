@@ -19,7 +19,6 @@ import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
 import com.scit45.kiminomenyuwa.domain.repository.StoreRepository;
 import com.scit45.kiminomenyuwa.domain.repository.UserDiningHistoryRepository;
 import com.scit45.kiminomenyuwa.domain.repository.UserRepository;
-import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -103,7 +102,8 @@ public class MyPageService {
 			.orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
 		// 예산 조회
-		Optional<BudgetEntity> existingBudgetOpt = budgetRepository.findByUserAndMonthAndYear(user, budgetDTO.getMonth(), budgetDTO.getYear());
+		Optional<BudgetEntity> existingBudgetOpt = budgetRepository.findByUserAndMonthAndYear(user,
+			budgetDTO.getMonth(), budgetDTO.getYear());
 
 		BudgetEntity budgetEntity;
 		if (existingBudgetOpt.isPresent()) {
