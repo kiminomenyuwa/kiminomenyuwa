@@ -1,20 +1,25 @@
 package com.scit45.kiminomenyuwa.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.scit45.kiminomenyuwa.domain.dto.BudgetDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.UserDiningHistoryDTO;
+import com.scit45.kiminomenyuwa.domain.entity.BudgetEntity;
 import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
 import com.scit45.kiminomenyuwa.domain.entity.StoreEntity;
 import com.scit45.kiminomenyuwa.domain.entity.UserDiningHistoryEntity;
 import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
+import com.scit45.kiminomenyuwa.domain.repository.BudgetRepository;
 import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
 import com.scit45.kiminomenyuwa.domain.repository.StoreRepository;
 import com.scit45.kiminomenyuwa.domain.repository.UserDiningHistoryRepository;
 import com.scit45.kiminomenyuwa.domain.repository.UserRepository;
+import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -31,6 +36,7 @@ public class MyPageService {
 	private final StoreRepository storeRepository;
 	private final UserDiningHistoryRepository userDiningHistoryRepository;
 	private final UserRepository userRepository;
+	private final BudgetRepository budgetRepository;
 
 	public List<MenuDTO> getMenusByStoreName(String storeName) {
 		// 상점 이름으로 상점 찾기
@@ -70,7 +76,7 @@ public class MyPageService {
 	public MenuDTO getMenuById(int menuId) {
 		MenuEntity menu = menuRepository.findById(menuId)
 			.orElseThrow(() -> new EntityNotFoundException("Menu not found with id: " + menuId));
-		return MenuDTO.builder().menuId(menu.getMenuId()).name(menu.getName()).build();
+		return MenuDTO.builder().menuId(menu.getMenuId()).name(menu.getName()).price(menu.getPrice()).build();
 	}
 
 	public List<UserDiningHistoryDTO> getDiningHistoryByUserId(String userId) {
@@ -83,5 +89,102 @@ public class MyPageService {
 				.diningDate(history.getDiningDate())
 				.build())
 			.collect(Collectors.toList());
+	}
+
+	/**
+	 * 예산을 저장하는 메서드입니다.
+	 *
+	 * @param budgetDTO 저장할 예산 정보
+	 */
+	public void saveBudget(BudgetDTO budgetDTO) {
+		log.debug("saveBudget 메서드: {}", budgetDTO);
+		// 사용자 정보 조회
+		UserEntity user = userRepository.findById(budgetDTO.getUserId())
+			.orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+		// 예산 조회
+		Optional<BudgetEntity> existingBudgetOpt = budgetRepository.findByUserAndMonthAndYear(user, budgetDTO.getMonth(), budgetDTO.getYear());
+
+		BudgetEntity budgetEntity;
+		if (existingBudgetOpt.isPresent()) {
+			// 기존 예산 업데이트
+			budgetEntity = existingBudgetOpt.get();
+			budgetEntity.setBudget(budgetDTO.getBudget());
+		} else {
+			// 새로운 예산 생성
+			budgetEntity = new BudgetEntity();
+			budgetEntity.setUser(user);
+			budgetEntity.setMonth(budgetDTO.getMonth());
+			budgetEntity.setYear(budgetDTO.getYear());
+			budgetEntity.setBudget(budgetDTO.getBudget());
+		}
+
+		// 예산 저장
+		budgetRepository.save(budgetEntity);
+	}
+
+	/**
+	 * 특정 연도와 월의 예산을 조회합니다.
+	 *
+	 * @param userId 사용자 ID
+	 * @param year 연도
+	 * @param month 월
+	 * @return 예산 정보
+	 */
+	public BudgetDTO getRemainingBudget(String userId, int year, int month) {
+		// 사용자 정보 조회
+		UserEntity userEntity = userRepository.findById(userId)
+			.orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+		// 해당 연도와 월의 예산 조회
+		Optional<BudgetEntity> budgetOpt = budgetRepository.findByUserAndMonthAndYear(userEntity, month, year);
+		if (budgetOpt.isPresent()) {
+			log.debug("조회된 예산: {}", budgetOpt);
+			BudgetEntity budgetEntity = budgetOpt.get();
+			return BudgetDTO.builder()
+				.budgetId(budgetEntity.getBudgetId())
+				.userId(userId)
+				.month(budgetEntity.getMonth())
+				.year(budgetEntity.getYear())
+				.budget(budgetEntity.getBudget())
+				.build();
+		} else {
+			// 예산이 설정되지 않은 경우, 0으로 반환
+			return BudgetDTO.builder()
+				.userId(userId)
+				.year(year)
+				.month(month)
+				.budget(0)
+				.build();
+		}
+	}
+
+	/**
+	 * 특정 연도와 월의 예산을 초기화하는 메서드입니다.
+	 *
+	 * @param userId 사용자 ID
+	 * @param year 연도
+	 * @param month 월
+	 */
+	@Transactional
+	public void initializeBudget(String userId, int year, int month) {
+		// 사용자 정보 조회
+		UserEntity userEntity = userRepository.findById(userId)
+			.orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+		// 기존 예산 삭제 (선택 사항)
+		Optional<BudgetEntity> existingBudgetOpt = budgetRepository.findByUserAndMonthAndYear(userEntity, month, year);
+		existingBudgetOpt.ifPresent(budgetRepository::delete);
+		log.debug("예산 정상 삭제: {}", existingBudgetOpt);
+
+		// 예산을 0으로 설정
+		BudgetEntity newBudget = new BudgetEntity();
+		newBudget.setUser(userEntity);
+		newBudget.setMonth(month);
+		newBudget.setYear(year);
+		newBudget.setBudget(0); // 예산 초기화
+		log.debug("예산 초기화: {}", newBudget);
+
+		budgetRepository.save(newBudget);
 	}
 }
