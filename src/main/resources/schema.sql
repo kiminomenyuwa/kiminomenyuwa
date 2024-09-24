@@ -19,6 +19,7 @@ DROP TABLE IF EXISTS food_category;
 DROP TABLE IF EXISTS category_type;
 DROP TABLE IF EXISTS friendships;
 DROP TABLE IF EXISTS store_photo;
+DROP TABLE IF EXISTS budget;
 
 -- 외래 키 제약을 다시 활성화
 SET FOREIGN_KEY_CHECKS = 1;
@@ -229,7 +230,6 @@ CREATE TABLE store_photo
     FOREIGN KEY (store_id) REFERENCES store (store_id) ON DELETE CASCADE
 );
 
-select * from user_dining_history;
 -- 사용자가 입력한 예산 테이블
 CREATE TABLE budget (
                         budget_id INT AUTO_INCREMENT PRIMARY KEY,  -- 예산의 고유 ID
@@ -240,6 +240,4 @@ CREATE TABLE budget (
                         FOREIGN KEY (user_id) REFERENCES user(user_id)  -- 사용자 테이블과의 외래키 관계
 );
 commit;
-select * from budget;
 TRUNCATE TABLE `budget`;
-select * from user;
