@@ -1,5 +1,6 @@
 package com.scit45.kiminomenyuwa.service;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -109,5 +110,89 @@ public class StoreSearchService {
 		}
 
 		return dto;
+	}
+
+	/**
+	 * 사용자가 찜한 상점 목록을 조회하고 DTO로 매핑하며, 정렬 옵션을 적용합니다.
+	 *
+	 * @param userId 로그인한 사용자의 ID
+	 * @param sortBy 정렬 기준 ("distance", "newest", "oldest")
+	 * @param latitude 현재 위치의 위도 (거리 기준 정렬 시 필요)
+	 * @param longitude 현재 위치의 경도 (거리 기준 정렬 시 필요)
+	 * @param radius 반경 (미터 단위, 거리 기준 정렬 시 필요)
+	 * @return 사용자가 찜한 상점 목록 DTO
+	 */
+	@Transactional(readOnly = true)
+	public List<StoreResponseDTO> getUserFavorites(String userId, String sortBy, double latitude, double longitude,
+		double radius) {
+		// 사용자 엔티티 조회
+		UserEntity user = userRepository.findById(userId)
+			.orElseThrow(() -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
+
+		// 찜한 상점 목록 조회
+		List<FavoriteEntity> favorites = favoriteRepository.findByUser(user);
+		List<StoreResponseDTO> favoritedStores
+			= favorites.stream()
+			.map(f -> {
+				StoreResponseDTO dto = mapToDTO(f.getStore());
+				dto.setFavorited(true);
+				dto.setFavoritedTime(f.getCreatedAt());
+				return dto;
+			})
+			.collect(Collectors.toList());
+
+		// 정렬 적용
+		switch (sortBy.toLowerCase()) {
+			case "distance":
+				favoritedStores = favoritedStores.stream()
+					.sorted(Comparator.comparingDouble(
+						store -> calculateDistance(latitude, longitude, store.getLatitude(),
+							store.getLongitude())))
+					.collect(Collectors.toList());
+				break;
+			case "newest":
+				favoritedStores = favoritedStores.stream()
+					.sorted(Comparator.comparing(StoreResponseDTO::getFavoritedTime).reversed())
+					.collect(Collectors.toList());
+				break;
+			case "oldest":
+				favoritedStores = favoritedStores.stream()
+					.sorted(Comparator.comparing(StoreResponseDTO::getFavoritedTime))
+					.collect(Collectors.toList());
+				break;
+			default:
+				// 기본 정렬 (예: 이름 순)
+				favoritedStores = favoritedStores.stream()
+					.sorted(Comparator.comparing(StoreResponseDTO::getName))
+					.collect(Collectors.toList());
+				break;
+		}
+
+		// DTO 매핑
+		return favoritedStores;
+	}
+
+	/**
+	 * 두 지점 간의 거리를 계산합니다. (Haversine formula)
+	 *
+	 * @param lat1 첫 번째 지점의 위도
+	 * @param lon1 첫 번째 지점의 경도
+	 * @param lat2 두 번째 지점의 위도
+	 * @param lon2 두 번째 지점의 경도
+	 * @return 거리 (미터 단위)
+	 */
+	private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+		final int EARTH_RADIUS = 6371000; // 미터 단위
+
+		double latDistance = Math.toRadians(lat2 - lat1);
+		double lonDistance = Math.toRadians(lon2 - lon1);
+
+		double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+			+ Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+			* Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+
+		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+		return EARTH_RADIUS * c;
 	}
 }
