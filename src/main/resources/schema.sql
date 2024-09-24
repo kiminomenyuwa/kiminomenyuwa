@@ -20,6 +20,7 @@ DROP TABLE IF EXISTS category_type;
 DROP TABLE IF EXISTS friendships;
 DROP TABLE IF EXISTS store_photo;
 DROP TABLE IF EXISTS favorite;
+DROP TABLE IF EXISTS budget;
 
 -- 외래 키 제약을 다시 활성화
 SET FOREIGN_KEY_CHECKS = 1;
@@ -209,17 +210,18 @@ CREATE TABLE purchased_menu
 );
 
 -- 친구관계도 테이블
-CREATE TABLE friendships (
-    friendship_id INT PRIMARY KEY AUTO_INCREMENT,  -- 고유한 친구 관계 ID
-    user_id VARCHAR(20) NOT NULL,                 -- 친구 요청을 보낸 사용자 ID
-    friend_id VARCHAR(20) NOT NULL,               -- 친구 요청을 받은 사용자 ID
-    status ENUM('PENDING', 'ACCEPTED', 'DECLINED', 'BLOCKED') DEFAULT 'PENDING', -- 친구 관계 상태
-    FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE,   -- user_id 외래 키
-    FOREIGN KEY (friend_id) REFERENCES user(user_id) ON DELETE CASCADE  -- friend_id 외래 키
+CREATE TABLE friendships
+(
+    friendship_id INT PRIMARY KEY AUTO_INCREMENT,                                        -- 고유한 친구 관계 ID
+    user_id       VARCHAR(20) NOT NULL,                                                  -- 친구 요청을 보낸 사용자 ID
+    friend_id     VARCHAR(20) NOT NULL,                                                  -- 친구 요청을 받은 사용자 ID
+    status        ENUM ('PENDING', 'ACCEPTED', 'DECLINED', 'BLOCKED') DEFAULT 'PENDING', -- 친구 관계 상태
+    FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE,                   -- user_id 외래 키
+    FOREIGN KEY (friend_id) REFERENCES user (user_id) ON DELETE CASCADE                  -- friend_id 외래 키
 );
 
 -- user_id와 friend_id 쌍의 중복을 방지하는 고유 인덱스 추가
-CREATE UNIQUE INDEX friendship_unique_index ON friendships(user_id, friend_id);
+CREATE UNIQUE INDEX friendship_unique_index ON friendships (user_id, friend_id);
 
 CREATE TABLE store_photo
 (
@@ -231,13 +233,14 @@ CREATE TABLE store_photo
 );
 
 -- 사용자가 입력한 예산 테이블
-CREATE TABLE budget (
-                        budget_id INT AUTO_INCREMENT PRIMARY KEY,  -- 예산의 고유 ID
-                        user_id VARCHAR(20),                        -- 사용자 ID
-                        month INT,                                  -- 예산의 해당 월 (1 ~ 12)
-                        year INT,                                   -- 예산의 해당 연도 (예: 2024)
-                        budget INT,                                 -- 해당 월의 예산 금액
-                        FOREIGN KEY (user_id) REFERENCES user(user_id)  -- 사용자 테이블과의 외래키 관계
+CREATE TABLE budget
+(
+    budget_id INT AUTO_INCREMENT PRIMARY KEY,       -- 예산의 고유 ID
+    user_id   VARCHAR(20),                          -- 사용자 ID
+    month     INT,                                  -- 예산의 해당 월 (1 ~ 12)
+    year      INT,                                  -- 예산의 해당 연도 (예: 2024)
+    budget    INT,                                  -- 해당 월의 예산 금액
+    FOREIGN KEY (user_id) REFERENCES user (user_id) -- 사용자 테이블과의 외래키 관계
 );
 
 CREATE TABLE `favorite`
