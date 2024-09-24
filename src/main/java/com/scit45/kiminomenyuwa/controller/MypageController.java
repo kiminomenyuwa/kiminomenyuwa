@@ -1,7 +1,10 @@
 package com.scit45.kiminomenyuwa.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.scit45.kiminomenyuwa.domain.dto.BudgetDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MiniGameMenuRatingDTO;
 import com.scit45.kiminomenyuwa.domain.dto.StoreResponseDTO;
@@ -116,7 +120,74 @@ public class MypageController {
 		// 사용자의 미니게임 내역
 		List<MiniGameMenuRatingDTO> miniGameRatingList = miniGameService.getUsersMiniGameRatingAll(user.getId());
 		model.addAttribute("miniGameRatingList", miniGameRatingList);
-		return "mypageView/minigameHistory";
+        return "mypageView/minigameHistory";
+    }
+
+	/**
+	 * 예산을 저장하는 API
+	 * @param budgetDTO 예산 정보
+	 * @return ResponseEntity
+	 */
+	@ResponseBody
+	@PostMapping("/api/budget")
+	public ResponseEntity<String> saveMonthlyBudget(@RequestBody BudgetDTO budgetDTO,
+		@AuthenticationPrincipal AuthenticatedUser user) {
+		try {
+			// 예산 DTO에 사용자 ID 설정
+			budgetDTO.setUserId(user.getUsername());
+
+			// 클라이언트가 전송한 year와 month를 사용 (덮어쓰지 않음)
+			// budgetDTO.setYear(today.getYear());
+			// budgetDTO.setMonth(today.getMonthValue());
+
+			// 예산 저장 서비스 호출
+			myPageService.saveBudget(budgetDTO);
+			return ResponseEntity.ok("예산이 저장되었습니다.");
+		} catch (Exception e) {
+			log.error("예산 저장 실패: ", e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("예산 저장에 실패했습니다.");
+		}
+	}
+
+	/**
+	 * 특정 연도와 월의 남은 예산을 가져오는 API
+	 * @param year 연도
+	 * @param month 월
+	 * @param user 인증된 사용자
+	 * @return 남은 예산
+	 */
+	@ResponseBody
+	@GetMapping("/api/budget/remaining")
+	public ResponseEntity<Map<String, Integer>> getRemainingBudget(@RequestParam Integer year,
+		@RequestParam Integer month, @AuthenticationPrincipal AuthenticatedUser user) {
+		String userId = user.getUsername();
+		BudgetDTO budgetDTO = myPageService.getRemainingBudget(userId, year, month);
+
+		Map<String, Integer> response = new HashMap<>();
+		response.put("budget", budgetDTO.getBudget());
+
+		return ResponseEntity.ok(response);
+	}
+
+	/**
+	 * 특정 연도와 월의 예산을 초기화하는 API
+	 * @param year 연도
+	 * @param month 월
+	 * @param user 인증된 사용자
+	 * @return ResponseEntity
+	 */
+	@ResponseBody
+	@PostMapping("/api/budget/initialize")
+	public ResponseEntity<String> initializeBudget(@RequestParam Integer year, @RequestParam Integer month,
+		@AuthenticationPrincipal AuthenticatedUser user) {
+		try {
+			String userId = user.getUsername();
+			myPageService.initializeBudget(userId, year, month);
+			return ResponseEntity.ok("예산이 초기화되었습니다.");
+		} catch (Exception e) {
+			log.error("예산 초기화 실패: ", e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("예산 초기화에 실패했습니다.");
+		}
 	}
 
 	/**
