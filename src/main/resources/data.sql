@@ -1,11 +1,12 @@
 use kiminomenyuwa;
 
+-- 샘플 회원 추가 (비밀번호는 id를 따라갑니다. ex) user_id가 bbb면 비밀번호도 bbb
 INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`, `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
 VALUES ('aaa', '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS', '김철수', '1998-10-15', 'male', 'testuser01@example.com', '서울시 강남구', '테헤란로 123', '06234', '010-1234-5678', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
 INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`, `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
-VALUES ('bbb', '$2a$10$kz9me5s4fHK50IGx/L.R2exLsxnfvH9msIulhpn.Em8ctaBPm3vAS', '최재원', '1995-02-11', 'male', 'testuser01@example.com', '서울 강남구 봉은사로13길 10', '26동 1011호', '06122', '070-9114-3194', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
+VALUES ('bbb', '$2a$10$kz9me5s4fHK50IGx/L.R2exLsxnfvH9msIulhpn.Em8ctaBPm3vAS', '최재원', '1995-02-11', 'male', 'japol@naver.com', '서울 강남구 봉은사로13길 10', '26동 1011호', '06122', '070-9114-3194', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
 INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`, `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
-VALUES ('ccc', '$2a$10$9J/wHkfdw2/4ix3ZX74ZkeFkM4BviPLbgONDNiaJDQ6dxFqUZVHFG', '카리나', '2002-06-15', 'female', 'testuser01@example.com', '서울 송파구 올림픽로4길 42', '6동 907호', '05571', '010-3333-3333', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
+VALUES ('ccc', '$2a$10$9J/wHkfdw2/4ix3ZX74ZkeFkM4BviPLbgONDNiaJDQ6dxFqUZVHFG', '카리나', '2002-06-15', 'female', 'karina@daum.net', '서울 송파구 올림픽로4길 42', '6동 907호', '05571', '010-3333-3333', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
 
 -- 카테고리 타입 테이블에 데이터 추가
 INSERT INTO category_type (type_name)
@@ -355,9 +356,6 @@ FROM menu m
      food_category fc ON mcm.category_name = fc.category_name
 GROUP BY m.menu_id, m.name, m.price, m.picture_url, s.name, u.name;
 
-SELECT *
-FROM USER;
-
 -- 아래 sql은 그때 그때 미니게임을 다시 해보고 싶을 때 기록해둔 점수 초기화 하기 위한 sql
 DROP TABLE IF EXISTS `mini_game_menu_rating`;
 -- 미니게임에서 메뉴에 대한 별점 기록 테이블: 미니게임을 통해 메뉴에 대한 별점을 저장
@@ -382,15 +380,6 @@ VALUES
 ('bbb', 'aaa', 'ACCEPTED');  -- 양방향 친구 관계를 저장
 
 -- 여기까지
-
--- 사용자가 먹은 내역의 메뉴들의 카테고리 중 TOP10 카운트
-SELECT mcm.category_name, COUNT(*) AS category_count
-FROM user_dining_history udh
-         JOIN menu_category_mapping mcm ON udh.menu_id = mcm.menu_id
-WHERE udh.user_id = 'aaa' -- 여기에서 'aaa'는 사용자의 user_id
-GROUP BY mcm.category_name
-ORDER BY category_count DESC
-LIMIT 10;
 
 -- 상점 테이블에 테스트 상점 추가
 INSERT INTO `store` (`user_id`,
