@@ -17,5 +17,5 @@ public class StoreResponseDTO {
 	Boolean enabled;
 	Double longitude;
 	Double latitude;
-	Boolean favorites = false;
+	Boolean favorited = false;
 }

@@ -1,17 +1,25 @@
 package com.scit45.kiminomenyuwa.service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.scit45.kiminomenyuwa.domain.dto.StoreResponseDTO;
+import com.scit45.kiminomenyuwa.domain.entity.FavoriteEntity;
 import com.scit45.kiminomenyuwa.domain.entity.StoreEntity;
+import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
+import com.scit45.kiminomenyuwa.domain.repository.FavoriteRepository;
 import com.scit45.kiminomenyuwa.domain.repository.StoreRepository;
+import com.scit45.kiminomenyuwa.domain.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +29,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class StoreSearchService {
+	private final UserRepository userRepository;
 	private final StoreRepository storeRepository;
+	private final FavoriteRepository favoriteRepository;
 
 	/**
 	 * 특정 위치와 반경을 기준으로 주변 상점을 검색하고 DTO로 매핑합니다.
@@ -44,8 +54,32 @@ public class StoreSearchService {
 		// StoreEntity 리스트 조회
 		List<StoreEntity> storeEntities = storeRepository.findStoresWithinRadius(pointWKT, radius);
 
-		// StoreEntity를 StoreResponseDTO로 매핑
-		return storeEntities.stream().map(this::mapToDTO).collect(Collectors.toList());
+		// 현재 인증된 사용자 가져오기
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String userId = null;
+		Set<Integer> favoritedStoreIds = new HashSet<>();
+
+		if (authentication != null && authentication.isAuthenticated() &&
+			!authentication.getPrincipal().equals("anonymousUser")) {
+			userId = authentication.getName();
+			// 사용자의 찜한 상점 목록 조회
+			UserEntity user = userRepository.findById(userId)
+				.orElse(null);
+			if (user != null) {
+				List<FavoriteEntity> favorites = favoriteRepository.findByUser(user);
+				favoritedStoreIds = favorites.stream()
+					.map(fav -> fav.getStore().getStoreId())
+					.collect(Collectors.toSet());
+			}
+		}
+
+		// StoreEntity를 StoreResponseDTO로 매핑하면서 favorited 필드 설정
+		final Set<Integer> finalFavoritedStoreIds = favoritedStoreIds;
+		return storeEntities.stream().map(store -> {
+			StoreResponseDTO dto = mapToDTO(store);
+			dto.setFavorited(finalFavoritedStoreIds.contains(store.getStoreId()));
+			return dto;
+		}).collect(Collectors.toList());
 	}
 
 	/**

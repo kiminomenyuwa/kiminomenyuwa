@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>상점 검색 결과</title>
     <meta charset="UTF-8">
@@ -43,12 +44,15 @@
                 <td th:text="${store.description}">설명</td>
                 <td th:text="${store.longitude} + ', ' + ${store.latitude}">126.9855771, 37.5728571</td>
                 <td>
-                    <!-- 찜 버튼 -->
-                    <button class="btn btn-outline-primary favorite-btn" data-store-id="${store.storeId}"
-                            th:data-favorited="${store.favorited}"
-                            type="button">
-                        <span th:text="${store.favorited} ? '찜 취소' : '찜 하기'">찜 하기</span>
-                    </button>
+                    <!-- 찜 버튼: 인증된 사용자에게만 표시 -->
+                    <th:block sec:authorize="isAuthenticated()">
+                        <button class="btn btn-outline-primary favorite-btn"
+                                th:data-favorited="${store.favorited}"
+                                th:data-store-id="${store.storeId}"
+                                type="button">
+                            <span th:text="${store.favorited} ? '찜 취소' : '찜 하기'">찜 하기</span>
+                        </button>
+                    </th:block>
                 </td>
                 <td>
                     <!-- 상세 보기 버튼 -->
