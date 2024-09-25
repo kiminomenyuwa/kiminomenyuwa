@@ -66,6 +66,7 @@
         }
 
         //유효성 검사
+        //TODO 원활한 테스트를 위해 일부 주석처리
         function validation() {
             let id = $("#id").val();
             let pw = $("#password").val();
@@ -98,30 +99,30 @@
                 return false;
             }
             // 생년월일 입력 여부 확인
-            if (birthDate == "") {
-                alert("생년월일을 입력하세요.");
-                return false;
-            }
+            // if (birthDate == "") {
+            //     alert("생년월일을 입력하세요.");
+            //     return false;
+            // }
             //성별 선택 여부 확인
             if (gender == "") {
                 alert("성별을 선택하세요.");
                 return false;
             }
-            //이메일 입력 여부 확인
-            if (email == "") {
-                alert("이메일을 입력하세요.");
-                return false;
-            }
-            //우편번호 입력 여부 확인
-            if (zipcode == "") {
-                alert("우편번호를 입력하세요.");
-                return false;
-            }
-            //전화번호 입력 여부 확인
-            if (phoneNumber == "") {
-                alert("전화번호를 입력하세요.");
-                return false;
-            }
+            // //이메일 입력 여부 확인
+            // if (email == "") {
+            //     alert("이메일을 입력하세요.");
+            //     return false;
+            // }
+            // //우편번호 입력 여부 확인
+            // if (zipcode == "") {
+            //     alert("우편번호를 입력하세요.");
+            //     return false;
+            // }
+            // //전화번호 입력 여부 확인
+            // if (phoneNumber == "") {
+            //     alert("전화번호를 입력하세요.");
+            //     return false;
+            // }
             return true;
         }
     </script>

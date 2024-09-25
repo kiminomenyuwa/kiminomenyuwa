@@ -13,9 +13,12 @@
 	$(document).ready(function() {
 		//도로명주소 새창 팝업
 		$('#searchAddressBtn').click(kakaoRoadAddress);
-
 		//회원가입 데이터 보냄
 		$('#submitForm').click(function() {
+			let formData = new FormData($('#storeForm')[0]);
+			// 추가 데이터 (enabled) 설정
+			formData.append('enabled', true); // 기본적으로 가게는 활성화됨
+
 			let registration = {
 				userId : $('#userId').val(),
 				name : $('#name').val(),
@@ -35,8 +38,9 @@
 			$.ajax({
 				url : 'storeRegistration',
 				type : 'post',
-				contentType : 'application/json', // JSON 데이터 형식 명시
-				data : JSON.stringify(registration), // 데이터를 직렬화
+				data: formData,
+				processData: false, // jQuery가 데이터를 처리하지 않도록 설정
+				contentType: false, // jQuery가 콘텐츠 타입을 설정하지 않도록 설정
 				success : function() {
 					alert('가게가 정상 등록되었습니다.');
 					// 성공하면 페이지 리다이렉트
@@ -106,6 +110,14 @@
 			<tr>
 				<td><label for="description">설명:</label></td>
 				<td><textarea id="description" name="description"></textarea></td>
+			</tr>
+			<!-- 사진 업로드 필드 추가 -->
+			<tr>
+				<td><label for="photos">사진 업로드:</label></td>
+				<td>
+					<input type="file" id="photos" name="photos" multiple accept="image/*">
+					<small>여러 장의 사진을 선택할 수 있습니다.</small>
+				</td>
 			</tr>
 			<tr>
 				<td colspan="2">

@@ -1,16 +1,29 @@
--- 기존 테이블이 있으면 삭제
-DROP TABLE IF EXISTS `mini_game_menu_rating`;
-DROP TABLE IF EXISTS `user_activity`;
-DROP TABLE IF EXISTS `user_dining_history`;
-DROP TABLE IF EXISTS `review_photo`;
-DROP TABLE IF EXISTS `review`;
-DROP TABLE IF EXISTS `menu_category_mapping`;
-DROP TABLE IF EXISTS `food_category`;
-DROP TABLE IF EXISTS `menu`;
-DROP TABLE IF EXISTS `store`;
-DROP TABLE IF EXISTS `profile_photo`;
-DROP TABLE IF EXISTS `user`;
-DROP TABLE IF EXISTS `category_type`;
+use kiminomenyuwa;
+-- 외래 키 제약을 비활성화
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- 테이블 삭제
+DROP TABLE IF EXISTS purchased_menu;
+DROP TABLE IF EXISTS receipt_verification;
+DROP TABLE IF EXISTS profile_photo;
+DROP TABLE IF EXISTS mini_game_menu_rating;
+DROP TABLE IF EXISTS user_activity;
+DROP TABLE IF EXISTS user_dining_history;
+DROP TABLE IF EXISTS review_photo;
+DROP TABLE IF EXISTS review;
+DROP TABLE IF EXISTS menu_category_mapping;
+DROP TABLE IF EXISTS menu;
+DROP TABLE IF EXISTS store;
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS food_category;
+DROP TABLE IF EXISTS category_type;
+DROP TABLE IF EXISTS friendships;
+DROP TABLE IF EXISTS store_photo;
+DROP TABLE IF EXISTS favorite;
+DROP TABLE IF EXISTS budget;
+
+-- 외래 키 제약을 다시 활성화
+SET FOREIGN_KEY_CHECKS = 1;
 
 
 -- 카테고리 타입 테이블: 카테고리의 종류를 정의 (예: 재료, 나라, 조리 방법)
@@ -66,6 +79,7 @@ CREATE TABLE `store`
     `category`          VARCHAR(30),                           -- 상점 카테고리
     `description`       TEXT,                                  -- 상점 설명
     `enabled`           TINYINT(1)         NOT NULL DEFAULT 1, -- 상점 활성화 여부
+    `location` POINT,
     PRIMARY KEY (`store_id`),                                  -- 기본 키 설정
     FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 );
@@ -97,12 +111,12 @@ CREATE TABLE `menu_category_mapping`
 -- 리뷰 테이블: 사용자 리뷰를 저장
 CREATE TABLE `review`
 (
-    `review_id`    INT AUTO_INCREMENT NOT NULL,          -- 리뷰의 고유 식별자
-    `store_id`     INT                NOT NULL,          -- 리뷰가 속한 상점의 ID
-    `user_id`      VARCHAR(20)        NOT NULL,          -- 리뷰 작성자의 사용자 ID (변경된 필드 이름)
-    `rating`       TINYINT            NOT NULL,          -- 리뷰 평점
-    `comment`      TEXT,                                 -- 리뷰 내용
-    `created_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- 리뷰 작성 시간
+    `review_id`     INT AUTO_INCREMENT NOT NULL,         -- 리뷰의 고유 식별자
+    `store_id`      INT                NOT NULL,         -- 리뷰가 속한 상점의 ID
+    `user_id`       VARCHAR(20)        NOT NULL,         -- 리뷰 작성자의 사용자 ID (변경된 필드 이름)
+    `rating`        TINYINT            NOT NULL,         -- 리뷰 평점
+    `comment`       TEXT,                                -- 리뷰 내용
+    `created_time`  TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 리뷰 작성 시간
     `modified_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 리뷰 작성 시간
     PRIMARY KEY (`review_id`),                           -- 기본 키 설정
     FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`),
@@ -167,4 +181,76 @@ CREATE TABLE `profile_photo`
     `saved_name`    VARCHAR(100)       NOT NULL,         -- UUID와 업로드 시간을 조합한 저장 파일명
     `upload_date`   TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 업로드 날짜
     PRIMARY KEY (`photo_id`)                             -- 기본 키 설정
+);
+
+-- 영수증 인증 정보를 저장하는 테이블
+CREATE TABLE receipt_verification
+(
+    receipt_verification_id BIGINT AUTO_INCREMENT PRIMARY KEY,  -- 고유 ID (자동 증가)
+    user_id                 VARCHAR(20) NOT NULL,               -- 사용자 ID (UserEntity와 외래키 관계)
+    store_id                INT         NOT NULL,               -- 가게 ID (StoreEntity와 외래키 관계)
+    review_id               INT,                                -- 리뷰 ID (ReviewEntity와 외래키 관계)
+    verification_date       DATETIME DEFAULT CURRENT_TIMESTAMP, -- 인증 날짜 (기본값: 현재 시간)
+
+    CONSTRAINT FK_user FOREIGN KEY (user_id) REFERENCES User (user_id),
+    CONSTRAINT FK_store FOREIGN KEY (store_id) REFERENCES Store (store_id),
+    CONSTRAINT FK_review FOREIGN KEY (review_id) REFERENCES review (review_id)
+);
+
+-- 사용자가 구매한 메뉴 정보를 저장하는 테이블
+CREATE TABLE purchased_menu
+(
+    purchased_menu_id       BIGINT AUTO_INCREMENT PRIMARY KEY, -- 고유 ID (자동 증가)
+    receipt_verification_id BIGINT NOT NULL,                   -- 영수증 인증 ID (ReceiptVerificationEntity와 외래키 관계)
+    menu_id                 INT    NOT NULL,                   -- 메뉴 ID (MenuEntity와 외래키 관계)
+    quantity                INT,                               -- 구매 수량
+
+    CONSTRAINT FK_receipt_verification FOREIGN KEY (receipt_verification_id) REFERENCES receipt_verification (receipt_verification_id),
+    CONSTRAINT FK_menu FOREIGN KEY (menu_id) REFERENCES `menu` (menu_id)
+);
+
+-- 친구관계도 테이블
+CREATE TABLE friendships
+(
+    friendship_id INT PRIMARY KEY AUTO_INCREMENT,                                        -- 고유한 친구 관계 ID
+    user_id       VARCHAR(20) NOT NULL,                                                  -- 친구 요청을 보낸 사용자 ID
+    friend_id     VARCHAR(20) NOT NULL,                                                  -- 친구 요청을 받은 사용자 ID
+    status        ENUM ('PENDING', 'ACCEPTED', 'DECLINED', 'BLOCKED') DEFAULT 'PENDING', -- 친구 관계 상태
+    FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE,                   -- user_id 외래 키
+    FOREIGN KEY (friend_id) REFERENCES user (user_id) ON DELETE CASCADE                  -- friend_id 외래 키
+);
+
+-- user_id와 friend_id 쌍의 중복을 방지하는 고유 인덱스 추가
+CREATE UNIQUE INDEX friendship_unique_index ON friendships (user_id, friend_id);
+
+CREATE TABLE store_photo
+(
+    photo_id  INT AUTO_INCREMENT PRIMARY KEY,
+    store_id  INT          NOT NULL,
+    photo_url VARCHAR(255) NOT NULL,
+    is_main BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (store_id) REFERENCES store (store_id) ON DELETE CASCADE
+);
+
+-- 사용자가 입력한 예산 테이블
+CREATE TABLE budget
+(
+    budget_id INT AUTO_INCREMENT PRIMARY KEY,       -- 예산의 고유 ID
+    user_id   VARCHAR(20),                          -- 사용자 ID
+    month     INT,                                  -- 예산의 해당 월 (1 ~ 12)
+    year      INT,                                  -- 예산의 해당 연도 (예: 2024)
+    budget    INT,                                  -- 해당 월의 예산 금액
+    FOREIGN KEY (user_id) REFERENCES user (user_id) -- 사용자 테이블과의 외래키 관계
+);
+
+CREATE TABLE `favorite`
+(
+    `favorite_id` INT AUTO_INCREMENT NOT NULL,         -- 찜 항목의 고유 식별자
+    `user_id`     VARCHAR(20)        NOT NULL,         -- 찜한 사용자의 ID
+    `store_id`    INT                NOT NULL,         -- 찜한 상점의 ID
+    `created_at`  TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- 찜한 날짜와 시간
+    PRIMARY KEY (`favorite_id`),                       -- 기본 키 설정
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE,
+    FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`) ON DELETE CASCADE,
+    UNIQUE KEY unique_favorite (user_id, store_id)
 );

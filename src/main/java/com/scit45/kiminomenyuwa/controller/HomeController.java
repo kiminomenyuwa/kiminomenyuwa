@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.security.core.Authentication;
+
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
+import com.scit45.kiminomenyuwa.service.FriendshipService;
+import com.scit45.kiminomenyuwa.domain.dto.ProfilePhotoDTO;
+import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
 import com.scit45.kiminomenyuwa.service.MiniGameService;
+import com.scit45.kiminomenyuwa.service.ProfilePhotoService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +37,8 @@ public class HomeController {
 
 	// MiniGameService를 주입받아 DB에서 메뉴 데이터를 조회합니다.
 	private final MiniGameService miniGameService;
+	private final FriendshipService friendshipService;
+	private final ProfilePhotoService profilePhotoService;
 
 	/**
 	 * 루트 경로("/")에 대한 GET 요청을 처리합니다.
@@ -39,16 +49,47 @@ public class HomeController {
 	 * @return 홈 페이지 템플릿의 이름 (home.html)
 	 */
 	@GetMapping("/")
-	public String home(Model model, HttpSession session) {
-		// MiniGameService를 통해 DB에서 메뉴의 총 개수를 가져와 모델에 추가
+	public String home(Model model, @AuthenticationPrincipal AuthenticatedUser user, HttpSession session) {
+    // 현재 로그인한 사용자의 ID 가져오기
+		String loggedInUserId = getLoggedInUserId();
+
+    // MiniGameService를 통해 DB에서 메뉴의 총 개수를 가져와 모델에 추가
 		long menuCount = miniGameService.countAllMenus();
 		model.addAttribute("menuCount", menuCount);
 
-		// 새로운 게임이 시작되었으므로, 세션에 저장된 선택된 메뉴 번호 리스트를 초기화
+		// 친구 수 모델에 추가
+		int acceptedFriendCount = friendshipService.getFriendCount(loggedInUserId);
+		model.addAttribute("friendCount", acceptedFriendCount);
+
+		// 새로운 게임이 시작되었으므로 세션 초기화
 		session.removeAttribute("selectedNumbers");
+
+		// 현재 로그인한 사용자의 프로필 사진 URL 추가
+		if (user != null) {
+			String userId = user.getUsername(); // 로그인한 사용자의 ID 가져오기
+			ProfilePhotoDTO profilePhotoDTO = profilePhotoService.getUserProfilePhotoInfo(userId);
+			if (profilePhotoDTO != null) {
+				// 프로필 사진의 URL을 모델에 추가
+				String profilePhotoUrl = "/files/" + profilePhotoDTO.getSavedName();
+				model.addAttribute("profilePhotoUrl", profilePhotoUrl);
+			} else {
+				// 프로필 사진이 없는 경우 기본 이미지를 사용하도록 설정
+				model.addAttribute("profilePhotoUrl", "/images/default-profile.png");
+			}
+		}
 
 		// 홈 페이지 템플릿으로 이동
 		return "home";
+	}
+
+	// 로그인한 사용자의 ID를 가져오는 메서드
+	private String getLoggedInUserId() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+			UserDetails userDetails = (UserDetails)authentication.getPrincipal();
+			return userDetails.getUsername();
+		}
+		return null;
 	}
 
 	/**
