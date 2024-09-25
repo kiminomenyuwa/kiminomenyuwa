@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style01.css}"/>
+    <title>미니게임을 통한 메뉴추천</title>
+</head>
+<body>
+<h2>미니게임 기반 카테고리 점수</h2>
+<table>
+    <tr>
+        <th>categoryName</th>
+        <th>categoryCount</th>
+    </tr>
+    <tr th:each="ct : ${minigameCategoryScoreList}">
+        <td th:text="${ct.categoryName}"></td>
+        <td th:text="${ct.categoryCount}"></td>
+    </tr>
+</table>
+
+<h2>사용자 기반 메뉴별 점수 (내림차순 정렬)</h2>
+<table>
+    <tr>
+        <th>메뉴 이름</th>
+        <th>점수</th>
+    </tr>
+    <!-- sortedMenuList의 데이터만 출력 -->
+    <tr th:each="entry : ${sortedMenuList}">
+        <td th:text="${entry.key.name}"></td>
+        <td th:text="${entry.value}"></td>
+    </tr>
+</table>
+
+<h2>미니게임을 통한 메뉴추천</h2>
+<table>
+    <tr>
+        <th>메뉴 ID</th>
+        <th>가게 ID</th>
+        <th>이름</th>
+        <th>가격</th>
+        <th>카테고리</th>
+        <th>이미지</th>
+    </tr>
+    <tr th:each="menu : ${recommendedMenus}">
+        <td th:text="${menu.menuId}"></td>
+        <td th:text="${menu.storeId}"></td>
+        <td th:text="${menu.name}"></td>
+        <td th:text="${menu.price}"></td>
+        <td th:text="${menu.categories}"></td>
+        <td><img th:src="@{/files/{savedName}(savedName=${menu.pictureUrl})}" width="100"></td>
+    </tr>
+</table>
+</body>
+</html>

@@ -6,15 +6,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 메뉴와 카테고리 간의 관계 데이터를 전송하기 위한 DTO 클래스입니다.
+ * StorePhotoEntity를 위한 Data Transfer Object (DTO) 클래스입니다.
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MenuCategoryMappingDTO {
-
-    Integer mappingId;
-    Integer menuId;
-    String categoryName;
+public class StorePhotoDTO {
+    Integer photoId;
+    Integer storeId;
+    String photoUrl;
+    Boolean isMain;
 }

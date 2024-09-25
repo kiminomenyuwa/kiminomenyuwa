@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style01.css}"/>
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <title>미니게임 내역</title>
+</head>
+<body>
+<p th:text="|${#authentication.principal.name}님의 미니게임 내역|"></p>
+<table>
+    <tr>
+        <th>ratingId</th>
+        <th>userId</th>
+        <th>menuId</th>
+        <th>rating</th>
+        <th>ratingDate</th>
+    </tr>
+    <tr th:each="mgrList : ${miniGameRatingList}">
+        <td th:text="${mgrList.ratingId}"></td>
+        <td th:text="${mgrList.userId}"></td>
+        <td th:text="${mgrList.menuId}"></td>
+        <td th:text="${mgrList.rating}"></td>
+        <td th:text="${mgrList.ratingDate}"></td>
+    </tr>
+</table>
+</body>
+</html>
