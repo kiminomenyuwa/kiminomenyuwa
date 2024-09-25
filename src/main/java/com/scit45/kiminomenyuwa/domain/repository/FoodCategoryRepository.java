@@ -12,5 +12,5 @@ import com.scit45.kiminomenyuwa.domain.entity.FoodCategoryEntity;
 public interface FoodCategoryRepository extends JpaRepository<FoodCategoryEntity, String> {
 	Optional<FoodCategoryEntity> findByCategoryName(String categoryName);
 
-	List<FoodCategoryEntity> findByTypeId(Integer typeId);
+	List<FoodCategoryEntity> findByCategoryType_TypeId(Integer typeId);
 }

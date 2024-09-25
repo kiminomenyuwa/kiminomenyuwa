@@ -6,16 +6,33 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.scit45.kiminomenyuwa.domain.dto.*;
-import com.scit45.kiminomenyuwa.domain.entity.*;
-import com.scit45.kiminomenyuwa.domain.repository.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.scit45.kiminomenyuwa.domain.dto.CategoryTypeDTO;
+import com.scit45.kiminomenyuwa.domain.dto.FoodCategoryDTO;
+import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
+import com.scit45.kiminomenyuwa.domain.dto.StorePhotoDTO;
+import com.scit45.kiminomenyuwa.domain.dto.StoreRegistrationDTO;
+import com.scit45.kiminomenyuwa.domain.entity.CategoryTypeEntity;
+import com.scit45.kiminomenyuwa.domain.entity.FoodCategoryEntity;
+import com.scit45.kiminomenyuwa.domain.entity.MenuCategoryMappingEntity;
+import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
+import com.scit45.kiminomenyuwa.domain.entity.StoreEntity;
+import com.scit45.kiminomenyuwa.domain.entity.StorePhotoEntity;
+import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
+import com.scit45.kiminomenyuwa.domain.repository.CategoryTypeRepository;
+import com.scit45.kiminomenyuwa.domain.repository.FoodCategoryRepository;
+import com.scit45.kiminomenyuwa.domain.repository.MenuCategoryMappingRepository;
+import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
+import com.scit45.kiminomenyuwa.domain.repository.StorePhotoRepository;
+import com.scit45.kiminomenyuwa.domain.repository.StoreRepository;
+import com.scit45.kiminomenyuwa.domain.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -177,9 +194,9 @@ public class StoreService {
     }
 
     public List<FoodCategoryDTO> getAllCategories(Integer typeId) {
-        List<FoodCategoryEntity> categories = foodCategoryRepository.findByTypeId(typeId);
+        List<FoodCategoryEntity> categories = foodCategoryRepository.findByCategoryType_TypeId(typeId);
         return categories.stream()
-                .map(category -> new FoodCategoryDTO(category.getCategoryName(), category.getTypeId()))
+            .map(category -> new FoodCategoryDTO(category.getCategoryName(), category.getCategoryType().getTypeId()))
                 .collect(Collectors.toList());
     }
 
