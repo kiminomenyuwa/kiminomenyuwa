@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap" rel="stylesheet">
+
+
+    <link href='/static/fullcalendar/packages/core/main.css' rel='stylesheet'/>
+
+    <link href='/static/fullcalendar/packages/daygrid/main.css' rel='stylesheet'/>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/static/css/CalendarCss/bootstrap.min.css">
+
+
+    <!-- Style -->
+    <link rel="stylesheet" href="/static/css/CalendarCss/style.css">
+    <link rel="stylesheet" href="/static/css/CalendarCss/header.css">
+
+
+    <title>Calendar #9</title>
+</head>
+
+<body>
+
+<!-- Header -->
+<header class="header">
+    <div class="header-left">
+        <button class="hamburger-menu" id="hamburger">&#9776;</button>
+        <img src="/images/logosample.png" alt="사이트 로고" class="logo">
+    </div>
+
+
+    <div class="header-center">
+        <div class="search-container">
+
+            <!-- 검색창 왼쪽 -->
+            <input type="text" class="search-bar" placeholder="검색어를 입력하세요">
+
+            <!-- 구분 바 -->
+            <span class="divider"></span>
+
+            <!-- 위치 텍스트 -->
+            <span class="location-text">New York, NY</span>
+        </div>
+    </div>
+    <div class="header-right">
+      <span class="user-avatar" id="profile-menu-btn">
+        <img src="/images/avatar.jpg" alt="User Avatar" class="profile-pic">
+      </span>
+
+        <!-- Dropdown Menu -->
+        <div class="dropdown-menu" id="dropdown-menu">
+            <ul>
+                <li><a href="#">마이페이지</a></li>
+                <li><a href="#">Find Friends</a></li>
+                <li><a href="#">Log Out</a></li>
+            </ul>
+        </div>
+    </div>
+
+</header>
+
+<!-- Hidden Sidebar Menu -->
+<div id="sideMenu" class="side-menu">
+    <div class="side-menu-content">
+        <h3>user name</h3>
+        <nav>
+            <ul>
+                <li><a href="#">link to MyPage</a></li>
+                <li><a href="#">link to business page</a></li>
+            </ul>
+        </nav>
+        <a href="#" class="logout">log out</a>
+    </div>
+</div>
+
+<!-- Overlay -->
+<div id="overlay" class="overlay"></div>
+<!-- Main Container -->
+<div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="profile">
+            <img src="./images/avatar.jpg" alt="Profile" class="profile-pic">
+            <h3>간을 좋아하는 범고래</h3>
+
+            <div class="profile-buttons">
+                <div class="button">
+                    <div class="icon">
+                        <img src="./images/magnif.png" alt="Edit Icon"> <!-- 원형 아이콘 -->
+                    </div>
+                    <span>프로필 편집</span> <!-- 텍스트 -->
+                </div>
+
+                <div class="button">
+                    <div class="icon">
+                        <img src="./images/magnif.png" alt="Add Friend Icon"> <!-- 원형 아이콘 -->
+                    </div>
+                    <span>친구 추가</span> <!-- 텍스트 -->
+                </div>
+            </div>
+        </div>
+
+
+        <nav>
+            <ul>
+                <li class="menu-item active">
+                    <img src="./images/magnif.png" alt="Profile Icon">
+                    <span>내 프로필</span>
+                </li>
+                <li class="menu-item">
+                    <img src="./images/magnif.png" alt="Reviews Icon">
+                    <span>내 리뷰</span>
+                </li>
+                <li class="menu-item">
+                    <img src="./images/magnif.png" alt="Drafts Icon">
+                    <span>친구</span>
+                </li>
+                <li class="menu-item">
+                    <img src="./images/magnif.png" alt="Collections Icon">
+                    <span>컬렉션</span>
+                </li>
+                <li class="menu-item">
+                    <img src="./images/magnif.png" alt="Events Icon">
+                    <span>내 이벤트</span>
+                </li>
+            </ul>
+        </nav>
+
+    </div>
+
+
+    <!-- Main Content -->
+    <main class="contents">
+        <section class="page-header">
+            <h2>캘린더</h2>
+        </section>
+        <!-- calendar content -->
+        <div class="content">
+            <div id='calendar'></div>
+        </div>
+    </main>
+</div>
+
+
+<script src="/static/js/jquery-3.7.1.min.js"></script>
+<script src="/static/js/CalendarJs/popper.min.js"></script>
+<script src="/static/js/CalendarJs/bootstrap.min.js"></script>
+
+<script src='/static/fullcalendar/packages/core/main.js'></script>
+<script src='/static/fullcalendar/packages/interaction/main.js'></script>
+<script src="/static/fullcalendar/packages/daygrid/main.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            plugins: ['interaction', 'dayGrid'],
+            defaultDate: '2020-02-12',
+            editable: true,
+            eventLimit: true, // allow "more" link when too many events
+            events: [
+                {
+                    title: 'All Day Event',
+                    start: '2020-02-01'
+                },
+                {
+                    title: 'Long Event',
+                    start: '2020-02-07',
+                    end: '2020-02-10'
+                },
+                {
+                    groupId: 999,
+                    title: 'Repeating Event',
+                    start: '2020-02-09T16:00:00'
+                },
+                {
+                    groupId: 999,
+                    title: 'Repeating Event',
+                    start: '2020-02-16T16:00:00'
+                },
+                {
+                    title: 'Conference',
+                    start: '2020-02-11',
+                    end: '2020-02-13'
+                },
+                {
+                    title: 'Meeting',
+                    start: '2020-02-12T10:30:00',
+                    end: '2020-02-12T12:30:00'
+                },
+                {
+                    title: 'Lunch',
+                    start: '2020-02-12T12:00:00'
+                },
+                {
+                    title: 'Meeting',
+                    start: '2020-02-12T14:30:00'
+                },
+                {
+                    title: 'Happy Hour',
+                    start: '2020-02-12T17:30:00'
+                },
+                {
+                    title: 'Dinner',
+                    start: '2020-02-12T20:00:00'
+                },
+                {
+                    title: 'Birthday Party',
+                    start: '2020-02-13T07:00:00'
+                },
+                {
+                    title: 'Click for Google',
+                    url: 'http://google.com/',
+                    start: '2020-02-28'
+                }
+            ]
+        });
+
+        calendar.render();
+    });
+
+</script>
+
+<script src="/static/js/CalendarJs/main.js"></script>
+</body>
+
+</html>
