@@ -1,0 +1,24 @@
+<!-- src/main/resources/templates/recommendations.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>추천 메뉴</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<h1>추천 메뉴</h1>
+<div th:if="${#lists.isEmpty(recommendedMenus)}">
+    <p>추천할 메뉴가 없습니다.</p>
+</div>
+<div th:unless="${#lists.isEmpty(recommendedMenus)}">
+    <ul>
+        <li th:each="menu : ${recommendedMenus}">
+            <h3 th:text="${menu.name}">메뉴 이름</h3>
+            <img alt="메뉴 사진" th:src="${menu.pictureUrl}" width="200"/>
+            <p>가격: <span th:text="${menu.price}">0</span>원</p>
+            <!--            <p>상점: <span th:text="${menu.store.name}">상점 이름</span></p>-->
+        </li>
+    </ul>
+</div>
+</body>
+</html>
