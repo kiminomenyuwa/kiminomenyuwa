@@ -67,11 +67,11 @@ public class ProfilePhotoService {
 	 */
 	private ProfilePhotoDTO convertEntityToDTO(ProfilePhotoEntity entity) {
 		return ProfilePhotoDTO.builder()
-                .userId(entity.getUserId())
-                .originalName(entity.getOriginalName())
-                .savedName(entity.getSavedName())
-				.uploadDate(entity.getUploadDate())
-                .build();
+			.userId(entity.getUserId())
+			.originalName(entity.getOriginalName())
+			.savedName(entity.getSavedName())
+			.uploadDate(entity.getUploadDate())
+			.build();
 	}
 
 	/**
