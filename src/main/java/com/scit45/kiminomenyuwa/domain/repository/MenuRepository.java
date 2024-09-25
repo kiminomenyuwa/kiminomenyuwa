@@ -43,4 +43,7 @@ public interface MenuRepository extends JpaRepository<MenuEntity, Integer> {
 	List<Object[]> findMenusWithCategoriesNotInMenuIds(@Param("eatenMenuIds") List<Long> eatenMenuIds);
 
 	Optional<MenuEntity> findByNameAndStoreId(String name, Integer storeId);
+
+	// 남은 예산보다 적은 가격의 메뉴들을 가져옴
+	List<MenuEntity> findByPriceLessThanEqual(int budget);
 }

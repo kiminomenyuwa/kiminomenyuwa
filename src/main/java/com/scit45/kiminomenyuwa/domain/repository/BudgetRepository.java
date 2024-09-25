@@ -11,4 +11,6 @@ import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
 @Repository
 public interface BudgetRepository extends JpaRepository<BudgetEntity, Integer> {
 	Optional<BudgetEntity> findByUserAndMonthAndYear(UserEntity user, Integer month, Integer year);
+
+	Optional<BudgetEntity> findByUserAndYearAndMonth(UserEntity user, int year, int month);
 }

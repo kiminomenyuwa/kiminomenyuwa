@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * 상점에서 제공하는 메뉴 항목을 저장하는 엔티티 클래스입니다.
@@ -49,5 +50,6 @@ public class MenuEntity {
 
 	// 메뉴와 카테고리 간의 관계를 나타내는 매핑
 	@OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ToString.Exclude // 무한 재귀 방지를 위해 제외
 	private List<MenuCategoryMappingEntity> categoryMappings;
 }

@@ -1,5 +1,6 @@
 package com.scit45.kiminomenyuwa.domain.repository;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.scit45.kiminomenyuwa.domain.dto.CategoryCountDTO;
 import com.scit45.kiminomenyuwa.domain.entity.UserDiningHistoryEntity;
+import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
 
 @Repository
 public interface UserDiningHistoryRepository extends JpaRepository<UserDiningHistoryEntity, Integer> {
@@ -28,4 +30,7 @@ public interface UserDiningHistoryRepository extends JpaRepository<UserDiningHis
 	List<CategoryCountDTO> findTopCategoriesByUserId(@Param("userId") String userId);
 
 	List<UserDiningHistoryEntity> findByUser_UserId(String userId);
+
+	// 먹은 음식의 날짜
+	List<UserDiningHistoryEntity> findByUserAndDiningDateBetween(UserEntity user, LocalDateTime start, LocalDateTime end);
 }
