@@ -22,7 +22,7 @@ public interface MenuRepository extends JpaRepository<MenuEntity, Integer> {
 	 * @param userId 평가를 조회할 사용자 ID
 	 * @return 해당 사용자가 평가하지 않은 메뉴들의 리스트
 	 */
-	@Query("SELECT m FROM MenuEntity m WHERE m.menuId NOT IN (SELECT r.menuId FROM MiniGameMenuRatingEntity r WHERE r.userId = :userId)")
+	@Query("SELECT m FROM MenuEntity m WHERE m.menuId NOT IN (SELECT r.menu.menuId FROM MiniGameMenuRatingEntity r WHERE r.user.userId = :userId)")
 	List<MenuEntity> findUnratedMenusByUserId(@Param("userId")
 	String userId);
 
@@ -46,4 +46,6 @@ public interface MenuRepository extends JpaRepository<MenuEntity, Integer> {
 
 	// 남은 예산보다 적은 가격의 메뉴들을 가져옴
 	List<MenuEntity> findByPriceLessThanEqual(int budget);
+
+	List<MenuEntity> findByEnabledTrue();
 }

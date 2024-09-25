@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Service
 @Transactional
-public class BudgetRecommandService {
+public class BudgetRecommendService {
 
 	private final MenuRepository menuRepository;
 	private final UserRepository userRepository;

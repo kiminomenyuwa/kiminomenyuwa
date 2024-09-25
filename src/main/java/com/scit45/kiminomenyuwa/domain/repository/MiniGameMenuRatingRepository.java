@@ -21,5 +21,7 @@ public interface MiniGameMenuRatingRepository extends JpaRepository<MiniGameMenu
 	 * @param userId 평가를 조회할 사용자 ID
 	 * @return 해당 사용자가 평가한 메뉴 평가 기록 리스트
 	 */
-	List<MiniGameMenuRatingEntity> findByUserId(String userId, Sort sort);
+	List<MiniGameMenuRatingEntity> findByUser_UserId(String userId, Sort sort);
+
+	List<MiniGameMenuRatingEntity> findByUser_UserId(String userId);
 }

@@ -9,13 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
-import com.scit45.kiminomenyuwa.service.BudgetRecommandService;
+import com.scit45.kiminomenyuwa.service.BudgetRecommendService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,13 +23,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 
-public class BudgetRecommandController {
+public class BudgetRecommendController {
 
-	private final BudgetRecommandService budgetRecommandService;
+	private final BudgetRecommendService budgetRecommendService;
 
-	@GetMapping("/recommand/recommandByBudget")
-	public String recommandByBudget() {
-		return "recommandView/recommandByBudget"; // ��플�� 경로 변경
+	@GetMapping("/recommend/recommendByBudget")
+	public String recommendByBudget() {
+		return "recommendView/recommendByBudget"; // ��플�� 경로 변경
 	}
 
 	/**
@@ -47,7 +46,7 @@ public class BudgetRecommandController {
 		@RequestParam Integer days) {
 		try {
 			log.debug("getRecommendedMenus 호출 - 예산: {}, 남은 일수: {}", budget, days);
-			List<MenuDTO> recommendedMenus = budgetRecommandService.getRecommendedMenus(budget, days);
+			List<MenuDTO> recommendedMenus = budgetRecommendService.getRecommendedMenus(budget, days);
 			return ResponseEntity.ok(recommendedMenus);
 		} catch (Exception e) {
 			log.error("추천 메뉴 조회 실패: ", e);
@@ -72,7 +71,7 @@ public class BudgetRecommandController {
 		try {
 			String userId = user.getUsername(); // 인증된 사용자 ID 가져오기
 			log.debug("getRemainingBudget 호출 - 사용자 ID: {}, 연도: {}, 월: {}", userId, year, month);
-			int remainingBudget = budgetRecommandService.calculateRemainingBudget(userId, year, month);
+			int remainingBudget = budgetRecommendService.calculateRemainingBudget(userId, year, month);
 
 			Map<String, Integer> response = new HashMap<>();
 			response.put("budget", remainingBudget);

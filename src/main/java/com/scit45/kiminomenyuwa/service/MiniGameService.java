@@ -3,12 +3,10 @@ package com.scit45.kiminomenyuwa.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
-import java.util.Set;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -18,9 +16,11 @@ import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MiniGameMenuRatingDTO;
 import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
 import com.scit45.kiminomenyuwa.domain.entity.MiniGameMenuRatingEntity;
+import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
 import com.scit45.kiminomenyuwa.domain.repository.MenuCategoryMappingRepository;
 import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
 import com.scit45.kiminomenyuwa.domain.repository.MiniGameMenuRatingRepository;
+import com.scit45.kiminomenyuwa.domain.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.Builder;
@@ -43,6 +43,7 @@ public class MiniGameService {
 	private final MiniGameMenuRatingRepository ratingRepository;
 	private final MenuCategoryMappingRepository menuCategoryMappingRepository;
 	private final MenuService menuService;
+	private final UserRepository userRepository;
 
 	/**
 	 * 모든 메뉴를 조회하고, DTO 리스트로 변환하여 반환하는 메서드.
@@ -142,10 +143,15 @@ public class MiniGameService {
 	public void rateMenu(String userId, int menuId, float rating) {
 		log.info("평가 저장 시작 - userId: {}, menuId: {}, rating: {}", userId, menuId, rating);
 
+		UserEntity user = userRepository.findById(userId)
+			.orElseThrow(() -> new IllegalArgumentException("user : " + userId + "가 존재하지 않습니다."));
+		MenuEntity menu = menuRepository.findById(menuId)
+			.orElseThrow(() -> new IllegalArgumentException("menu :" + menuId + "가 존재하지 않습니다"));
+
 		// 평가 정보를 담은 엔티티 객체 생성
 		MiniGameMenuRatingEntity ratingEntity = new MiniGameMenuRatingEntity();
-		ratingEntity.setUserId(userId);
-		ratingEntity.setMenuId(menuId);
+		ratingEntity.setUser(user);
+		ratingEntity.setMenu(menu);
 		ratingEntity.setRating(rating);
 		ratingEntity.setRatingDate(LocalDateTime.now());
 
@@ -193,13 +199,13 @@ public class MiniGameService {
 		// 별점 기준 내림차순으로 정렬
 		Sort sort = Sort.by(Sort.Direction.DESC, "rating");
 
-		List<MiniGameMenuRatingEntity> ratingEntities = ratingRepository.findByUserId(userId, sort);
+		List<MiniGameMenuRatingEntity> ratingEntities = ratingRepository.findByUser_UserId(userId, sort);
 		List<MiniGameMenuRatingDTO> miniGameRatingList = new ArrayList<>();
 		for (MiniGameMenuRatingEntity entity : ratingEntities) {
 			miniGameRatingList.add(MiniGameMenuRatingDTO.builder()
 				.ratingId(entity.getRatingId())
-				.userId(entity.getUserId())
-				.menuId(entity.getMenuId())
+				.userId(entity.getUser().getUserId())
+				.menuId(entity.getMenu().getMenuId())
 				.rating(entity.getRating())
 				.ratingDate(entity.getRatingDate())
 				.build());
@@ -215,7 +221,7 @@ public class MiniGameService {
 	public List<CategoryCountDTO> getCategoryScoresByUserId(String userId) {
 		// 1. 미니게임 내역을 불러옴
 		Sort sort = Sort.by(Sort.Direction.DESC, "rating");
-		List<MiniGameMenuRatingEntity> ratingEntities = ratingRepository.findByUserId(userId, sort);
+		List<MiniGameMenuRatingEntity> ratingEntities = ratingRepository.findByUser_UserId(userId, sort);
 
 		// 2. 카테고리별 점수 저장을 위한 Map 생성
 		Map<String, Long> categoryScores = new HashMap<>();
@@ -223,7 +229,7 @@ public class MiniGameService {
 		// 3. 각 미니게임 내역을 돌면서 카테고리 점수 계산
 		for (MiniGameMenuRatingEntity entity : ratingEntities) {
 			int rating = Math.round(entity.getRating()); // 평가 점수
-			Integer menuId = entity.getMenuId();
+			Integer menuId = entity.getMenu().getMenuId();
 
 			// 메뉴 ID로 해당 메뉴의 카테고리를 조회
 			List<String> categories = menuCategoryMappingRepository.findCategoriesByMenuId(menuId);
