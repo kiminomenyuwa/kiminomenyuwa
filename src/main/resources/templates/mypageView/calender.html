@@ -165,6 +165,7 @@
                         month: month
                     },
                     success: function (data) {
+                        console.log(this.url);
                         console.log('불러온 예산 데이터', data);
                         monthlyBudget = data.budget || 0; // 불러온 예산 설정
                         updateRemainingBudget(); // 남은 예산 업데이트
@@ -295,7 +296,7 @@
             });
 
             // 식사 기록을 저장하는 함수
-            function saveDiningHistory(selectedMenuName) {
+            function saveDiningHistory(selectedMenuName, selectedMenuPrice) {
                 const menuId = selectedMenuId;  // 실제 선택된 메뉴 ID로 대체
                 // 사용자가 선택한 날짜로 저장하도록 수정
                 const diningDate = `${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}-${selectedDate.toString().padStart(2, '0')}T00:00:00`;

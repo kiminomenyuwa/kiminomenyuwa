@@ -196,4 +196,24 @@ public class FriendshipController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("친구 요청 거절에 실패했습니다.");
 		}
 	}
+
+	/**
+	 * 친구 삭제 요청을 처리하는 메서드.
+	 *
+	 * @param friendId 삭제할 친구의 ID
+	 * @return 삭제 성공 시 HTTP 200 OK와 메시지 반환, 실패 시 HTTP 400 BAD REQUEST 반환
+	 */
+	@PostMapping("/deleteFriend")
+	public ResponseEntity<String> deleteFriend(@RequestParam("friendId")
+	String friendId) {
+		String loggedInUserId = getLoggedInUserId();
+		boolean success = friendshipService.deleteFriendship(loggedInUserId, friendId);
+
+		if (success) {
+			return ResponseEntity.ok("친구가 삭제되었습니다.");
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("친구 삭제에 실패했습니다.");
+		}
+	}
+
 }

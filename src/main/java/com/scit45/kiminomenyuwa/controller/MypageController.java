@@ -20,12 +20,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.scit45.kiminomenyuwa.domain.dto.BudgetDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MiniGameMenuRatingDTO;
+import com.scit45.kiminomenyuwa.domain.dto.StoreResponseDTO;
 import com.scit45.kiminomenyuwa.domain.dto.UserDiningHistoryDTO;
 import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
 import com.scit45.kiminomenyuwa.service.MenuService;
 import com.scit45.kiminomenyuwa.service.MiniGameService;
-import com.scit45.kiminomenyuwa.service.UserDiningHistoryService;
 import com.scit45.kiminomenyuwa.service.MyPageService;
+import com.scit45.kiminomenyuwa.service.StoreSearchService;
+import com.scit45.kiminomenyuwa.service.UserDiningHistoryService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,6 +41,7 @@ public class MypageController {
 	private final UserDiningHistoryService userDiningHistoryService;
 	private final MyPageService myPageService;
 	private final MiniGameService miniGameService;
+	private final StoreSearchService storeSearchService;
 
 	/**
 	 * 마이페이지 메인화면
@@ -102,7 +105,6 @@ public class MypageController {
 	@GetMapping("/api/dining-history")
 	public List<UserDiningHistoryDTO> getDiningHistory(@AuthenticationPrincipal AuthenticatedUser user) {
 		String userId = user.getUsername();
-		log.debug("유저 아이디 {}", userId);
 		return myPageService.getDiningHistoryByUserId(userId);
 	}
 
@@ -186,5 +188,34 @@ public class MypageController {
 			log.error("예산 초기화 실패: ", e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("예산 초기화에 실패했습니다.");
 		}
+	}
+
+	/**
+	 * 사용자의 찜 목록을 조회하고 정렬된 결과를 반환합니다.
+	 *
+	 * @param sortBy    정렬 기준 ("distance", "newest", "oldest")
+	 * @param model     모델 객체
+	 * @param latitude  현재 위치의 위도 (거리 기준 정렬 시 필요)
+	 * @param longitude 현재 위치의 경도 (거리 기준 정렬 시 필요)
+	 * @param radius    반경 (미터 단위, 거리 기준 정렬 시 필요)
+	 * @return 찜 목록 페이지 템플릿 이름
+	 */
+	@GetMapping("/favorites")
+	public String getUserFavorites(
+		@RequestParam(value = "sortBy", defaultValue = "distance") String sortBy,
+		@RequestParam(value = "latitude", required = false) Double latitude,
+		@RequestParam(value = "longitude", required = false) Double longitude,
+		@RequestParam(value = "radius", defaultValue = "1000") double radius,
+		@AuthenticationPrincipal AuthenticatedUser user,
+		Model model) {
+
+		String userId = user.getUsername(); // 현재 사용자 ID 가져오기
+		List<StoreResponseDTO> favorites = storeSearchService.getUserFavorites(userId, sortBy,
+			latitude != null ? latitude : 37.572,
+			longitude != null ? longitude : 126.985,
+			radius);
+		model.addAttribute("favorites", favorites);
+		model.addAttribute("sortBy", sortBy);
+		return "myPageView/favorites";
 	}
 }

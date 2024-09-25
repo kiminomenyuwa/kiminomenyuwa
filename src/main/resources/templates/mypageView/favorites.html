@@ -2,24 +2,44 @@
 <html xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>상점 검색 결과</title>
+    <title>찜 목록</title>
     <meta charset="UTF-8">
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- 네이버 지도 API 스크립트 로드 -->
     <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=t06c4jgb48&submodules=geocoder"
             type="text/javascript"></script>
+    <style>
+        /* 모달 내 지도의 크기 조정 */
+        #storeModal .modal-body {
+            position: relative;
+            padding: 0;
+        }
+
+        #storeModal #map {
+            width: 100%;
+            height: 400px;
+        }
+    </style>
 </head>
 <body>
 <div class="container mt-5">
-    <h1>검색 결과</h1>
+    <h1>내 찜 목록</h1>
     <div class="mb-3">
         <a class="btn btn-secondary" href="/stores/search">다시 검색</a>
     </div>
-    <div th:if="${#lists.isEmpty(stores)}">
-        <p>검색 결과가 없습니다.</p>
+    <div class="mb-3">
+        <label for="sortBy">정렬 기준:</label>
+        <select class="form-control" id="sortBy" style="width: 200px;">
+            <option th:selected="${sortBy == 'distance'}" value="distance">거리순</option>
+            <option th:selected="${sortBy == 'newest'}" value="newest">최신순</option>
+            <option th:selected="${sortBy == 'oldest'}" value="oldest">오래된순</option>
+        </select>
     </div>
-    <div th:unless="${#lists.isEmpty(stores)}">
+    <div th:if="${#lists.isEmpty(favorites)}">
+        <p>찜한 상점이 없습니다.</p>
+    </div>
+    <div th:unless="${#lists.isEmpty(favorites)}">
         <table class="table table-striped">
             <thead>
             <tr>
@@ -35,7 +55,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="store : ${stores}">
+            <tr th:each="store : ${favorites}">
                 <td th:text="${store.storeId}">1</td>
                 <td th:text="${store.name}">상점 이름</td>
                 <td th:text="${store.category}">카테고리</td>
@@ -45,14 +65,14 @@
                 <td th:text="${store.longitude} + ', ' + ${store.latitude}">126.9855771, 37.5728571</td>
                 <td>
                     <!-- 찜 버튼: 인증된 사용자에게만 표시 -->
-                    <th:block sec:authorize="isAuthenticated()">
+                    <sec:authorize access="!isAnonymous()">
                         <button class="btn btn-outline-primary favorite-btn"
                                 th:data-favorited="${store.favorited}"
                                 th:data-store-id="${store.storeId}"
                                 type="button">
                             <span th:text="${store.favorited} ? '찜 취소' : '찜 하기'">찜 하기</span>
                         </button>
-                    </th:block>
+                    </sec:authorize>
                 </td>
                 <td>
                     <!-- 상세 보기 버튼 -->
@@ -60,15 +80,15 @@
                             data-toggle="modal"
                             th:data-category="${store.category}"
                             th:data-certification="${store.certification}"
-                            th:data-name="${store.name}"
                             th:data-description="${store.description}"
-                            th:data-road-name-address="${store.roadNameAddress}"
                             th:data-detail-address="${store.detailAddress}"
-                            th:data-zipcode="${store.zipcode}"
                             th:data-latitude="${store.latitude}"
                             th:data-longitude="${store.longitude}"
+                            th:data-name="${store.name}"
                             th:data-phone-number="${store.phoneNumber}"
+                            th:data-road-name-address="${store.roadNameAddress}"
                             th:data-store-id="${store.storeId}"
+                            th:data-zipcode="${store.zipcode}"
                             type="button">
                         상세 보기
                     </button>
@@ -91,15 +111,17 @@
             </div>
             <div class="modal-body">
                 <!-- 상점 정보 -->
-                <h3 id="modalStoreName"></h3>
-                <p><strong>상점 ID:</strong> <span id="modalStoreId"></span></p>
-                <p><strong>카테고리:</strong> <span id="modalCategory"></span></p>
-                <p><strong>인증 정보:</strong> <span id="modalCertification"></span></p>
-                <p><strong>주소:</strong> <span id="modalAddress"></span></p>
-                <p><strong>전화번호:</strong> <span id="modalPhoneNumber"></span></p>
-                <p><strong>설명:</strong> <span id="modalDescription"></span></p>
+                <div class="p-3">
+                    <h3 id="modalStoreName"></h3>
+                    <p><strong>상점 ID:</strong> <span id="modalStoreId"></span></p>
+                    <p><strong>카테고리:</strong> <span id="modalCategory"></span></p>
+                    <p><strong>인증 정보:</strong> <span id="modalCertification"></span></p>
+                    <p><strong>주소:</strong> <span id="modalAddress"></span></p>
+                    <p><strong>전화번호:</strong> <span id="modalPhoneNumber"></span></p>
+                    <p><strong>설명:</strong> <span id="modalDescription"></span></p>
+                </div>
                 <!-- 네이버 지도 -->
-                <div id="map" style="width:100%; height:400px;"></div>
+                <div id="map"></div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" data-dismiss="modal" type="button">닫기</button>
@@ -112,10 +134,6 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-<!-- 네이버 지도 API -->
-<script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=YOUR_NCP_CLIENT_ID&submodules=geocoder"
-        type="text/javascript"></script>
 
 <!-- 커스텀 JavaScript -->
 <script type="text/javascript">
@@ -134,7 +152,7 @@
                     success: function (response) {
                         alert(response);
                         button.data('favorited', false);
-                        button.html('<span>찜 하기</span>');
+                        button.find('span').text('찜 하기');
                     },
                     error: function (xhr) {
                         alert(xhr.responseText);
@@ -148,7 +166,7 @@
                     success: function (response) {
                         alert(response);
                         button.data('favorited', true);
-                        button.html('<span>찜 취소</span>');
+                        button.find('span').text('찜 취소');
                     },
                     error: function (xhr) {
                         alert(xhr.responseText);
@@ -157,8 +175,18 @@
             }
         });
 
-        // 모달 창이 열릴 때 상점 정보 및 지도 초기화
-        $('#storeModal').on('show.bs.modal', function (event) {
+        // 정렬 기준 변경 시 페이지 새로고침
+        $('#sortBy').change(function () {
+            var sortBy = $(this).val();
+            window.location.href = '/mypage/favorites?sortBy=' + sortBy;
+        });
+
+        // 지도 인스턴스 관리
+        var map;
+        var marker;
+
+        // 모달 창이 완전히 열렸을 때 지도 초기화
+        $('#storeModal').on('shown.bs.modal', function (event) {
             var button = $(event.relatedTarget); // 버튼 요소
             var storeId = button.data('store-id');
             var name = button.data('name');
@@ -182,25 +210,40 @@
             modal.find('#modalPhoneNumber').text(phoneNumber);
             modal.find('#modalDescription').text(description);
 
-            // 네이버 지도 초기화
-            var map = new naver.maps.Map('map', {
-                center: new naver.maps.LatLng(latitude, longitude),
-                zoom: 16
-            });
+            // 네이버 지도 초기화 또는 재설정
+            if (!map) {
+                map = new naver.maps.Map('map', {
+                    center: new naver.maps.LatLng(latitude, longitude),
+                    zoom: 16
+                });
+            } else {
+                map.setCenter(new naver.maps.LatLng(latitude, longitude));
+                map.setZoom(16);
+            }
+
+            // 기존 마커 제거
+            if (marker) {
+                marker.setMap(null);
+            }
 
             // 마커 추가
-            var marker = new naver.maps.Marker({
+            marker = new naver.maps.Marker({
                 position: new naver.maps.LatLng(latitude, longitude),
                 map: map
             });
 
-            // 지도 중심 변경 (필요 시)
-            map.setCenter(new naver.maps.LatLng(latitude, longitude));
+            // 지도 리사이즈 (필요 시)
+            naver.maps.Event.trigger(map, 'resize');
         });
 
         // 모달이 닫힐 때 지도 초기화 (지도 리소스 해제)
         $('#storeModal').on('hidden.bs.modal', function () {
-            $('#map').empty();
+            // 지도 인스턴스를 삭제하거나 초기화하려면 추가 로직 필요
+            // 예: 마커 제거
+            if (marker) {
+                marker.setMap(null);
+                marker = null;
+            }
         });
     });
 </script>

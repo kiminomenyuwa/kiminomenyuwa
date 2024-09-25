@@ -8,95 +8,100 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+.home-link {
+	display: inline-block;
+	padding: 6px 12px;
+	background-color: #4caf50; /* 녹색 배경 */
+	color: white; /* 흰색 텍스트 */
+	text-decoration: none;
+	border-radius: 5px; /* 둥근 모서리 */
+}
+
+.home-link:hover {
+	background-color: #45a049; /* 마우스 오버 시 배경색 변화 */
+}
+</style>
 </head>
 <body>
 	<h1>친구 관리</h1>
+	<span><a th:href="@{/}" class="home-link">홈으로 가기</a></span>
 
 	<!-- 친구 추가 버튼 (모달 창을 열기 위한 버튼) -->
 	<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#friendSearchModal">친구 추가</button>
 
-	<!-- 탭 메뉴: 친구 목록, 받은 친구 요청, 보낸 친구 요청 -->
-	<ul class="nav nav-tabs" id="friendTab" role="tablist">
-		<li class="nav-item" role="presentation">
-			<button class="nav-link active" id="friends-list-tab" data-bs-toggle="tab" data-bs-target="#friends-list" type="button" role="tab"
-				aria-controls="friends-list" aria-selected="true">친구 목록</button>
-		</li>
-		<li class="nav-item" role="presentation">
-			<button class="nav-link" id="received-requests-tab" data-bs-toggle="tab" data-bs-target="#received-requests" type="button" role="tab"
-				aria-controls="received-requests" aria-selected="false">받은 친구 요청</button>
-		</li>
-		<li class="nav-item" role="presentation">
-			<button class="nav-link" id="sent-requests-tab" data-bs-toggle="tab" data-bs-target="#sent-requests" type="button" role="tab"
-				aria-controls="sent-requests" aria-selected="false">보낸 친구 요청</button>
-		</li>
-	</ul>
+	<!-- 친구 목록, 받은 친구 요청, 보낸 친구 요청을 한 화면에 배치 -->
+	<div class="container">
+		<div class="row">
+			<!-- 친구 목록 섹션 -->
+			<div class="col-md-4">
+				<h3>친구 목록</h3>
+				<table class="table mt-3">
+					<thead>
+						<tr>
+							<th>친구 ID</th>
+							<th>상태</th>
+							<th>작업</th>
+						</tr>
+					</thead>
+					<tbody>
+						<!-- acceptedFriendIds 변수를 통해 수락된 친구 목록을 표시 -->
+						<tr th:each="friend : ${acceptedFriendIds}">
+							<td th:text="${friend}">친구 ID</td>
+							<td>친구</td>
+							<td>
+								<!-- 삭제 버튼 -->
+								<button type="button" class="btn btn-danger delete-friend-btn" th:data-friend-id="${friend}">삭제</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 
-	<!-- 탭 내용 -->
-	<div class="tab-content" id="friendTabContent">
-		<!-- 친구 목록 탭 내용 -->
-		<div class="tab-pane fade" id="friends-list" role="tabpanel" aria-labelledby="friends-list-tab">
-			<table class="table mt-3">
-				<thead>
-					<tr>
-						<th>친구 ID</th>
-						<th>상태</th>
-					</tr>
-				</thead>
-				<tbody>
-					<!-- acceptedFriendIds 변수를 통해 수락된 친구 목록을 표시 -->
-					<tr th:each="friendId : ${acceptedFriendIds}">
-						<td th:text="${friendId}">친구 ID</td>
-						<td>친구</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+			<!-- 받은 친구 요청 섹션 -->
+			<div class="col-md-4">
+				<h3>받은 친구 요청</h3>
+				<table class="table mt-3">
+					<thead>
+						<tr>
+							<th>요청한 사용자 ID</th>
+							<th>작업</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="request : ${receivedRequests}">
+							<td th:text="${request.userId}">요청한 사용자 ID</td>
+							<td>
+								<button type="button" class="btn btn-success accept-btn" th:data-request-id="${request.friendshipId}">수락</button>
+								<button type="button" class="btn btn-danger decline-btn" th:data-request-id="${request.friendshipId}">거절</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 
-		<!-- 받은 친구 요청 탭 내용 -->
-		<div class="tab-pane fade" id="received-requests" role="tabpanel" aria-labelledby="received-requests-tab">
-			<table class="table mt-3">
-				<thead>
-					<tr>
-						<th>요청한 사용자 ID</th>
-						<th>작업</th>
-					</tr>
-				</thead>
-				<tbody>
-					<!-- receivedRequests 변수를 통해 받은 친구 요청 목록을 표시 -->
-					<tr th:each="request : ${receivedRequests}">
-						<td th:text="${request.userId}">요청한 사용자 ID</td>
-						<td>
-							<!-- 친구 요청 수락 및 거절 버튼 -->
-							<button type="button" class="btn btn-success accept-btn" th:data-request-id="${request.friendshipId}">수락</button>
-							<button type="button" class="btn btn-danger decline-btn" th:data-request-id="${request.friendshipId}">거절</button>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-
-		<!-- 보낸 친구 요청 탭 내용 -->
-		<div class="tab-pane fade" id="sent-requests" role="tabpanel" aria-labelledby="sent-requests-tab">
-			<table class="table mt-3">
-				<thead>
-					<tr>
-						<th>친구 ID</th>
-						<th>상태</th>
-						<th>작업</th>
-					</tr>
-				</thead>
-				<tbody>
-					<!-- sentRequests 변수를 통해 보낸 친구 요청 목록을 표시 -->
-					<tr th:each="friend : ${sentRequests}">
-						<td th:text="${friend.friendId}">친구 ID</td>
-						<td>대기 중</td>
-						<td>
-							<!-- 보낸 친구 요청 취소 버튼 -->
-							<button type="button" class="btn btn-danger cancel-sent-btn" th:data-friend-id="${friend.friendId}">요청 취소</button>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+			<!-- 보낸 친구 요청 섹션 -->
+			<div class="col-md-4">
+				<h3>보낸 친구 요청</h3>
+				<table class="table mt-3">
+					<thead>
+						<tr>
+							<th>친구 ID</th>
+							<th>상태</th>
+							<th>작업</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="friend : ${sentRequests}">
+							<td th:text="${friend.friendId}">친구 ID</td>
+							<td>대기 중</td>
+							<td>
+								<button type="button" class="btn btn-danger cancel-sent-btn" th:data-friend-id="${friend.friendId}">요청 취소</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 
@@ -109,110 +114,125 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					<!-- 친구 아이디 검색 입력 필드 -->
 					<input type="text" id="searchFriendId" class="form-control" placeholder="아이디를 입력하세요" />
-					<!-- 검색 버튼 -->
 					<button type="button" class="btn btn-secondary mt-2" id="searchFriendButton">검색</button>
 					<div id="searchResult" class="mt-3"></div>
-					<!-- 검색 결과 표시 -->
 				</div>
 			</div>
 		</div>
 	</div>
 
 	<script>
-    $(document).ready(function () {
-      // 친구 요청 수락 버튼 클릭 이벤트 처리
-      $(".accept-btn").on("click", function () {
-        const requestId = $(this).data("request-id"); // 요청 ID 가져오기
+      $(document).ready(function () {
+        // 친구 삭제 버튼 클릭 이벤트 처리
+        $(".delete-friend-btn").on("click", function () {
+          const friendId = $(this).data("friend-id"); // 친구 ID 가져오기
 
-        // 수락 확인 메시지 및 수락 요청 처리
-        if (confirm("친구 요청을 수락하시겠습니까?")) {
-          $.post(
-            "/friendships/acceptRequest",
-            { friendshipId: requestId },
-            function (response) {
-              alert("친구 요청을 수락했습니다.");
-              window.location.reload(); // 수락 후 페이지 새로고침
-            }
-          ).fail(function () {
-            alert("수락 중 오류가 발생했습니다.");
-          });
-        }
-      });
+          if (confirm("이 친구를 삭제하시겠습니까?")) {
+            $.post(
+              "/friendships/deleteFriend", // 친구 삭제 API 엔드포인트
+              { friendId: friendId }, // 삭제할 친구 ID 전달
+              function (response) {
+                alert("친구가 삭제되었습니다.");
+                window.location.reload(); // 삭제 후 페이지 새로고침
+              }
+            ).fail(function () {
+              alert("친구 삭제 중 오류가 발생했습니다.");
+            });
+          }
+        });
 
-      // 친구 요청 거절 버튼 클릭 이벤트 처리
-      $(".decline-btn").on("click", function () {
-        const requestId = $(this).data("request-id"); // 요청 ID 가져오기
+        // 친구 요청 수락 버튼 클릭 이벤트 처리
+        $(".accept-btn").on("click", function () {
+          const requestId = $(this).data("request-id"); // 요청 ID 가져오기
 
-        // 거절 확인 메시지 및 거절 요청 처리
-        if (confirm("친구 요청을 거절하시겠습니까?")) {
-          $.post(
-            "/friendships/declineRequest",
-            { friendshipId: requestId },
-            function (response) {
-              alert("친구 요청을 거절했습니다.");
-              window.location.reload(); // 거절 후 페이지 새로고침
-            }
-          ).fail(function () {
-            alert("거절 중 오류가 발생했습니다.");
-          });
-        }
-      });
+          // 수락 확인 메시지 및 수락 요청 처리
+          if (confirm("친구 요청을 수락하시겠습니까?")) {
+            $.post(
+              "/friendships/acceptRequest",
+              { friendshipId: requestId },
+              function (response) {
+                alert("친구 요청을 수락했습니다.");
+                window.location.reload(); // 수락 후 페이지 새로고침
+              }
+            ).fail(function () {
+              alert("수락 중 오류가 발생했습니다.");
+            });
+          }
+        });
 
-      // 보낸 친구 요청 취소 버튼 클릭 이벤트 처리
-      $(".cancel-sent-btn").on("click", function () {
-        const friendId = $(this).data("friend-id"); // 친구 ID 가져오기
+        // 친구 요청 거절 버튼 클릭 이벤트 처리
+        $(".decline-btn").on("click", function () {
+          const requestId = $(this).data("request-id"); // 요청 ID 가져오기
 
-        // 취소 확인 메시지 및 취소 요청 처리
-        if (confirm("친구 요청을 취소하시겠습니까?")) {
-          $.post(
-            "/friendships/cancelRequest",
-            { friendId: friendId },
-            function (response) {
-              alert("친구 요청을 취소했습니다.");
-              window.location.reload(); // 취소 후 페이지 새로고침
-            }
-          ).fail(function () {
-            alert("취소 중 오류가 발생했습니다.");
-          });
-        }
-      });
+          // 거절 확인 메시지 및 거절 요청 처리
+          if (confirm("친구 요청을 거절하시겠습니까?")) {
+            $.post(
+              "/friendships/declineRequest",
+              { friendshipId: requestId },
+              function (response) {
+                alert("친구 요청을 거절했습니다.");
+                window.location.reload(); // 거절 후 페이지 새로고침
+              }
+            ).fail(function () {
+              alert("거절 중 오류가 발생했습니다.");
+            });
+          }
+        });
 
-      // 친구 검색 버튼 클릭 이벤트 처리 및 엔터키 검색 처리 추가
-      $("#searchFriendButton").on("click", performSearch); // 버튼 클릭 시 검색 실행
-      $("#searchFriendId").on("keyup", function (event) {
-        if (event.key === "Enter") {
-          performSearch(); // 엔터키가 눌리면 검색 실행
-        }
-      });
+        // 보낸 친구 요청 취소 버튼 클릭 이벤트 처리
+        $(".cancel-sent-btn").on("click", function () {
+          const friendId = $(this).data("friend-id"); // 친구 ID 가져오기
 
-      // 검색 요청 처리 함수
-      function performSearch() {
-        const friendId = $("#searchFriendId").val(); // 입력된 친구 ID 값 가져오기
-        if (friendId.length > 0) {
-          // ID가 입력된 경우 Ajax로 친구 존재 여부 확인
-          $.get(
-            "/friendships/checkUser",
-            { friendId: friendId },
-            function (data) {
-              if (data.exists) {
-                let name = data.name ? data.name : "본인입니다"; // 이름이 없으면 "본인입니다"로 처리
-                let buttonHtml = "";
+          // 취소 확인 메시지 및 취소 요청 처리
+          if (confirm("친구 요청을 취소하시겠습니까?")) {
+            $.post(
+              "/friendships/cancelRequest",
+              { friendId: friendId },
+              function (response) {
+                alert("친구 요청을 취소했습니다.");
+                window.location.reload(); // 취소 후 페이지 새로고침
+              }
+            ).fail(function () {
+              alert("취소 중 오류가 발생했습니다.");
+            });
+          }
+        });
 
-                // 검색된 사용자 상태에 따라 버튼 표시
-                if (data.isSelf) {
-                  buttonHtml = `<button type="button" class="btn btn-secondary" disabled>본인입니다</button>`;
-                } else if (data.isFriend) {
-                  buttonHtml = `<button type="button" class="btn btn-secondary" disabled>이미 친구입니다</button>`;
-                } else if (data.hasPendingRequest) {
-                  buttonHtml = `<button type="button" class="btn btn-secondary" disabled>친구 요청을 보냈습니다</button>`;
-                } else {
-                  buttonHtml = `<button type="button" class="btn btn-success" id="sendFriendRequestButton">친구 요청 보내기</button>`;
-                }
+        // 친구 검색 버튼 클릭 이벤트 처리 및 엔터키 검색 처리 추가
+        $("#searchFriendButton").on("click", performSearch); // 버튼 클릭 시 검색 실행
+        $("#searchFriendId").on("keyup", function (event) {
+          if (event.key === "Enter") {
+            performSearch(); // 엔터키가 눌리면 검색 실행
+          }
+        });
 
-                // 검색 결과 출력
-                $("#searchResult").html(`
+        // 검색 요청 처리 함수
+        function performSearch() {
+          const friendId = $("#searchFriendId").val(); // 입력된 친구 ID 값 가져오기
+          if (friendId.length > 0) {
+            // ID가 입력된 경우 Ajax로 친구 존재 여부 확인
+            $.get(
+              "/friendships/checkUser",
+              { friendId: friendId },
+              function (data) {
+                if (data.exists) {
+                  let name = data.name ? data.name : "본인입니다"; // 이름이 없으면 "본인입니다"로 처리
+                  let buttonHtml = "";
+
+                  // 검색된 사용자 상태에 따라 버튼 표시
+                  if (data.isSelf) {
+                    buttonHtml = `<button type="button" class="btn btn-secondary" disabled>본인입니다</button>`;
+                  } else if (data.isFriend) {
+                    buttonHtml = `<button type="button" class="btn btn-secondary" disabled>이미 친구입니다</button>`;
+                  } else if (data.hasPendingRequest) {
+                    buttonHtml = `<button type="button" class="btn btn-secondary" disabled>친구 요청을 보냈습니다</button>`;
+                  } else {
+                    buttonHtml = `<button type="button" class="btn btn-success" id="sendFriendRequestButton">친구 요청 보내기</button>`;
+                  }
+
+                  // 검색 결과 출력
+                  $("#searchResult").html(`
                   <div class="d-flex align-items-center border p-3">
                     <div class="me-3">
                       <img src="/images/${data.profileImg}" class="rounded-circle" alt="프로필 이미지" width="50" height="50">
@@ -227,35 +247,41 @@
                   </div>
                 `);
 
-                // 친구 요청 버튼 클릭 시 처리
-                if (!data.isSelf && !data.isFriend && !data.hasPendingRequest) {
-                  $("#sendFriendRequestButton").on("click", function () {
-                    $.post(
-                      "/friendships/sendRequest",
-                      { friendId: friendId },
-                      function (response) {
-                        alert("친구 요청을 보냈습니다!");
-                        $("#friendSearchModal").modal("hide"); // 모달 창 닫기
-                        window.location.reload(); // 페이지 새로고침
-                      }
-                    ).fail(function () {
-                      alert("친구 요청 중 오류가 발생했습니다.");
+                  // 친구 요청 버튼 클릭 시 처리
+                  if (
+                    !data.isSelf &&
+                    !data.isFriend &&
+                    !data.hasPendingRequest
+                  ) {
+                    $("#sendFriendRequestButton").on("click", function () {
+                      $.post(
+                        "/friendships/sendRequest",
+                        { friendId: friendId },
+                        function (response) {
+                          alert("친구 요청을 보냈습니다!");
+                          $("#friendSearchModal").modal("hide"); // 모달 창 닫기
+                          window.location.reload(); // 페이지 새로고침
+                        }
+                      ).fail(function () {
+                        alert("친구 요청 중 오류가 발생했습니다.");
+                      });
                     });
-                  });
+                  }
+                } else {
+                  // 친구가 존재하지 않을 경우 메시지 출력
+                  $("#searchResult").html(
+                    `<p>${friendId}는 존재하지 않는 아이디입니다.</p>`
+                  );
                 }
-              } else {
-                // 친구가 존재하지 않을 경우 메시지 출력
-                $("#searchResult").html(`<p>${friendId}는 존재하지 않는 아이디입니다.</p>`);
               }
-            }
-          ).fail(function () {
-            $("#searchResult").html("<p>오류가 발생했습니다.</p>");
-          });
-        } else {
-          $("#searchResult").html("<p>아이디를 입력하세요.</p>"); // ID가 입력되지 않았을 경우
+            ).fail(function () {
+              $("#searchResult").html("<p>오류가 발생했습니다.</p>");
+            });
+          } else {
+            $("#searchResult").html("<p>아이디를 입력하세요.</p>"); // ID가 입력되지 않았을 경우
+          }
         }
-      }
-    });
-  </script>
+      });
+    </script>
 </body>
 </html>

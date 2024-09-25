@@ -48,4 +48,16 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
 	List<StoreEntity> findStoresWithinRadius(
 		@Param("point") String pointWKT,
 		@Param("radius") double radius);
+
+	/**
+	 * 상점 이름과 카테고리로 상점을 검색합니다.
+	 *
+	 * @param name     상점 이름 (옵션)
+	 * @param category 상점 카테고리 (옵션)
+	 * @return 검색된 상점 목록
+	 */
+	@Query("SELECT s FROM StoreEntity s " +
+		"WHERE (:name IS NULL OR LOWER(s.name) LIKE LOWER(CONCAT('%', :name, '%'))) " +
+		"AND (:category IS NULL OR s.category = :category)")
+	List<StoreEntity> findStoresByNameAndCategory(@Param("name") String name, @Param("category") String category);
 }
