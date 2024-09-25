@@ -1,5 +1,6 @@
 package com.scit45.kiminomenyuwa.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -79,7 +80,7 @@ public class RecommandService {
 	}
 
 	/**
-	 * 미니게임 점수 메뉴 추천 최종 메서드
+	 * 미니게임 점수 메뉴 추천 메서드
 	 * @param userId 로그인 중인 userId
 	 * @return 미니게임 점수 기반 추천된 메뉴(미니게임 점수 기반 내림차순 정렬)
 	 */
@@ -122,5 +123,7 @@ public class RecommandService {
 
 		return recommendedMenus;
 	}
+
+
 
 }
