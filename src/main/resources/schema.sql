@@ -254,3 +254,7 @@ CREATE TABLE `favorite`
     FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`) ON DELETE CASCADE,
     UNIQUE KEY unique_favorite (user_id, store_id)
 );
+
+select * from user_dining_history;
+select * from menu;
+select * from budget;
