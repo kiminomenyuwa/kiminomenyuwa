@@ -29,6 +29,10 @@ public class RecommendationController {
 
 	@GetMapping
 	public String getRecommendations(Model model, @AuthenticationPrincipal AuthenticatedUser authenticatedUser) {
+		if (authenticatedUser == null) {
+			return "redirect:/";
+		}
+
 		String userId = authenticatedUser.getUsername(); // 스프링 시큐리티 사용 시 유저 ID 가져오는 방법
 		int limit = 10;
 
