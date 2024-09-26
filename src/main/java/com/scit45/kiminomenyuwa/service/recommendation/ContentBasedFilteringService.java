@@ -70,12 +70,12 @@ public class ContentBasedFilteringService {
 	}
 
 	/**
-	 * 사용자의 선호 카테고리를 분석합니다.
+	 * 사용자의 선호 카테고리를 분석하여 반환합니다.
 	 *
 	 * @param userId 유저 ID
 	 * @return 선호 카테고리 Set
 	 */
-	private Set<String> getUserPreferredCategories(String userId) {
+	public Set<String> getUserPreferredCategories(String userId) {
 		List<UserDiningHistoryEntity> diningHistories = userDiningHistoryRepository.findByUser_UserId(userId);
 
 		Map<String, Integer> categoryCount = new HashMap<>();
@@ -96,5 +96,18 @@ public class ContentBasedFilteringService {
 			.limit(3)
 			.map(Map.Entry::getKey)
 			.collect(Collectors.toSet());
+	}
+
+	/**
+	 * 특정 메뉴의 카테고리 목록을 반환합니다.
+	 *
+	 * @param menuId 메뉴 ID
+	 * @return 카테고리 이름 목록
+	 */
+	public List<String> getMenuCategories(Integer menuId) {
+		List<MenuCategoryMappingEntity> mappings = menuCategoryMappingRepository.findByMenu_MenuId(menuId);
+		return mappings.stream()
+			.map(mapping -> mapping.getFoodCategory().getCategoryName())
+			.collect(Collectors.toList());
 	}
 }

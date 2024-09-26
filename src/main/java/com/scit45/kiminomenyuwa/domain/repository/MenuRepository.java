@@ -49,8 +49,8 @@ public interface MenuRepository extends JpaRepository<MenuEntity, Integer> {
 
 	List<MenuEntity> findByEnabledTrue();
 
-	// // 특정 가게의 활성화된 메뉴 조회
-	// List<MenuEntity> findByStore_StoreIdAndEnabledTrue(Long storeId);
+	// 특정 가게의 활성화된 메뉴 조회
+	List<MenuEntity> findByStore_StoreIdAndEnabledTrue(Integer storeId);
 }
 
 

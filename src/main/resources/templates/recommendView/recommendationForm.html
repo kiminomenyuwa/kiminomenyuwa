@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>메뉴 추천</title>
+    <link href="/css/style.css" rel="stylesheet">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(setPosition, showError);
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        });
+
+        function setPosition(position) {
+            document.getElementById("latitude").value = position.coords.latitude;
+            document.getElementById("longitude").value = position.coords.longitude;
+            document.getElementById("submitBtn").disabled = false;
+        }
+
+        function showError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    alert("사용자가 위치 정보 공유를 거부했습니다.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert("위치 정보를 사용할 수 없습니다.");
+                    break;
+                case error.TIMEOUT:
+                    alert("위치 요청이 시간이 초과되었습니다.");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    alert("알 수 없는 오류가 발생했습니다.");
+                    break;
+            }
+        }
+    </script>
+</head>
+<body>
+<h1>메뉴 추천</h1>
+<form action="#" method="post" th:action="@{/recommendations/nearby-menus}">
+    <!-- 사용자 ID 입력 필드 제거 -->
+
+    <!-- 숨김 필드로 위도와 경도 추가 -->
+    <input id="latitude" name="latitude" required type="hidden">
+    <input id="longitude" name="longitude" required type="hidden">
+
+    <div>
+        <label for="limit">추천 개수:</label>
+        <input id="limit" min="1" name="limit" type="number" value="10">
+    </div>
+    <div>
+        <button disabled id="submitBtn" type="submit">추천 받기</button>
+    </div>
+</form>
+</body>
+</html>

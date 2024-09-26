@@ -88,5 +88,33 @@ public class CollaborativeFilteringService {
 			.filter(MenuEntity::getEnabled)
 			.collect(Collectors.toList());
 	}
+
+	/**
+	 * 사용자 간의 유사도를 계산하여 반환합니다.
+	 *
+	 * @param userId 기준 유저 ID
+	 * @return 다른 사용자들과의 유사도 Map
+	 */
+	public Map<String, Double> calculateSimilarity(String userId) {
+		Map<String, Map<Integer, Integer>> userItemMatrix = userItemMatrixService.createUserItemMatrix();
+
+		if (!userItemMatrix.containsKey(userId)) {
+			log.warn("User ID {} not found in user-item matrix.", userId);
+			return Collections.emptyMap();
+		}
+
+		Map<Integer, Integer> targetUserVector = userItemMatrix.get(userId);
+
+		Map<String, Double> similarityMap = new HashMap<>();
+		for (String otherUserId : userItemMatrix.keySet()) {
+			if (!otherUserId.equals(userId)) {
+				double similarity = similarityService.cosineSimilarity(targetUserVector,
+					userItemMatrix.get(otherUserId));
+				similarityMap.put(otherUserId, similarity);
+			}
+		}
+
+		return similarityMap;
+	}
 }
 

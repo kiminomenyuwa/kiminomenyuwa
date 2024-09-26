@@ -88,4 +88,8 @@ public class MenuService {
 		return menuDTOs;
 	}
 
+	public List<MenuEntity> findByStoreId(Integer storeId) {
+		return menuRepository.findByStore_StoreIdAndEnabledTrue(storeId);
+	}
+
 }
