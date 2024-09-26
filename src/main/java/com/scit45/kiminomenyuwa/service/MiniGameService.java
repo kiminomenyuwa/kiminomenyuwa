@@ -60,7 +60,7 @@ public class MiniGameService {
 			// MenuEntity를 MenuDTO로 변환하여 리스트에 추가
 			menuDTOs.add(MenuDTO.builder()
 				.menuId(menuEntity.getMenuId())
-				.storeId(menuEntity.getStoreId())
+				.storeId(menuEntity.getStore().getStoreId())
 				.name(menuEntity.getName())
 				.price(menuEntity.getPrice())
 				.pictureUrl(menuEntity.getPictureUrl())
@@ -97,7 +97,7 @@ public class MiniGameService {
 			MenuEntity menu = menuEntity.get();
 			return MenuDTO.builder()
 				.menuId(menu.getMenuId())
-				.storeId(menu.getStoreId())
+				.storeId(menu.getStore().getStoreId())
 				.name(menu.getName())
 				.price(menu.getPrice())
 				.pictureUrl(menu.getPictureUrl())

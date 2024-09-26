@@ -27,9 +27,9 @@ public interface MenuRepository extends JpaRepository<MenuEntity, Integer> {
 	String userId);
 
 	// 가게 ID로 메뉴 목록 조회
-	List<MenuEntity> findByStoreId(Integer storeId);
+	List<MenuEntity> findByStore_StoreId(Integer storeId);
 
-	@Query("SELECT m FROM MenuEntity m JOIN StoreEntity s ON m.storeId = s.storeId WHERE s.name = :storeName")
+	@Query("SELECT m FROM MenuEntity m JOIN StoreEntity s ON m.store.storeId = s.storeId WHERE s.name = :storeName")
 	List<MenuEntity> findMenusByStoreName(@Param("storeName") String storeName);
 
 	// 이미 먹은 메뉴들(eatenMenuIds 리스트)을 제외한 나머지 메뉴들을 가져오는 쿼리
@@ -42,10 +42,15 @@ public interface MenuRepository extends JpaRepository<MenuEntity, Integer> {
 		"GROUP BY m.menuId")
 	List<Object[]> findMenusWithCategoriesNotInMenuIds(@Param("eatenMenuIds") List<Long> eatenMenuIds);
 
-	Optional<MenuEntity> findByNameAndStoreId(String name, Integer storeId);
+	Optional<MenuEntity> findByNameAndStore_StoreId(String name, Integer storeId);
 
 	// 남은 예산보다 적은 가격의 메뉴들을 가져옴
 	List<MenuEntity> findByPriceLessThanEqual(int budget);
 
 	List<MenuEntity> findByEnabledTrue();
+
+	// // 특정 가게의 활성화된 메뉴 조회
+	// List<MenuEntity> findByStore_StoreIdAndEnabledTrue(Long storeId);
 }
+
+

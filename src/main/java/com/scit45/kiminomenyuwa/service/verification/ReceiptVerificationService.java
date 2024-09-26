@@ -209,7 +209,7 @@ public class ReceiptVerificationService {
 				throw new IllegalArgumentException("아이템 정보가 유효하지 않습니다.");
 			}
 
-			menuRepository.findByNameAndStoreId(item.getDescription(), storeId)
+			menuRepository.findByNameAndStore_StoreId(item.getDescription(), storeId)
 				.orElseThrow(() -> new IllegalArgumentException("메뉴 항목이 유효하지 않습니다: " + item.getDescription()));
 		}
 	}
