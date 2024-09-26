@@ -16,18 +16,35 @@ $(document).ready(function() {
 	const starsContainer = likeButton.querySelector(".stars"); // 별점 컨테이너
 	const stars = starsContainer.querySelectorAll(".star"); // 각 별 요소
 	const buttonText = likeButton.firstChild; // "좋아요" 버튼의 텍스트 노드
+	const fixedRatingCheckbox = document.getElementById("fixed-rating-checkbox"); // 3점 고정 체크박스
 
-	// "좋아요" 버튼에 마우스를 올렸을 때 별점 컨테이너 표시 및 텍스트 지움
+	// "좋아요" 버튼 클릭 이벤트
+	likeButton.addEventListener("click", () => {
+		if (fixedRatingCheckbox.checked) {
+			// 체크박스가 선택된 경우 3점으로 평가
+			rateMenu(window.menuId, 3); // 3점으로 평가
+		} else {
+			// 체크박스가 선택되지 않은 경우 기존 별점 기능을 활성화
+			starsContainer.style.display = "flex"; // 별점 컨테이너 표시
+			buttonText.textContent = ""; // "좋아요" 텍스트 숨김
+		}
+	});
+
+	// "좋아요" 버튼에 마우스를 올렸을 때 별점 컨테이너 표시 및 텍스트 지움 (체크박스가 선택되지 않은 경우에만)
 	likeButton.addEventListener("mouseover", () => {
-		starsContainer.style.display = "flex"; // 별점 컨테이너 표시
-		buttonText.textContent = ""; // "좋아요" 텍스트 숨김
+		if (!fixedRatingCheckbox.checked) {
+			starsContainer.style.display = "flex"; // 별점 컨테이너 표시
+			buttonText.textContent = ""; // "좋아요" 텍스트 숨김
+		}
 	});
 
 	// "좋아요" 버튼에서 마우스를 뗐을 때 별점 컨테이너 숨김 및 텍스트 복원
 	likeButton.addEventListener("mouseout", () => {
-		starsContainer.style.display = "none"; // 별점 컨테이너 숨김
-		buttonText.textContent = "좋아요"; // "좋아요" 텍스트 복원
-		resetStars(); // 별점 초기화
+		if (!fixedRatingCheckbox.checked) {
+			starsContainer.style.display = "none"; // 별점 컨테이너 숨김
+			buttonText.textContent = "좋아요"; // "좋아요" 텍스트 복원
+			resetStars(); // 별점 초기화
+		}
 	});
 
 	// 별에 마우스를 올렸을 때 해당 별까지 채워지는 이벤트 처리
