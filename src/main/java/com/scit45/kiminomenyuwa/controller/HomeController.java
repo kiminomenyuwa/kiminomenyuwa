@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.security.core.Authentication;
-
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
-import com.scit45.kiminomenyuwa.service.FriendshipService;
 import com.scit45.kiminomenyuwa.domain.dto.ProfilePhotoDTO;
 import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
+import com.scit45.kiminomenyuwa.service.FriendshipService;
 import com.scit45.kiminomenyuwa.service.MiniGameService;
 import com.scit45.kiminomenyuwa.service.ProfilePhotoService;
 
@@ -49,11 +48,12 @@ public class HomeController {
 	 * @return 홈 페이지 템플릿의 이름 (home.html)
 	 */
 	@GetMapping("/")
-	public String home(Model model, @AuthenticationPrincipal AuthenticatedUser user, HttpSession session) {
-    // 현재 로그인한 사용자의 ID 가져오기
+	public String home(Model model, @AuthenticationPrincipal
+	AuthenticatedUser user, HttpSession session) {
+		// 현재 로그인한 사용자의 ID 가져오기
 		String loggedInUserId = getLoggedInUserId();
 
-    // MiniGameService를 통해 DB에서 메뉴의 총 개수를 가져와 모델에 추가
+		// MiniGameService를 통해 DB에서 메뉴의 총 개수를 가져와 모델에 추가
 		long menuCount = miniGameService.countAllMenus();
 		model.addAttribute("menuCount", menuCount);
 

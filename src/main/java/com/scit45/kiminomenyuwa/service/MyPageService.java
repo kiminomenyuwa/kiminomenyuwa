@@ -44,7 +44,7 @@ public class MyPageService {
 			throw new RuntimeException("Store not found");
 		}
 		// 상점 ID로 메뉴 찾기
-		List<MenuEntity> menus = menuRepository.findByStoreId(store.getStoreId());
+		List<MenuEntity> menus = menuRepository.findByStore_StoreId(store.getStoreId());
 		log.debug("메뉴: {}", menus.toString());
 
 		// MenuEntity를 MenuDTO로 변환

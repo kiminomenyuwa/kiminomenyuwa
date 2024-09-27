@@ -30,9 +30,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
-@RequestMapping("recommand")
+@RequestMapping("recommend")
 @RequiredArgsConstructor
-public class RecommandController {
+public class RecommendController {
 
 	private final MenuService menuService;
 	private final UserDiningHistoryService userDiningHistoryService;
@@ -45,7 +45,7 @@ public class RecommandController {
 	 * @return recTest.html
 	 */
 	@GetMapping("test")
-	public String recommandTest(Model model, @AuthenticationPrincipal AuthenticatedUser user) {
+	public String recommendTest(Model model, @AuthenticationPrincipal AuthenticatedUser user) {
 
 		//전체 메뉴 리스트 출력
 		List<MenuDTO> menuDTOList = menuService.getAllMenus();
@@ -75,7 +75,7 @@ public class RecommandController {
 		List<CategoryCountDTO> categoryScores = miniGameService.getCategoryScoresByUserId(user.getId());
 		model.addAttribute("categoryScores", categoryScores);
 
-		return "recommandView/recTest";
+		return "recommendView/recTest";
 	}
 
 	/**
@@ -93,16 +93,16 @@ public class RecommandController {
 		List<MenuDTO> recommendedMenus = recommendService.recommendMenusByUntriedCategory(user.getId());
 		model.addAttribute("recommendedMenus", recommendedMenus);
 
-		return "recommandView/untriedMenu"; // 추천 결과를 보여줄 페이지로 이동
+		return "recommendView/untriedMenu"; // 추천 결과를 보여줄 페이지로 이동
 	}
 
 	/**
 	 * 미니게임 점수 기반 추천
 	 * @param model 모델에 담아 출력
 	 * @param user 현재 로그인 중인 userId
-	 * @return recommandByMinigame.html
+	 * @return recommendByMinigame.html
 	 */
-	@GetMapping("recommandByMinigame")
+	@GetMapping("recommendByMinigame")
 	public String recommendByMinigameScore(Model model, @AuthenticationPrincipal AuthenticatedUser user) {
 		// 사용자의 미니게임 기반 카테고리 점수
 		List<CategoryCountDTO> minigameCategoryScoreList = miniGameService.getCategoryScoresByUserId(user.getId());
@@ -119,7 +119,7 @@ public class RecommandController {
 		List<MenuDTO> recommendedMenus = recommendService.recommendMenusByCategoryScores(user.getId());
 		model.addAttribute("recommendedMenus", recommendedMenus);
 
-		return "recommandView/recommandByMinigame";
+		return "recommendView/recommendByMinigame";
 	}
 
 	@GetMapping("recommendByAge")

@@ -83,7 +83,7 @@ public class UserDiningHistoryService {
 			// MenuDTO에 카테고리 리스트를 추가하여 생성
 			menuDTOs.add(MenuDTO.builder()
 				.menuId(menuEntity.getMenuId())
-				.storeId(menuEntity.getStoreId())
+				.storeId(menuEntity.getStore().getStoreId())
 				.name(menuEntity.getName())
 				.price(menuEntity.getPrice())
 				.pictureUrl(menuEntity.getPictureUrl())
