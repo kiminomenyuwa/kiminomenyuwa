@@ -22,7 +22,7 @@
     <tr th:each="menu : ${agePopularMenus}">
         <td th:text="${menu.menuId}"></td>
         <td th:text="${menu.name}"></td>
-        <td th:text="${menu.price} + '원'"></td>
+        <td th:text="${menu.price}"></td>
         <td><img th:src="${menu.pictureUrl}" alt="메뉴 이미지" style="width: 100px; height: auto;"></td>
     </tr>
 </table>

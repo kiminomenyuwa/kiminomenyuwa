@@ -44,13 +44,13 @@ public interface UserDiningHistoryRepository extends JpaRepository<UserDiningHis
 	 * @param pageable     결과 페이징 처리를 위한 Pageable 객체 (예: 상위 5개의 메뉴를 가져오기 위해 사용)
 	 * @return MenuCountDTO 리스트로, 각 메뉴의 ID, 먹은 횟수, 이름, 사진 URL이 포함됨
 	 */
-	@Query("SELECT new com.scit45.kiminomenyuwa.domain.dto.MenuCountDTO(udh.menu.menuId, COUNT(udh.menu.menuId), m.name, m.pictureUrl) " +
+	@Query("SELECT new com.scit45.kiminomenyuwa.domain.dto.MenuCountDTO(udh.menu.menuId, COUNT(udh.menu.menuId), m.name, m.pictureUrl, m.price) " +
 		"FROM UserDiningHistoryEntity udh " +
 		"JOIN udh.user u " +
 		"JOIN udh.menu m " +
 		"WHERE (YEAR(CURRENT_DATE) - YEAR(u.birthDate)) BETWEEN :ageStart AND :ageEnd " +
 		"AND udh.diningDate >= :sevenDaysAgo " +
-		"GROUP BY udh.menu.menuId, m.name, m.pictureUrl " +
+		"GROUP BY udh.menu.menuId, m.name, m.pictureUrl, m.price " +
 		"ORDER BY COUNT(udh.menu.menuId) DESC")
 	List<MenuCountDTO> findTopMenusByAgeGroupAndDateRange(
 		@Param("ageStart") int ageStart,
@@ -58,4 +58,5 @@ public interface UserDiningHistoryRepository extends JpaRepository<UserDiningHis
 		@Param("sevenDaysAgo") LocalDateTime sevenDaysAgo,
 		Pageable pageable
 	);
+
 }

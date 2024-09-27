@@ -14,4 +14,5 @@ public class MenuCountDTO {
 	Long menuCount;
 	String name;
 	String pictureUrl;
+	Integer price;
 }

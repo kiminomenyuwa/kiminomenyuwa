@@ -155,6 +155,7 @@ public class RecommandService {
 			.map(menu -> MenuDTO.builder()
 				.menuId(menu.getMenuId())
 				.name(menu.getName())
+				.price(menu.getPrice())
 				.pictureUrl(menu.getPictureUrl())
 				.build())
 			.collect(Collectors.toList());
