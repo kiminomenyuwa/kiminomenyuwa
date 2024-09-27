@@ -1,16 +1,12 @@
--- IMPORTANT! DATA 생성 SQL문 실행 전에 프로젝트 실행해서 id를 aaa로 회원 가입 후 실행할 것!
--- 현재 모든 테스트 데이터가 userID : 'aaa'를 기준으로 되어있고. 회원가입의 경우 비밀번호 암호화때문에 직접 해줘야하는 듯
 use kiminomenyuwa;
 
+-- 샘플 회원 추가 (비밀번호는 id를 따라갑니다. ex) user_id가 bbb면 비밀번호도 bbb
 INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`, `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
-VALUES ('aaa', '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS', '김철수', '1985-10-15', 'male', 'testuser01@example.com', '서울시 강남구', '테헤란로 123', '06234', '010-1234-5678', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
-
--- 비밀번호 bbb
-INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`,
-                    `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
-VALUES ('bbb', '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS', '김영희', '1985-10-15', 'female',
-        'testuser01@example.com', '서울시 강남구', '테헤란로 123', '06234', '010-1234-5678', 'http://example.com/photo.jpg',
-        'ROLE_USER', 1);
+VALUES ('aaa', '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS', '김철수', '1998-10-15', 'male', 'testuser01@example.com', '서울시 강남구', '테헤란로 123', '06234', '010-1234-5678', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
+INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`, `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
+VALUES ('bbb', '$2a$10$kz9me5s4fHK50IGx/L.R2exLsxnfvH9msIulhpn.Em8ctaBPm3vAS', '최재원', '1995-02-11', 'male', 'japol@naver.com', '서울 강남구 봉은사로13길 10', '26동 1011호', '06122', '070-9114-3194', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
+INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`, `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
+VALUES ('ccc', '$2a$10$9J/wHkfdw2/4ix3ZX74ZkeFkM4BviPLbgONDNiaJDQ6dxFqUZVHFG', '카리나', '2002-06-15', 'female', 'karina@daum.net', '서울 송파구 올림픽로4길 42', '6동 907호', '05571', '010-3333-3333', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
 
 -- 카테고리 타입 테이블에 데이터 추가
 INSERT INTO category_type (type_name)
@@ -323,25 +319,54 @@ VALUES
 (20, '고소한');
 
 
-
 -- 테스트용 사용자 음식 먹은 내역
 INSERT INTO user_dining_history (`user_id`, `menu_id`, `dining_date`)
 VALUES
-    ('aaa', 1, '2024-09-01 12:30:45'),
-    ('aaa', 2, '2024-09-02 08:15:30'),
-    ('aaa', 3, '2024-09-03 14:22:10'),
-    ('aaa', 4, '2024-09-04 18:45:00'),
-    ('aaa', 5, '2024-09-05 09:10:25'),
-    ('aaa', 1, '2024-09-06 19:05:50'), -- menu_id 1 다시 사용
-    ('aaa', 6, '2024-09-07 11:55:35'),
-    ('aaa', 2, '2024-09-08 07:30:20'), -- menu_id 2 다시 사용
-    ('aaa', 7, '2024-09-09 15:45:40'),
-    ('aaa', 8, '2024-09-10 13:20:15'),
-    ('aaa', 3, '2024-09-11 16:40:05'), -- menu_id 3 다시 사용
-    ('aaa', 9, '2024-09-12 10:00:50'),
-    ('aaa', 10, '2024-09-13 17:35:00');
+    -- aaa 유저
+    ('aaa', 1, '2024-09-24 10:30:45'),
+    ('aaa', 2, '2024-09-23 08:15:30'),
+    ('aaa', 3, '2024-09-22 14:22:10'),
+    ('aaa', 4, '2024-09-21 18:45:00'),
+    ('aaa', 5, '2024-09-20 09:10:25'),
+    ('aaa', 1, '2024-09-19 19:05:50'),
+    ('aaa', 6, '2024-09-18 11:55:35'),
+    ('aaa', 2, '2024-09-22 07:30:20'),
+    ('aaa', 7, '2024-09-24 15:45:40'),
+    ('aaa', 8, '2024-09-23 13:20:15'),
+    ('aaa', 3, '2024-09-21 16:40:05'),
+    ('aaa', 9, '2024-09-20 10:00:50'),
+    ('aaa', 10, '2024-09-19 17:35:00'),
 
-select * from user_dining_history;
+    -- bbb 유저
+    ('bbb', 2, '2024-09-24 12:15:25'),
+    ('bbb', 5, '2024-09-23 19:30:10'),
+    ('bbb', 7, '2024-09-22 08:10:45'),
+    ('bbb', 11, '2024-09-21 12:45:00'),
+    ('bbb', 4, '2024-09-20 18:30:25'),
+    ('bbb', 6, '2024-09-19 19:05:50'),
+    ('bbb', 3, '2024-09-18 13:20:40'),
+    ('bbb', 8, '2024-09-22 11:15:30'),
+    ('bbb', 10, '2024-09-23 15:45:15'),
+    ('bbb', 12, '2024-09-21 09:35:20'),
+    ('bbb', 15, '2024-09-20 18:40:05'),
+    ('bbb', 17, '2024-09-19 19:55:50'),
+    ('bbb', 20, '2024-09-18 20:30:30'),
+
+    -- ccc 유저
+    ('ccc', 1, '2024-09-24 07:20:15'),
+    ('ccc', 3, '2024-09-23 12:25:40'),
+    ('ccc', 4, '2024-09-22 17:45:10'),
+    ('ccc', 8, '2024-09-21 14:50:25'),
+    ('ccc', 10, '2024-09-20 08:05:35'),
+    ('ccc', 12, '2024-09-19 12:10:50'),
+    ('ccc', 13, '2024-09-18 11:55:05'),
+    ('ccc', 16, '2024-09-22 16:30:20'),
+    ('ccc', 18, '2024-09-23 19:10:15'),
+    ('ccc', 19, '2024-09-21 09:15:45'),
+    ('ccc', 5, '2024-09-20 20:25:30'),
+    ('ccc', 14, '2024-09-19 07:35:20'),
+    ('ccc', 9, '2024-09-18 21:40:05');
+
 
 -- 메뉴 전체 정보 확인
 SELECT m.menu_id,                                                   -- 메뉴 ID
@@ -361,10 +386,6 @@ FROM menu m
          LEFT JOIN
      food_category fc ON mcm.category_name = fc.category_name
 GROUP BY m.menu_id, m.name, m.price, m.picture_url, s.name, u.name;
-
-SELECT *
-FROM USER;
-
 
 -- 아래 sql은 그때 그때 미니게임을 다시 해보고 싶을 때 기록해둔 점수 초기화 하기 위한 sql
 DROP TABLE IF EXISTS `mini_game_menu_rating`;
@@ -389,21 +410,7 @@ VALUES
 ('aaa', 'bbb', 'ACCEPTED'),  -- aaa가 bbb에게 친구 요청을 보내고, bbb가 수락한 경우
 ('bbb', 'aaa', 'ACCEPTED');  -- 양방향 친구 관계를 저장
 
-select * from friendships;
 -- 여기까지
-
--- 사용자가 먹은 내역의 메뉴들의 카테고리 중 TOP10 카운트
-SELECT mcm.category_name, COUNT(*) AS category_count
-FROM user_dining_history udh
-         JOIN menu_category_mapping mcm ON udh.menu_id = mcm.menu_id
-WHERE udh.user_id = 'aaa' -- 여기에서 'aaa'는 사용자의 user_id
-GROUP BY mcm.category_name
-ORDER BY category_count DESC
-LIMIT 10;
-
-select * from store;
-select * from menu;
-select * from user_dining_history;
 
 -- 상점 테이블에 테스트 상점 추가
 INSERT INTO `store` (`user_id`,

@@ -25,7 +25,6 @@ DROP TABLE IF EXISTS budget;
 -- 외래 키 제약을 다시 활성화
 SET FOREIGN_KEY_CHECKS = 1;
 
-
 -- 카테고리 타입 테이블: 카테고리의 종류를 정의 (예: 재료, 나라, 조리 방법)
 CREATE TABLE `category_type`
 (
@@ -64,6 +63,7 @@ CREATE TABLE `user`
     CONSTRAINT `chk_gender` CHECK (`gender` IN ('male', 'female', 'non-binary', 'other')),                    -- 성별 값에 대한 제약 조건
     CONSTRAINT `chk_role` CHECK (`role` IN ('ROLE_USER', 'ROLE_MERCHANT', 'ROLE_ADMIN'))                      -- 역할 값에 대한 제약 조건
 );
+
 
 -- 상점 테이블: 사용자가 소유한 상점 정보를 저장
 CREATE TABLE `store`

@@ -15,11 +15,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.scit45.kiminomenyuwa.domain.dto.CategoryCountDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MiniGameMenuRatingDTO;
+import com.scit45.kiminomenyuwa.domain.dto.UserDTO;
 import com.scit45.kiminomenyuwa.domain.dto.UserDiningHistoryDTO;
 import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
 import com.scit45.kiminomenyuwa.service.MenuService;
 import com.scit45.kiminomenyuwa.service.MiniGameService;
+import com.scit45.kiminomenyuwa.service.RecommandService;
 import com.scit45.kiminomenyuwa.service.UserDiningHistoryService;
+import com.scit45.kiminomenyuwa.service.UserService;
+import com.scit45.kiminomenyuwa.utils.AgeUtils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +37,8 @@ public class RecommendController {
 	private final MenuService menuService;
 	private final UserDiningHistoryService userDiningHistoryService;
 	private final MiniGameService miniGameService;
+	private final RecommandService recommendService;
+	private final UserService userService;
 
 	/**
 	 * 추천기능 테스트용 페이지
@@ -83,50 +89,8 @@ public class RecommendController {
 	 */
 	@GetMapping("recommendUntriedFood")
 	public String recommendUntriedFood(Model model, @AuthenticationPrincipal AuthenticatedUser user) {
-		// 전체 먹지 않은 메뉴 리스트 출력
-		List<MenuDTO> notTriedMenuList = userDiningHistoryService.getMenusNotTried(user.getId());
-		log.debug("notTriedMenuList: {}", notTriedMenuList);
-
-		// 사용자가 먹은 음식 내역 중 카테고리 TOP 10
-		List<CategoryCountDTO> categoryTop10 = userDiningHistoryService.getTopCategoriesByUserId(user.getId());
-		log.debug("categoryTop10: {}", categoryTop10);
-
 		// 추천할 메뉴 리스트 (최종 결과)
-		List<MenuDTO> recommendedMenus = new ArrayList<>();
-
-		// 각 카테고리당 추천할 메뉴 수 제한 (각 카테고리에서 최대 3개 추천)
-		int maxRecommendationsPerCategory = 3;
-
-		// 추천된 메뉴를 중복해서 추가하지 않도록 Set 사용
-		Set<Integer> addedMenuIds = new HashSet<>();
-
-		// 카테고리 TOP 10을 기준으로 아직 먹지 않은 메뉴 추천
-		for (CategoryCountDTO category : categoryTop10) {
-			String categoryName = category.getCategoryName();  // 카테고리 이름
-			int count = 0; // 현재 카테고리에서 추천된 메뉴 수
-
-			// 해당 카테고리에 속한 메뉴 필터링
-			for (MenuDTO menu : notTriedMenuList) {
-				// 이미 추천된 메뉴는 제외
-				if (addedMenuIds.contains(menu.getMenuId())) {
-					continue;
-				}
-
-				// 메뉴의 categories 필드가 null이 아닌지 확인한 후 contains 호출
-				if (menu.getCategories() != null && menu.getCategories().contains(categoryName)) {
-					recommendedMenus.add(menu);
-					addedMenuIds.add(menu.getMenuId());
-					count++;
-
-					// 해당 카테고리에서 최대 추천 개수를 초과하면 루프 종료
-					if (count >= maxRecommendationsPerCategory) {
-						break;
-					}
-				}
-			}
-		}
-
-		// 추천된 메뉴 리스트를 모델에 추가
+		List<MenuDTO> recommendedMenus = recommendService.recommendMenusByUntriedCategory(user.getId());
 		model.addAttribute("recommendedMenus", recommendedMenus);
 
 		return "recommendView/untriedMenu"; // 추천 결과를 보여줄 페이지로 이동
@@ -152,9 +116,31 @@ public class RecommendController {
 		model.addAttribute("sortedMenuList", sortedMenuList); // 정렬된 리스트 추가
 
 		// 사용자 ID를 기반으로 추천 메뉴 리스트 가져오기
-		List<MenuDTO> recommendedMenus = miniGameService.recommendMenusByCategoryScores(user.getId());
+		List<MenuDTO> recommendedMenus = recommendService.recommendMenusByCategoryScores(user.getId());
 		model.addAttribute("recommendedMenus", recommendedMenus);
 
 		return "recommendView/recommendByMinigame";
+	}
+
+	/**
+	 * 연령대별 7일간 인기 메뉴 추천
+	 * @param user 현재 로그인 중인 ID
+	 * @param model 모델에 담아 출력
+	 * @return List<MenuDTO>의 인기 메뉴 리스트
+	 */
+	@GetMapping("recommendByAge")
+	public String recommendAgePopularMenus(@AuthenticationPrincipal AuthenticatedUser user, Model model) {
+		// userId를 통해 UserDTO 조회
+		UserDTO userDTO = userService.getUserByUserId(user.getId());
+
+		// UserDTO에서 birthDate를 가져와서 연령대 계산
+		String ageGroup = AgeUtils.getAgeGroup(userDTO.getBirthDate());
+
+		// 연령대에 해당하는 인기 메뉴 추천 리스트 가져오기
+		List<MenuDTO> agePopularMenus = recommendService.recommendPopularMenusByAgeGroup(ageGroup);
+
+		model.addAttribute("agePopularMenus", agePopularMenus); // 연령대별 인기 메뉴 리스트를 모델에 추가
+		model.addAttribute("ageGroup", ageGroup); // 연령대 정보를 모델에 추가
+		return "recommendView/recommendByAge";
 	}
 }
