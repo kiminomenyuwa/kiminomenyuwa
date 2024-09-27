@@ -8,13 +8,10 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
-import com.scit45.kiminomenyuwa.domain.dto.UserDiningHistoryDTO;
 import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
-import com.scit45.kiminomenyuwa.domain.entity.UserDiningHistoryEntity;
 import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
 import com.scit45.kiminomenyuwa.domain.repository.UserDiningHistoryRepository;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +48,7 @@ public class MenuService {
 			// MenuEntity를 MenuDTO로 변환하여 리스트에 추가
 			menuDTOs.add(MenuDTO.builder()
 				.menuId(menuEntity.getMenuId())
-				.storeId(menuEntity.getStoreId())
+				.storeId(menuEntity.getStore().getStoreId())
 				.name(menuEntity.getName())
 				.price(menuEntity.getPrice())
 				.pictureUrl(menuEntity.getPictureUrl())
@@ -63,7 +60,6 @@ public class MenuService {
 		// 변환된 DTO 리스트를 호출자에게 반환
 		return menuDTOs;
 	}
-
 
 	public List<MenuDTO> getMenusNotTried(String userId) {
 		List<Long> eatenMenuIds = userDiningHistoryRepository.findDistinctMenuIdsByUserId(userId);
@@ -79,7 +75,7 @@ public class MenuService {
 			// MenuEntity를 MenuDTO로 변환하고 카테고리 리스트 추가
 			MenuDTO menuDTO = MenuDTO.builder()
 				.menuId(menuEntity.getMenuId())
-				.storeId(menuEntity.getStoreId())
+				.storeId(menuEntity.getStore().getStoreId())
 				.name(menuEntity.getName())
 				.price(menuEntity.getPrice())
 				.pictureUrl(menuEntity.getPictureUrl())
@@ -92,5 +88,8 @@ public class MenuService {
 		return menuDTOs;
 	}
 
+	public List<MenuEntity> findByStoreId(Integer storeId) {
+		return menuRepository.findByStore_StoreIdAndEnabledTrue(storeId);
+	}
 
 }
