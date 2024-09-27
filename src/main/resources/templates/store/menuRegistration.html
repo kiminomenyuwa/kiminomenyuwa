@@ -96,9 +96,13 @@
 			<td><label for="price">가격:</label></td>
 			<td><input type="number" id="price" name="price" required></td>
 		</tr>
+		<!-- 사진 업로드 필드 추가 -->
 		<tr>
-			<td><label for="pictureUrl">사진 URL:</label></td>
-			<td><input type="text" id="pictureUrl" name="pictureUrl"></td>
+			<td><label for="photos">사진 업로드:</label></td>
+			<td>
+				<input type="file" id="photos" name="photos" multiple accept="image/*">
+				<small>여러 장의 사진을 선택할 수 있습니다.</small>
+			</td>
 		</tr>
 		<tr>
 			<td><label>카테고리 선택:</label></td>
