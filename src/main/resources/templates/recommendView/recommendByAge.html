@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>연령대별 인기 메뉴 추천</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style01.css}"/>
+</head>
+<body>
+<h1 th:text="'연령대: ' + ${ageGroup} + ' 인기 메뉴'"></h1>
+
+<table>
+    <tr>
+        <th>Menu ID</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Picture</th>
+    </tr>
+    <tr th:each="menu : ${agePopularMenus}">
+        <td th:text="${menu.menuId}"></td>
+        <td th:text="${menu.name}"></td>
+        <td th:text="${menu.price} + '원'"></td>
+        <td><img th:src="${menu.pictureUrl}" alt="메뉴 이미지" style="width: 100px; height: auto;"></td>
+    </tr>
+</table>
+
+</body>
+</html>

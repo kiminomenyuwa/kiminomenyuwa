@@ -135,6 +135,6 @@ public class RecommendController {
 
 		model.addAttribute("agePopularMenus", agePopularMenus); // 연령대별 인기 메뉴 리스트를 모델에 추가
 		model.addAttribute("ageGroup", ageGroup); // 연령대 정보를 모델에 추가
-		return "recommandView/recommandByAge";
+		return "recommendView/recommendByAge";
 	}
 }
