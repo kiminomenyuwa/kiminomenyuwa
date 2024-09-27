@@ -91,13 +91,18 @@ public class FriendshipController {
 				boolean isFriend = friendshipService.areFriends(loggedInUserId, friendId);
 				boolean hasPendingRequest = friendshipService.hasPendingRequest(loggedInUserId, friendId);
 
+				// 프로필 사진이 없는 경우 기본 이미지 경로 설정
+				String profileImg = user.get().getProfileImgUuid() != null ? "/files/" + user.get().getProfileImgUuid()
+					: "/images/default-profile.png"; // 기본 이미지 경로
+
 				// 사용자 정보 및 상태 응답에 추가
 				response.put("exists", true);
 				response.put("isSelf", false);
 				response.put("isFriend", isFriend);
 				response.put("hasPendingRequest", hasPendingRequest);
 				response.put("name", user.get().getName()); // 사용자 이름 추가
-				response.put("profileImg", user.get().getProfileImgUuid()); // 사용자 프로필 이미지 추가
+				response.put("profileImg", user.get().getProfileImgUuid() != null ? user.get().getProfileImgUuid()
+					: "/images/default-profile.png");
 
 				// 상태에 따른 메시지 추가
 				if (isFriend) {
