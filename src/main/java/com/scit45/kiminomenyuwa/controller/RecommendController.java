@@ -122,6 +122,12 @@ public class RecommendController {
 		return "recommendView/recommendByMinigame";
 	}
 
+	/**
+	 * 연령대별 7일간 인기 메뉴 추천
+	 * @param user 현재 로그인 중인 ID
+	 * @param model 모델에 담아 출력
+	 * @return List<MenuDTO>의 인기 메뉴 리스트
+	 */
 	@GetMapping("recommendByAge")
 	public String recommendAgePopularMenus(@AuthenticationPrincipal AuthenticatedUser user, Model model) {
 		// userId를 통해 UserDTO 조회
