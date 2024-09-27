@@ -10,6 +10,21 @@
     <title>연령대별 7일간 인기 메뉴</title>
 </head>
 <body>
-<h1>연령대별 7일간 인기 메뉴</h1>
+<h1 th:text="'연령대: ' + ${ageGroup} + ' 인기 메뉴'"></h1>
+
+<table>
+    <tr>
+        <th>Menu ID</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Picture</th>
+    </tr>
+    <tr th:each="menu : ${agePopularMenus}">
+        <td th:text="${menu.menuId}"></td>
+        <td th:text="${menu.name}"></td>
+        <td th:text="${menu.price} + '원'"></td>
+        <td><img th:src="${menu.pictureUrl}" alt="메뉴 이미지" style="width: 100px; height: auto;"></td>
+    </tr>
+</table>
 </body>
 </html>

@@ -22,4 +22,20 @@ public class AgeUtils {
 			return "어르신";
 		}
 	}
+
+	// 연령대에 따른 시작 나이와 끝 나이를 반환하는 메서드
+	public static int[] getAgeRange(String ageGroup) {
+		switch (ageGroup) {
+			case "10대":
+				return new int[]{10, 19};
+			case "20대":
+				return new int[]{20, 29};
+			case "30대":
+				return new int[]{30, 39};
+			case "40대":
+				return new int[]{40, 49};
+			default:
+				return new int[]{50, 100}; // 예: 50대 이상
+		}
+	}
 }

@@ -15,12 +15,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.scit45.kiminomenyuwa.domain.dto.CategoryCountDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MiniGameMenuRatingDTO;
+import com.scit45.kiminomenyuwa.domain.dto.UserDTO;
 import com.scit45.kiminomenyuwa.domain.dto.UserDiningHistoryDTO;
 import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
 import com.scit45.kiminomenyuwa.service.MenuService;
 import com.scit45.kiminomenyuwa.service.MiniGameService;
 import com.scit45.kiminomenyuwa.service.RecommandService;
 import com.scit45.kiminomenyuwa.service.UserDiningHistoryService;
+import com.scit45.kiminomenyuwa.service.UserService;
+import com.scit45.kiminomenyuwa.utils.AgeUtils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +38,7 @@ public class RecommandController {
 	private final UserDiningHistoryService userDiningHistoryService;
 	private final MiniGameService miniGameService;
 	private final RecommandService recommendService;
+	private final UserService userService;
 
 	/**
 	 * 추천기능 테스트용 페이지
@@ -116,5 +120,21 @@ public class RecommandController {
 		model.addAttribute("recommendedMenus", recommendedMenus);
 
 		return "recommandView/recommandByMinigame";
+	}
+
+	@GetMapping("recommendByAge")
+	public String recommendAgePopularMenus(@AuthenticationPrincipal AuthenticatedUser user, Model model) {
+		// userId를 통해 UserDTO 조회
+		UserDTO userDTO = userService.getUserByUserId(user.getId());
+
+		// UserDTO에서 birthDate를 가져와서 연령대 계산
+		String ageGroup = AgeUtils.getAgeGroup(userDTO.getBirthDate());
+
+		// 연령대에 해당하는 인기 메뉴 추천 리스트 가져오기
+		List<MenuDTO> agePopularMenus = recommendService.recommendPopularMenusByAgeGroup(ageGroup);
+
+		model.addAttribute("agePopularMenus", agePopularMenus); // 연령대별 인기 메뉴 리스트를 모델에 추가
+		model.addAttribute("ageGroup", ageGroup); // 연령대 정보를 모델에 추가
+		return "recommandView/recommandByAge";
 	}
 }

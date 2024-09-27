@@ -1,17 +1,23 @@
 package com.scit45.kiminomenyuwa.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.scit45.kiminomenyuwa.domain.dto.CategoryCountDTO;
+import com.scit45.kiminomenyuwa.domain.dto.MenuCountDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
+import com.scit45.kiminomenyuwa.domain.repository.UserDiningHistoryRepository;
+import com.scit45.kiminomenyuwa.utils.AgeUtils;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +34,7 @@ public class RecommandService {
 	private final UserDiningHistoryService userDiningHistoryService;
 	private final MiniGameService miniGameService;
 	private final MenuService menuService;
+	private final UserDiningHistoryRepository userDiningHistoryRepository;
 
 	/**
 	 * 사용자가 아직 먹지 않은 메뉴 추천 메서드
@@ -124,6 +131,35 @@ public class RecommandService {
 		return recommendedMenus;
 	}
 
+	/**
+	 * 연령대별 인기 메뉴를 가져오는 메서드.
+	 *
+	 * @param ageGroup 연령대 (예: "20대")
+	 * @return 연령대별 인기 메뉴 리스트
+	 */
+	public List<MenuDTO> recommendPopularMenusByAgeGroup(String ageGroup) {
+		// AgeUtils의 getAgeRange 메서드로 연령대 시작과 끝 값을 가져옴
+		int[] ageRange = AgeUtils.getAgeRange(ageGroup);
+		int ageStart = ageRange[0];
+		int ageEnd = ageRange[1];
 
+		// 7일 전 날짜 계산
+		LocalDateTime sevenDaysAgo = LocalDateTime.now().minusDays(7);
+
+		// 연령대와 7일 전 날짜를 기준으로 인기 메뉴 가져오기
+		List<MenuCountDTO> popularMenus = userDiningHistoryRepository.findTopMenusByAgeGroupAndDateRange(
+			ageStart, ageEnd, sevenDaysAgo, PageRequest.of(0, 5)); // 상위 5개 메뉴 가져오기
+
+		// MenuCountDTO를 MenuDTO로 변환
+		List<MenuDTO> menuDTOList = popularMenus.stream()
+			.map(menu -> MenuDTO.builder()
+				.menuId(menu.getMenuId())
+				.name(menu.getName())
+				.pictureUrl(menu.getPictureUrl())
+				.build())
+			.collect(Collectors.toList());
+
+		return menuDTOList;
+	}
 
 }
