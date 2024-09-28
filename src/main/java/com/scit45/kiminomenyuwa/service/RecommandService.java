@@ -1,6 +1,5 @@
 package com.scit45.kiminomenyuwa.service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.scit45.kiminomenyuwa.domain.dto.CategoryCountDTO;
+import com.scit45.kiminomenyuwa.domain.dto.FoodCategoryDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuCountDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.repository.UserDiningHistoryRepository;
@@ -112,10 +112,10 @@ public class RecommandService {
 			int totalScore = 0;
 
 			if (menu.getCategories() != null) {
-				for (String category : menu.getCategories()) {
+				for (FoodCategoryDTO category : menu.getCategories()) {
 					// 카테고리가 categoryScoreMap에 존재하면 해당 카테고리의 점수를 더함
-					if (categoryScoreMap.containsKey(category)) {
-						totalScore += categoryScoreMap.get(category);
+					if (categoryScoreMap.containsKey(category.getCategoryName())) {
+						totalScore += categoryScoreMap.get(category.getCategoryName());
 					}
 				}
 			}

@@ -166,6 +166,7 @@ public class StoreService {
 
 	public List<CategoryTypeDTO> getAllCategoryTypes() {
 		List<CategoryTypeEntity> entities = categoryTypeRepository.findAll();
+		log.debug(entities.toString());
 		return entities.stream()
 			.map(entity -> CategoryTypeDTO.builder()
 				.typeId(entity.getTypeId())
@@ -176,8 +177,19 @@ public class StoreService {
 
 	public List<FoodCategoryDTO> getAllCategories(Integer typeId) {
 		List<FoodCategoryEntity> categories = foodCategoryRepository.findByCategoryType_TypeId(typeId);
+		log.debug(categories.toString());
 		return categories.stream()
-			.map(category -> new FoodCategoryDTO(category.getCategoryName(), category.getCategoryType().getTypeId()))
+			.map(category -> new FoodCategoryDTO(category.getCategoryId(), category.getCategoryName(),
+				category.getCategoryType().getTypeId()))
+			.collect(Collectors.toList());
+	}
+
+	// 입력된 검색어를 바탕으로 카테고리 검색
+	public List<FoodCategoryDTO> searchCategories(String query) {
+		List<FoodCategoryEntity> categories = foodCategoryRepository.findByCategoryNameContaining(query);
+		return categories.stream()
+			.map(category -> new FoodCategoryDTO(category.getCategoryId(), category.getCategoryName(),
+				category.getCategoryType().getTypeId()))
 			.collect(Collectors.toList());
 	}
 

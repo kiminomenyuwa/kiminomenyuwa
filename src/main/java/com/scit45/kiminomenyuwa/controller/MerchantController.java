@@ -90,7 +90,7 @@ public class MerchantController {
 	 */
 	@GetMapping("/stores/{storeId}")
 	@PreAuthorize("hasRole('ROLE_MERCHANT')")
-	public String merchantsPage(@PathVariable Integer storeId
+	public String merchantsPage(@PathVariable("storeId") Integer storeId
 		, @AuthenticationPrincipal AuthenticatedUser user
 		, Model model) {
 
@@ -145,7 +145,7 @@ public class MerchantController {
 	 */
 	@GetMapping("/stores/{storeId}/menus/registration")
 	@PreAuthorize("hasRole('ROLE_MERCHANT')")
-	public String menuRegistration(@PathVariable Integer storeId
+	public String menuRegistration(@PathVariable("storeId") Integer storeId
 		, @AuthenticationPrincipal AuthenticatedUser user
 		, Model model) {
 		// 가게 상세 정보 조회 (옵션: 메뉴 등록 페이지에서 가게 정보를 표시하고 싶을 경우)
@@ -171,7 +171,7 @@ public class MerchantController {
 	@PostMapping("/stores/{storeId}/menus/registration")
 	@PreAuthorize("hasRole('ROLE_MERCHANT')")
 	public ResponseEntity<String> registerMenu(
-		@PathVariable Integer storeId,
+		@PathVariable("storeId") Integer storeId,
 		@ModelAttribute MenuRegistrationDTO menuRegistrationDTO) {
 		log.debug("전달된 메뉴 DTO 객체: {}", menuRegistrationDTO);
 

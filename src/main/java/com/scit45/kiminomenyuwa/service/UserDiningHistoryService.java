@@ -88,7 +88,7 @@ public class UserDiningHistoryService {
 				.price(menuEntity.getPrice())
 				.pictureUrl(menuEntity.getPictureUrl())
 				.enabled(menuEntity.getEnabled())
-				.categories(categories) // 카테고리 리스트 추가
+				// .categories(categories) // 카테고리 리스트 추가
 				.build());
 		}
 

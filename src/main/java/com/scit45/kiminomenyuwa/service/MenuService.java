@@ -1,12 +1,12 @@
 package com.scit45.kiminomenyuwa.service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.scit45.kiminomenyuwa.domain.dto.FoodCategoryDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
 import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
@@ -41,8 +41,13 @@ public class MenuService {
 		List<MenuDTO> menuDTOs = new ArrayList<>();
 		for (MenuEntity menuEntity : menuEntities) {
 			// 각 메뉴의 카테고리 리스트 가져오기
-			List<String> categories = menuEntity.getCategoryMappings().stream()
-				.map(mapping -> mapping.getFoodCategory().getCategoryName())
+			List<FoodCategoryDTO> categories = menuEntity.getCategoryMappings().stream()
+				.map(mapping -> FoodCategoryDTO
+					.builder()
+					.categoryId(mapping.getFoodCategory().getCategoryId())
+					.categoryName(mapping.getFoodCategory().getCategoryName())
+					.typeId(mapping.getFoodCategory().getCategoryType().getTypeId())
+					.build())
 				.collect(Collectors.toList());
 
 			// MenuEntity를 MenuDTO로 변환하여 리스트에 추가
@@ -80,7 +85,7 @@ public class MenuService {
 				.price(menuEntity.getPrice())
 				.pictureUrl(menuEntity.getPictureUrl())
 				.enabled(menuEntity.getEnabled())
-				.categories(Arrays.asList(categories.split(", ")))  // 카테고리 추가
+				// .categories(Arrays.asList(categories.split(", ")))  // 카테고리 추가
 				.build();
 
 			menuDTOs.add(menuDTO);

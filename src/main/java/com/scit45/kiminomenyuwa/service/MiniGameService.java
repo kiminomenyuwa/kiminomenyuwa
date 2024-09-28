@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.scit45.kiminomenyuwa.domain.dto.CategoryCountDTO;
+import com.scit45.kiminomenyuwa.domain.dto.FoodCategoryDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MiniGameMenuRatingDTO;
 import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
@@ -281,10 +282,10 @@ public class MiniGameService {
 			int totalScore = 0;
 
 			if (menu.getCategories() != null) {
-				for (String category : menu.getCategories()) {
+				for (FoodCategoryDTO category : menu.getCategories()) {
 					// 카테고리가 categoryScoreMap에 존재하면 해당 카테고리의 점수를 더함
-					if (categoryScoreMap.containsKey(category)) {
-						totalScore += categoryScoreMap.get(category);
+					if (categoryScoreMap.containsKey(category.getCategoryName())) {
+						totalScore += categoryScoreMap.get(category.getCategoryName());
 					}
 				}
 			}

@@ -24,9 +24,9 @@ public class MenuRegistrationDTO {
 	Integer price;
 	MultipartFile photo;
 	Boolean enabled;
-	List<String> categories = new ArrayList<>(); // 카테고리 리스트
+	List<Integer> categories = new ArrayList<>(); // FoodCategory Id List
 
-	public List<String> getCategories() {
+	public List<Integer> getCategories() {
 		// categories 필드가 null일 경우 빈 리스트 반환
 		return categories != null ? categories : new ArrayList<>();
 	}

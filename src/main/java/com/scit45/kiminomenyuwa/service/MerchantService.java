@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.scit45.kiminomenyuwa.domain.dto.FoodCategoryDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.ReviewResponseDTO;
 import com.scit45.kiminomenyuwa.domain.dto.StoreResponseDTO;
@@ -177,8 +178,13 @@ public class MerchantService {
 				menuDTO.setEnabled(menu.getEnabled());
 
 				// 카테고리 목록 조회
-				List<String> categories = menuCategoryMappingRepository.findByMenu(menu).stream()
-					.map(mapping -> mapping.getFoodCategory().getCategoryName())
+				List<FoodCategoryDTO> categories = menuCategoryMappingRepository.findByMenu(menu).stream()
+					.map(mapping -> FoodCategoryDTO
+						.builder()
+						.categoryId(mapping.getFoodCategory().getCategoryId())
+						.categoryName(mapping.getFoodCategory().getCategoryName())
+						.typeId(mapping.getFoodCategory().getCategoryType().getTypeId())
+						.build())
 					.collect(Collectors.toList());
 				menuDTO.setCategories(categories);
 
@@ -339,10 +345,10 @@ public class MerchantService {
 		// 3. 카테고리 매핑 생성
 		List<MenuCategoryMappingEntity> categoryMappings = menuRegistrationDTO.getCategories()
 			.stream()
-			.map(categoryName -> {
+			.map(category -> {
 				// 카테고리 이름을 기반으로 FoodCategory 엔티티를 조회
-				FoodCategoryEntity foodCategory = foodCategoryRepository.findByCategoryName(categoryName)
-					.orElseThrow(() -> new RuntimeException("카테고리를 찾을 수 없습니다: " + categoryName));
+				FoodCategoryEntity foodCategory = foodCategoryRepository.findByCategoryId(category)
+					.orElseThrow(() -> new RuntimeException("카테고리를 찾을 수 없습니다: " + category));
 
 				// MenuCategoryMappingEntity 객체를 생성하여 메뉴와 카테고리 간 매핑을 저장
 				return new MenuCategoryMappingEntity(savedMenu, foodCategory);
