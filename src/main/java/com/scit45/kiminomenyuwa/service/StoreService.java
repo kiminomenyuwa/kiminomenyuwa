@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +16,9 @@ import com.scit45.kiminomenyuwa.domain.dto.FoodCategoryDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.StorePhotoDTO;
 import com.scit45.kiminomenyuwa.domain.dto.StoreRegistrationDTO;
+import com.scit45.kiminomenyuwa.domain.dto.StoreResponseDTO;
 import com.scit45.kiminomenyuwa.domain.entity.CategoryTypeEntity;
+import com.scit45.kiminomenyuwa.domain.entity.FavoriteEntity;
 import com.scit45.kiminomenyuwa.domain.entity.FoodCategoryEntity;
 import com.scit45.kiminomenyuwa.domain.entity.MenuCategoryMappingEntity;
 import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
@@ -23,6 +26,7 @@ import com.scit45.kiminomenyuwa.domain.entity.StoreEntity;
 import com.scit45.kiminomenyuwa.domain.entity.StorePhotoEntity;
 import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
 import com.scit45.kiminomenyuwa.domain.repository.CategoryTypeRepository;
+import com.scit45.kiminomenyuwa.domain.repository.FavoriteRepository;
 import com.scit45.kiminomenyuwa.domain.repository.FoodCategoryRepository;
 import com.scit45.kiminomenyuwa.domain.repository.MenuCategoryMappingRepository;
 import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
@@ -47,6 +51,7 @@ public class StoreService {
 	private final FoodCategoryRepository foodCategoryRepository;
 	private final CategoryTypeRepository categoryTypeRepository;
 	private final StorePhotoRepository storePhotoRepository;
+	private final FavoriteRepository favoriteRepository;
 
 	// application.properties에서 파일 업로드 경로를 읽어옴
 	@Value("${file.storage.location}")
@@ -233,5 +238,49 @@ public class StoreService {
 
 		// 저장된 파일의 경로 반환 (예: "{storeId}/{uniqueFileName}")
 		return "files/store/" + storeId + "/" + uniqueFileName;
+	}
+
+	private StoreResponseDTO convertToDTO(StoreEntity store, String userId) {
+		StoreResponseDTO dto = new StoreResponseDTO();
+		dto.setStoreId(store.getStoreId());
+		dto.setMerchantId(store.getUser().getUserId());
+		dto.setName(store.getName());
+		dto.setCertification(store.getCertification());
+		dto.setRoadNameAddress(store.getRoadNameAddress());
+		dto.setDetailAddress(store.getDetailAddress());
+		dto.setZipcode(store.getZipcode());
+		dto.setPhoneNumber(store.getPhoneNumber());
+		dto.setCategory(store.getCategory());
+		dto.setDescription(store.getDescription());
+		dto.setEnabled(store.getEnabled());
+
+		// 공간 정보(Geometry)에서 위도와 경도 추출
+		if (store.getLocation() != null) {
+			dto.setLongitude(store.getLocation().getCoordinate().getX());
+			dto.setLatitude(store.getLocation().getCoordinate().getY());
+		}
+
+		// 사진 URL 목록 조회
+		dto.setPhotoUrls(storePhotoRepository.findAllByStoreStoreId(store.getStoreId()).stream()
+			.map(StorePhotoEntity::getPhotoUrl)
+			.collect(Collectors.toList()));
+
+		// 찜 여부 및 찜 시간 조회
+		if (userId != null) {
+			Optional<FavoriteEntity> favoriteOpt = favoriteRepository.findByUser_UserIdAndStore_StoreId(userId,
+				store.getStoreId());
+			if (favoriteOpt.isPresent()) {
+				dto.setFavorited(true);
+				dto.setFavoritedTime(favoriteOpt.get().getCreatedAt());
+			} else {
+				dto.setFavorited(false);
+				dto.setFavoritedTime(null);
+			}
+		} else {
+			dto.setFavorited(false);
+			dto.setFavoritedTime(null);
+		}
+
+		return dto;
 	}
 }
