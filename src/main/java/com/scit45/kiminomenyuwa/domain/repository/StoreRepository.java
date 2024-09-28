@@ -2,6 +2,8 @@ package com.scit45.kiminomenyuwa.domain.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -60,4 +62,6 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
 		"WHERE (:name IS NULL OR LOWER(s.name) LIKE LOWER(CONCAT('%', :name, '%'))) " +
 		"AND (:category IS NULL OR s.category = :category)")
 	List<StoreEntity> findStoresByNameAndCategory(@Param("name") String name, @Param("category") String category);
+
+	Page<StoreEntity> findByUser_UserId(String userId, Pageable pageable);
 }
