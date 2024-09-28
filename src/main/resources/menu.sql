@@ -1,3 +1,6 @@
+delete
+from menu;
+
 INSERT INTO `menu`
 VALUES ('2856', '13204', '곰바위 홍탕(50g)', '18000', '', 1);
 INSERT INTO `menu`
