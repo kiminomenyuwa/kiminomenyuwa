@@ -35,6 +35,6 @@ public class MenuCategoryMappingEntity {
 	private MenuEntity menu;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "category_name", nullable = false)
+	@JoinColumn(name = "category_id", nullable = false)
 	private FoodCategoryEntity foodCategory; // food_category 테이블과 매핑
 }
