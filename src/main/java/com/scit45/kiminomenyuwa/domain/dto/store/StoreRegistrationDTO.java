@@ -1,13 +1,14 @@
-package com.scit45.kiminomenyuwa.domain.dto;
+package com.scit45.kiminomenyuwa.domain.dto.store;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Builder
@@ -25,6 +26,8 @@ public class StoreRegistrationDTO {
     String category;
     String description;
     Boolean enabled;
+    Double longitude;
+    Double latitude;
     List<MultipartFile> photos = new ArrayList<>();
     List<StorePhotoDTO> photosDTO = new ArrayList<>();
 }
