@@ -100,21 +100,36 @@
         <h3>메뉴 목록</h3>
         <div class="row">
             <div class="col-md-4 menu-item" th:each="menu : ${storeDetails.menus}">
-                <div class="card">
-                    <img alt="Menu Picture" class="card-img-top" th:src="@{'/'+${menu.pictureUrl}}">
-                    <div class="card-body">
+                <div class="card h-100">
+                    <img alt="Menu Picture" class="card-img-top" onerror="this.onerror=null; this.src='/images/default-menu.png';"
+                         th:src="@{'/' + ${menu.pictureUrl}}">
+                    <div class="card-body d-flex flex-column">
                         <h5 class="card-title" th:text="${menu.name}">메뉴 이름</h5>
-                        <p class="card-text"><strong>가격:</strong> <span th:text="${menu.price}">가격</span></p>
+                        <p class="card-text"><strong>가격:</strong> <span th:text="${menu.price}">가격</span>원</p>
                         <p class="card-text"><strong>카테고리:</strong>
-                            <span th:each="category : ${menu.categories}" th:text="${category} + ' '">카테고리</span>
+                            <span class="badge bg-secondary me-1" th:each="category : ${menu.categories}"
+                                  th:text="${category.categoryName}">카테고리</span>
                         </p>
                         <p class="card-text"><strong>상태:</strong> <span
                                 th:text="${menu.enabled} ? '활성' : '비활성'">상태</span></p>
+                        <!-- 하단 여백을 채워 카드가 동일한 높이를 유지하도록 함 -->
+                        <div class="mt-auto">
+                            <a class="btn btn-primary btn-sm"
+                               th:href="@{'/merchant/menus/edit/' + ${menu.menuId}}">수정</a>
+                            <form method="post" style="display:inline;"
+                                  th:action="@{'/merchant/menus/delete/' + ${menu.menuId}}">
+                                <input name="_method" type="hidden" value="delete"/>
+                                <button class="btn btn-danger btn-sm" onclick="return confirm('정말 삭제하시겠습니까?');"
+                                        type="submit">삭제
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 
     <!-- 리뷰 목록 -->
     <div class="mb-4">
