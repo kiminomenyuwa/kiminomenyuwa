@@ -1,17 +1,18 @@
 package com.scit45.kiminomenyuwa.controller;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.scit45.kiminomenyuwa.domain.dto.CategoryTypeDTO;
 import com.scit45.kiminomenyuwa.domain.dto.FoodCategoryDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
-import com.scit45.kiminomenyuwa.domain.dto.StoreRegistrationDTO;
+import com.scit45.kiminomenyuwa.domain.dto.store.StoreRegistrationDTO;
 import com.scit45.kiminomenyuwa.service.StoreService;
 
 import lombok.RequiredArgsConstructor;
@@ -34,76 +35,15 @@ public class StoreController {
         return "store/storePage";
     }
 
-    // 가게 리스트 페이지를 반환하는 메소드
-    @ResponseBody
-    @GetMapping("/api/stores")
-    public List<StoreRegistrationDTO> showStoreList(Authentication user) {
-        // 서비스에서 가게 리스트를 가져와서 모델에 추가
-        List<StoreRegistrationDTO> storeList = storeService.getAllStores();
-
-        return storeList;
-    }
-
-    /**
-     * 가게 등록 페이지로 이동
-     *
-     * @return
-     */
-    @GetMapping("storeRegistration")
-    public String storeRegistration() {
-
-        return "store/storeRegistration";
-    }
-
-    /**
-     * 가게 등록정보를 Repository에 저장
-     *
-     * @param storeRegistrationDTO
-     */
-    @ResponseBody
-    @PostMapping("storeRegistration")
-    public ResponseEntity<String> registerStore(
-            @ModelAttribute
-            StoreRegistrationDTO storeRegistrationDTO) throws IOException {
-        log.debug("전달된 dto객체: {}", storeRegistrationDTO);
-        try {
-            storeService.saveStore(storeRegistrationDTO);
-            return ResponseEntity.ok("가게가 정상 등록되었습니다.");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body("가게 등록에 실패했습니다.");
-        }
-    }
-
-    @GetMapping("menuRegistration")
-    public String menuRegistration() {
-        return "store/menuRegistration";
-    }
-
-    /**
-     * 새로운 메뉴를 등록하는 엔드포인트
-     *
-     * @param menuDTO 클라이언트에서 전달된 메뉴 등록 정보
-     * @return 성공 여부에 대한 응답
-     */
-    @ResponseBody
-    @PostMapping("menuRegistration")
-    public ResponseEntity<MenuDTO> registerMenu(@RequestBody
-                                                MenuDTO menuDTO) {
-        // 전달된 DTO 객체 로그 출력
-        log.debug("전달된 메뉴 DTO 객체: {}", menuDTO);
-
-        // 서비스 계층을 통해 메뉴 저장 로직을 실행
-        storeService.saveMenu(menuDTO);
-
-        // 성공적으로 저장된 DTO를 응답으로 반환
-        return ResponseEntity.ok().body(menuDTO);
-    }
-
-    @GetMapping("/store/{storeId}")
-    public String merchantsPage() {
-        return "store/merchantsPage";
-    }
+    // // 가게 리스트 페이지를 반환하는 메소드
+    // @ResponseBody
+    // @GetMapping("/api/stores")
+    // public List<StoreRegistrationDTO> showStoreList(Authentication user) {
+    //     // 서비스에서 가게 리스트를 가져와서 모델에 추가
+    //     List<StoreRegistrationDTO> storeList = storeService.getAllStores();
+    //
+    //     return storeList;
+    // }
 
     /**
      * 가게 이름 불러오기

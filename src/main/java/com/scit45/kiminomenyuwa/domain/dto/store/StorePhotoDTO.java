@@ -1,4 +1,4 @@
-package com.scit45.kiminomenyuwa.domain.dto;
+package com.scit45.kiminomenyuwa.domain.dto.store;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

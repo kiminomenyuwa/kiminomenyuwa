@@ -89,7 +89,7 @@ public class ReviewService {
         responseDTO.setUserId(savedReview.getUser().getUserId());
         responseDTO.setRating(savedReview.getRating());
         responseDTO.setComment(savedReview.getComment());
-        responseDTO.setCreatedTime(savedReview.getCreatedTime().toString()); // 필요에 따라 형식 수정
+        responseDTO.setCreatedTime(savedReview.getCreatedTime());
         responseDTO.setPhotoUrls(photoUrls);
 
         return responseDTO;
@@ -165,7 +165,7 @@ public class ReviewService {
         responseDTO.setUserId(reviewEntity.getUser().getUserId());
         responseDTO.setRating(reviewEntity.getRating());
         responseDTO.setComment(reviewEntity.getComment());
-        responseDTO.setCreatedTime(reviewEntity.getCreatedTime().toString());
+        responseDTO.setCreatedTime(reviewEntity.getCreatedTime());
 
         // 리뷰의 사진 URL 리스트 설정
         responseDTO.setPhotoUrls(getReviewPhotosByReviewId(reviewEntity.getReviewId()));
