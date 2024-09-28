@@ -23,6 +23,9 @@ import lombok.NoArgsConstructor;
 public class FoodCategoryEntity {
 
 	@Id
+	@Column(name = "category_id")
+	private Integer categoryId;
+
 	@Column(name = "category_name")
 	private String categoryName;
 

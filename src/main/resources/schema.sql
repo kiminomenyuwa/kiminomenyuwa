@@ -36,9 +36,9 @@ CREATE TABLE `category_type`
 -- 카테고리 테이블: 카테고리 항목을 정의 (예: 고추, 중식, 굽기)
 CREATE TABLE `food_category`
 (
+    `category_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `category_name` VARCHAR(50) NOT NULL, -- 카테고리 이름 (예: '고추', '중식', '굽기')
     `type_id`       INT         NOT NULL, -- 카테고리 타입 ID (외래 키)
-    PRIMARY KEY (`category_name`),        -- 기본 키 설정
     FOREIGN KEY (`type_id`) REFERENCES `category_type` (`type_id`)
 );
 
@@ -87,25 +87,25 @@ CREATE TABLE `store`
 -- 메뉴 테이블: 상점에서 제공하는 메뉴 항목을 저장
 CREATE TABLE `menu`
 (
-    `menu_id`     INT AUTO_INCREMENT NOT NULL,           -- 메뉴의 고유 식별자
-    `store_id`    INT                NOT NULL,           -- 메뉴가 속한 상점의 ID
-    `name`        VARCHAR(50),                           -- 메뉴 이름
-    `price`       INT,                                   -- 메뉴 가격
-    `picture_url` VARCHAR(100),                          -- 메뉴 사진 URL
-    `enabled`     TINYINT(1)         NOT NULL DEFAULT 1, -- 메뉴 활성화 여부
-    PRIMARY KEY (`menu_id`),                             -- 기본 키 설정
+    `menu_id`     INT        NOT NULL,           -- 메뉴의 고유 식별자
+    `store_id`    INT        NOT NULL,           -- 메뉴가 속한 상점의 ID
+    `name`        VARCHAR(50),                   -- 메뉴 이름
+    `price`       INT,                           -- 메뉴 가격
+    `picture_url` VARCHAR(100),                  -- 메뉴 사진 URL
+    `enabled`     TINYINT(1) NOT NULL DEFAULT 1, -- 메뉴 활성화 여부
+    PRIMARY KEY (`menu_id`),                     -- 기본 키 설정
     FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`)
 );
 
 -- 메뉴와 카테고리 간의 관계를 저장하는 테이블: 메뉴에 대한 카테고리 정보를 저장
 CREATE TABLE `menu_category_mapping`
 (
-    `mapping_id`    INT AUTO_INCREMENT NOT NULL, -- 메뉴와 카테고리 간의 관계의 고유 식별자
-    `menu_id`       INT                NOT NULL, -- 메뉴의 ID
-    `category_name` VARCHAR(50)        NOT NULL, -- 카테고리의 이름
-    PRIMARY KEY (`mapping_id`),                  -- 기본 키 설정
+    `mapping_id`  INT AUTO_INCREMENT NOT NULL, -- 메뉴와 카테고리 간의 관계의 고유 식별자
+    `menu_id`     INT                NOT NULL, -- 메뉴의 ID
+    `category_id` INT                NOT NULL, -- 카테고리 ID
+    PRIMARY KEY (`mapping_id`),                -- 기본 키 설정
     FOREIGN KEY (`menu_id`) REFERENCES `menu` (`menu_id`),
-    FOREIGN KEY (`category_name`) REFERENCES `food_category` (`category_name`)
+    FOREIGN KEY (`category_id`) REFERENCES `food_category` (`category_id`)
 );
 
 -- 리뷰 테이블: 사용자 리뷰를 저장
