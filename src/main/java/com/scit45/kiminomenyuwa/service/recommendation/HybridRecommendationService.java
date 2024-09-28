@@ -12,8 +12,10 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
 import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
+import com.scit45.kiminomenyuwa.service.MenuService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,7 @@ public class HybridRecommendationService {
 	private final ContentBasedFilteringService contentBasedFilteringService;
 	private final MenuRepository menuRepository;
 	private final UserItemMatrixService userItemMatrixService;
+	private final MenuService menuService;
 
 	/**
 	 * 하이브리드 필터링을 통해 추천 메뉴를 생성합니다.
@@ -89,7 +92,7 @@ public class HybridRecommendationService {
 	 * @param limit       추천할 메뉴 개수
 	 * @return 추천 순으로 정렬된 메뉴 목록
 	 */
-	public List<MenuEntity> sortMenusByRecommendation(String userId, List<MenuEntity> nearbyMenus, int limit) {
+	public List<MenuDTO> sortMenusByRecommendation(String userId, List<MenuDTO> nearbyMenus, int limit) {
 		// 사용자 아이템 매트릭스 생성
 		Map<String, Map<Integer, Integer>> userItemMatrix = userItemMatrixService.createUserItemMatrix();
 
@@ -118,7 +121,7 @@ public class HybridRecommendationService {
 			double similarity = entry.getValue();
 			Map<Integer, Integer> similarUserVector = userItemMatrix.get(similarUserId);
 
-			for (MenuEntity menu : nearbyMenus) {
+			for (MenuDTO menu : nearbyMenus) {
 				Integer menuId = menu.getMenuId();
 				int score = similarUserVector.getOrDefault(menuId, 0);
 
@@ -136,7 +139,7 @@ public class HybridRecommendationService {
 		// 콘텐츠 기반 필터링 점수 계산
 		Set<String> preferredCategories = contentBasedFilteringService.getUserPreferredCategories(userId);
 
-		for (MenuEntity menu : nearbyMenus) {
+		for (MenuDTO menu : nearbyMenus) {
 			Integer menuId = menu.getMenuId();
 			List<String> menuCategories = contentBasedFilteringService.getMenuCategories(menuId);
 
@@ -153,15 +156,12 @@ public class HybridRecommendationService {
 		}
 
 		// 점수 기준으로 메뉴를 정렬하고 상위 N개를 선택합니다.
-		List<MenuEntity> sortedMenus = menuScoreMap.entrySet().stream()
+		List<MenuDTO> sortedMenus = menuScoreMap.entrySet().stream()
 			.sorted(Map.Entry.<Integer, Double>comparingByValue().reversed())
 			.limit(limit)
-			.map(entry -> {
-				Optional<MenuEntity> menuOpt = menuRepository.findById(entry.getKey());
-				return menuOpt.orElse(null);
-			})
+			.map(entry -> menuService.findById(entry.getKey()))
 			.filter(Objects::nonNull)
-			.filter(MenuEntity::getEnabled) // 메뉴가 활성화된 경우만 포함
+			.filter(MenuDTO::getEnabled) // 메뉴가 활성화된 경우만 포함
 			.collect(Collectors.toList());
 
 		log.info("Sorted recommendations for user {}: {}", userId, sortedMenus);

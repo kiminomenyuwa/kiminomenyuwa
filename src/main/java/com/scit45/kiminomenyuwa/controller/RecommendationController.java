@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.StoreResponseDTO;
-import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
 import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
 import com.scit45.kiminomenyuwa.service.MenuService;
 import com.scit45.kiminomenyuwa.service.StoreSearchService;
@@ -40,7 +40,7 @@ public class RecommendationController {
 		@AuthenticationPrincipal AuthenticatedUser user,
 		@RequestParam("latitude") double latitude,
 		@RequestParam("longitude") double longitude,
-		@RequestParam(value = "radius", defaultValue = "999999999") int radius,
+		@RequestParam(value = "radius", defaultValue = "1000") int radius,
 		@RequestParam(defaultValue = "10", name = "limit") int limit) {
 
 		// 사용자의 위치를 기반으로 주변 가게들을 검색합니다.
@@ -48,13 +48,13 @@ public class RecommendationController {
 		log.debug("nearbyStores = {}", nearbyStores);
 
 		// 주변 가게들의 메뉴 리스트를 수집합니다.
-		List<MenuEntity> nearbyMenus = nearbyStores.stream()
-			.flatMap(store -> menuService.findByStoreId(store.getStoreId()).stream())
+		List<MenuDTO> nearbyMenus = nearbyStores.stream()
+			.flatMap(store -> menuService.findMenusByStoreId(store.getStoreId()).stream())
 			.collect(Collectors.toList());
 
 		log.debug("nearbyMenus = {}", nearbyMenus);
 		// 추천 순으로 메뉴를 정렬합니다.
-		List<MenuEntity> recommendedMenus = hybridRecommendationService.sortMenusByRecommendation(
+		List<MenuDTO> recommendedMenus = hybridRecommendationService.sortMenusByRecommendation(
 			user.getUsername(),
 			nearbyMenus,
 			limit

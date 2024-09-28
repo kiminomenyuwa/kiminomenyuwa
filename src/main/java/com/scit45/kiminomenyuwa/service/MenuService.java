@@ -8,10 +8,12 @@ import org.springframework.stereotype.Service;
 
 import com.scit45.kiminomenyuwa.domain.dto.FoodCategoryDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
+import com.scit45.kiminomenyuwa.domain.entity.FoodCategoryEntity;
 import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
 import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
 import com.scit45.kiminomenyuwa.domain.repository.UserDiningHistoryRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -93,8 +95,52 @@ public class MenuService {
 		return menuDTOs;
 	}
 
-	public List<MenuEntity> findByStoreId(Integer storeId) {
-		return menuRepository.findByStore_StoreIdAndEnabledTrue(storeId);
+	/**
+	 * 특정 가게 ID에 속한 모든 메뉴를 조회하여 MenuDTO 리스트로 반환
+	 *
+	 * @param storeId 가게 ID
+	 * @return 메뉴 DTO 리스트
+	 */
+	public List<MenuDTO> findMenusByStoreId(Integer storeId) {
+		List<MenuEntity> menuEntities = menuRepository.findByStore_StoreId(storeId);
+
+		return menuEntities.stream()
+			.map(this::convertToDTO)
+			.collect(Collectors.toList());
+	}
+
+	public MenuDTO findById(Integer menuId) {
+		return convertToDTO(menuRepository.findById(menuId)
+			.orElseThrow(() -> new EntityNotFoundException("menuId : {}" + menuId + "가 존재하지 않습니다.")));
+	}
+
+	/**
+	 * MenuEntity를 MenuDTO로 변환하는 메서드
+	 *
+	 * @param menuEntity 메뉴 엔티티
+	 * @return 메뉴 DTO
+	 */
+	private MenuDTO convertToDTO(MenuEntity menuEntity) {
+		List<FoodCategoryDTO> foodCategories = menuEntity.getCategoryMappings().stream()
+			.map(mapping -> {
+				FoodCategoryEntity category = mapping.getFoodCategory();
+				return FoodCategoryDTO.builder()
+					.categoryId(category.getCategoryId())
+					.categoryName(category.getCategoryName())
+					.typeId(category.getCategoryType().getTypeId())
+					.build();
+			})
+			.collect(Collectors.toList());
+
+		return MenuDTO.builder()
+			.menuId(menuEntity.getMenuId())
+			.storeId(menuEntity.getStore().getStoreId())
+			.name(menuEntity.getName())
+			.price(menuEntity.getPrice())
+			.pictureUrl(menuEntity.getPictureUrl())
+			.enabled(menuEntity.getEnabled())
+			.categories(foodCategories)
+			.build();
 	}
 
 }
