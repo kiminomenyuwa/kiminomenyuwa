@@ -41,7 +41,7 @@ public class RecommendationController {
 		@AuthenticationPrincipal AuthenticatedUser user,
 		@RequestParam("latitude") double latitude,
 		@RequestParam("longitude") double longitude,
-		@RequestParam(value = "radius", defaultValue = "1000") int radius,
+		@RequestParam(value = "radius", defaultValue = "400") int radius,
 		@RequestParam(defaultValue = "10", name = "limit") int limit) {
 
 		// 사용자의 위치를 기반으로 주변 가게들을 검색합니다.
@@ -65,7 +65,7 @@ public class RecommendationController {
 
 		// 두 리스트를 포함하는 맵을 생성하여 반환합니다.
 		Map<String, Object> response = new HashMap<>();
-		response.put("nearbyStores", nearbyStores);
+		response.put("nearbyStores", nearbyStores.stream().limit(10).collect(Collectors.toList()));
 		response.put("recommendedMenus", recommendedMenus);
 
 		return ResponseEntity.ok(response);
