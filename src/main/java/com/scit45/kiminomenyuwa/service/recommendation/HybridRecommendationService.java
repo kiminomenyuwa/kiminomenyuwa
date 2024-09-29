@@ -1,11 +1,11 @@
 package com.scit45.kiminomenyuwa.service.recommendation;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
-import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
+import com.scit45.kiminomenyuwa.domain.dto.recommendation.MenuRecommendationDTO;
 import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
 import com.scit45.kiminomenyuwa.service.MenuService;
 
@@ -33,66 +33,14 @@ public class HybridRecommendationService {
 	private final MenuService menuService;
 
 	/**
-	 * 하이브리드 필터링을 통해 추천 메뉴를 생성합니다.
-	 *
-	 * @param userId 추천 대상 유저 ID
-	 * @param limit  추천할 메뉴 개수
-	 * @return 추천 메뉴 목록
-	 */
-	public List<MenuEntity> recommendMenus(String userId, int limit) {
-		// 기존의 추천 방식 그대로 사용
-		List<MenuEntity> cfRecommendations = collaborativeFilteringService.recommendMenus(userId, limit);
-		List<MenuEntity> cbfRecommendations = contentBasedFilteringService.recommendMenus(userId, limit);
-
-		// 메뉴 ID를 키로 하고 점수를 값으로 하는 Map을 생성합니다.
-		Map<Integer, Double> menuScoreMap = new HashMap<>();
-
-		// 가중치 설정 (필요에 따라 조정 가능)
-		double cfWeight = 1.0;  // Collaborative Filtering 가중치
-		double cbfWeight = 1.0; // Content-Based Filtering 가중치
-
-		// Collaborative Filtering 추천 메뉴에 점수 부여
-		for (int i = 0; i < cfRecommendations.size(); i++) {
-			MenuEntity menu = cfRecommendations.get(i);
-			// 리스트 상위에 위치할수록 높은 점수를 부여
-			double score = cfWeight * (cfRecommendations.size() - i);
-			menuScoreMap.put(menu.getMenuId(), menuScoreMap.getOrDefault(menu.getMenuId(), 0.0) + score);
-		}
-
-		// Content-Based Filtering 추천 메뉴에 점수 부여
-		for (int i = 0; i < cbfRecommendations.size(); i++) {
-			MenuEntity menu = cbfRecommendations.get(i);
-			// 리스트 상위에 위치할수록 높은 점수를 부여
-			double score = cbfWeight * (cbfRecommendations.size() - i);
-			menuScoreMap.put(menu.getMenuId(), menuScoreMap.getOrDefault(menu.getMenuId(), 0.0) + score);
-		}
-
-		// 점수 기준으로 메뉴를 정렬하고 상위 N개를 선택합니다.
-		List<MenuEntity> combinedList = menuScoreMap.entrySet().stream()
-			.sorted(Map.Entry.<Integer, Double>comparingByValue().reversed())
-			.limit(limit)
-			.map(entry -> {
-				Optional<MenuEntity> menuOpt = menuRepository.findById(entry.getKey());
-				return menuOpt.orElse(null);
-			})
-			.filter(Objects::nonNull)
-			.filter(MenuEntity::getEnabled) // 메뉴가 활성화된 경우만 포함
-			.collect(Collectors.toList());
-
-		log.info("Hybrid recommendations for user {}: {}", userId, combinedList);
-
-		return combinedList;
-	}
-
-	/**
-	 * 입력된 메뉴 리스트를 하이브리드 추천 점수에 따라 정렬합니다.
+	 * 입력된 메뉴 리스트를 하이브리드 추천 점수에 따라 정렬하고, 추천 이유를 추가한 DTO 리스트를 반환합니다.
 	 *
 	 * @param userId      추천 대상 유저 ID
 	 * @param nearbyMenus 사용자의 위치 주변 가게들의 메뉴 리스트
 	 * @param limit       추천할 메뉴 개수
-	 * @return 추천 순으로 정렬된 메뉴 목록
+	 * @return 추천 순으로 정렬된 메뉴 목록 (추천 이유 포함)
 	 */
-	public List<MenuDTO> sortMenusByRecommendation(String userId, List<MenuDTO> nearbyMenus, int limit) {
+	public List<MenuRecommendationDTO> sortMenusByRecommendation(String userId, List<MenuDTO> nearbyMenus, int limit) {
 		// 사용자 아이템 매트릭스 생성
 		Map<String, Map<Integer, Integer>> userItemMatrix = userItemMatrixService.createUserItemMatrix();
 
@@ -102,6 +50,7 @@ public class HybridRecommendationService {
 		}
 
 		Map<Integer, Double> menuScoreMap = new HashMap<>();
+		Map<Integer, List<String>> menuReasonsMap = new HashMap<>(); // 추천 이유를 저장할 맵
 
 		// 가중치 설정 (필요에 따라 조정 가능)
 		double cfWeight = 1.0;  // Collaborative Filtering 가중치
@@ -114,7 +63,7 @@ public class HybridRecommendationService {
 		List<Map.Entry<String, Double>> sortedSimilarUsers = similarityMap.entrySet().stream()
 			.sorted(Map.Entry.<String, Double>comparingByValue().reversed())
 			.limit(topN)
-			.toList();
+			.collect(Collectors.toList());
 
 		for (Map.Entry<String, Double> entry : sortedSimilarUsers) {
 			String similarUserId = entry.getKey();
@@ -131,7 +80,11 @@ public class HybridRecommendationService {
 				}
 
 				if (score > 0) {
-					menuScoreMap.put(menuId, menuScoreMap.getOrDefault(menuId, 0.0) + (cfWeight * similarity * score));
+					double calculatedScore = cfWeight * similarity * score;
+					menuScoreMap.put(menuId, menuScoreMap.getOrDefault(menuId, 0.0) + calculatedScore);
+
+					// 추천 이유 추가
+					menuReasonsMap.computeIfAbsent(menuId, k -> new ArrayList<>()).add("유사한 사용자들이 선호하는 음식");
 				}
 			}
 		}
@@ -151,17 +104,38 @@ public class HybridRecommendationService {
 			}
 
 			if (matchingCategories > 0) {
-				menuScoreMap.put(menuId, menuScoreMap.getOrDefault(menuId, 0.0) + (cbfWeight * matchingCategories));
+				double calculatedScore = cbfWeight * matchingCategories;
+				menuScoreMap.put(menuId, menuScoreMap.getOrDefault(menuId, 0.0) + calculatedScore);
+
+				// 추천 이유 추가
+				menuReasonsMap.computeIfAbsent(menuId, k -> new ArrayList<>()).add("사용자가 선호하는 카테고리");
 			}
 		}
 
 		// 점수 기준으로 메뉴를 정렬하고 상위 N개를 선택합니다.
-		List<MenuDTO> sortedMenus = menuScoreMap.entrySet().stream()
+		List<MenuRecommendationDTO> sortedMenus = menuScoreMap.entrySet().stream()
 			.sorted(Map.Entry.<Integer, Double>comparingByValue().reversed())
 			.limit(limit)
-			.map(entry -> menuService.findById(entry.getKey()))
+			.map(entry -> {
+				MenuDTO menuDTO = menuService.findById(entry.getKey());
+				if (menuDTO == null || !menuDTO.getEnabled()) {
+					return null;
+				}
+
+				List<String> reasons = menuReasonsMap.getOrDefault(entry.getKey(), new ArrayList<>());
+
+				return MenuRecommendationDTO.builder()
+					.menuId(menuDTO.getMenuId())
+					.storeId(menuDTO.getStoreId())
+					.name(menuDTO.getName())
+					.price(menuDTO.getPrice())
+					.pictureUrl(menuDTO.getPictureUrl())
+					.enabled(menuDTO.getEnabled())
+					.categories(menuDTO.getCategories())
+					.recommendationReasons(reasons)
+					.build();
+			})
 			.filter(Objects::nonNull)
-			.filter(MenuDTO::getEnabled) // 메뉴가 활성화된 경우만 포함
 			.collect(Collectors.toList());
 
 		log.info("Sorted recommendations for user {}: {}", userId, sortedMenus);

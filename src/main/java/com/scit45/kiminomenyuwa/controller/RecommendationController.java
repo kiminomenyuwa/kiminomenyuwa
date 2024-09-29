@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.StoreResponseDTO;
+import com.scit45.kiminomenyuwa.domain.dto.recommendation.MenuRecommendationDTO;
 import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
 import com.scit45.kiminomenyuwa.service.MenuService;
 import com.scit45.kiminomenyuwa.service.StoreSearchService;
@@ -54,7 +55,7 @@ public class RecommendationController {
 
 		log.debug("nearbyMenus = {}", nearbyMenus);
 		// 추천 순으로 메뉴를 정렬합니다.
-		List<MenuDTO> recommendedMenus = hybridRecommendationService.sortMenusByRecommendation(
+		List<MenuRecommendationDTO> recommendedMenus = hybridRecommendationService.sortMenusByRecommendation(
 			user.getUsername(),
 			nearbyMenus,
 			limit

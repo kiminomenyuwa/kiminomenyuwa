@@ -80,6 +80,13 @@
         let userMarker;
         let storeMarkers = [];
 
+        // 추천 이유에 따른 이모티콘 매핑
+        const recommendationEmojiMap = {
+            "사용자가 선호하는 카테고리": "❤",
+            "유사한 사용자들이 선호하는 음식": "👨‍👩‍👧‍👦",
+            "사용자가 선호하는 음식": "❤",
+        };
+
         // Slick Slider 초기화 함수
         function initializeSlickSliders() {
             // 추천 메뉴 슬라이더 초기화
@@ -207,7 +214,6 @@
                     displayNearbyStores(response.nearbyStores);
                 },
                 error: function (xhr, status, error) {
-                    console.error("Error fetching recommended menus and stores: ", error);
                     alert("추천 메뉴 및 가게를 가져오는 중 오류가 발생했습니다.");
                 }
             });
@@ -237,7 +243,7 @@
                                     <h5 class="card-title">${menu.name}</h5>
                                     <p class="card-text"><strong>가격:</strong> ${menu.price}원</p>
                                     <p class="card-text"><strong>카테고리:</strong> ${formatCategories(menu.categories)}</p>
-                                    <p class="card-text"><strong>상태:</strong> ${menu.enabled ? '활성' : '비활성'}</p>
+                                     <p class="card-text"><em>${formatRecommendationReasons(menu.recommendationReasons)}</em></p> <!-- 추천 이유 표시 -->
                                     <a href="/menu/${menu.menuId}" class="btn btn-primary mt-auto">자세히 보기</a>
                                 </div>
                             </div>
@@ -249,6 +255,14 @@
             // 슬라이더 다시 초기화
             initializeSlickSliders();
             setSlickNavigation();
+        }
+
+        function formatRecommendationReasons(reasons) {
+            if (!reasons || reasons.length === 0) return '';
+            return reasons.map(reason => {
+                const emoji = recommendationEmojiMap[reason] || ''; // 매핑된 이모티콘 또는 빈 문자열
+                return `${emoji} ${reason}`;
+            }).join(' & ');
         }
 
         // Function to format categories into badges
