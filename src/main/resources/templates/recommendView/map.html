@@ -5,21 +5,70 @@
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>내 위치</title>
+    <!-- Slick Slider CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" rel="stylesheet" type="text/css"/>
+    <!-- Slick Slider Theme CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" rel="stylesheet"
+          type="text/css"/>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Naver Map API Script -->
     <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=t06c4jgb48&submodules=geocoder"
             type="text/javascript"></script>
+
+    <style>
+        body {
+            padding-top: 70px;
+        }
+
+        .store-photo, .menu-photo {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .badge-category {
+            margin-right: 5px;
+        }
+
+        /* Slick Slider 커스터마이징 */
+        .slick-slide {
+            padding: 0 10px;
+        }
+
+        .slick-prev:before, .slick-next:before {
+            color: #000;
+        }
+    </style>
 </head>
 <body>
 <div class="container mt-5">
     <h1>내 위치</h1>
     <div id="coordinates">Latitude: 37.5665, Longitude: 126.9780</div>
     <div id="map" style="width: 100%; height: 500px;"></div>
+
+    <!-- 추천 메뉴 목록 -->
     <h3>추천 메뉴 목록</h3>
-    <ul class="list-group mt-3" id="menu-list"></ul>
-    <h3>주변 가게 목록</h3>
-    <ul class="list-group mt-3" id="store-list"></ul>
+    <div class="menu-slider">
+        <!-- 메뉴 카드가 여기서 동적으로 추가됩니다 -->
+    </div>
+
+    <!-- 메뉴 슬라이더 네비게이션 버튼 -->
+    <div class="d-flex justify-content-center mt-3">
+        <button class="btn btn-secondary mr-2 slick-prev-menu">이전</button>
+        <button class="btn btn-secondary slick-next-menu">다음</button>
+    </div>
+
+    <!-- 주변 가게 목록 -->
+    <h3 class="mt-5">주변 가게 목록</h3>
+    <div class="row" id="store-list">
+        <!-- 가게 카드가 여기서 동적으로 추가됩니다 -->
+    </div>
 </div>
 
 <!-- jQuery, Bootstrap JS -->
@@ -30,6 +79,62 @@
         let map;
         let userMarker;
         let storeMarkers = [];
+
+        // Slick Slider 초기화 함수
+        function initializeSlickSliders() {
+            // 추천 메뉴 슬라이더 초기화
+            $('.menu-slider').slick({
+                slidesToShow: 3, // 한 번에 3개씩 표시
+                slidesToScroll: 3, // 슬라이드 시 3개씩 이동
+                infinite: false,
+                dots: true, // 페이지네이션 활성화
+                arrows: false,
+                speed: 500, // 슬라이드 전환 속도 (밀리초)
+                cssEase: 'ease-in-out', // 슬라이드 전환 애니메이션
+                responsive: [
+                    {
+                        breakpoint: 1200,
+                        settings: {
+                            slidesToShow: 3,
+                            slidesToScroll: 3
+                        }
+                    },
+                    {
+                        breakpoint: 992,
+                        settings: {
+                            slidesToShow: 2,
+                            slidesToScroll: 2
+                        }
+                    },
+                    {
+                        breakpoint: 576,
+                        settings: {
+                            slidesToShow: 1,
+                            slidesToScroll: 1
+                        }
+                    }
+                ]
+            });
+        }
+
+        // Slick Slider 네비게이션 버튼 설정
+        function setSlickNavigation() {
+            // 추천 메뉴 네비게이션
+            $('.slick-prev-menu').click(function () {
+                $('.menu-slider').slick('slickPrev');
+            });
+            $('.slick-next-menu').click(function () {
+                $('.menu-slider').slick('slickNext');
+            });
+        }
+
+        // 초기 Slick Slider 및 네비게이션 설정
+        initializeSlickSliders();
+        setSlickNavigation();
+
+        // 초기 페이지 설정
+        let menuCurrentPage = 0;
+        let menuPageSize = 3; // 한 슬라이드당 3개씩 표시
 
         // Check if Geolocation is supported
         if (navigator.geolocation) {
@@ -110,13 +215,46 @@
 
         // Function to display recommended menus on the page
         function displayRecommendedMenus(menus) {
-            const menuList = $('#menu-list');
-            menuList.empty(); // Clear previous menus
+            const menuSlider = $('.menu-slider');
+            // 슬라이더가 이미 초기화되었는지 확인
+            if (menuSlider.hasClass('slick-initialized')) {
+                menuSlider.slick('unslick'); // 슬라이더 파괴
+            }
+
+            menuSlider.empty(); // 기존 슬라이드 제거
+
+            if (menus.length === 0) {
+                menuSlider.append('<div><p class="text-muted">추천 메뉴가 없습니다.</p></div>');
+                return;
+            }
 
             menus.forEach(function (menu) {
-                const menuItem = $('<li class="list-group-item"></li>').text(menu.name + ' - ' + menu.price + '원');
-                menuList.append(menuItem);
+                const menuCard = `
+                        <div>
+                            <div class="card h-100">
+                                <img src="${menu.pictureUrl || '/images/default-menu.png'}" class="card-img-top menu-photo" alt="${menu.name}">
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title">${menu.name}</h5>
+                                    <p class="card-text"><strong>가격:</strong> ${menu.price}원</p>
+                                    <p class="card-text"><strong>카테고리:</strong> ${formatCategories(menu.categories)}</p>
+                                    <p class="card-text"><strong>상태:</strong> ${menu.enabled ? '활성' : '비활성'}</p>
+                                    <a href="/menu/${menu.menuId}" class="btn btn-primary mt-auto">자세히 보기</a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                menuSlider.append(menuCard);
             });
+
+            // 슬라이더 다시 초기화
+            initializeSlickSliders();
+            setSlickNavigation();
+        }
+
+        // Function to format categories into badges
+        function formatCategories(categories) {
+            if (!categories || categories.length === 0) return '없음';
+            return categories.map(category => `<span class="badge badge-secondary badge-category">${category.categoryName}</span>`).join(' ');
         }
 
         // Function to display nearby stores on the page and add markers to the map
@@ -129,8 +267,20 @@
             storeMarkers = [];
 
             stores.forEach(function (store) {
-                const storeItem = $('<li class="list-group-item"></li>').text(store.name + ' - ' + store.category);
-                storeList.append(storeItem);
+                const storeCard = `
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <img src="${store.photoUrls && store.photoUrls.length > 0 ? store.photoUrls[0] : '/images/default-store.png'}" class="card-img-top store-photo" alt="${store.name}">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">${store.name}</h5>
+                                <p class="card-text"><strong>카테고리:</strong> ${store.category}</p>
+                                <p class="card-text"><strong>전화번호:</strong> ${store.phoneNumber}</p>
+                                <a href="/store/${store.storeId}" class="btn btn-primary mt-auto">가게 보기</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                storeList.append(storeCard);
 
                 // Add marker for each store
                 const storeMarker = new naver.maps.Marker({
@@ -144,5 +294,8 @@
         }
     });
 </script>
+<!-- Slick Slider JS -->
+<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js" type="text/javascript"></script>
+
 </body>
 </html>
