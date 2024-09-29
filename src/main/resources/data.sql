@@ -1,12 +1,21 @@
 use kiminomenyuwa;
 
 -- 샘플 회원 추가 (비밀번호는 id를 따라갑니다. ex) user_id가 bbb면 비밀번호도 bbb
-INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`, `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
-VALUES ('aaa', '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS', '김철수', '1998-10-15', 'male', 'testuser01@example.com', '서울시 강남구', '테헤란로 123', '06234', '010-1234-5678', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
-INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`, `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
-VALUES ('bbb', '$2a$10$kz9me5s4fHK50IGx/L.R2exLsxnfvH9msIulhpn.Em8ctaBPm3vAS', '최재원', '1995-02-11', 'male', 'japol@naver.com', '서울 강남구 봉은사로13길 10', '26동 1011호', '06122', '070-9114-3194', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
-INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`, `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
-VALUES ('ccc', '$2a$10$9J/wHkfdw2/4ix3ZX74ZkeFkM4BviPLbgONDNiaJDQ6dxFqUZVHFG', '카리나', '2002-06-15', 'female', 'karina@daum.net', '서울 송파구 올림픽로4길 42', '6동 907호', '05571', '010-3333-3333', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
+INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`,
+                    `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
+VALUES ('aaa', '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS', '김철수', '1998-10-15', 'male',
+        'testuser01@example.com', '서울시 강남구', '테헤란로 123', '06234', '010-1234-5678', 'http://example.com/photo.jpg',
+        'ROLE_USER', 1);
+INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`,
+                    `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
+VALUES ('bbb', '$2a$10$kz9me5s4fHK50IGx/L.R2exLsxnfvH9msIulhpn.Em8ctaBPm3vAS', '최재원', '1995-02-11', 'male',
+        'japol@naver.com', '서울 강남구 봉은사로13길 10', '26동 1011호', '06122', '070-9114-3194', 'http://example.com/photo.jpg',
+        'ROLE_USER', 1);
+INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`,
+                    `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
+VALUES ('ccc', '$2a$10$9J/wHkfdw2/4ix3ZX74ZkeFkM4BviPLbgONDNiaJDQ6dxFqUZVHFG', '카리나', '2002-06-15', 'female',
+        'karina@daum.net', '서울 송파구 올림픽로4길 42', '6동 907호', '05571', '010-3333-3333', 'http://example.com/photo.jpg',
+        'ROLE_USER', 1);
 
 -- 카테고리 타입 테이블에 데이터 추가
 INSERT INTO category_type (type_name)
@@ -17,6 +26,35 @@ VALUES ('재료'),
        ('식사 시간'),
        ('식이 제한'),
        ('음식 특성');
+
+select *
+from kiminomenyuwa.store_photo
+where (select count(*) from store s) > 5;
+select menu.store_id
+from menu
+group by store_id
+having count(*) > 5;
+select store_id
+from store_photo
+group by store_id
+having count(*) > 5;
+
+select *
+from review_photo
+where review_id = 6;
+
+select a.store_id
+from (select menu.store_id from menu group by store_id having count(*) > 0) as a
+         join
+     (select * from kiminomenyuwa.store_photo where (select count(*) from store s) > 0) as b
+     on a.store_id = b.store_id;
+
+
+select store_id
+from review
+group by store_id
+having count(*) > 5;
+
 
 -- 재료 카테고리 데이터 추가
 INSERT INTO food_category (category_name, type_id)
@@ -104,8 +142,10 @@ VALUES ('매운', 7),
        ('풍미 가득', 7);
 
 -- 유저 추가
-INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`, `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
-VALUES ('testuser01', '$2y$10$abcdefghijklmnopqrstuvwx', '김철수', '1985-10-15', 'male', 'testuser01@example.com', '서울시 강남구', '테헤란로 123', '06234', '010-1234-5678', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
+INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`,
+                    `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
+VALUES ('testuser01', '$2y$10$abcdefghijklmnopqrstuvwx', '김철수', '1985-10-15', 'male', 'testuser01@example.com',
+        '서울시 강남구', '테헤란로 123', '06234', '010-1234-5678', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
 
 -- 상점 추가
 INSERT INTO `store` (`user_id`, `name`, `certification`, `road_name_address`, `detail_address`, `zipcode`,
@@ -406,9 +446,9 @@ from mini_game_menu_rating mgmr;
 
 -- aaa 유저와 bbb 유저가 친구 관계로 추가되는 SQL
 INSERT INTO friendships (user_id, friend_id, status)
-VALUES 
-('aaa', 'bbb', 'ACCEPTED'),  -- aaa가 bbb에게 친구 요청을 보내고, bbb가 수락한 경우
-('bbb', 'aaa', 'ACCEPTED');  -- 양방향 친구 관계를 저장
+VALUES ('aaa', 'bbb', 'ACCEPTED'), -- aaa가 bbb에게 친구 요청을 보내고, bbb가 수락한 경우
+       ('bbb', 'aaa', 'ACCEPTED');
+-- 양방향 친구 관계를 저장
 
 -- 여기까지
 
