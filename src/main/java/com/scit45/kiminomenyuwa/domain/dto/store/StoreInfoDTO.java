@@ -1,21 +1,18 @@
 package com.scit45.kiminomenyuwa.domain.dto.store;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.ReviewResponseDTO;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
 @Data
-public class StoreDetailsDTO {
+public class StoreInfoDTO {
 	Integer storeId;
 	String name;
 	String roadNameAddress;
@@ -23,15 +20,13 @@ public class StoreDetailsDTO {
 	String zipcode;
 	String phoneNumber;
 	String category;
-	List<String> photoUrls;
+	List<String> photoUrls = new ArrayList<>();
 	Double latitude;
 	Double longitude;
 	String certification;
-	Boolean enabled;
-	String description;
-	LocalDateTime createdTime;
-	LocalDateTime updatedTime;
-	List<MenuDTO> menus;       // 메뉴 목록
-	List<ReviewResponseDTO> reviews;   // 리뷰 목록 (추가 시)
-	// 추가적인 사장님용 필드 (예: 매출 통계 등)
+	String description; // 가게 설명
+	Boolean favorited; // 찜 여부
+	LocalDateTime favoritedTime; // 찜한 시간
+	List<MenuDTO> menus = new ArrayList<>(); // 가게 메뉴 리스트
+	List<ReviewResponseDTO> reviews = new ArrayList<>(); // 가게 리뷰 리스트
 }

@@ -3,16 +3,21 @@ package com.scit45.kiminomenyuwa.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.scit45.kiminomenyuwa.domain.dto.CategoryTypeDTO;
 import com.scit45.kiminomenyuwa.domain.dto.FoodCategoryDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
+import com.scit45.kiminomenyuwa.domain.dto.store.StoreInfoDTO;
 import com.scit45.kiminomenyuwa.domain.dto.store.StoreRegistrationDTO;
+import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
 import com.scit45.kiminomenyuwa.service.StoreService;
 
 import lombok.RequiredArgsConstructor;
@@ -21,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @Slf4j
 @RequiredArgsConstructor
+@RequestMapping("/stores")
 public class StoreController {
 
 	private final StoreService storeService;
@@ -33,6 +39,23 @@ public class StoreController {
 	@GetMapping("storePage")
 	public String storePage() {
 		return "store/storePage";
+	}
+
+	/**
+	 * 특정 상점의 정보, 사진, 메뉴, 리뷰를 조회하여 뷰로 전달하는 메서드입니다.
+	 *
+	 * @param storeId 상점 ID
+	 * @param model   뷰에 데이터를 전달하기 위한 모델 객체
+	 * @return store.html 템플릿을 반환
+	 */
+	@GetMapping("/{storeId}")
+	public String getStoreDetails(@PathVariable("storeId") Integer storeId
+		, @AuthenticationPrincipal AuthenticatedUser user
+		, Model model) {
+		String userId = user.getId();
+		StoreInfoDTO storeDto = storeService.getStoreById(storeId, userId);
+		model.addAttribute("store", storeDto);
+		return "store/storeInfo";
 	}
 
 	// // 가게 리스트 페이지를 반환하는 메소드

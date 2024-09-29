@@ -1,6 +1,7 @@
 package com.scit45.kiminomenyuwa.domain.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,16 +53,12 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
 		@Param("radius") double radius);
 
 	/**
-	 * 상점 이름과 카테고리로 상점을 검색합니다.
+	 * 상점 ID로 상점 정보를 조회하는 메서드입니다.
 	 *
-	 * @param name     상점 이름 (옵션)
-	 * @param category 상점 카테고리 (옵션)
-	 * @return 검색된 상점 목록
+	 * @param storeId 상점 ID
+	 * @return 상점 엔티티 Optional 객체
 	 */
-	@Query("SELECT s FROM StoreEntity s " +
-		"WHERE (:name IS NULL OR LOWER(s.name) LIKE LOWER(CONCAT('%', :name, '%'))) " +
-		"AND (:category IS NULL OR s.category = :category)")
-	List<StoreEntity> findStoresByNameAndCategory(@Param("name") String name, @Param("category") String category);
+	Optional<StoreEntity> findByStoreId(Integer storeId);
 
 	Page<StoreEntity> findByUser_UserId(String userId, Pageable pageable);
 }
