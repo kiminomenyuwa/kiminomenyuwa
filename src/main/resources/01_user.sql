@@ -8,6 +8,15 @@ delete
 from profile_photo
 where user_id like '%user%';
 
+INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`, `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
+VALUES ('aaa', '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS', '김철수', '1998-10-15', 'male', 'testuser01@example.com', '서울시 강남구', '테헤란로 123', '06234', '010-1234-5678', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
+INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`, `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
+VALUES ('bbb', '$2a$10$kz9me5s4fHK50IGx/L.R2exLsxnfvH9msIulhpn.Em8ctaBPm3vAS', '최재원', '1995-02-11', 'male', 'japol@naver.com', '서울 강남구 봉은사로13길 10', '26동 1011호', '06122', '070-9114-3194', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
+INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`, `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
+VALUES ('ccc', '$2a$10$9J/wHkfdw2/4ix3ZX74ZkeFkM4BviPLbgONDNiaJDQ6dxFqUZVHFG', '카리나', '2002-06-15', 'female', 'karina@daum.net', '서울 송파구 올림픽로4길 42', '6동 907호', '05571', '010-3333-3333', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
+
+
+
 INSERT INTO `user` (`user_id`,
                     `password_hash`,
                     `name`,
