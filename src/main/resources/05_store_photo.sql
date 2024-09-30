@@ -1,3 +1,6 @@
+use kiminomenyuwa;
+
+
 INSERT INTO `store_photo` (`store_id`, `photo_url`, `is_main`)
 VALUES ('1439', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/692182_798545529.jpg', TRUE);
 INSERT INTO `store_photo` (`store_id`, `photo_url`, `is_main`)

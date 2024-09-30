@@ -1,3 +1,5 @@
+use kiminomenyuwa;
+
 INSERT INTO `category_type`
 VALUES ('1', '대분류');
 INSERT INTO `category_type`

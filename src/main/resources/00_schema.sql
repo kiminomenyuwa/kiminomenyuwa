@@ -259,3 +259,4 @@ commit;
 select * from user_dining_history;
 select * from menu;
 select * from budget;
+select * from store;

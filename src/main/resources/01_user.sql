@@ -1,3 +1,5 @@
+use kiminomenyuwa;
+
 delete
 from user_dining_history
 where user_id like '%user%';
