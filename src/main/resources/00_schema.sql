@@ -255,6 +255,7 @@ CREATE TABLE `favorite`
     UNIQUE KEY unique_favorite (user_id, store_id)
 );
 
+commit;
 select * from user_dining_history;
 select * from menu;
 select * from budget;

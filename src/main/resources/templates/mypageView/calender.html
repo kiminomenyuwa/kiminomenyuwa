@@ -199,7 +199,11 @@
         function saveMonthlyBudget() {
             const currentUserId = '[[${#authentication.name}]]';
             const year = currentDate.getFullYear();
-            const month = currentDate.getMonth() + 1; // JavaScript 월은 0부터 시작
+            // const month = currentDate.getMonth() + 1; // JavaScript 월은 0부터 시작
+            const month = calendar.getDate().getMonth() + 1;
+            console.log("현재 달력 달 : " + month);
+
+            console.log("Saving Budget - Year:", year, "Month:", month, "Budget:", monthlyBudget);
 
             const formData = {
                 userId: currentUserId,
@@ -265,6 +269,7 @@
         // 남은 예산을 계산하는 함수
         function updateRemainingBudget() {
             const remainingBudget = monthlyBudget - totalSpent;  // 남은 예산 = 예산 - 총 소비 금액
+            console.log("남은 예산", remainingBudget);
             $('#remainingBudget').text(remainingBudget.toLocaleString());         // 남은 예산 표시
         }
 
@@ -272,7 +277,9 @@
         function loadMonthlyBudget() {
             const currentUserId = '[[${#authentication.name}]]';
             const year = currentDate.getFullYear();
-            const month = currentDate.getMonth() + 1; // JavaScript 월은 0부터 시작
+            const month = calendar.getDate().getMonth() + 1; // JavaScript 월은 0부터 시작
+
+            console.log("Loading Budget - Year:", year, "Month:", month);
 
             $.ajax({
                 url: '/mypage/api/budget/remaining', // 절대 경로로 수정
@@ -334,40 +341,72 @@
         // 식사 기록 불러오기
         function loadDiningHistory(calendar) {
             const currentUserId = '[[${#authentication.name}]]';
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth() + 1;
+            calendar.removeAllEvents();
             $.ajax({
                 url: '/mypage/api/dining-history', // 절대 경로로 수정
                 method: 'GET',
+                data: {
+                    year: year,
+                    month: month
+                },
                 success: function (data) {
-                    console.log(data);
+                    console.log("식사기록", data);
+                    totalSpent = 0; // 매 달 이동 시 초기화
                     data.forEach(record => {
-                        const diningDate = new Date(record.diningDate); // ISO 형식의 문자열을 Date 객체로 변환
-                        const day = diningDate.getDate();
-                        const month = diningDate.getMonth(); // 0부터 시작
-                        const year = diningDate.getFullYear();
+                        try {
+                            console.log('Record diningDate:', record.diningDate);
 
-                        // 해당 연도와 월에 맞는지 확인
-                        if (year === currentDate.getFullYear() && month === currentDate.getMonth()) {
-                            // 메뉴 ID로 메뉴 이름과 가격을 가져오는 AJAX 호출
-                            $.ajax({
-                                url: `/mypage/api/menus/${record.menuId}`, // 절대 경로로 수정
-                                method: 'GET',
-                                success: function (menu) {
-                                    const menuName = menu.name;  // 가져온 메뉴 이름
-                                    const menuPrice = menu.price;   // 메뉴 가격 추가
-                                    console.log('불러온 메뉴 가격:', menuPrice);
-                                    // FullCalendar에 이벤트 추가
-                                    calendar.addEvent({
-                                        title: menuName,
-                                        start: diningDate.toISOString().split('T')[0], // 'YYYY-MM-DD' 형식
-                                        allDay: true
-                                    });
-                                    totalSpent += menuPrice;  // 총 소비 금액 업데이트
-                                    updateRemainingBudget();  // 남은 예산 업데이트
-                                },
-                                error: function () {
-                                    console.error('Failed to fetch menu name for menuId:', record.menuId);
+                            // diningDate가 배열인지 확인하고 배열인 경우 처리
+                            if (Array.isArray(record.diningDate)) {
+                                const [year, month, day] = record.diningDate;
+
+                                // JavaScript의 Date 객체는 월을 0부터 시작하므로 month-1로 설정
+                                const diningDate = new Date(year, month - 1, day);
+
+                                if (isNaN(diningDate)) {
+                                    console.error('Invalid diningDate after parsing:', record.diningDate);
+                                    return; // 유효하지 않은 경우 다음 반복으로 넘어감
                                 }
-                            });
+
+                                const parsedYear = diningDate.getFullYear();
+                                const parsedMonth = diningDate.getMonth(); // 0부터 시작
+                                console.log('Parsed Year:', parsedYear);
+                                console.log('Parsed Month:', parsedMonth);
+
+                                // 해당 연도와 월에 맞는지 확인
+                                if (parsedYear === currentDate.getFullYear() && parsedMonth === currentDate.getMonth()) {
+                                    // 이후 로직 실행
+                                    $.ajax({
+                                        url: `/mypage/api/menus/${record.menuId}`, // 절대 경로로 수정
+                                        method: 'GET',
+                                        success: function (menu) {
+                                            const menuName = menu.name;  // 가져온 메뉴 이름
+                                            const menuPrice = menu.price;   // 메뉴 가격 추가
+                                            console.log('불러온 메뉴 가격:', menuPrice);
+
+                                            // FullCalendar에 이벤트 추가
+                                            calendar.addEvent({
+                                                title: menuName,
+                                                start: diningDate.toISOString().split('T')[0], // 'YYYY-MM-DD' 형식
+                                                allDay: true
+                                            });
+
+                                            totalSpent += menuPrice;  // 총 소비 금액 업데이트
+                                            updateRemainingBudget();  // 남은 예산 업데이트
+                                        },
+                                        error: function (e) {
+                                            console.error('Failed to fetch menu name for menuId:', record.menuId);
+                                            console.error('AJAX request failed with response:', e);
+                                        }
+                                    });
+                                }
+                            } else {
+                                console.error('Unexpected format for diningDate:', record.diningDate);
+                            }
+                        } catch (error) {
+                            console.error('Error processing dining record:', error);
                         }
                     });
                 },
@@ -426,7 +465,7 @@
             locale: 'ko',
             editable: true,
             eventLimit: true,
-            dateClick: function(info) { // 날짜 클릭 이벤트 핸들러 수정
+            dateClick: function (info) { // 날짜 클릭 이벤트 핸들러 수정
                 // 클릭한 날짜 얻기
                 selectedDate = info.dateStr; // 'YYYY-MM-DD' 형식
                 console.log('Clicked Date:', selectedDate);
@@ -435,68 +474,36 @@
                 $('#storeForm').show();
                 $('#menuContainer').hide();
             },
-            events: [ // 초기 이벤트 데이터
-                {
-                    title: 'All Day Event',
-                    start: '2024-09-01'
-                },
-                {
-                    title: 'Long Event',
-                    start: '2024-09-07',
-                    end: '2024-09-10'
-                },
-                {
-                    groupId: 999,
-                    title: 'Repeating Event',
-                    start: '2024-09-09T16:00:00'
-                },
-                {
-                    groupId: 999,
-                    title: 'Repeating Event',
-                    start: '2024-09-16T16:00:00'
-                },
-                {
-                    title: 'Conference',
-                    start: '2024-09-11',
-                    end: '2024-09-13'
-                },
-                {
-                    title: 'Meeting',
-                    start: '2024-09-12T10:30:00',
-                    end: '2024-09-12T12:30:00'
-                },
-                {
-                    title: 'Lunch',
-                    start: '2024-09-12T12:00:00'
-                },
-                {
-                    title: 'Meeting',
-                    start: '2024-09-12T14:30:00'
-                },
-                {
-                    title: 'Happy Hour',
-                    start: '2024-09-12T17:30:00'
-                },
-                {
-                    title: 'Dinner',
-                    start: '2024-09-12T20:00:00'
-                },
-                {
-                    title: 'Birthday Party',
-                    start: '2024-09-13T07:00:00'
-                },
-                {
-                    title: 'Click for Google',
-                    url: 'http://google.com/',
-                    start: '2024-09-28'
-                }
-            ]
+            datesSet: function (info) {
+                // 캘린더 월이 변경될 때 예산 불러오기
+                currentDate = info.view.currentStart;
+                console.log("Updated currentDate: ", currentDate);
+                loadMonthlyBudget();
+            }
+
         });
 
         calendar.render();
 
+        // 전월 버튼 클릭 시 예산 불러오기
+        $(document).on('click', '.fc-prev-button', function () {
+            currentDate = calendar.getDate(); // 현재 달의 시작 날짜 가져오기
+            console.log("Prev button clicked. Updated currentDate: ", currentDate);
+            loadMonthlyBudget();
+            loadDiningHistory(calendar);
+        });
+
+        // 다음 달 버튼 클릭 시 예산 불러오기
+        $(document).on('click', '.fc-next-button', function () {
+            currentDate = calendar.getDate(); // 현재 달의 시작 날짜 가져오기
+            console.log("Next button clicked. Updated currentDate: ", currentDate);
+            loadMonthlyBudget();
+            loadDiningHistory(calendar);
+        });
+
         // 초기 로드 시 식사 기록 불러오기 및 예산 불러오기
         loadDiningHistory(calendar);
+        console.log("loadDiningHistory", calendar);
         loadMonthlyBudget();
     });
 </script>
