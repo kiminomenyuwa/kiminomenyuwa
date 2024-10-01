@@ -40,7 +40,7 @@
                 const query = $(this).val();
                 if (query.length > 1) { // 최소 2글자 이상 입력 시 검색 실행
                     $.ajax({
-                        url: '/api/search-categories',
+                        url: '/stores/api/search-categories',
                         method: 'GET',
                         data: {query: query},
                         success: function (categories) {
