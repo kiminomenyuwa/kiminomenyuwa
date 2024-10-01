@@ -1,1413 +1,1413 @@
 -- 대분류 (1)
 
 INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('한식', 1);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('음료류', 1);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('양식', 1);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('일식', 1);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('패스트푸드', 1);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('기타', 1);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('제과류', 1);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('중식', 1);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('태국식', 1);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('인도식', 1);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('베트남식', 1);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('멕시코식', 1);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('지중해식', 1);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('프랑스식', 1);
+VALUES ('한식', 1),
+
+('음료류', 1),
+
+('양식', 1),
+
+('일식', 1),
+
+('패스트푸드', 1),
+
+('기타', 1),
+
+('제과류', 1),
+
+('중식', 1),
+
+('태국식', 1),
+
+('인도식', 1),
+
+('베트남식', 1),
+
+('멕시코식', 1),
+
+('지중해식', 1),
+
+('프랑스식', 1);
 
 
 -- 소분류 (2)
 
 INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('갈비탕', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('설렁탕', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('곰탕', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('국밥', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('소주', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('맥주', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('복분자', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('막걸리', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('탄산음료', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('토닉', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('등심', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('한우', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('갈비', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('곱창전골', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('전골', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('정식', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('냉면', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('비빔밥', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('물냉면', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('비빔냉면', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('칼국수', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('된장찌개', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('된장', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('누룽지', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('불고기', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('구이', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('육회', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('와인', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('차돌박이', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('볶음밥', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('우동사리', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('야채', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('곱창', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('면사리', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('만두', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('숙주', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('고기', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('꼬치', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('모둠', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('순대', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('수육', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('철판', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('만두전골', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('회무침', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('무침', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('술국', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('낙지볶음', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('아귀찜', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('감자탕', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('조개', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('국수', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('메밀', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('땅콩', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('고추', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('오이', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('레몬', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('마늘', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('청하', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('산사춘', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('백세주', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('아메리카노', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('커피', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('에스프레소', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('카푸치노', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('카페라떼', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('사케', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('녹차', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('유자', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('주스', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('보쌈', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('조림', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('생굴', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('청국장', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('계란', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('황태', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('막국수', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('물만두', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('소금구이', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('공기밥', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('추어탕', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('숙회', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('매운탕', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('튀김', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('김밥', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('유부', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('콤비', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('족발', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('소시지', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('골뱅이', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('감자튀김', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('후라이드치킨', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('먹태', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('김치', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('돼지갈비', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('생삼겹살', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('소갈비살', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('우거지', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('김치찌개', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('계란찜', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('음료수', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('갈비살', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('삼겹살', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('항정살', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('두루치기', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('김치전골', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('찌개', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('골뱅이무침', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('두부김치', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('번데기', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('계란탕', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('계란말이', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('해장국', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('오징어', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('낙지', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('해물파전', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('산낙지', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('연포탕', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('소면', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('당면', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('백반', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('매화수', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('매실', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('뚝배기', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('삼계탕', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('떡국', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('덮밥', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('해물순두부', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('볶음', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('해물탕', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('부추', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('갈비찜', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('순두부찌개', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('치즈떡', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('소고기', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('홍어', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('생맥주', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('하이볼', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('새우', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('샐러드', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('탕수육', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('치킨가라아게', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('가라아게', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('나베', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('떡볶이', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('치즈', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('불닭', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('김치전', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('알탕', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('짬뽕탕', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('홍합', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('어묵탕', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('누룽지탕', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('부대찌개', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('안주', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('노가리', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('와사비', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('라면', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('황도', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('아이스크림', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('주먹밥', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('사시미', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('대구탕', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('대구', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('도미', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('새우튀김', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('회덮밥', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('전복죽', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('초밥', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('돌솥비빔밥', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('순두부', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('안심', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('치킨', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('돈까스', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('연어', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('송이버섯', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('꽃게', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('간장', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('알밥', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('들깨', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('딸기', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('쉐이크', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('핫초코', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('라떼', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('녹차라떼', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('고구마라떼', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('초코', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('바나나', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('스무디', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('요거트스무디', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('얼그레이', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('밀크티', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('캐모마일', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('민트', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('자스민', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('레몬차', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('오렌지', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('유자차', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('자몽차', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('레몬에이드', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('에이드', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('자몽에이드', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('블루베리', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('아이스티', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('망고', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('팥빙수', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('빙수', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('와플', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('샌드위치', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('흑임자', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('쫄면', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('새우볶음밥', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('김치볶음밥', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('오므라이스', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('스테이크', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('과일', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('야채볶음', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('유린기', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('치즈스틱', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('피자', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('매운맛', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('바베큐', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('까르보나라', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('크림', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('파스타', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('콤보', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('리조또', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('토마토', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('해물', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('카페모카', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('아포가토', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('케이크', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('수제비', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('콩국수', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('쟁반', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('제육', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('순대국', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('육개장', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('마요네즈', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('카레', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('감자', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('더치커피', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('페퍼로니', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('치즈볼', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('허브', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('텐더', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('달콤', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('샤브샤브', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('만두국', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('비빔국수', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('양파', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('날치알', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('치즈돈까스', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('우동', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('치즈김밥', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('도시락', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('고기덮밥', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('불족발', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('닭볶음탕', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('닭날개', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('오징어볶음', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('오돌뼈', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('닭모래집', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('닭발', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('돌솥', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('술', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('냉채', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('제육볶음', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('차돌된장찌개', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('두부찌개', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('스틱', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('고르곤졸라', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('트리플', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('리코타', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('고구마', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('하와이안', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('올리브', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('옥수수', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('포도', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('베이컨', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('파인애플', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('칠리새우', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('호두', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('냉모밀', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('카레우동', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('소갈비', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('껍데기', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('양념', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('라면사리', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('뼈해장국', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('열무', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('아보카도', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('로제', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('토스트', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('옛날식', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('통닭', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('문어', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('특선', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('김치볶음', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('카페', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('파이', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('참치', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('소바', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('라볶이', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('어묵', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('왕새우튀김', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('제육덮밥', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('함박', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('코스', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('왕새우', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('어향', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('멘보샤', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('유산슬', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('양장피', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('마파두부', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('잡채', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('짜장면', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('짬뽕', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('삼선짬뽕', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('우육', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('볶음면', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('울면', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('중국', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('찹쌀', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('닭고기', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('돼지고기', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('난자완스', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('고추잡채', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('고량주', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('공부가주', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('오향', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('게살', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('두부', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('해삼', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('전복', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('전가복', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('생선', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('관자', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('영양', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('페퍼민트', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('송로버섯', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('버섯', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('콩나물', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('고등어', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('삼합', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('우럭', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('카라멜마끼아또', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('연유라떼', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('크림라떼', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('선지해장국', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('도가니', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('닭갈비', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('바지락', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('멸치', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('군만두', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('고등어구이', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('스끼야끼', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('광어', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('한치', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('고로케', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('텐동', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('바닐라라떼', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('콜드브루라떼', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('체리', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('바닐라', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('복숭아아이스티', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('깐풍기', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('마끼아또', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('초콜릿', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('콜드브루', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('홍차', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('프라푸치노', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('허브차', 2);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('자몽', 2);
+VALUES ('갈비탕', 2),
+
+('설렁탕', 2),
+
+('곰탕', 2),
+
+('국밥', 2),
+
+('소주', 2),
+
+('맥주', 2),
+
+('복분자', 2),
+
+('막걸리', 2),
+
+('탄산음료', 2),
+
+('토닉', 2),
+
+('등심', 2),
+
+('한우', 2),
+
+('갈비', 2),
+
+('곱창전골', 2),
+
+('전골', 2),
+
+('정식', 2),
+
+('냉면', 2),
+
+('비빔밥', 2),
+
+('물냉면', 2),
+
+('비빔냉면', 2),
+
+('칼국수', 2),
+
+('된장찌개', 2),
+
+('된장', 2),
+
+('누룽지', 2),
+
+('불고기', 2),
+
+('구이', 2),
+
+('육회', 2),
+
+('와인', 2),
+
+('차돌박이', 2),
+
+('볶음밥', 2),
+
+('우동사리', 2),
+
+('야채', 2),
+
+('곱창', 2),
+
+('면사리', 2),
+
+('만두', 2),
+
+('숙주', 2),
+
+('고기', 2),
+
+('꼬치', 2),
+
+('모둠', 2),
+
+('순대', 2),
+
+('수육', 2),
+
+('철판', 2),
+
+('만두전골', 2),
+
+('회무침', 2),
+
+('무침', 2),
+
+('술국', 2),
+
+('낙지볶음', 2),
+
+('아귀찜', 2),
+
+('감자탕', 2),
+
+('조개', 2),
+
+('국수', 2),
+
+('메밀', 2),
+
+('땅콩', 2),
+
+('고추', 2),
+
+('오이', 2),
+
+('레몬', 2),
+
+('마늘', 2),
+
+('청하', 2),
+
+('산사춘', 2),
+
+('백세주', 2),
+
+('아메리카노', 2),
+
+('커피', 2),
+
+('에스프레소', 2),
+
+('카푸치노', 2),
+
+('카페라떼', 2),
+
+('사케', 2),
+
+('녹차', 2),
+
+('유자', 2),
+
+('주스', 2),
+
+('보쌈', 2),
+
+('조림', 2),
+
+('생굴', 2),
+
+('청국장', 2),
+
+('계란', 2),
+
+('황태', 2),
+
+('막국수', 2),
+
+('물만두', 2),
+
+('소금구이', 2),
+
+('공기밥', 2),
+
+('추어탕', 2),
+
+('숙회', 2),
+
+('매운탕', 2),
+
+('튀김', 2),
+
+('김밥', 2),
+
+('유부', 2),
+
+('콤비', 2),
+
+('족발', 2),
+
+('소시지', 2),
+
+('골뱅이', 2),
+
+('감자튀김', 2),
+
+('후라이드치킨', 2),
+
+('먹태', 2),
+
+('김치', 2),
+
+('돼지갈비', 2),
+
+('생삼겹살', 2),
+
+('소갈비살', 2),
+
+('우거지', 2),
+
+('김치찌개', 2),
+
+('계란찜', 2),
+
+('음료수', 2),
+
+('갈비살', 2),
+
+('삼겹살', 2),
+
+('항정살', 2),
+
+('두루치기', 2),
+
+('김치전골', 2),
+
+('찌개', 2),
+
+('골뱅이무침', 2),
+
+('두부김치', 2),
+
+('번데기', 2),
+
+('계란탕', 2),
+
+('계란말이', 2),
+
+('해장국', 2),
+
+('오징어', 2),
+
+('낙지', 2),
+
+('해물파전', 2),
+
+('산낙지', 2),
+
+('연포탕', 2),
+
+('소면', 2),
+
+('당면', 2),
+
+('백반', 2),
+
+('매화수', 2),
+
+('매실', 2),
+
+('뚝배기', 2),
+
+('삼계탕', 2),
+
+('떡국', 2),
+
+('덮밥', 2),
+
+('해물순두부', 2),
+
+('볶음', 2),
+
+('해물탕', 2),
+
+('부추', 2),
+
+('갈비찜', 2),
+
+('순두부찌개', 2),
+
+('치즈떡', 2),
+
+('소고기', 2),
+
+('홍어', 2),
+
+('생맥주', 2),
+
+('하이볼', 2),
+
+('새우', 2),
+
+('샐러드', 2),
+
+('탕수육', 2),
+
+('치킨가라아게', 2),
+
+('가라아게', 2),
+
+('나베', 2),
+
+('떡볶이', 2),
+
+('치즈', 2),
+
+('불닭', 2),
+
+('김치전', 2),
+
+('알탕', 2),
+
+('짬뽕탕', 2),
+
+('홍합', 2),
+
+('어묵탕', 2),
+
+('누룽지탕', 2),
+
+('부대찌개', 2),
+
+('안주', 2),
+
+('노가리', 2),
+
+('와사비', 2),
+
+('라면', 2),
+
+('황도', 2),
+
+('아이스크림', 2),
+
+('주먹밥', 2),
+
+('사시미', 2),
+
+('대구탕', 2),
+
+('대구', 2),
+
+('도미', 2),
+
+('새우튀김', 2),
+
+('회덮밥', 2),
+
+('전복죽', 2),
+
+('초밥', 2),
+
+('돌솥비빔밥', 2),
+
+('순두부', 2),
+
+('안심', 2),
+
+('치킨', 2),
+
+('돈까스', 2),
+
+('연어', 2),
+
+('송이버섯', 2),
+
+('꽃게', 2),
+
+('간장', 2),
+
+('알밥', 2),
+
+('들깨', 2),
+
+('딸기', 2),
+
+('쉐이크', 2),
+
+('핫초코', 2),
+
+('라떼', 2),
+
+('녹차라떼', 2),
+
+('고구마라떼', 2),
+
+('초코', 2),
+
+('바나나', 2),
+
+('스무디', 2),
+
+('요거트스무디', 2),
+
+('얼그레이', 2),
+
+('밀크티', 2),
+
+('캐모마일', 2),
+
+('민트', 2),
+
+('자스민', 2),
+
+('레몬차', 2),
+
+('오렌지', 2),
+
+('유자차', 2),
+
+('자몽차', 2),
+
+('레몬에이드', 2),
+
+('에이드', 2),
+
+('자몽에이드', 2),
+
+('블루베리', 2),
+
+('아이스티', 2),
+
+('망고', 2),
+
+('팥빙수', 2),
+
+('빙수', 2),
+
+('와플', 2),
+
+('샌드위치', 2),
+
+('흑임자', 2),
+
+('쫄면', 2),
+
+('새우볶음밥', 2),
+
+('김치볶음밥', 2),
+
+('오므라이스', 2),
+
+('스테이크', 2),
+
+('과일', 2),
+
+('야채볶음', 2),
+
+('유린기', 2),
+
+('치즈스틱', 2),
+
+('피자', 2),
+
+('매운맛', 2),
+
+('바베큐', 2),
+
+('까르보나라', 2),
+
+('크림', 2),
+
+('파스타', 2),
+
+('콤보', 2),
+
+('리조또', 2),
+
+('토마토', 2),
+
+('해물', 2),
+
+('카페모카', 2),
+
+('아포가토', 2),
+
+('케이크', 2),
+
+('수제비', 2),
+
+('콩국수', 2),
+
+('쟁반', 2),
+
+('제육', 2),
+
+('순대국', 2),
+
+('육개장', 2),
+
+('마요네즈', 2),
+
+('카레', 2),
+
+('감자', 2),
+
+('더치커피', 2),
+
+('페퍼로니', 2),
+
+('치즈볼', 2),
+
+('허브', 2),
+
+('텐더', 2),
+
+('달콤', 2),
+
+('샤브샤브', 2),
+
+('만두국', 2),
+
+('비빔국수', 2),
+
+('양파', 2),
+
+('날치알', 2),
+
+('치즈돈까스', 2),
+
+('우동', 2),
+
+('치즈김밥', 2),
+
+('도시락', 2),
+
+('고기덮밥', 2),
+
+('불족발', 2),
+
+('닭볶음탕', 2),
+
+('닭날개', 2),
+
+('오징어볶음', 2),
+
+('오돌뼈', 2),
+
+('닭모래집', 2),
+
+('닭발', 2),
+
+('돌솥', 2),
+
+('술', 2),
+
+('냉채', 2),
+
+('제육볶음', 2),
+
+('차돌된장찌개', 2),
+
+('두부찌개', 2),
+
+('스틱', 2),
+
+('고르곤졸라', 2),
+
+('트리플', 2),
+
+('리코타', 2),
+
+('고구마', 2),
+
+('하와이안', 2),
+
+('올리브', 2),
+
+('옥수수', 2),
+
+('포도', 2),
+
+('베이컨', 2),
+
+('파인애플', 2),
+
+('칠리새우', 2),
+
+('호두', 2),
+
+('냉모밀', 2),
+
+('카레우동', 2),
+
+('소갈비', 2),
+
+('껍데기', 2),
+
+('양념', 2),
+
+('라면사리', 2),
+
+('뼈해장국', 2),
+
+('열무', 2),
+
+('아보카도', 2),
+
+('로제', 2),
+
+('토스트', 2),
+
+('옛날식', 2),
+
+('통닭', 2),
+
+('문어', 2),
+
+('특선', 2),
+
+('김치볶음', 2),
+
+('카페', 2),
+
+('파이', 2),
+
+('참치', 2),
+
+('소바', 2),
+
+('라볶이', 2),
+
+('어묵', 2),
+
+('왕새우튀김', 2),
+
+('제육덮밥', 2),
+
+('함박', 2),
+
+('코스', 2),
+
+('왕새우', 2),
+
+('어향', 2),
+
+('멘보샤', 2),
+
+('유산슬', 2),
+
+('양장피', 2),
+
+('마파두부', 2),
+
+('잡채', 2),
+
+('짜장면', 2),
+
+('짬뽕', 2),
+
+('삼선짬뽕', 2),
+
+('우육', 2),
+
+('볶음면', 2),
+
+('울면', 2),
+
+('중국', 2),
+
+('찹쌀', 2),
+
+('닭고기', 2),
+
+('돼지고기', 2),
+
+('난자완스', 2),
+
+('고추잡채', 2),
+
+('고량주', 2),
+
+('공부가주', 2),
+
+('오향', 2),
+
+('게살', 2),
+
+('두부', 2),
+
+('해삼', 2),
+
+('전복', 2),
+
+('전가복', 2),
+
+('생선', 2),
+
+('관자', 2),
+
+('영양', 2),
+
+('페퍼민트', 2),
+
+('송로버섯', 2),
+
+('버섯', 2),
+
+('콩나물', 2),
+
+('고등어', 2),
+
+('삼합', 2),
+
+('우럭', 2),
+
+('카라멜마끼아또', 2),
+
+('연유라떼', 2),
+
+('크림라떼', 2),
+
+('선지해장국', 2),
+
+('도가니', 2),
+
+('닭갈비', 2),
+
+('바지락', 2),
+
+('멸치', 2),
+
+('군만두', 2),
+
+('고등어구이', 2),
+
+('스끼야끼', 2),
+
+('광어', 2),
+
+('한치', 2),
+
+('고로케', 2),
+
+('텐동', 2),
+
+('바닐라라떼', 2),
+
+('콜드브루라떼', 2),
+
+('체리', 2),
+
+('바닐라', 2),
+
+('복숭아아이스티', 2),
+
+('깐풍기', 2),
+
+('마끼아또', 2),
+
+('초콜릿', 2),
+
+('콜드브루', 2),
+
+('홍차', 2),
+
+('프라푸치노', 2),
+
+('허브차', 2),
+
+('자몽', 2);
 
 -- 재료 (3)
 
 INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('야채', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('두부', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('고기', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('면', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('완자', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('소고기', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('사골', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('소양', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('쌀', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('보리', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('매실', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('복분자', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('토닉워터', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('물', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('우롱', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('음료', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('홍초', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('소등심', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('안창살', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('소갈비', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('곱창', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('메밀면', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('계란', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('육수', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('누룽지', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('특양', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('소막창', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('소대창', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('포도', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('꽃등심', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('차돌박이', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('우설', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('당면', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('밀가루', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('숙주', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('모짜렐라치즈', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('양송이버섯', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('은행', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('돼지내장', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('순대', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('오징어', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('돼지고기', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('내장', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('홍어', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('회무침', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('생선회', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('낙지', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('아귀', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('게', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('우거지', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('돼지등뼈', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('감자', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('조개', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('오리고기', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('레몬', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('마늘', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('닭고기', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('얼음', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('산사나무열매', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('인삼', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('찹쌀', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('에스프레소', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('우유', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('우유거품', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('녹차', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('유자', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('오렌지', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('김치', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('황태', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('명태', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('꽁치', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('굴', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('미역', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('오이', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('장어', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('미꾸라지', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('메기', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('김', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('유부', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('골뱅이', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('돼지갈비', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('삼겹살', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('갈비살', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('살치살', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('돼지항정살', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('고추', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('번데기', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('치즈', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('콩나물', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('해산물', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('녹두', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('파', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('소면', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('떡', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('과일', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('가래떡', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('순두부', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('부추', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('목살', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('참치', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('버섯', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('우렁이', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('메밀가루', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('배추', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('무', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('민어', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('병어', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('밀', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('새우', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('전분', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('닭가슴살', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('문어', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('가라아게', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('닭모래집', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('빵가루', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('어묵', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('소시지', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('가쓰오부시', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('생선알', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('멸치육수', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('수제비', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('홍합', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('햄', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('땅콩', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('생선', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('나초', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('복숭아', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('대구', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('대구머리', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('도미머리', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('도미', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('보리굴비', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('전복', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('멸치', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('스팸', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('분식', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('소염통', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('묵은지', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('주꾸미', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('돼지족발', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('산채', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('소안심', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('연어', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('꽃게', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('날치알', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('딸기', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('초콜릿', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('블루베리', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('고구마', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('단호박', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('아보카도', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('바나나', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('망고', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('요거트', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('얼그레이', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('카라멜', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('캐모마일', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('라벤더', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('페퍼민트', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('자스민', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('자몽', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('토마토', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('키위', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('청포도', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('탄산수', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('홍차', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('버터', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('설탕', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('쿠키', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('팥', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('수박', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('쫄면', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('왕새우', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('닭안심', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('베이컨', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('닭날개', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('바질', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('루꼴라', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('파스타면', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('고르곤졸라치즈', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('파슬리', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('펜네', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('아스파라거스', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('민트', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('바닐라', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('바닐라아이스크림', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('크림', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('서리태', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('양파', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('고사리', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('곡물', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('스위트콘', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('페페로니', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('조랭이떡', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('고등어', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('콩', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('빵', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('메밀', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('체다치즈', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('견과', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('돼지불고기', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('오돌뼈', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('닭발', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('열무김치', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('더덕', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('도토리', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('북어', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('또띠아', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('할라페뇨', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('올리브', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('살라미', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('페페론치노', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('파인애플', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('체리', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('브로콜리', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('옥수수', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('모타델라', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('호두', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('돼지껍데기', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('열무', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('수란', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('소꼬리', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('채끝살', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('짱뚱어', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('매생이', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('게살', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('바지락', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('쌀떡', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('제육볶음', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('대게', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('애호박', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('캔참치', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('돼지등심', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('킹크랩', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('가지', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('표고버섯', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('사골육수', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('해삼', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('닭다리살', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('생강', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('청경채', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('대나무잎', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('해파리', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('오향', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('죽순', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('샥스핀', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('송이버섯', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('소특수부위', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('사과', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('농어', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('멍게', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('갑오징어', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('우럭', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('무뼈닭발', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('소곱창', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('바닐라빈', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('광어', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('소머리', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('시래기', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('소선지', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('소도가니', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('닭다리', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('열빙어', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('한치', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('낫또', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('고로케', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('명란', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('마', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('콜드브루', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('계피', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('젤리', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('우삼겹', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('피클', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('허브', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('자색고구마', 3);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('코코아파우더', 3);
+VALUES ('야채', 3),
+
+('두부', 3),
+
+('고기', 3),
+
+('면', 3),
+
+('완자', 3),
+
+('소고기', 3),
+
+('사골', 3),
+
+('소양', 3),
+
+('쌀', 3),
+
+('보리', 3),
+
+('매실', 3),
+
+('복분자', 3),
+
+('토닉워터', 3),
+
+('물', 3),
+
+('우롱', 3),
+
+('음료', 3),
+
+('홍초', 3),
+
+('소등심', 3),
+
+('안창살', 3),
+
+('소갈비', 3),
+
+('곱창', 3),
+
+('메밀면', 3),
+
+('계란', 3),
+
+('육수', 3),
+
+('누룽지', 3),
+
+('특양', 3),
+
+('소막창', 3),
+
+('소대창', 3),
+
+('포도', 3),
+
+('꽃등심', 3),
+
+('차돌박이', 3),
+
+('우설', 3),
+
+('당면', 3),
+
+('밀가루', 3),
+
+('숙주', 3),
+
+('모짜렐라치즈', 3),
+
+('양송이버섯', 3),
+
+('은행', 3),
+
+('돼지내장', 3),
+
+('순대', 3),
+
+('오징어', 3),
+
+('돼지고기', 3),
+
+('내장', 3),
+
+('홍어', 3),
+
+('회무침', 3),
+
+('생선회', 3),
+
+('낙지', 3),
+
+('아귀', 3),
+
+('게', 3),
+
+('우거지', 3),
+
+('돼지등뼈', 3),
+
+('감자', 3),
+
+('조개', 3),
+
+('오리고기', 3),
+
+('레몬', 3),
+
+('마늘', 3),
+
+('닭고기', 3),
+
+('얼음', 3),
+
+('산사나무열매', 3),
+
+('인삼', 3),
+
+('찹쌀', 3),
+
+('에스프레소', 3),
+
+('우유', 3),
+
+('우유거품', 3),
+
+('녹차', 3),
+
+('유자', 3),
+
+('오렌지', 3),
+
+('김치', 3),
+
+('황태', 3),
+
+('명태', 3),
+
+('꽁치', 3),
+
+('굴', 3),
+
+('미역', 3),
+
+('오이', 3),
+
+('장어', 3),
+
+('미꾸라지', 3),
+
+('메기', 3),
+
+('김', 3),
+
+('유부', 3),
+
+('골뱅이', 3),
+
+('돼지갈비', 3),
+
+('삼겹살', 3),
+
+('갈비살', 3),
+
+('살치살', 3),
+
+('돼지항정살', 3),
+
+('고추', 3),
+
+('번데기', 3),
+
+('치즈', 3),
+
+('콩나물', 3),
+
+('해산물', 3),
+
+('녹두', 3),
+
+('파', 3),
+
+('소면', 3),
+
+('떡', 3),
+
+('과일', 3),
+
+('가래떡', 3),
+
+('순두부', 3),
+
+('부추', 3),
+
+('목살', 3),
+
+('참치', 3),
+
+('버섯', 3),
+
+('우렁이', 3),
+
+('메밀가루', 3),
+
+('배추', 3),
+
+('무', 3),
+
+('민어', 3),
+
+('병어', 3),
+
+('밀', 3),
+
+('새우', 3),
+
+('전분', 3),
+
+('닭가슴살', 3),
+
+('문어', 3),
+
+('가라아게', 3),
+
+('닭모래집', 3),
+
+('빵가루', 3),
+
+('어묵', 3),
+
+('소시지', 3),
+
+('가쓰오부시', 3),
+
+('생선알', 3),
+
+('멸치육수', 3),
+
+('수제비', 3),
+
+('홍합', 3),
+
+('햄', 3),
+
+('땅콩', 3),
+
+('생선', 3),
+
+('나초', 3),
+
+('복숭아', 3),
+
+('대구', 3),
+
+('대구머리', 3),
+
+('도미머리', 3),
+
+('도미', 3),
+
+('보리굴비', 3),
+
+('전복', 3),
+
+('멸치', 3),
+
+('스팸', 3),
+
+('분식', 3),
+
+('소염통', 3),
+
+('묵은지', 3),
+
+('주꾸미', 3),
+
+('돼지족발', 3),
+
+('산채', 3),
+
+('소안심', 3),
+
+('연어', 3),
+
+('꽃게', 3),
+
+('날치알', 3),
+
+('딸기', 3),
+
+('초콜릿', 3),
+
+('블루베리', 3),
+
+('고구마', 3),
+
+('단호박', 3),
+
+('아보카도', 3),
+
+('바나나', 3),
+
+('망고', 3),
+
+('요거트', 3),
+
+('얼그레이', 3),
+
+('카라멜', 3),
+
+('캐모마일', 3),
+
+('라벤더', 3),
+
+('페퍼민트', 3),
+
+('자스민', 3),
+
+('자몽', 3),
+
+('토마토', 3),
+
+('키위', 3),
+
+('청포도', 3),
+
+('탄산수', 3),
+
+('홍차', 3),
+
+('버터', 3),
+
+('설탕', 3),
+
+('쿠키', 3),
+
+('팥', 3),
+
+('수박', 3),
+
+('쫄면', 3),
+
+('왕새우', 3),
+
+('닭안심', 3),
+
+('베이컨', 3),
+
+('닭날개', 3),
+
+('바질', 3),
+
+('루꼴라', 3),
+
+('파스타면', 3),
+
+('고르곤졸라치즈', 3),
+
+('파슬리', 3),
+
+('펜네', 3),
+
+('아스파라거스', 3),
+
+('민트', 3),
+
+('바닐라', 3),
+
+('바닐라아이스크림', 3),
+
+('크림', 3),
+
+('서리태', 3),
+
+('양파', 3),
+
+('고사리', 3),
+
+('곡물', 3),
+
+('스위트콘', 3),
+
+('페페로니', 3),
+
+('조랭이떡', 3),
+
+('고등어', 3),
+
+('콩', 3),
+
+('빵', 3),
+
+('메밀', 3),
+
+('체다치즈', 3),
+
+('견과', 3),
+
+('돼지불고기', 3),
+
+('오돌뼈', 3),
+
+('닭발', 3),
+
+('열무김치', 3),
+
+('더덕', 3),
+
+('도토리', 3),
+
+('북어', 3),
+
+('또띠아', 3),
+
+('할라페뇨', 3),
+
+('올리브', 3),
+
+('살라미', 3),
+
+('페페론치노', 3),
+
+('파인애플', 3),
+
+('체리', 3),
+
+('브로콜리', 3),
+
+('옥수수', 3),
+
+('모타델라', 3),
+
+('호두', 3),
+
+('돼지껍데기', 3),
+
+('열무', 3),
+
+('수란', 3),
+
+('소꼬리', 3),
+
+('채끝살', 3),
+
+('짱뚱어', 3),
+
+('매생이', 3),
+
+('게살', 3),
+
+('바지락', 3),
+
+('쌀떡', 3),
+
+('제육볶음', 3),
+
+('대게', 3),
+
+('애호박', 3),
+
+('캔참치', 3),
+
+('돼지등심', 3),
+
+('킹크랩', 3),
+
+('가지', 3),
+
+('표고버섯', 3),
+
+('사골육수', 3),
+
+('해삼', 3),
+
+('닭다리살', 3),
+
+('생강', 3),
+
+('청경채', 3),
+
+('대나무잎', 3),
+
+('해파리', 3),
+
+('오향', 3),
+
+('죽순', 3),
+
+('샥스핀', 3),
+
+('송이버섯', 3),
+
+('소특수부위', 3),
+
+('사과', 3),
+
+('농어', 3),
+
+('멍게', 3),
+
+('갑오징어', 3),
+
+('우럭', 3),
+
+('무뼈닭발', 3),
+
+('소곱창', 3),
+
+('바닐라빈', 3),
+
+('광어', 3),
+
+('소머리', 3),
+
+('시래기', 3),
+
+('소선지', 3),
+
+('소도가니', 3),
+
+('닭다리', 3),
+
+('열빙어', 3),
+
+('한치', 3),
+
+('낫또', 3),
+
+('고로케', 3),
+
+('명란', 3),
+
+('마', 3),
+
+('콜드브루', 3),
+
+('계피', 3),
+
+('젤리', 3),
+
+('우삼겹', 3),
+
+('피클', 3),
+
+('허브', 3),
+
+('자색고구마', 3),
+
+('코코아파우더', 3);
 
 
 -- 조리방법 (4)
 
 INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('구이', 4);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('찜', 4);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('볶음', 4);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('튀김', 4);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('삶음', 4);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('조림', 4);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('훈제', 4);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('찌개', 4);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('베이킹', 4);
+VALUES ('구이', 4),
+
+('찜', 4),
+
+('볶음', 4),
+
+('튀김', 4),
+
+('삶음', 4),
+
+('조림', 4),
+
+('훈제', 4),
+
+('찌개', 4),
+
+('베이킹', 4);
 
 
 -- 식이제한(5)
 INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('채식', 5);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('비건', 5);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('글루텐', 5);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('무유당', 5);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('저염', 5);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('저칼로리', 5);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('무설탕', 5);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('오가닉', 5);
+VALUES ('채식', 5),
+
+('비건', 5),
+
+('글루텐', 5),
+
+('무유당', 5),
+
+('저염', 5),
+
+('저칼로리', 5),
+
+('무설탕', 5),
+
+('오가닉', 5);
 
 
 -- 음식특성 (6)
 
 INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('매운', 6);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('짠', 6);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('단', 6);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('신', 6);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('쓴', 6);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('고소한', 6);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('새콤달콤', 6);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('풍미가득', 6);
+VALUES ('매운', 6),
+
+('짠', 6),
+
+('단', 6),
+
+('신', 6),
+
+('쓴', 6),
+
+('고소한', 6),
+
+('새콤달콤', 6),
+
+('풍미가득', 6);
 
 -- 식사시간(7)
 
 INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('아침', 7);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('점심', 7);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('저녁', 7);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('간식', 7);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('브런치', 7);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('야식', 7);
-INSERT INTO `food_category` (`category_name`, `type_id`)
-VALUES ('오후 ', 7);
+VALUES ('아침', 7),
+
+('점심', 7),
+
+('저녁', 7),
+
+('간식', 7),
+
+('브런치', 7),
+
+('야식', 7),
+
+('오후 ', 7);
