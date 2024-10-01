@@ -1,29 +1,29 @@
 INSERT INTO `store_photo` (`store_id`, `photo_url`, `is_main`)
-VALUES ('1439', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/692182_798545529.jpg', TRUE);
+VALUES ('1', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/692182_798545529.jpg', TRUE);
 INSERT INTO `store_photo` (`store_id`, `photo_url`, `is_main`)
-VALUES ('1439', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/692182_1493790217.jpg',
+VALUES ('1', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/692182_1493790217.jpg',
         TRUE);
 INSERT INTO `store_photo` (`store_id`, `photo_url`, `is_main`)
-VALUES ('1439', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/692182_1487183779.jpg',
+VALUES ('1', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/692182_1487183779.jpg',
         TRUE);
 INSERT INTO `store_photo` (`store_id`, `photo_url`, `is_main`)
-VALUES ('1439', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/692182_458844803.jpg', TRUE);
+VALUES ('2', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/692182_458844803.jpg', TRUE);
 INSERT INTO `store_photo` (`store_id`, `photo_url`, `is_main`)
-VALUES ('1439', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/692182_762738390.jpg', TRUE);
+VALUES ('3', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/692182_762738390.jpg', TRUE);
 INSERT INTO `store_photo` (`store_id`, `photo_url`, `is_main`)
-VALUES ('1439', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/692182_894465002.jpg', TRUE);
+VALUES ('2', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/692182_894465002.jpg', TRUE);
 INSERT INTO `store_photo` (`store_id`, `photo_url`, `is_main`)
-VALUES ('1439', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/692182_166987050.jpg', TRUE);
+VALUES ('2', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/692182_166987050.jpg', TRUE);
 INSERT INTO `store_photo` (`store_id`, `photo_url`, `is_main`)
-VALUES ('1439', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/692182_1015053566.jpg',
+VALUES ('3', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/692182_1015053566.jpg',
         TRUE);
 INSERT INTO `store_photo` (`store_id`, `photo_url`, `is_main`)
-VALUES ('1439', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/692182_242811985.jpg', TRUE);
+VALUES ('4', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/692182_242811985.jpg', TRUE);
 INSERT INTO `store_photo` (`store_id`, `photo_url`, `is_main`)
-VALUES ('1439', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/692182_1612196586.jpg',
+VALUES ('4', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/692182_1612196586.jpg',
         TRUE);
 INSERT INTO `store_photo` (`store_id`, `photo_url`, `is_main`)
-VALUES ('1440', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/1275_2302196.jpg', TRUE);
+VALUES ('4', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/1275_2302196.jpg', TRUE);
 INSERT INTO `store_photo` (`store_id`, `photo_url`, `is_main`)
 VALUES ('1440', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/1275_96204531.jpg', TRUE);
 INSERT INTO `store_photo` (`store_id`, `photo_url`, `is_main`)
