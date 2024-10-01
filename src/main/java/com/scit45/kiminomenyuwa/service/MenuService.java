@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.scit45.kiminomenyuwa.domain.dto.FoodCategoryDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
+import com.scit45.kiminomenyuwa.domain.dto.StoreDTO;
 import com.scit45.kiminomenyuwa.domain.entity.FoodCategoryEntity;
 import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
+import com.scit45.kiminomenyuwa.domain.entity.StoreEntity;
 import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
 import com.scit45.kiminomenyuwa.domain.repository.UserDiningHistoryRepository;
 
@@ -87,7 +89,7 @@ public class MenuService {
 				.price(menuEntity.getPrice())
 				.pictureUrl(menuEntity.getPictureUrl())
 				.enabled(menuEntity.getEnabled())
-				// .categories(Arrays.asList(categories.split(", ")))  // 카테고리 추가
+//				.categories(Arrays.asList(categories.split(", "))) // 카테고리 추가
 				.build();
 
 			menuDTOs.add(menuDTO);
@@ -140,6 +142,36 @@ public class MenuService {
 			.pictureUrl(menuEntity.getPictureUrl())
 			.enabled(menuEntity.getEnabled())
 			.categories(foodCategories)
+			.build();
+	}
+
+	// StoreEntity를 StoreDTO로 변환하는 메서드
+	public StoreDTO convertToStoreDTO(StoreEntity storeEntity) {
+		// Geometry에서 좌표 정보 추출 (JTS 라이브러리 사용)
+		double latitude = storeEntity.getLocation().getCoordinate().getY();
+		double longitude = storeEntity.getLocation().getCoordinate().getX();
+
+		return StoreDTO.builder()
+			.storeId(storeEntity.getStoreId())
+			.name(storeEntity.getName())
+			.roadNameAddress(storeEntity.getRoadNameAddress())
+			.detailAddress(storeEntity.getDetailAddress())
+			.latitude(latitude)
+			.longitude(longitude)
+			.build();
+	}
+
+	// MenuEntity를 MenuDTO로 변환하는 메서드
+	public MenuDTO convertToMenuDTO(MenuEntity menuEntity) {
+		StoreDTO storeDTO = convertToStoreDTO(menuEntity.getStore());
+
+		return MenuDTO.builder()
+			.menuId(menuEntity.getMenuId())
+			.name(menuEntity.getName())
+			.price(menuEntity.getPrice())
+			.pictureUrl(menuEntity.getPictureUrl())
+			.enabled(menuEntity.getEnabled())
+			.store(storeDTO) // MenuDTO에 StoreDTO 추가
 			.build();
 	}
 
