@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>약속 설정</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JS Bundle (Popper 포함) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- 네이버 지도 API 스크립트 로드 -->
+    <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=t06c4jgb48&submodules=geocoder"
+            type="text/javascript"></script>
+    <style>
+        body {
+            padding-top: 70px; /* 네비게이션 바 공간 확보 */
+        }
+        #map {
+            width: 100%;
+            height: 400px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<!-- 네비게이션 바 -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">KimiNoMenu</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <!-- 네비게이션 링크들 -->
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}">홈</a>
+                </li>
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link" th:href="@{/meetings/schedule}" th:classappend="${#strings.equals(#request.requestURI, '/meetings/schedule')} ? 'active' : ''">약속 설정</a>-->
+<!--                </li>-->
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/reviews/write}">리뷰 작성</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/profile}">마이 페이지</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"
+                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">로그아웃</a>
+                    <form id="logout-form" th:action="@{/logout}" method="post" style="display:none;">
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- 메인 컨테이너 -->
+<div class="container">
+    <h2 class="mt-4 mb-4 text-center">약속 설정</h2>
+    <form th:action="@{/meetings/schedule}" th:object="${meeting}" method="post" id="meetingForm">
+        <div class="mb-3">
+            <label for="title" class="form-label">약속 제목</label>
+            <input type="text" th:field="*{title}" class="form-control" id="title" placeholder="약속 제목을 입력하세요" required>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">약속 설명</label>
+            <textarea th:field="*{description}" class="form-control" id="description" rows="3" placeholder="약속에 대한 설명을 입력하세요"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="meetingDate" class="form-label">약속 날짜 및 시간</label>
+            <input type="datetime-local" th:field="*{meetingDate}" class="form-control" id="meetingDate" required>
+        </div>
+        <div class="mb-3">
+            <label for="location" class="form-label">약속 장소</label>
+            <input type="text" th:field="*{location}" class="form-control" id="location" placeholder="약속 장소를 입력하세요" required readonly>
+        </div>
+
+        <!-- 네이버 지도 검색창 -->
+        <div class="mb-3">
+            <label for="mapSearch" class="form-label">장소 검색</label>
+            <input type="text" id="mapSearch" class="form-control" placeholder="장소를 검색하세요">
+        </div>
+
+        <!-- 네이버 지도 표시 영역 -->
+        <div id="map"></div>
+
+        <div class="mb-3">
+            <label class="form-label">함께할 친구들 선택</label>
+            <div class="form-check">
+                <div th:each="friend : ${friends}">
+                    <input class="form-check-input" type="checkbox" th:id="'friend-' + ${friend.userId}"
+                           th:name="participantUserIds" th:value="${friend.userId}">
+                    <label class="form-check-label" th:for="'friend-' + ${friend.userId}">
+                        <span th:text="${friend.name}">Friend Name</span> (<span th:text="${friend.email}">email@example.com</span>)
+                    </label>
+                    <br/>
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">약속 생성</button>
+    </form>
+</div>
+
+<!-- jQuery 스크립트 -->
+<script>
+    $(document).ready(function(){
+        $('#meetingForm').on('submit', function(e){
+            var meetingDate = $('#meetingDate').val();
+            var selectedDate = new Date(meetingDate);
+            var currentDate = new Date();
+            if(selectedDate < currentDate){
+                e.preventDefault();
+                alert('약속 날짜 및 시간은 현재 시간보다 이후여야 합니다.');
+            }
+        });
+    });
+</script>
+
+<!-- 네이버 지도 스크립트 -->
+<script>
+    // 네이버 지도 초기화 변수
+    var map;
+    var marker;
+    var currentPosition;
+
+    // 네이버 지도 API 초기화
+    function initializeMap(lat, lng) {
+        var mapOptions = {
+            center: new naver.maps.LatLng(lat, lng),
+            zoom: 15
+        };
+        map = new naver.maps.Map('map', mapOptions);
+
+        marker = new naver.maps.Marker({
+            position: map.getCenter(),
+            map: map
+        });
+
+        // 지도를 드래그하거나 줌 변경 시 중심 위치 변경
+        naver.maps.Event.addListener(map, 'idle', function() {
+            var center = map.getCenter();
+            marker.setPosition(center);
+            getAddress(center);
+        });
+
+        // 마커 클릭 시 주소 검색
+        naver.maps.Event.addListener(marker, 'click', function() {
+            var position = marker.getPosition();
+            getAddress(position);
+        });
+
+        // 마커 드래그 가능하게 설정 (선택 사항)
+        /*
+        marker.setOptions({
+            draggable: true
+        });
+
+        naver.maps.Event.addListener(marker, 'dragend', function(e) {
+            var position = marker.getPosition();
+            getAddress(position);
+        });
+        */
+    }
+
+    // Geolocation을 사용하여 사용자의 현재 위치 가져오기
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            currentPosition = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            initializeMap(position.coords.latitude, position.coords.longitude);
+        }, function(error) {
+            console.error("Geolocation error:", error.message);
+            // 위치 정보를 가져올 수 없을 경우 기본 위치 설정 (예: 서울 시청)
+            initializeMap(37.5665, 126.9780);
+        });
+    } else {
+        alert("Geolocation을 지원하지 않는 브라우저입니다.");
+        // 기본 위치 설정 (예: 서울 시청)
+        initializeMap(37.5665, 126.9780);
+    }
+
+    // 장소 검색 기능 구현
+    $('#mapSearch').on('keypress', function(e){
+        if(e.which == 13){ // Enter 키 눌렀을 때
+            e.preventDefault();
+            var query = $(this).val();
+            if(query.length > 0){
+                searchAddress(query);
+            }
+        }
+    });
+
+    function searchAddress(query){
+        naver.maps.Service.geocode({
+            query: query
+        }, function(status, response) {
+            if (status !== naver.maps.Service.Status.OK) {
+                return alert('장소를 찾을 수 없습니다.');
+            }
+
+            var result = response.v2;
+            var items = result.addresses;
+
+            if (items.length > 0) {
+                var item = items[0];
+                var lat = parseFloat(item.y);
+                var lng = parseFloat(item.x);
+                var position = new naver.maps.LatLng(lat, lng);
+
+                map.setCenter(position);
+                marker.setPosition(position);
+                $('#location').val(item.address);
+            } else {
+                alert('검색 결과가 없습니다.');
+            }
+        });
+    }
+
+    // 좌표를 주소로 변환하여 입력 필드에 업데이트
+    function getAddress(latlng){
+        naver.maps.Service.reverseGeocode({
+            coords: latlng,
+            orders: 'addr',
+            language: 'ko'
+        }, function(status, response) {
+            if (status !== naver.maps.Service.Status.OK) {
+                return alert('주소를 가져올 수 없습니다.');
+            }
+
+            var result = response.result;
+            if (result && result.items && result.items.length > 0) {
+                var addressDetail = result.items[0].addrdetail;
+                var fullAddress = addressDetail.country + ' ' + addressDetail.si + ' ' + addressDetail.gu + ' ' + addressDetail.dong + ' ' + addressDetail.roadAddress;
+                $('#location').val(fullAddress);
+            }
+        });
+    }
+</script>
+</body>
+</html>

@@ -36,7 +36,7 @@ CREATE TABLE `category_type`
 -- 카테고리 테이블: 카테고리 항목을 정의 (예: 고추, 중식, 굽기)
 CREATE TABLE `food_category`
 (
-    `category_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `category_id`   INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `category_name` VARCHAR(50) NOT NULL, -- 카테고리 이름 (예: '고추', '중식', '굽기')
     `type_id`       INT         NOT NULL, -- 카테고리 타입 ID (외래 키)
     FOREIGN KEY (`type_id`) REFERENCES `category_type` (`type_id`)
@@ -79,7 +79,7 @@ CREATE TABLE `store`
     `category`          VARCHAR(30),                           -- 상점 카테고리
     `description`       TEXT,                                  -- 상점 설명
     `enabled`           TINYINT(1)         NOT NULL DEFAULT 1, -- 상점 활성화 여부
-    `location` POINT,
+    `location`          POINT,
     PRIMARY KEY (`store_id`),                                  -- 기본 키 설정
     FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 );
@@ -228,7 +228,7 @@ CREATE TABLE store_photo
     photo_id  INT AUTO_INCREMENT PRIMARY KEY,
     store_id  INT          NOT NULL,
     photo_url VARCHAR(255) NOT NULL,
-    is_main BOOLEAN DEFAULT FALSE,
+    is_main   BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (store_id) REFERENCES store (store_id) ON DELETE CASCADE
 );
 
@@ -253,4 +253,29 @@ CREATE TABLE `favorite`
     FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE,
     FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`) ON DELETE CASCADE,
     UNIQUE KEY unique_favorite (user_id, store_id)
+);
+
+CREATE TABLE `meeting`
+(
+    `meeting_id`   INT AUTO_INCREMENT PRIMARY KEY,                                  -- 약속의 고유 ID
+    `host_user_id` VARCHAR(20)  NOT NULL,                                           -- 약속을 생성한 사용자 ID
+    `title`        VARCHAR(100) NOT NULL,                                           -- 약속 제목
+    `description`  TEXT,                                                            -- 약속 설명
+    `meeting_date` DATETIME     NOT NULL,                                           -- 약속 날짜 및 시간
+    `location`     VARCHAR(255) NOT NULL,                                           -- 약속 장소 (예: 상점 ID 또는 주소)
+    `created_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                             -- 약속 생성 시간
+    `updated_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- 약속 수정 시간
+    FOREIGN KEY (`host_user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE
+);
+
+CREATE TABLE `meeting_participants`
+(
+    `meeting_participant_id` INT AUTO_INCREMENT PRIMARY KEY,                                     -- 참여 ID
+    `meeting_id`             INT         NOT NULL,                                               -- 약속 ID
+    `user_id`                VARCHAR(20) NOT NULL,                                               -- 참여 사용자 ID
+    `status`                 ENUM ('INVITED', 'ACCEPTED', 'DECLINED') DEFAULT 'INVITED',         -- 참여 상태
+    `invited_time`           TIMESTAMP                                DEFAULT CURRENT_TIMESTAMP, -- 초대 시간
+    FOREIGN KEY (`meeting_id`) REFERENCES `meeting` (`meeting_id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE,
+    UNIQUE KEY `unique_participant` (`meeting_id`, `user_id`)
 );
