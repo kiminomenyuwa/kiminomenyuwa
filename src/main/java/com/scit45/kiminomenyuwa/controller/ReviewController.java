@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,9 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.scit45.kiminomenyuwa.domain.dto.ReviewRequestDTO;
 import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
-import com.scit45.kiminomenyuwa.service.MenuService;
 import com.scit45.kiminomenyuwa.service.ReviewService;
-import com.scit45.kiminomenyuwa.service.StoreService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,18 +27,14 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/reviews")
 @RequiredArgsConstructor
 public class ReviewController {
-
-	private final StoreService storeService;
-	private final MenuService menuService;
 	private final ReviewService reviewService;
 
 	/**
-	 * 리뷰 작성 페이지 표시
+	 * 영수증 업로드 페이지 표시
 	 */
-	@GetMapping("/write/{storeId}")
-	public String showWriteReviewPage(@PathVariable("storeId") Integer storeId, Model model) {
-		model.addAttribute("reviewDTO", new ReviewRequestDTO());
-		return "reviewView/write_review";
+	@GetMapping("/write")
+	public String showUploadPage() {
+		return "reviewView/reviewForm"; // 템플릿 경로 변경
 	}
 
 	/**
