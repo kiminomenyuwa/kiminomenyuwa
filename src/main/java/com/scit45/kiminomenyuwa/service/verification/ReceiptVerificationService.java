@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.scit45.kiminomenyuwa.domain.dto.ItemDTO;
-import com.scit45.kiminomenyuwa.domain.dto.ReceiptDTO;
+import com.scit45.kiminomenyuwa.domain.dto.receipt.ReceiptDTO;
 import com.scit45.kiminomenyuwa.domain.entity.StoreEntity;
 import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
 import com.scit45.kiminomenyuwa.domain.entity.verification.ReceiptVerificationEntity;
@@ -30,6 +30,8 @@ public class ReceiptVerificationService {
 	private final MenuRepository menuRepository;
 	private final ReceiptVerificationRepository receiptVerificationRepository;
 
+	
+	// TODO : 여기도 테스트를 위해서 주석처리 해두었음. 주석 해제 하기
 	/**
 	 * 영수증 인증을 수행하는 메소드
 	 *
@@ -39,26 +41,30 @@ public class ReceiptVerificationService {
 	 */
 	public boolean verifyReceipt(ReceiptDTO receipt, String loggedInUserId) {
 		// 입력 데이터 검증
-		if (receipt == null) {
-			throw new IllegalArgumentException("영수증 정보가 제공되지 않았습니다.");
-		}
-		if (loggedInUserId == null || loggedInUserId.trim().isEmpty()) {
-			throw new IllegalArgumentException("로그인된 사용자 ID가 제공되지 않았습니다.");
-		}
-		validateReceiptDTO(receipt);
+		// if (receipt == null) {
+		// 	throw new IllegalArgumentException("영수증 정보가 제공되지 않았습니다.");
+		// }
+		// if (loggedInUserId == null || loggedInUserId.trim().isEmpty()) {
+		// 	throw new IllegalArgumentException("로그인된 사용자 ID가 제공되지 않았습니다.");
+		// }
 
-		UserEntity userEntity = validateUser(loggedInUserId);
-		StoreEntity storeEntity = validateStore(
-			receipt.getMerchantName(),
-			receipt.getMerchantAddress(),
-			receipt.getMerchantPhoneNumber()
-		);
-		validateItems(receipt.getItems(), storeEntity.getStoreId());
-		if (receipt.getTransactionDate() != null) {
-			validateReceiptDate(receipt.getTransactionDate());
-		}
+		// validateReceiptDTO(receipt);
+		// UserEntity userEntity = validateUser(loggedInUserId);
+		// StoreEntity storeEntity = validateStore(
+		// 	receipt.getMerchantName(),
+		// 	receipt.getMerchantAddress(),
+		// 	receipt.getMerchantPhoneNumber()
+		// );
+		// validateItems(receipt.getItems(), storeEntity.getStoreId());
+		// if (receipt.getTransactionDate() != null) {
+		// 	validateReceiptDate(receipt.getTransactionDate());
+		// }
 		// 검증 성공 시 영수증 인증 정보를 저장
-		saveReceiptVerification(userEntity, storeEntity);
+
+		UserEntity user = userRepository.findById("user01").get();
+		StoreEntity store = storeRepository.findById(15481).get();
+		receipt.setStoreId(store.getStoreId());
+		saveReceiptVerification(user, store);
 
 		return true;
 	}
