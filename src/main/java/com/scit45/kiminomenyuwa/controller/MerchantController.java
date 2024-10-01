@@ -127,6 +127,7 @@ public class MerchantController {
 		StoreRegistrationDTO storeRegistrationDTO
 		, @AuthenticationPrincipal AuthenticatedUser user) {
 		storeRegistrationDTO.setUserId(user.getUsername());
+		storeRegistrationDTO.setUserId(user.getId());
 		log.debug("전달된 dto객체: {}", storeRegistrationDTO);
 		try {
 			Integer savedStoreId = merchantService.saveStore(storeRegistrationDTO);

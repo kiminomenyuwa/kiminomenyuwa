@@ -204,8 +204,11 @@ public class MerchantService {
 
 		GeometryFactory geometryFactory = new GeometryFactory();
 
-		Point location = geometryFactory.createPoint(
-			new Coordinate(storeRegistrationDTO.getLongitude(), storeRegistrationDTO.getLatitude()));
+		// TODO: 입력받은 주소로 경도 위도 받아와서 저장하게 하기
+		// Point location = geometryFactory.createPoint(
+		// 	new Coordinate(storeRegistrationDTO.getLongitude(), storeRegistrationDTO.getLatitude()));
+
+		Point location = geometryFactory.createPoint(new Coordinate(127.000, 37.0));
 
 		StoreEntity storeEntity = StoreEntity.builder()
 			.user(merchant)
