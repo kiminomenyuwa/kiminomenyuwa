@@ -234,4 +234,39 @@ public class StoreService {
 		// 저장된 파일의 경로 반환 (예: "{storeId}/{uniqueFileName}")
 		return "files/store/" + storeId + "/" + uniqueFileName;
 	}
+
+	/**
+	 * 현재 로그인 중인 사용자의 가게만 조회하는 메서드
+	 * @param userId 현재 로그인중인 userId
+	 * @return 등록된 가게들
+	 */
+	public List<StoreRegistrationDTO> getStoresByUserId(String userId) {
+		List<StoreRegistrationDTO> storeList = storeRepository.findByUser_UserId(userId)
+			.stream()
+			.map(store -> StoreRegistrationDTO.builder()
+				.name(store.getName())
+				.phoneNumber(store.getPhoneNumber())
+				.zipcode(store.getZipcode())
+				.roadNameAddress(store.getRoadNameAddress())
+				.detailAddress(store.getDetailAddress())
+				.userId(store.getUser().getUserId())
+				.storeId(store.getStoreId())
+				.build()
+			)
+			.collect(Collectors.toList());
+
+		// 각 가게에 해당하는 사진 설정
+		storeList.forEach(store -> store.setPhotosDTO(
+			storePhotoRepository.findAllByStoreStoreId(store.getStoreId())
+				.stream()
+				.map(photo -> StorePhotoDTO.builder()
+					.photoId(photo.getPhotoId())
+					.photoUrl(photo.getPhotoUrl())
+					.isMain(photo.getIsMain())
+					.build()
+				).toList()
+		));
+
+		return storeList;
+	}
 }

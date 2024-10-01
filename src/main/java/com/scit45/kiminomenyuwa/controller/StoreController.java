@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,7 @@ import com.scit45.kiminomenyuwa.domain.dto.CategoryTypeDTO;
 import com.scit45.kiminomenyuwa.domain.dto.FoodCategoryDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.StoreRegistrationDTO;
+import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
 import com.scit45.kiminomenyuwa.service.StoreService;
 
 import lombok.RequiredArgsConstructor;
@@ -37,13 +39,11 @@ public class StoreController {
     // 가게 리스트 페이지를 반환하는 메소드
     @ResponseBody
     @GetMapping("/api/stores")
-    public List<StoreRegistrationDTO> showStoreList(Authentication user) {
-        // 서비스에서 가게 리스트를 가져와서 모델에 추가
-        List<StoreRegistrationDTO> storeList = storeService.getAllStores();
-
-        //TODO 모든 가게 리스트가 아닌 현재 로그인 중인 사장의 가게 불러오기
-        
-        return storeList;
+    public List<StoreRegistrationDTO> showStoreList(@AuthenticationPrincipal AuthenticatedUser user) {
+        // 현재 로그인 중인 userId
+        String userId = user.getId();
+        // 로그인한 사용자의 가게만 가져오기
+        return storeService.getStoresByUserId(userId);
     }
 
     /**

@@ -60,4 +60,7 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
 		"WHERE (:name IS NULL OR LOWER(s.name) LIKE LOWER(CONCAT('%', :name, '%'))) " +
 		"AND (:category IS NULL OR s.category = :category)")
 	List<StoreEntity> findStoresByNameAndCategory(@Param("name") String name, @Param("category") String category);
+
+	// userId로 가게 목록을 조회하는 쿼리
+	List<StoreEntity> findByUser_UserId(String userId);
 }
