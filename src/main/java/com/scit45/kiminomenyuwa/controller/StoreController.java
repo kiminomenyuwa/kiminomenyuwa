@@ -41,6 +41,8 @@ public class StoreController {
         // 서비스에서 가게 리스트를 가져와서 모델에 추가
         List<StoreRegistrationDTO> storeList = storeService.getAllStores();
 
+        //TODO 모든 가게 리스트가 아닌 현재 로그인 중인 사장의 가게 불러오기
+        
         return storeList;
     }
 
