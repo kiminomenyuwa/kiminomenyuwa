@@ -25,6 +25,7 @@ DROP TABLE IF EXISTS budget;
 -- 외래 키 제약을 다시 활성화
 SET FOREIGN_KEY_CHECKS = 1;
 
+
 -- 카테고리 타입 테이블: 카테고리의 종류를 정의 (예: 재료, 나라, 조리 방법)
 CREATE TABLE `category_type`
 (
@@ -254,9 +255,3 @@ CREATE TABLE `favorite`
     FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`) ON DELETE CASCADE,
     UNIQUE KEY unique_favorite (user_id, store_id)
 );
-
-commit;
-select * from user_dining_history;
-select * from menu;
-select * from budget;
-select * from store;
