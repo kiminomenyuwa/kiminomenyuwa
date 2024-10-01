@@ -6,6 +6,10 @@
     <meta charset="UTF-8">
     <title>가게 등록</title>
 
+    <!-- Naver Map API Script -->
+    <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=t06c4jgb48&submodules=geocoder"
+            type="text/javascript"></script>
+
     <script src="/js/jquery-3.7.1.min.js"></script>
     <!-- 카카오 도로명주소 서비스 호출 -->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -43,6 +47,20 @@
             new daum.Postcode({
                 oncomplete: function (data) {
                     //카카오 도로명주소에서 받아온 data html에 반영
+
+                    // 네이버 geocode로 주소 -> 좌표 변환
+                    naver.maps.Service.geocode({
+                        query: data.address
+                    }, function (status, response) {
+                        if (status !== naver.maps.Service.Status.OK) {
+                            return alert('Something wrong!');
+                        }
+                        var result = response.v2, // 검색 결과의 컨테이너
+                            items = result.addresses; // 검색 결과의 배열
+                        $('#longitude').val(items.x);
+                        $('#latitude').val(items.y);
+                    });
+
                     $('#zipcode').val(data.zonecode);
                     $('#roadNameAddress').val(data.roadAddress);
                 }
@@ -97,6 +115,8 @@
                 <small>여러 장의 사진을 선택할 수 있습니다.</small>
             </td>
         </tr>
+        <input type="hidden" id="longitude" name="longitude" th:value="127.000">
+        <input type="hidden" id="latitude" name="latitude" th:value="37.000">
         <tr>
             <td colspan="2">
                 <button id="submitForm" type="button">등록</button>

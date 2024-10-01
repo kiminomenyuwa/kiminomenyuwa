@@ -124,7 +124,9 @@ public class MerchantController {
 	@PreAuthorize("hasRole('ROLE_MERCHANT')")
 	public ResponseEntity<String> registerStore(
 		@ModelAttribute
-		StoreRegistrationDTO storeRegistrationDTO) {
+		StoreRegistrationDTO storeRegistrationDTO
+		, @AuthenticationPrincipal AuthenticatedUser user) {
+		storeRegistrationDTO.setUserId(user.getUsername());
 		log.debug("전달된 dto객체: {}", storeRegistrationDTO);
 		try {
 			Integer savedStoreId = merchantService.saveStore(storeRegistrationDTO);
