@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.scit45.kiminomenyuwa.domain.dto.CategoryTypeDTO;
@@ -11,6 +12,7 @@ import com.scit45.kiminomenyuwa.domain.dto.FoodCategoryDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.ReviewResponseDTO;
 import com.scit45.kiminomenyuwa.domain.dto.store.StoreInfoDTO;
+import com.scit45.kiminomenyuwa.domain.dto.store.StorePhotoDTO;
 import com.scit45.kiminomenyuwa.domain.dto.store.StoreRegistrationDTO;
 import com.scit45.kiminomenyuwa.domain.entity.CategoryTypeEntity;
 import com.scit45.kiminomenyuwa.domain.entity.FavoriteEntity;
@@ -127,29 +129,66 @@ public class StoreService {
 	// 	});
 	// }
 
-	/**
-	 * dto를 entity로 변경해주는 메소드
-	 *
-	 * @param storeRegistrationDTO 작성한 가게 등록 정보
-	 * @return 작성한 가게 정보를 entity로 변경된 정보를 리턴
-	 */
-	private StoreEntity convertToEntity(StoreRegistrationDTO storeRegistrationDTO) {
 
-		UserEntity user = userRepository.findById(storeRegistrationDTO.getUserId())
-			.orElseThrow(() -> new IllegalArgumentException("해당 유저가 존재하지 않습니다: " + storeRegistrationDTO.getUserId()));
-		return StoreEntity.builder()
-			.user(user)
-			.name(storeRegistrationDTO.getName())
-			.certification(storeRegistrationDTO.getCertification())
-			.roadNameAddress(storeRegistrationDTO.getRoadNameAddress())
-			.detailAddress(storeRegistrationDTO.getDetailAddress())
-			.zipcode(storeRegistrationDTO.getZipcode())
-			.phoneNumber(storeRegistrationDTO.getPhoneNumber())
-			.category(storeRegistrationDTO.getCategory())
-			.description(storeRegistrationDTO.getDescription())
-			.enabled(storeRegistrationDTO.getEnabled())
-			.build();
+	// application.properties에서 파일 업로드 경로를 읽어옴
+	@Value("${file.storage.location}")
+	private String uploadDir;
+
+	// 모든 가게 리스트를 가져오는 메소드
+	public List<StoreRegistrationDTO> getAllStores() {
+		// StoreEntity를 StoreDTO로 변환하여 리스트로 반환
+
+		List<StoreRegistrationDTO> storeList = storeRepository.findAll().stream()
+			.map(store -> {
+				log.debug(store.getName());
+				return StoreRegistrationDTO.builder()
+					.name(store.getName())
+					.phoneNumber(store.getPhoneNumber())
+					.zipcode(store.getZipcode())
+					.roadNameAddress(store.getRoadNameAddress())
+					.detailAddress(store.getDetailAddress())
+					.userId(store.getUser().getUserId())
+					.storeId(store.getStoreId())
+					.build();
+			})
+			.collect(Collectors.toList());
+
+		// set photoList
+		storeList.forEach(store -> store.setPhotosDTO(getStorePhotoDTOListByStoreId(store.getStoreId())));
+		return storeList;
 	}
+
+	public List<StorePhotoDTO> getStorePhotoDTOListByStoreId(Integer storeId){
+		return storePhotoRepository.findAllByStoreStoreId(storeId).stream()
+			.map(photo -> StorePhotoDTO.builder()
+				.photoId(photo.getPhotoId())
+				.photoUrl(photo.getPhotoUrl())
+				.isMain(photo.getIsMain())
+				.build()).toList();
+	}
+
+
+//	/**
+//	 * 등록 정보를 받아서 storeRepository에 저장한다
+//	 *
+//	 * @param storeRegistrationDTO
+//	 */
+//	public void saveStore(StoreRegistrationDTO storeRegistrationDTO) throws IOException {
+//		StoreEntity storeEntity = convertToEntity(storeRegistrationDTO);
+//		// 엔티티를 DB에 저장
+//		StoreEntity savedStore = storeRepository.save(storeEntity);
+//
+//		List<StorePhotoEntity> photoEntities = new ArrayList<>();
+//		for (MultipartFile file : storeRegistrationDTO.getPhotos()) {
+//			String photoUrl = saveFile(file, savedStore.getStoreId()); // 파일 저장 후 URL 반환
+//
+//			StorePhotoEntity photoEntity = new StorePhotoEntity(savedStore, photoUrl);
+//			photoEntities.add(photoEntity);
+//		}
+//		photoEntities.get(0).setIsMain(true);
+//
+//		storePhotoRepository.saveAll(photoEntities);
+//	}
 
 	/**
 	 * 가게이름 받아오기
@@ -306,8 +345,9 @@ public class StoreService {
 
 					if (profilePhoto != null) {
 						dto.setUserProfileUrl("/files/" + profilePhoto.getSavedName());
-					} else
+					} else {
 						dto.setUserProfileUrl("/images/default-profile.png");
+					}
 					log.debug(dto.toString());
 					return dto;
 				}
@@ -355,5 +395,9 @@ public class StoreService {
 			.build();
 
 		return storeDto;
+	}
+
+	public List<StoreEntity> findStoresWithinRadius(String pointWKT, double radius) {
+		return storeRepository.findStoresWithinRadius(pointWKT, radius);
 	}
 }

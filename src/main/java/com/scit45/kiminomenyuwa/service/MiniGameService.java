@@ -21,6 +21,7 @@ import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
 import com.scit45.kiminomenyuwa.domain.repository.MenuCategoryMappingRepository;
 import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
 import com.scit45.kiminomenyuwa.domain.repository.MiniGameMenuRatingRepository;
+import com.scit45.kiminomenyuwa.domain.repository.StoreRepository;
 import com.scit45.kiminomenyuwa.domain.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -45,6 +46,7 @@ public class MiniGameService {
 	private final MenuCategoryMappingRepository menuCategoryMappingRepository;
 	private final MenuService menuService;
 	private final UserRepository userRepository;
+	private final StoreRepository storeRepository;
 
 	/**
 	 * 모든 메뉴를 조회하고, DTO 리스트로 변환하여 반환하는 메서드.
@@ -131,6 +133,7 @@ public class MiniGameService {
 		return MenuDTO.builder()
 			.menuId(selectedMenu.getMenuId())
 			.name(selectedMenu.getName())
+			.pictureUrl(selectedMenu.getPictureUrl()) // 이미지 URL 추가
 			.build();
 	}
 
@@ -188,6 +191,7 @@ public class MiniGameService {
 		return MenuDTO.builder()
 			.menuId(selectedMenu.getMenuId())
 			.name(selectedMenu.getName())
+			.pictureUrl(selectedMenu.getPictureUrl()) // 이미지 URL 추가
 			.build();
 	}
 
@@ -297,4 +301,27 @@ public class MiniGameService {
 		// 6. menuScoreMap을 반환
 		return menuScoreMap;
 	}
+
+	public MenuDTO getRandomMenuByLocation(double latitude, double longitude, double radius) {
+		String pointWKT = String.format("POINT(%s %s)", longitude, latitude);
+		MenuEntity randomMenu = menuRepository.findRandomMenuWithinRadius(pointWKT, radius);
+
+		if (randomMenu != null) {
+			return convertToMenuDTO(randomMenu);
+		} else {
+			return null; // 반경 내에 메뉴가 없는 경우
+		}
+	}
+
+	public MenuDTO convertToMenuDTO(MenuEntity menuEntity) {
+		return MenuDTO.builder()
+			.menuId(menuEntity.getMenuId())
+			.storeId(menuEntity.getStore().getStoreId()) // StoreEntity를 통해 storeId를 가져옴
+			.name(menuEntity.getName())
+			.price(menuEntity.getPrice())
+			.pictureUrl(menuEntity.getPictureUrl()) // 이미지 URL 포함
+			.enabled(menuEntity.getEnabled())
+			.build();
+	}
+
 }

@@ -57,8 +57,8 @@
                         }
                         var result = response.v2, // 검색 결과의 컨테이너
                             items = result.addresses; // 검색 결과의 배열
-                        $('#longitude').val(items.x);
-                        $('#latitude').val(items.y);
+                        $('#longitude').val(items[0].x);
+                        $('#latitude').val(items[0].y);
                     });
 
                     $('#zipcode').val(data.zonecode);

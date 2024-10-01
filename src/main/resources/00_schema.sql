@@ -87,13 +87,13 @@ CREATE TABLE `store`
 -- 메뉴 테이블: 상점에서 제공하는 메뉴 항목을 저장
 CREATE TABLE `menu`
 (
-    `menu_id`     INT        NOT NULL AUTO_INCREMENT, -- 메뉴의 고유 식별자
-    `store_id`    INT        NOT NULL,                -- 메뉴가 속한 상점의 ID
-    `name`        VARCHAR(50),                        -- 메뉴 이름
-    `price`       INT,                                -- 메뉴 가격
-    `picture_url` VARCHAR(100),                       -- 메뉴 사진 URL
-    `enabled`     TINYINT(1) NOT NULL DEFAULT 1,      -- 메뉴 활성화 여부
-    PRIMARY KEY (`menu_id`),                          -- 기본 키 설정
+    `menu_id`     INT        NOT NULL,           -- 메뉴의 고유 식별자
+    `store_id`    INT        NOT NULL,           -- 메뉴가 속한 상점의 ID
+    `name`        VARCHAR(50),                   -- 메뉴 이름
+    `price`       INT,                           -- 메뉴 가격
+    `picture_url` VARCHAR(100),                  -- 메뉴 사진 URL
+    `enabled`     TINYINT(1) NOT NULL DEFAULT 1, -- 메뉴 활성화 여부
+    PRIMARY KEY (`menu_id`),                     -- 기본 키 설정
     FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`)
 );
 
@@ -122,26 +122,6 @@ CREATE TABLE `review`
     FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`),
     FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 );
-
-START TRANSACTION;
-
-INSERT INTO `review` (`store_id`, `user_id`, `rating`, `comment`)
-VALUES (15481, 'user01', 5, 'Amazing experience! The food was delicious and the staff was friendly.');
-
-INSERT INTO `review` (`store_id`, `user_id`, `rating`, `comment`)
-VALUES (15481, 'user02', 4, 'Great place to visit. The ambiance was nice, and the menu had a good variety.');
-
-INSERT INTO `review` (`store_id`, `user_id`, `rating`, `comment`)
-VALUES (15481, 'user03', 3, 'It was okay. Some dishes were tasty, but others could be improved.');
-
-INSERT INTO `review` (`store_id`, `user_id`, `rating`, `comment`)
-VALUES (15481, 'user04', 2, 'Not very satisfied. The service was slow and the food was mediocre.');
-
-INSERT INTO `review` (`store_id`, `user_id`, `rating`, `comment`)
-VALUES (15481, 'user05', 5, 'Absolutely loved it! Highly recommend to everyone looking for quality food.');
-
-COMMIT;
-
 
 -- 리뷰 사진 테이블 생성
 CREATE TABLE `review_photo`

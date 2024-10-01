@@ -33,17 +33,20 @@ public interface MenuRepository extends JpaRepository<MenuEntity, Integer> {
 	List<MenuEntity> findByStore_StoreId(Integer storeId);
 
 	@Query("SELECT m FROM MenuEntity m JOIN StoreEntity s ON m.store.storeId = s.storeId WHERE s.name = :storeName")
-	List<MenuEntity> findMenusByStoreName(@Param("storeName") String storeName);
+	List<MenuEntity> findMenusByStoreName(@Param("storeName")
+	String storeName);
 
 	// 이미 먹은 메뉴들(eatenMenuIds 리스트)을 제외한 나머지 메뉴들을 가져오는 쿼리
 	@Query("SELECT m FROM MenuEntity m WHERE m.menuId NOT IN :eatenMenuIds")
-	List<MenuEntity> findMenusNotInMenuIds(@Param("eatenMenuIds") List<Long> eatenMenuIds);
+	List<MenuEntity> findMenusNotInMenuIds(@Param("eatenMenuIds")
+	List<Long> eatenMenuIds);
 
 	@Query("SELECT m, GROUP_CONCAT(mc.foodCategory.categoryName) FROM MenuEntity m " +
 		"LEFT JOIN MenuCategoryMappingEntity mc ON m.menuId = mc.menu.menuId " +
 		"WHERE m.menuId NOT IN :eatenMenuIds " +
 		"GROUP BY m.menuId")
-	List<Object[]> findMenusWithCategoriesNotInMenuIds(@Param("eatenMenuIds") List<Long> eatenMenuIds);
+	List<Object[]> findMenusWithCategoriesNotInMenuIds(@Param("eatenMenuIds")
+	List<Long> eatenMenuIds);
 
 	Optional<MenuEntity> findByNameAndStore_StoreId(String name, Integer storeId);
 
@@ -54,6 +57,20 @@ public interface MenuRepository extends JpaRepository<MenuEntity, Integer> {
 
 	// 특정 가게의 활성화된 메뉴 조회
 	List<MenuEntity> findByStore_StoreIdAndEnabledTrue(Integer storeId);
+
+	/**
+	 * 주어진 가게 목록에 해당하는 메뉴를 검색합니다.
+	 *
+	 * @param stores 가게 목록
+	 * @return 가게들의 메뉴 목록
+	 */
+	List<MenuEntity> findByStoreIn(List<StoreEntity> stores);
+
+	// 반경 기반으로 가게와 메뉴를 조회하는 로직 작성
+	@Query(value = "SELECT m.* FROM menu m JOIN store s ON m.store_id = s.store_id "
+		+ "WHERE ST_Distance_Sphere(s.location, ST_GeomFromText(:point)) <= :radius "
+		+ "AND m.enabled = true ORDER BY RAND() LIMIT 1", nativeQuery = true)
+	MenuEntity findRandomMenuWithinRadius(@Param("point")
+	String pointWKT, @Param("radius")
+	double radius);
 }
-
-
