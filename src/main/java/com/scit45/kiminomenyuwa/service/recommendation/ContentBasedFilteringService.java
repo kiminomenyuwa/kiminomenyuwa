@@ -1,6 +1,7 @@
 package com.scit45.kiminomenyuwa.service.recommendation;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -109,5 +110,22 @@ public class ContentBasedFilteringService {
 		return mappings.stream()
 			.map(mapping -> mapping.getFoodCategory().getCategoryName())
 			.collect(Collectors.toList());
+	}
+
+	/**
+	 * 사용자들의 선호 카테고리를 종합하여 반환합니다.
+	 *
+	 * @param userIds 유저 ID 리스트
+	 * @return 종합된 선호 카테고리 Set
+	 */
+	public Set<String> getCombinedUserPreferredCategories(List<String> userIds) {
+		Set<String> combinedPreferredCategories = new HashSet<>();
+
+		for (String userId : userIds) {
+			Set<String> userPreferredCategories = getUserPreferredCategories(userId);
+			combinedPreferredCategories.addAll(userPreferredCategories);
+		}
+
+		return combinedPreferredCategories;
 	}
 }

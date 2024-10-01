@@ -1,32 +1,119 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>약속 설정</title>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>다중 사용자 추천</title>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Bootstrap JS Bundle (Popper 포함) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- 네이버 지도 API 스크립트 로드 -->
-    <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=t06c4jgb48&submodules=geocoder"
-            type="text/javascript"></script>
+    <!-- Slick Slider CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" rel="stylesheet" type="text/css"/>
+    <!-- Slick Slider Theme CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" rel="stylesheet"
+          type="text/css"/>
+    <!-- jQuery UI CSS -->
+    <link href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" rel="stylesheet">
     <style>
         body {
             padding-top: 70px; /* 네비게이션 바 공간 확보 */
         }
         #map {
             width: 100%;
-            height: 400px;
+            height: 500px;
             margin-bottom: 20px;
+        }
+
+        /* jQuery UI Autocomplete 커스터마이징 */
+        .ui-autocomplete {
+            z-index: 1050; /* Bootstrap 네비게이션 바보다 위에 표시되도록 설정 */
+            max-height: 300px;
+            overflow-y: auto;
+            /* 기본 스타일 제거 */
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+
+        .ui-menu-item {
+            display: block;
+            padding: 5px;
+        }
+
+        .friend-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .friend-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        .friend-photo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+
+        /* 선택된 친구 리스트 스타일 */
+        #selected-friends .selected-friend {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 10px;
+            margin: 5px;
+            background-color: #0d6efd;
+            color: white;
+            border-radius: 15px;
+        }
+
+        #selected-friends .selected-friend .remove-friend {
+            margin-left: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* 추천 메뉴 슬라이더 스타일 */
+        .menu-slider .card {
+            margin: 0 auto;
+        }
+
+        /* 추천 이유 이모티콘 */
+        .recommendation-reasons {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        /* 로딩 스피너 스타일 */
+        #loadingSpinner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            display: none; /* 기본적으로 숨김 */
         }
     </style>
 </head>
 <body>
+<!-- 로딩 스피너 -->
+<div id="loadingSpinner">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
 <!-- 네비게이션 바 -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container-fluid">
@@ -41,9 +128,6 @@
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/}">홈</a>
                 </li>
-<!--                <li class="nav-item">-->
-<!--                    <a class="nav-link" th:href="@{/meetings/schedule}" th:classappend="${#strings.equals(#request.requestURI, '/meetings/schedule')} ? 'active' : ''">약속 설정</a>-->
-<!--                </li>-->
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/reviews/write}">리뷰 작성</a>
                 </li>
@@ -63,184 +147,477 @@
 
 <!-- 메인 컨테이너 -->
 <div class="container">
-    <h2 class="mt-4 mb-4 text-center">약속 설정</h2>
-    <form th:action="@{/meetings/schedule}" th:object="${meeting}" method="post" id="meetingForm">
+    <h2 class="mt-4 mb-4 text-center">다중 사용자 추천</h2>
+    <!-- 추천 설정 폼 (필요 시 폼 추가) -->
+    <form class="mb-4" id="recommendationForm">
+        <!-- 친구 검색 입력 필드 -->
         <div class="mb-3">
-            <label for="title" class="form-label">약속 제목</label>
-            <input type="text" th:field="*{title}" class="form-control" id="title" placeholder="약속 제목을 입력하세요" required>
-        </div>
-        <div class="mb-3">
-            <label for="description" class="form-label">약속 설명</label>
-            <textarea th:field="*{description}" class="form-control" id="description" rows="3" placeholder="약속에 대한 설명을 입력하세요"></textarea>
-        </div>
-        <div class="mb-3">
-            <label for="meetingDate" class="form-label">약속 날짜 및 시간</label>
-            <input type="datetime-local" th:field="*{meetingDate}" class="form-control" id="meetingDate" required>
-        </div>
-        <div class="mb-3">
-            <label for="location" class="form-label">약속 장소</label>
-            <input type="text" th:field="*{location}" class="form-control" id="location" placeholder="약속 장소를 입력하세요" required readonly>
+            <label class="form-label" for="friendSearch">친구 검색</label>
+            <input class="form-control" id="friendSearch" placeholder="친구 이름 또는 이메일로 검색하세요" type="text">
         </div>
 
-        <!-- 네이버 지도 검색창 -->
-        <div class="mb-3">
-            <label for="mapSearch" class="form-label">장소 검색</label>
-            <input type="text" id="mapSearch" class="form-control" placeholder="장소를 검색하세요">
+        <!-- 선택된 친구 표시 영역 -->
+        <div class="mb-3" id="selected-friends">
+            <!-- 선택된 친구들이 여기에 추가됩니다 -->
         </div>
 
-        <!-- 네이버 지도 표시 영역 -->
-        <div id="map"></div>
-
+        <!-- 선호 카테고리 선택 -->
         <div class="mb-3">
-            <label class="form-label">함께할 친구들 선택</label>
-            <div class="form-check">
-                <div th:each="friend : ${friends}">
-                    <input class="form-check-input" type="checkbox" th:id="'friend-' + ${friend.userId}"
-                           th:name="participantUserIds" th:value="${friend.userId}">
-                    <label class="form-check-label" th:for="'friend-' + ${friend.userId}">
-                        <span th:text="${friend.name}">Friend Name</span> (<span th:text="${friend.email}">email@example.com</span>)
-                    </label>
-                    <br/>
-                </div>
-            </div>
+            <label class="form-label" for="preferredCategories">선호 카테고리</label>
+            <select class="form-select" id="preferredCategories" multiple>
+                <option value="한식">한식</option>
+                <option value="중식">중식</option>
+                <option value="일식">일식</option>
+                <option value="양식">양식</option>
+                <option value="디저트">디저트</option>
+                <!-- 필요에 따라 추가 카테고리 옵션 -->
+            </select>
+            <small class="form-text text-muted">선호하는 카테고리를 선택하세요.</small>
         </div>
-        <button type="submit" class="btn btn-primary">약속 생성</button>
+
+        <!-- 키워드 입력 -->
+        <div class="mb-3">
+            <label class="form-label" for="keywords">키워드</label>
+            <input class="form-control" id="keywords" placeholder="예: 맵고, 달콤한, 저칼로리" type="text">
+            <small class="form-text text-muted">선호하는 메뉴의 키워드를 입력하세요.</small>
+        </div>
+
+        <button class="btn btn-primary" id="fetchRecommendations" type="button">추천 받기</button>
     </form>
+
+    <!-- 현재 좌표 표시 -->
+    <div class="mb-3" id="coordinates">Latitude: -, Longitude: -</div>
+
+    <!-- 네이버 지도 표시 영역 -->
+    <div id="map"></div>
+
+    <!-- 추천 메뉴 목록 -->
+    <h3>추천 메뉴 목록</h3>
+    <div class="menu-slider">
+        <!-- 메뉴 카드가 여기서 동적으로 추가됩니다 -->
+    </div>
+
+    <!-- 메뉴 슬라이더 네비게이션 버튼 -->
+    <div class="d-flex justify-content-center mt-3">
+        <button class="btn btn-secondary mr-2 slick-prev-menu">이전</button>
+        <button class="btn btn-secondary slick-next-menu">다음</button>
+    </div>
+
+    <!-- 주변 가게 목록 -->
+    <h3 class="mt-5">주변 가게 목록</h3>
+    <div class="row" id="store-list">
+        <!-- 가게 카드가 여기서 동적으로 추가됩니다 -->
+    </div>
 </div>
 
-<!-- jQuery 스크립트 -->
+<!-- jQuery, Bootstrap JS, Slick Slider JS, jQuery UI JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+
+<!-- 네이버 지도 API 스크립트 로드 -->
+<script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=t06c4jgb48&submodules=geocoder"
+        type="text/javascript"></script>
+
 <script>
     $(document).ready(function(){
-        $('#meetingForm').on('submit', function(e){
-            var meetingDate = $('#meetingDate').val();
-            var selectedDate = new Date(meetingDate);
-            var currentDate = new Date();
-            if(selectedDate < currentDate){
-                e.preventDefault();
-                alert('약속 날짜 및 시간은 현재 시간보다 이후여야 합니다.');
+        // 초기 Slick Slider 설정
+        function initializeSlickSliders() {
+            // 추천 메뉴 슬라이더 초기화
+            $('.menu-slider').slick({
+                slidesToShow: 3, // 한 번에 3개씩 표시
+                slidesToScroll: 3, // 슬라이드 시 3개씩 이동
+                infinite: false,
+                dots: true, // 페이지네이션 활성화
+                arrows: false,
+                speed: 500, // 슬라이드 전환 속도 (밀리초)
+                cssEase: 'ease-in-out', // 슬라이드 전환 애니메이션
+                responsive: [
+                    {
+                        breakpoint: 1200,
+                        settings: {
+                            slidesToShow: 3,
+                            slidesToScroll: 3
+                        }
+                    },
+                    {
+                        breakpoint: 992,
+                        settings: {
+                            slidesToShow: 2,
+                            slidesToScroll: 2
+                        }
+                    },
+                    {
+                        breakpoint: 576,
+                        settings: {
+                            slidesToShow: 1,
+                            slidesToScroll: 1
+                        }
+                    }
+                ]
+            });
+        }
+
+        // Slick Slider 네비게이션 버튼 설정
+        function setSlickNavigation() {
+            // 추천 메뉴 네비게이션
+            $('.slick-prev-menu').click(function () {
+                $('.menu-slider').slick('slickPrev');
+            });
+            $('.slick-next-menu').click(function () {
+                $('.menu-slider').slick('slickNext');
+            });
+        }
+
+        // 초기 Slick Slider 및 네비게이션 설정
+        initializeSlickSliders();
+        setSlickNavigation();
+
+        // 추천 이유에 따른 이모티콘 매핑
+        const recommendationEmojiMap = {
+            "사용자들이 선호하는 카테고리": "❤",
+            "유사한 사용자들이 선호하는 음식": "👨‍👩‍👧‍👦",
+            "사용자가 입력한 키워드와 일치": "🔍",
+            "선호하는 카테고리에 속함": "⭐",
+            // 필요에 따라 추가 이모티콘 매핑
+        };
+
+        // 선택된 친구 저장 배열
+        let selectedFriends = [];
+
+        // 자동완성 목록 커스터마이징
+        $.widget("custom.friendAutocomplete", $.ui.autocomplete, {
+            _renderItem: function (ul, item) {
+                var $li = $('<li>');
+                var $div = $('<div>').addClass('friend-item').append(
+                    $('<img>').attr('src', item.profilePhotoUrl || 'https://via.placeholder.com/40').addClass('friend-photo'),
+                    $('<span>').text(item.name + ' (' + item.value + ')')
+                );
+                return $li.append($div).appendTo(ul);
             }
         });
-    });
-</script>
 
-<!-- 네이버 지도 스크립트 -->
-<script>
-    // 네이버 지도 초기화 변수
-    var map;
-    var marker;
-    var currentPosition;
+        // 친구 검색 자동완성 기능
+        $('#friendSearch').friendAutocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/friendships/search',
+                    type: 'GET',
+                    dataType: 'json',
+                    data: {
+                        query: request.term
+                    },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.userName + ' (' + item.userId + ')',
+                                value: item.userId,
+                                name: item.userName,
+                                profilePhotoUrl: item.profilePhotoUrl
+                            };
+                        }));
+                    },
+                    error: function () {
+                        response([]);
+                    }
+                });
+            },
+            minLength: 2,
+            select: function (event, ui) {
+                // 중복 선택 방지
+                if (selectedFriends.includes(ui.item.value)) {
+                    alert('이미 선택된 친구입니다.');
+                    return false;
+                }
 
-    // 네이버 지도 API 초기화
-    function initializeMap(lat, lng) {
-        var mapOptions = {
-            center: new naver.maps.LatLng(lat, lng),
-            zoom: 15
-        };
-        map = new naver.maps.Map('map', mapOptions);
+                // 선택된 친구 추가
+                selectedFriends.push(ui.item.value);
+                var friendHtml = '<div class="selected-friend" data-user-id="' + ui.item.value + '">'
+                    + '<img src="' + (ui.item.profilePhotoUrl || 'https://via.placeholder.com/30') + '" class="friend-photo me-2" style="width:30px; height:30px; border-radius:50%;">'
+                    + ui.item.name + ' (' + ui.item.value + ') '
+                    + '<span class="remove-friend">&times;</span>'
+                    + '<input type="hidden" name="participantUserIds" value="' + ui.item.value + '"/>'
+                    + '</div>';
+                $('#selected-friends').append(friendHtml);
 
-        marker = new naver.maps.Marker({
-            position: map.getCenter(),
-            map: map
+                // 입력 필드 초기화
+                $(this).val('');
+                return false;
+            }
         });
 
-        // 지도를 드래그하거나 줌 변경 시 중심 위치 변경
-        naver.maps.Event.addListener(map, 'idle', function() {
+        // 선택된 친구 제거 기능
+        $('#selected-friends').on('click', '.remove-friend', function () {
+            var userId = $(this).siblings('input[name="participantUserIds"]').val();
+            selectedFriends = selectedFriends.filter(id => id !== userId);
+            $(this).parent('.selected-friend').remove();
+        });
+
+        // 추천 받기 버튼 클릭 시
+        $('#fetchRecommendations').click(function () {
+            if (selectedFriends.length === 0) {
+                alert('추천을 받을 친구를 최소 한 명 이상 선택하세요.');
+                return;
+            }
+
+            var preferredCategories = $('#preferredCategories').val() || [];
+            var keywords = $('#keywords').val().trim();
+
+            // Get current map center coordinates
             var center = map.getCenter();
-            marker.setPosition(center);
-            getAddress(center);
+            var latitude = center.lat();
+            var longitude = center.lng();
+
+            // 로딩 스피너 표시 및 버튼 비활성화
+            $('#loadingSpinner').show();
+            $('#fetchRecommendations').prop('disabled', true);
+
+            // AJAX 요청으로 추천 데이터 가져오기
+            $.ajax({
+                url: '/recommendations/nearby-menus-with-friends',
+                type: 'POST',
+                data: {
+                    latitude: latitude,
+                    longitude: longitude,
+                    radius: 1000, // 예시 반경
+                    limit: 10,    // 추천할 메뉴 개수
+                    participantUserIds: selectedFriends,
+                    preferredCategories: preferredCategories,
+                    keywords: keywords
+                },
+                success: function (response) {
+                    displayRecommendedMenus(response.recommendedMenus);
+                    displayNearbyStores(response.nearbyStores);
+                },
+                error: function (xhr, status, error) {
+                    alert("추천 메뉴 및 가게를 가져오는 중 오류가 발생했습니다.");
+                },
+                complete: function () {
+                    // 로딩 스피너 숨기고 버튼 활성화
+                    $('#loadingSpinner').hide();
+                    $('#fetchRecommendations').prop('disabled', false);
+                }
+            });
         });
 
-        // 마커 클릭 시 주소 검색
-        naver.maps.Event.addListener(marker, 'click', function() {
-            var position = marker.getPosition();
-            getAddress(position);
-        });
+        // Function to display recommended menus on the page
+        function displayRecommendedMenus(menus) {
+            const menuSlider = $('.menu-slider');
+            // 슬라이더가 이미 초기화되었는지 확인
+            if (menuSlider.hasClass('slick-initialized')) {
+                menuSlider.slick('unslick'); // 슬라이더 파괴
+            }
 
-        // 마커 드래그 가능하게 설정 (선택 사항)
-        /*
-        marker.setOptions({
-            draggable: true
-        });
+            menuSlider.empty(); // 기존 슬라이드 제거
 
-        naver.maps.Event.addListener(marker, 'dragend', function(e) {
-            var position = marker.getPosition();
-            getAddress(position);
-        });
-        */
-    }
+            if (menus.length === 0) {
+                menuSlider.append('<div><p class="text-muted">추천 메뉴가 없습니다.</p></div>');
+                return;
+            }
 
-    // Geolocation을 사용하여 사용자의 현재 위치 가져오기
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            currentPosition = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
-            initializeMap(position.coords.latitude, position.coords.longitude);
-        }, function(error) {
-            console.error("Geolocation error:", error.message);
-            // 위치 정보를 가져올 수 없을 경우 기본 위치 설정 (예: 서울 시청)
+            menus.forEach(function (menu) {
+                const menuCard = `
+                    <div>
+                        <div class="card h-100">
+                            <img src="${menu.pictureUrl || '/images/default-menu.png'}" class="card-img-top menu-photo" alt="${menu.name}">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">${menu.name}</h5>
+                                <p class="card-text"><strong>가격:</strong> ${menu.price}원</p>
+                                <p class="card-text"><strong>카테고리:</strong> ${formatCategories(menu.categories)}</p>
+                                <p class="recommendation-reasons"><em>${formatRecommendationReasons(menu.recommendationReasons)}</em></p> <!-- 추천 이유 표시 -->
+                                <a href="/menu/${menu.menuId}" class="btn btn-primary mt-auto">자세히 보기</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                menuSlider.append(menuCard);
+            });
+
+            // 슬라이더 다시 초기화
+            initializeSlickSliders();
+            setSlickNavigation();
+        }
+
+        // Function to format recommendation reasons with emojis
+        function formatRecommendationReasons(reasons) {
+            if (!reasons || reasons.length === 0) return '';
+            return reasons.map(reason => {
+                const emoji = recommendationEmojiMap[reason] || ''; // 매핑된 이모티콘 또는 빈 문자열
+                return `${emoji} ${reason}`;
+            }).join(' & ');
+        }
+
+        // Function to format categories into badges
+        function formatCategories(categories) {
+            if (!categories || categories.length === 0) return '없음';
+            return categories.map(category => `<span class="badge bg-secondary badge-category">${category.categoryName}</span>`).join(' ');
+        }
+
+        // Function to display nearby stores on the page and add markers to the map
+        function displayNearbyStores(stores) {
+            const storeList = $('#store-list');
+            storeList.empty(); // 기존 가게 목록 제거
+
+            // 기존 마커 제거
+            storeMarkers.forEach(marker => marker.setMap(null));
+            storeMarkers = [];
+
+            if (stores.length === 0) {
+                storeList.append('<p class="text-muted">주변 가게가 없습니다.</p>');
+                return;
+            }
+
+            stores.forEach(function (store) {
+                const storeCard = `
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <img src="${store.photoUrls && store.photoUrls.length > 0 ? store.photoUrls[0] : '/images/default-store.png'}" class="card-img-top store-photo" alt="${store.name}">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">${store.name}</h5>
+                                <p class="card-text"><strong>카테고리:</strong> ${store.category}</p>
+                                <p class="card-text"><strong>전화번호:</strong> ${store.phoneNumber}</p>
+                                <a href="/stores/${store.storeId}" class="btn btn-primary mt-auto">가게 보기</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                storeList.append(storeCard);
+
+                // 지도에 가게 마커 추가
+                const storeMarker = new naver.maps.Marker({
+                    position: new naver.maps.LatLng(store.latitude, store.longitude),
+                    map: map,
+                    title: store.name
+                });
+
+                // 마커 클릭 시 정보창 표시 (선택 사항)
+                const infoWindow = new naver.maps.InfoWindow({
+                    content: `<div style="width:200px;"><strong>${store.name}</strong><br/>${store.address}</div>`
+                });
+
+                naver.maps.Event.addListener(storeMarker, 'click', function () {
+                    infoWindow.open(map, storeMarker);
+                });
+
+                storeMarkers.push(storeMarker);
+            });
+        }
+
+        // 지도 초기화 변수
+        var map;
+        var userMarker;
+        var storeMarkers = [];
+
+        // Geolocation을 사용하여 사용자의 현재 위치 가져오기
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
+        } else {
+            alert("Geolocation을 지원하지 않는 브라우저입니다.");
+            // 기본 위치 설정 (예: 서울 시청)
             initializeMap(37.5665, 126.9780);
-        });
-    } else {
-        alert("Geolocation을 지원하지 않는 브라우저입니다.");
-        // 기본 위치 설정 (예: 서울 시청)
-        initializeMap(37.5665, 126.9780);
-    }
+        }
 
-    // 장소 검색 기능 구현
-    $('#mapSearch').on('keypress', function(e){
-        if(e.which == 13){ // Enter 키 눌렀을 때
-            e.preventDefault();
-            var query = $(this).val();
-            if(query.length > 0){
-                searchAddress(query);
+        // 현재 위치 표시 및 지도 초기화
+        function showPosition(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            // 지도 초기화
+            map = new naver.maps.Map('map', {
+                center: new naver.maps.LatLng(latitude, longitude),
+                zoom: 15
+            });
+
+            // 사용자 위치 마커 추가
+            userMarker = new naver.maps.Marker({
+                position: new naver.maps.LatLng(latitude, longitude),
+                map: map,
+                title: "내 위치"
+            });
+
+            // 초기 좌표 표시
+            $('#coordinates').text(`Latitude: ${latitude}, Longitude: ${longitude}`);
+        }
+
+        // Geolocation 에러 처리
+        function showError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    alert("위치 정보를 허용하지 않았습니다.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert("위치 정보를 사용할 수 없습니다.");
+                    break;
+                case error.TIMEOUT:
+                    alert("위치 정보를 가져오는 시간이 초과되었습니다.");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    alert("알 수 없는 오류가 발생했습니다.");
+                    break;
             }
         }
+
+        // 장소 검색 기능 구현
+        $('#mapSearch').on('keypress', function (e) {
+            if (e.which == 13) { // Enter 키 눌렀을 때
+                e.preventDefault();
+                var query = $(this).val();
+                if (query.length > 0) {
+                    searchAddress(query);
+                }
+            }
+        });
+
+        function searchAddress(query) {
+            naver.maps.Service.geocode({
+                query: query
+            }, function (status, response) {
+                if (status !== naver.maps.Service.Status.OK) {
+                    return alert('장소를 찾을 수 없습니다.');
+                }
+
+                var result = response.v2;
+                var items = result.addresses;
+
+                if (items.length > 0) {
+                    var item = items[0];
+                    var lat = parseFloat(item.y);
+                    var lng = parseFloat(item.x);
+                    var position = new naver.maps.LatLng(lat, lng);
+
+                    map.setCenter(position);
+                    marker.setPosition(position);
+                    $('#location').val(item.address);
+                    $('#coordinates').text(`Latitude: ${lat}, Longitude: ${lng}`);
+                } else {
+                    alert('검색 결과가 없습니다.');
+                }
+            });
+        }
+
+        // 좌표를 주소로 변환하여 입력 필드에 업데이트
+        function getAddress(latlng) {
+            naver.maps.Service.reverseGeocode({
+                coords: latlng,
+                orders: 'addr',
+                language: 'ko'
+            }, function (status, response) {
+                if (status !== naver.maps.Service.Status.OK) {
+                    return alert('주소를 가져올 수 없습니다.');
+                }
+
+                var result = response.v2;
+                var items = result.addresses;
+
+                if (items.length > 0) {
+                    var addressDetail = items[0].roadAddress || items[0].jibunAddress;
+                    $('#location').val(addressDetail);
+                    $('#coordinates').text(`Latitude: ${latlng.lat()}, Longitude: ${latlng.lng()}`);
+                }
+            });
+        }
     });
-
-    function searchAddress(query){
-        naver.maps.Service.geocode({
-            query: query
-        }, function(status, response) {
-            if (status !== naver.maps.Service.Status.OK) {
-                return alert('장소를 찾을 수 없습니다.');
-            }
-
-            var result = response.v2;
-            var items = result.addresses;
-
-            if (items.length > 0) {
-                var item = items[0];
-                var lat = parseFloat(item.y);
-                var lng = parseFloat(item.x);
-                var position = new naver.maps.LatLng(lat, lng);
-
-                map.setCenter(position);
-                marker.setPosition(position);
-                $('#location').val(item.address);
-            } else {
-                alert('검색 결과가 없습니다.');
-            }
-        });
-    }
-
-    // 좌표를 주소로 변환하여 입력 필드에 업데이트
-    function getAddress(latlng){
-        naver.maps.Service.reverseGeocode({
-            coords: latlng,
-            orders: 'addr',
-            language: 'ko'
-        }, function(status, response) {
-            if (status !== naver.maps.Service.Status.OK) {
-                return alert('주소를 가져올 수 없습니다.');
-            }
-
-            var result = response.result;
-            if (result && result.items && result.items.length > 0) {
-                var addressDetail = result.items[0].addrdetail;
-                var fullAddress = addressDetail.country + ' ' + addressDetail.si + ' ' + addressDetail.gu + ' ' + addressDetail.dong + ' ' + addressDetail.roadAddress;
-                $('#location').val(fullAddress);
-            }
-        });
-    }
 </script>
 </body>
 </html>

@@ -116,5 +116,70 @@ public class CollaborativeFilteringService {
 
 		return similarityMap;
 	}
+
+	/**
+	 * 다중 유저에 대한 협업 필터링을 통해 추천 메뉴를 생성합니다.
+	 *
+	 * @param userIds 추천 대상 유저 ID 리스트
+	 * @param limit   추천할 메뉴 개수
+	 * @return 추천 메뉴 목록
+	 */
+	public List<MenuEntity> recommendMenusForUsers(List<String> userIds, int limit) {
+		Map<String, Map<Integer, Integer>> userItemMatrix = userItemMatrixService.createUserItemMatrix();
+
+		// 존재하지 않는 유저는 제외
+		List<String> validUserIds = userIds.stream()
+			.filter(userItemMatrix::containsKey)
+			.collect(Collectors.toList());
+
+		if (validUserIds.isEmpty()) {
+			log.warn("No valid user IDs found in user-item matrix.");
+			return Collections.emptyList();
+		}
+
+		Map<Integer, Double> recommendedScores = new HashMap<>();
+
+		for (String userId : validUserIds) {
+			Map<String, Double> similarityMap = calculateSimilarity(userId);
+
+			int topN = 5; // 상위 유사 사용자 수
+			List<Map.Entry<String, Double>> sortedSimilarUsers = similarityMap.entrySet().stream()
+				.sorted(Map.Entry.<String, Double>comparingByValue().reversed())
+				.limit(topN)
+				.collect(Collectors.toList());
+
+			for (Map.Entry<String, Double> entry : sortedSimilarUsers) {
+				String similarUserId = entry.getKey();
+				double similarity = entry.getValue();
+				Map<Integer, Integer> similarUserVector = userItemMatrix.get(similarUserId);
+
+				for (Map.Entry<Integer, Integer> menuEntry : similarUserVector.entrySet()) {
+					Integer menuId = menuEntry.getKey();
+					int score = menuEntry.getValue();
+
+					// 대상 사용자가 이미 가진 메뉴는 제외
+					if (userItemMatrix.get(userId).containsKey(menuId)) {
+						continue;
+					}
+
+					// 점수 합산 (가중치 조정 가능)
+					double calculatedScore = similarity * score;
+					recommendedScores.put(menuId, recommendedScores.getOrDefault(menuId, 0.0) + calculatedScore);
+				}
+			}
+		}
+
+		// 점수 기준으로 메뉴를 정렬하고 상위 N개를 선택합니다.
+		List<Integer> recommendedMenuIds = recommendedScores.entrySet().stream()
+			.sorted(Map.Entry.<Integer, Double>comparingByValue().reversed())
+			.limit(limit)
+			.map(Map.Entry::getKey)
+			.collect(Collectors.toList());
+
+		return menuRepository.findAllById(recommendedMenuIds).stream()
+			.filter(MenuEntity::getEnabled)
+			.collect(Collectors.toList());
+	}
+
 }
 

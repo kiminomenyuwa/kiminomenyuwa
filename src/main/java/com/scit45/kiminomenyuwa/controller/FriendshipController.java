@@ -9,6 +9,7 @@ import java.util.Set;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -19,8 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.scit45.kiminomenyuwa.domain.dto.UserSimpleDTO;
 import com.scit45.kiminomenyuwa.domain.entity.FriendshipEntity;
 import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
+import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
 import com.scit45.kiminomenyuwa.service.FriendshipService;
 import com.scit45.kiminomenyuwa.service.UserService;
 
@@ -221,4 +224,20 @@ public class FriendshipController {
 		}
 	}
 
+	/**
+	 * 친구 검색 엔드포인트
+	 * @param query 검색어 (이름 또는 이메일)
+	 * @param user 현재 로그인한 사용자 정보
+	 * @return 검색된 친구 목록
+	 */
+	@GetMapping("/search")
+	@ResponseBody
+	public ResponseEntity<List<UserSimpleDTO>> searchFriends(
+		@RequestParam("query") String query,
+		@AuthenticationPrincipal AuthenticatedUser user) {
+
+		String currentUserId = user.getUsername();
+		List<UserSimpleDTO> friends = friendshipService.searchFriends(currentUserId, query);
+		return ResponseEntity.ok(friends);
+	}
 }
