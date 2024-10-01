@@ -31,10 +31,14 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
 		"LOWER(REPLACE(s.detailAddress, ' ', '')) LIKE LOWER(CONCAT('%', REPLACE(:detailAddress, ' ', ''), '%')) OR " +
 		"s.phoneNumber LIKE CONCAT('%', :phoneNumber, '%'))")
 	List<StoreEntity> findPotentialMatches(
-		@Param("name") String name,
-		@Param("roadNameAddress") String roadNameAddress,
-		@Param("detailAddress") String detailAddress,
-		@Param("phoneNumber") String phoneNumber);
+		@Param("name")
+		String name,
+		@Param("roadNameAddress")
+		String roadNameAddress,
+		@Param("detailAddress")
+		String detailAddress,
+		@Param("phoneNumber")
+		String phoneNumber);
 
 	StoreEntity findByName(String name);
 
@@ -49,8 +53,10 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
 		"WHERE ST_Distance_Sphere(s.location, ST_GeomFromText(:point)) <= :radius " +
 		"ORDER BY ST_Distance_Sphere(s.location, ST_GeomFromText(:point)) ASC", nativeQuery = true)
 	List<StoreEntity> findStoresWithinRadius(
-		@Param("point") String pointWKT,
-		@Param("radius") double radius);
+		@Param("point")
+		String pointWKT,
+		@Param("radius")
+		double radius);
 
 	/**
 	 * 상점 ID로 상점 정보를 조회하는 메서드입니다.
@@ -61,4 +67,10 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
 	Optional<StoreEntity> findByStoreId(Integer storeId);
 
 	Page<StoreEntity> findByUser_UserId(String userId, Pageable pageable);
+	@Query("SELECT s FROM StoreEntity s " +
+		"WHERE (:name IS NULL OR LOWER(s.name) LIKE LOWER(CONCAT('%', :name, '%'))) " +
+		"AND (:category IS NULL OR s.category = :category)")
+	List<StoreEntity> findStoresByNameAndCategory(@Param("name")
+	String name, @Param("category")
+	String category);
 }

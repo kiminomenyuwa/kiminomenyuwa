@@ -48,10 +48,10 @@ public class MerchantController {
 	@PreAuthorize("hasRole('ROLE_MERCHANT')")
 	public String listMyStores(
 		@AuthenticationPrincipal AuthenticatedUser user,
-		@RequestParam(defaultValue = "0") int page,
-		@RequestParam(defaultValue = "10") int size,
-		@RequestParam(defaultValue = "name") String sortBy,
-		@RequestParam(defaultValue = "asc") String sortDir,
+		@RequestParam(name = "page",defaultValue = "0") int page,
+		@RequestParam(name = "size",defaultValue = "10") int size,
+		@RequestParam(name = "sortBy",defaultValue = "name") String sortBy,
+		@RequestParam(name = "sortDir",defaultValue = "asc") String sortDir,
 		Model model) {
 
 		Sort sort = sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();

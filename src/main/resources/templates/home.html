@@ -4,6 +4,8 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>키미노 메뉴와</title>
+<!-- 네이버 지도 API를 로드 -->
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=t06c4jgb48&submodules=geocoder"></script>
 
 <!-- CSS 파일 링크 -->
 <link rel="stylesheet" href="/css/home.css" />
@@ -51,7 +53,6 @@
 			<li><a href="recommend/test">메뉴추천(테스트페이지)</a></li>
 			<li><a href="recommend/recommendUntriedFood">안먹어본 메뉴 추천</a></li>
 			<li><a href="recommend/recommendByMinigame">미니게임 결과에 따른 메뉴 추천</a></li>
-            <li><a href="recommend/recommendByAge">연령대별 추천</a></li>
 		</ul>
 
 		<ul>
@@ -59,39 +60,27 @@
 		</ul>
 	</div>
 
-	<script th:inline="javascript">
-		$(document).ready(function() {
-			let menuCount = /*[[${menuCount}]]*/0;
-			let selectedNumbers = [];
-			$("#start-game").click(function() {
-				if (selectedNumbers.length >= menuCount) {
-					alert("더 이상 메뉴가 없습니다!");
-					return;
-				}
-
-				let randomNumber;
-				do {
-					randomNumber = Math.floor(Math.random() * menuCount) + 1;
-				} while (selectedNumbers.includes(randomNumber));
-
-				$.post("/save-random-number", {
-					randomNumber : randomNumber,
-				}, function(menu) {
-					$("#menu-header").text(menu.name);
-					$("#start-game").text("다시 시작");
-					selectedNumbers.push(randomNumber);
-				});
-			});
-		});
-	</script>
 	<!-- 비회원용 메뉴 추천 섹션 -->
 	<div sec:authorize="not isAuthenticated()" id="menu-section">
+		<!-- 위치와 반경 선택 -->
+		<div id="location-section">
+			<h3>현재 위치</h3>
+			<p id="current-address">위치를 불러오는 중...</p>
+			<label for="radius-select">반경 선택:</label> <select id="radius-select">
+				<option value="300">300m</option>
+				<option value="500" selected>500m</option>
+				<option value="1000">1000m</option>
+				<option value="2000">2000m</option>
+			</select>
+		</div>
+
 		<!-- 메뉴 추천 메시지 및 결과 표시 -->
 		<div id="selected-menu">
 			<h2 id="menu-header">메뉴 룰렛을 누르세요</h2>
+			<img id="menu-image" src="" alt="메뉴 이미지" style="display: none; width: 200px; height: 200px" />
 		</div>
 
-		<!-- 게임 시작 버튼 (임시주석처리)-->
+		<!-- 게임 시작 버튼 -->
 		<div id="menu-controls">
 			<button id="start-game">게임 시작</button>
 		</div>
@@ -101,9 +90,22 @@
 	<div sec:authorize="isAuthenticated()" id="user-menu-section">
 		<h2>[ 회원용 ]</h2>
 
+		<!-- 위치와 반경 선택 -->
+		<div id="user-location-section">
+			<h3>현재 위치</h3>
+			<p id="user-current-address">위치를 불러오는 중...</p>
+			<label for="user-radius-select">반경 선택:</label> <select id="user-radius-select">
+				<option value="300">300m</option>
+				<option value="500" selected>500m</option>
+				<option value="1000">1000m</option>
+				<option value="2000">2000m</option>
+			</select>
+		</div>
+
 		<!-- 메뉴 추천 메시지 및 결과 표시 -->
 		<div id="user-selected-menu">
 			<h2 id="user-menu-header">메뉴 룰렛을 누르세요</h2>
+			<img id="user-menu-image" src="" alt="메뉴 이미지" style="display: none; width: 200px; height: 200px" />
 		</div>
 
 		<!-- 회원용 게임 시작 버튼 -->
