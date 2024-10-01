@@ -8,8 +8,14 @@ delete
 from profile_photo
 where user_id like '%user%';
 
-select distinct gender
-from user;
+INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`, `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
+VALUES ('aaa', '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS', '김철수', '1998-10-15', 'male', 'testuser01@example.com', '서울시 강남구', '테헤란로 123', '06234', '010-1234-5678', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
+INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`, `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
+VALUES ('bbb', '$2a$10$kz9me5s4fHK50IGx/L.R2exLsxnfvH9msIulhpn.Em8ctaBPm3vAS', '최재원', '1995-02-11', 'male', 'japol@naver.com', '서울 강남구 봉은사로13길 10', '26동 1011호', '06122', '070-9114-3194', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
+INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`, `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
+VALUES ('ccc', '$2a$10$9J/wHkfdw2/4ix3ZX74ZkeFkM4BviPLbgONDNiaJDQ6dxFqUZVHFG', '카리나', '2002-06-15', 'female', 'karina@daum.net', '서울 송파구 올림픽로4길 42', '6동 907호', '05571', '010-3333-3333', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
+
+
 
 INSERT INTO `user` (`user_id`,
                     `password_hash`,
@@ -122,7 +128,7 @@ VALUES
  '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS',
  '김민준',
  '1982-07-24',
- 'male',
+ 'other',
  '김민준7@example.com',
  '서울특별시 강남구 양재대로 227',
  '673호',
@@ -197,7 +203,7 @@ VALUES
  '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS',
  '윤지아',
  '1999-05-25',
- 'female',
+ 'other',
  '윤지아12@example.com',
  '서울특별시 서초구 올림픽대로 569',
  '935호',
@@ -212,7 +218,7 @@ VALUES
  '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS',
  '백현우',
  '1982-02-19',
- 'male',
+ 'other',
  '백현우13@example.com',
  '서울특별시 강남구 올림픽대로 700',
  '192호',
@@ -242,7 +248,7 @@ VALUES
  '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS',
  '이유진',
  '1995-04-26',
- 'female',
+ 'other',
  '이유진15@example.com',
  '서울특별시 송파구 양재대로 490',
  '212호',
@@ -272,7 +278,7 @@ VALUES
  '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS',
  '김수빈',
  '1981-04-15',
- 'female',
+ 'other',
  '김수빈17@example.com',
  '서울특별시 강남구 양재대로 306',
  '887호',
@@ -392,7 +398,7 @@ VALUES
  '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS',
  '정수민',
  '1985-04-16',
- 'female',
+ 'other',
  '정수민25@example.com',
  '서울특별시 마포구 올림픽대로 824',
  '899호',
@@ -422,7 +428,7 @@ VALUES
  '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS',
  '윤지우',
  '1988-09-19',
- 'male',
+ 'other',
  '윤지우27@example.com',
  '서울특별시 마포구 양재대로 800',
  '185호',
@@ -482,7 +488,7 @@ VALUES
  '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS',
  '차수현',
  '1986-04-10',
- 'male',
+ 'other',
  '차수현31@example.com',
  '서울특별시 송파구 올림픽대로 160',
  '160호',
@@ -512,7 +518,7 @@ VALUES
  '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS',
  '정현우',
  '1982-03-27',
- 'male',
+ 'other',
  '정현우33@example.com',
  '서울특별시 송파구 양재대로 385',
  '633호',
@@ -587,7 +593,7 @@ VALUES
  '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS',
  '강예은',
  '1997-02-12',
- 'female',
+ 'other',
  '강예은38@example.com',
  '서울특별시 강남구 테헤란로 940',
  '283호',
@@ -662,7 +668,7 @@ VALUES
  '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS',
  '김태우',
  '1995-05-12',
- 'male',
+ 'other',
  '김태우43@example.com',
  '서울특별시 강남구 테헤란로 267',
  '342호',
@@ -707,7 +713,7 @@ VALUES
  '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS',
  '이소민',
  '1984-04-06',
- 'female',
+ 'other',
  '이소민46@example.com',
  '서울특별시 마포구 테헤란로 102',
  '554호',
@@ -737,7 +743,7 @@ VALUES
  '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS',
  '장서윤',
  '1989-01-24',
- 'female',
+ 'other',
  '장서윤48@example.com',
  '서울특별시 송파구 양재대로 112',
  '352호',
@@ -752,7 +758,7 @@ VALUES
  '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS',
  '한서준',
  '2000-11-28',
- 'male',
+ 'other',
  '한서준49@example.com',
  '서울특별시 마포구 양재대로 186',
  '717호',
@@ -857,7 +863,7 @@ VALUES
  '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS',
  '오지호',
  '1982-12-21',
- 'male',
+ 'other',
  '오지호56@example.com',
  '서울특별시 서초구 월드컵북로 107',
  '608호',
