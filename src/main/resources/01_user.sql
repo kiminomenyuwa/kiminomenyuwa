@@ -1055,3 +1055,13 @@ VALUES ('user59', '111.jpg', '111.jpg');
 INSERT INTO `profile_photo` (`user_id`, `original_name`, `saved_name`)
 VALUES ('user60', '111.jpg', '111.jpg');
 
+# friendships 데이터 추가
+INSERT INTO friendships (user_id, friend_id, status) VALUES ('user01', 'user02', 'ACCEPTED');
+INSERT INTO friendships (user_id, friend_id, status) VALUES ('user01', 'user03', 'ACCEPTED');
+INSERT INTO friendships (user_id, friend_id, status) VALUES ('user01', 'user04', 'ACCEPTED');
+INSERT INTO friendships (user_id, friend_id, status) VALUES ('user01', 'user05', 'ACCEPTED');
+INSERT INTO friendships (user_id, friend_id, status) VALUES ('user01', 'user06', 'ACCEPTED');
+INSERT INTO friendships (user_id, friend_id, status) VALUES ('user01', 'user07', 'ACCEPTED');
+INSERT INTO friendships (user_id, friend_id, status) VALUES ('user01', 'user08', 'ACCEPTED');
+INSERT INTO friendships (user_id, friend_id, status) VALUES ('user01', 'user09', 'ACCEPTED');
+INSERT INTO friendships (user_id, friend_id, status) VALUES ('user01', 'user10', 'ACCEPTED');
