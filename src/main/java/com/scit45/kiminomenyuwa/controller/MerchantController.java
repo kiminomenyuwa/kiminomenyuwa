@@ -64,9 +64,11 @@ public class MerchantController {
 		String sortDir,
 		Model model) {
 
+		// 정렬 및 페이징 설정
 		Sort sort = sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
 		Pageable pageable = PageRequest.of(page, size, sort);
 
+		// 사장님의 가게 목록 조회
 		Page<StoreDetailsDTO> storePage = merchantService.getStoresForMerchant(user.getUsername(), pageable);
 
 		int totalPages = storePage.getTotalPages();
@@ -74,17 +76,18 @@ public class MerchantController {
 
 		// 페이지 번호를 10개씩 묶어서 표시
 		int pageBlock = 10;
-		int startPage = ((currentPage) / pageBlock) * pageBlock + 1;
+		int startPage = (currentPage / pageBlock) * pageBlock + 1;
 		int endPage = Math.min(startPage + pageBlock - 1, totalPages);
 
+		// 모델에 데이터 추가
 		model.addAttribute("currentPage", page);
-		model.addAttribute("totalPages", storePage.getTotalPages());
+		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("totalItems", storePage.getTotalElements());
 		model.addAttribute("stores", storePage.getContent());
 		model.addAttribute("sortBy", sortBy);
 		model.addAttribute("sortDir", sortDir);
 		model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
-		model.addAttribute("size", size); // 페이지 크기 전달
+		model.addAttribute("size", size);
 		model.addAttribute("startPage", startPage);
 		model.addAttribute("endPage", endPage);
 
@@ -263,5 +266,4 @@ public class MerchantController {
 		discountService.deleteDiscountByMenuId(menuId);
 		return ResponseEntity.ok("할인 정보가 삭제되었습니다.");
 	}
-
 }

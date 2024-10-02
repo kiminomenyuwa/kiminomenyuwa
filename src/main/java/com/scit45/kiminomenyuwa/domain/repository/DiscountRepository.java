@@ -12,9 +12,8 @@ public interface DiscountRepository extends JpaRepository<DiscountEntity, Intege
 	// 할인 정보를 메뉴 ID로 조회하는 메서드 정의
 	DiscountEntity findByMenu_MenuId(Integer menuId);
 
-	// 할인 정보를 메뉴로 조회하는 메서드 (필요에 따라)
+	// 메뉴 ID로 할인 정보 삭제
 	DiscountEntity findByMenu(MenuEntity menu);
 
-	// 메뉴 ID로 할인 정보 삭제
 	void deleteByMenu_MenuId(Integer menuId);
 }
