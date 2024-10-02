@@ -22,17 +22,17 @@ public class DiscountService {
 
 	// 할인 정보 저장
 	public void saveDiscount(DiscountDTO discountDTO) {
-	    MenuEntity menu = menuRepository.findById(discountDTO.getMenuId())
-	        .orElseThrow(() -> new IllegalArgumentException("메뉴를 찾을 수 없습니다."));
+		MenuEntity menu = menuRepository.findById(discountDTO.getMenuId())
+			.orElseThrow(() -> new IllegalArgumentException("메뉴를 찾을 수 없습니다."));
 
-	    DiscountEntity discount = DiscountEntity.builder()
-	        .menu(menu)
-	        .originalPrice(discountDTO.getOriginalPrice())
-	        .discountedPrice(discountDTO.getDiscountedPrice())
-	        .discountRate(discountDTO.getDiscountRate())
-	        .build();
+		DiscountEntity discount = DiscountEntity.builder()
+			.menu(menu)
+			.originalPrice(discountDTO.getOriginalPrice())
+			.discountedPrice(discountDTO.getDiscountedPrice())
+			.discountRate(discountDTO.getDiscountRate())
+			.build();
 
-	    discountRepository.save(discount);
+		discountRepository.save(discount);
 	}
 
 	// 특정 메뉴의 할인 정보 조회

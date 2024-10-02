@@ -172,14 +172,16 @@
                   <strong>가격:</strong>
                   <span
                     th:if="${menu.discount == null}"
-                    th:text="${menu.price} + '원'"
+                    th:text="${#numbers.formatInteger(menu.price)} + '원'"
                     >가격</span
                   >
                   <!-- 할인 중인 경우 -->
                   <span th:if="${menu.discount != null}">
-                    <del th:text="${menu.price} + '원'"></del>
+                    <del
+                      th:text="${#numbers.formatInteger(menu.price)} + '원'"
+                    ></del>
                     <span
-                      th:text="${menu.discount.discountedPrice} + '원'"
+                      th:text="${#numbers.formatInteger(menu.discount.discountedPrice)} + '원'"
                     ></span>
                     (<span
                       th:text="${menu.discount.discountRate} + '% 할인'"
