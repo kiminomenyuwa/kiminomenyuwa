@@ -1,5 +1,5 @@
 INSERT INTO `store_photo` (`store_id`, `photo_url`, `is_main`)
-VALUES ('5831', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/692182_798545529.jpg', TRUE),
+VALUES ('5831', 'https://i.namu.wiki/i/u1JAX5WHSv_ao8bhiekw3xLv7vBzsuuWxQgLRO9bgxS2t2N_5RMDl7u1N-hIRkAt1VPuXAasyweugr0mQ3X5KQ.webp', TRUE),
        ('7947', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/692182_1493790217.jpg',
         TRUE),
        ('9734', 'https://ukcooyocdlvo8099722.cdn.ntruss.com/public_data/2021-10/restaurant/692182_1487183779.jpg',
