@@ -666,3 +666,7 @@ VALUES ('2856', '13204', '곰바위 홍탕(50g)', '18000', '', 1),
 ('5291', '22691', '김치말이냉국수', '6000', '', 1),
 
 ('5292', '22691', '볶음밥', '3000', '', 1);
+
+SET FOREIGN_KEY_CHECKS = 0;
+ALTER TABLE menu MODIFY COLUMN menu_id INT NOT NULL AUTO_INCREMENT;
+SET FOREIGN_KEY_CHECKS = 1;

@@ -24,6 +24,7 @@ public class MenuDTO {
 	String pictureUrl;
 	Boolean enabled;
 	List<FoodCategoryDTO> categories = new ArrayList<>(); // 카테고리 리스트
+	private DiscountDTO discount; // 할인 정보 추가
 
 	// StoreDTO를 추가하여 메뉴와 관련된 상점 정보를 함께 전달
 	private StoreDTO store;
