@@ -52,7 +52,8 @@ public class DiscountService {
 	}
 
 	// 할인 정보 삭제
-	public void deleteDiscountByMenuId(Integer menuId) {
-		discountRepository.deleteByMenu_MenuId(menuId);
-	}
+	@Transactional
+    public void deleteDiscountByMenuId(Integer menuId) {
+        discountRepository.deleteByMenu_MenuId(menuId);
+    }
 }

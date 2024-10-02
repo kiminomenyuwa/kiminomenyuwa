@@ -98,6 +98,7 @@ CREATE TABLE `menu`
     FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`)
 );
 
+
 -- 메뉴와 카테고리 간의 관계를 저장하는 테이블: 메뉴에 대한 카테고리 정보를 저장
 CREATE TABLE `menu_category_mapping`
 (

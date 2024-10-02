@@ -250,9 +250,11 @@ public class MerchantController {
 	@ResponseBody
 	@DeleteMapping("/discounts/{menuId}")
 	@PreAuthorize("hasRole('ROLE_MERCHANT')")
-	public ResponseEntity<String> deleteDiscountByMenuId(@PathVariable
-	Integer menuId, @AuthenticationPrincipal
-	AuthenticatedUser user) {
+	public ResponseEntity<String> deleteDiscountByMenuId(
+		@PathVariable("menuId")
+		Integer menuId,
+		@AuthenticationPrincipal
+		AuthenticatedUser user) {
 		// 메뉴 소유권 확인
 		if (!merchantService.isMenuOwnedByMerchant(menuId, user.getUsername())) {
 			return ResponseEntity.status(403).body("해당 메뉴에 대한 권한이 없습니다.");
@@ -261,4 +263,5 @@ public class MerchantController {
 		discountService.deleteDiscountByMenuId(menuId);
 		return ResponseEntity.ok("할인 정보가 삭제되었습니다.");
 	}
+
 }

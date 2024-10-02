@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.locationtech.jts.geom.Coordinate;
@@ -426,12 +425,31 @@ public class MerchantService {
 	 * @return 메뉴가 해당 사장님의 것이라면 true, 아니면 false
 	 */
 	public boolean isMenuOwnedByMerchant(Integer menuId, String merchantId) {
-		Optional<MenuEntity> menuOpt = menuRepository.findById(menuId);
-		if (menuOpt.isPresent()) {
-			MenuEntity menu = menuOpt.get();
-			StoreEntity store = menu.getStore();
-			return store.getUser().getUserId().equals(merchantId);
+		MenuEntity menu = menuRepository.findById(menuId)
+			.orElse(null);
+		if (menu == null) {
+			return false;
 		}
-		return false;
+		StoreEntity store = menu.getStore();
+		if (store == null) {
+			return false;
+		}
+		return store.getUser().getUserId().equals(merchantId);
+	}
+
+	// 할인 삭제 메서드
+	@Transactional
+	public void deleteDiscount(Integer menuId, String merchantId) {
+		// 메뉴가 현재 사장님의 가게에 속하는지 확인
+		MenuEntity menu = menuRepository.findById(menuId)
+			.orElseThrow(() -> new EntityNotFoundException("해당 메뉴를 찾을 수 없습니다."));
+
+		StoreEntity store = menu.getStore();
+		if (!store.getUser().getUserId().equals(merchantId)) {
+			throw new IllegalArgumentException("해당 메뉴의 할인 정보를 삭제할 권한이 없습니다.");
+		}
+
+		// 할인 정보 삭제
+		discountRepository.deleteByMenu_MenuId(menuId);
 	}
 }
