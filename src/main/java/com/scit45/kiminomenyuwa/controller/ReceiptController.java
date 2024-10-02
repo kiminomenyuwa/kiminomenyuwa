@@ -55,7 +55,7 @@ public class ReceiptController {
 			// 영수증 분석
 			String jsonResult = receiptRecognitionService.analyzeReceipt(receiptFile);
 			ReceiptDTO receiptDTO = receiptRecognitionService.parseReceiptJson(jsonResult);
-
+			log.debug(receiptDTO.toString());
 			// 현재 로그인된 사용자 정보 가져오기
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			String loggedInUserId = authentication.getName();
