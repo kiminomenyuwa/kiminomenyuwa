@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <div th:fragment="header">
     <header>
         <!-- Header Content -->
@@ -17,19 +18,30 @@
                 <span class="location-text">New York, NY</span>
             </div>
         </div>
+
         <div class="header-right">
+            <!-- 로그인하지 않은 사용자에게 표시 -->
+            <div sec:authorize="!isAuthenticated()">
+                <a th:href="@{/user/loginForm}" class="btn btn-primary">로그인</a>
+                <a th:href="@{/user/joinForm}" class="btn btn-secondary">회원가입</a>
+            </div>
+
+            <!-- 로그인한 사용자에게 표시 -->
+            <div sec:authorize="isAuthenticated()" class="user-menu">
                 <span class="user-avatar" id="profile-menu-btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
                     <img th:src="@{/images/avatar.jpg}" alt="User Avatar" class="profile-pic">
                 </span>
-            <div class="dropdown-menu" id="dropdown-menu">
-                <ul>
-                    <li><a th:href="@{/profile}"><i class="fas fa-user"></i> 마이페이지</a></li>
-                    <li><a th:href="@{/friends}"><i class="fas fa-user-friends"></i> 친구 찾기</a></li>
-                    <li><a th:href="@{/notifications}"><i class="fas fa-bell"></i> 알림</a></li>
-                    <li><a th:href="@{/settings}"><i class="fas fa-cog"></i> 설정</a></li>
-                    <li><a th:href="@{/help}"><i class="fas fa-question-circle"></i> 도움말</a></li>
-                    <li><a th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i> 로그아웃</a></li>
-                </ul>
+
+                <div class="dropdown-menu" id="dropdown-menu">
+                    <ul>
+                        <li><a th:href="@{/profile}"><i class="fas fa-user"></i> 마이페이지</a></li>
+                        <li><a th:href="@{/friends}"><i class="fas fa-user-friends"></i> 친구 찾기</a></li>
+                        <li><a th:href="@{/notifications}"><i class="fas fa-bell"></i> 알림</a></li>
+                        <li><a th:href="@{/settings}"><i class="fas fa-cog"></i> 설정</a></li>
+                        <li><a th:href="@{/help}"><i class="fas fa-question-circle"></i> 도움말</a></li>
+                        <li><a th:href="@{user/logout}"><i class="fas fa-sign-out-alt"></i> 로그아웃</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </header>
