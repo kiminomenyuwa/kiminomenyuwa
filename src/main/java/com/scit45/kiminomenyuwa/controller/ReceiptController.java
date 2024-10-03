@@ -63,11 +63,12 @@ public class ReceiptController {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			String loggedInUserId = authentication.getName();
 
-			// 영수증 항목 처리: description 추출
+			// 음식 내역에 저장하기 위해 ReceiptDTO의 List<ItemDTO>에서 description들 가져오기
 			receiptDTO.getItems().forEach(item -> {
 				String description = item.getDescription();
-				log.info("Description: " + description);
-				// TODO: 이곳에서 description을 이용하여 메뉴를 찾고 필요한 로직 추가
+				log.debug("Description: {}", description);
+
+				// 먹은 내역 저장
 				userDiningHistoryService.saveDiningHistory(loggedInUserId, description);
 			});
 
