@@ -32,6 +32,7 @@ public class HybridRecommendationService {
 	private final UserItemMatrixService userItemMatrixService;
 	private final MenuService menuService;
 
+
 	/**
 	 * 입력된 메뉴 리스트를 하이브리드 추천 점수에 따라 정렬하고, 추천 이유를 추가한 DTO 리스트를 반환합니다.
 	 *
