@@ -1,3 +1,62 @@
+-- 이마트 테스트 데이터
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1000, `category_id`
+FROM `food_category`
+WHERE `category_name` = '중식';
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1000, `category_id`
+FROM `food_category`
+WHERE `category_name` = '볶음밥';
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1000, `category_id`
+FROM `food_category`
+WHERE `category_name` = '모짜렐라치즈';
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1000, `category_id`
+FROM `food_category`
+WHERE `category_name` = '볶음';
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1000, `category_id`
+FROM `food_category`
+WHERE `category_name` = '저칼로리';
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1000, `category_id`
+FROM `food_category`
+WHERE `category_name` = '짠';
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1000, `category_id`
+FROM `food_category`
+WHERE `category_name` = '점심';
+
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1001, `category_id`
+FROM `food_category`
+WHERE `category_name` = '중식';
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1001, `category_id`
+FROM `food_category`
+WHERE `category_name` = '짜장면';
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1001, `category_id`
+FROM `food_category`
+WHERE `category_name` = '돼지고기';
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1001, `category_id`
+FROM `food_category`
+WHERE `category_name` = '볶음';
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1001, `category_id`
+FROM `food_category`
+WHERE `category_name` = '오가닉';
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1001, `category_id`
+FROM `food_category`
+WHERE `category_name` = '짠';
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1001, `category_id`
+FROM `food_category`
+WHERE `category_name` = '점심';
+
 -- 대분류
 INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
 SELECT 2856, `category_id`
