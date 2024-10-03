@@ -17,8 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.scit45.kiminomenyuwa.domain.dto.StoreResponseDTO;
 import com.scit45.kiminomenyuwa.domain.entity.FavoriteEntity;
 import com.scit45.kiminomenyuwa.domain.entity.StoreEntity;
+import com.scit45.kiminomenyuwa.domain.entity.StorePhotoEntity;
 import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
 import com.scit45.kiminomenyuwa.domain.repository.FavoriteRepository;
+import com.scit45.kiminomenyuwa.domain.repository.StorePhotoRepository;
 import com.scit45.kiminomenyuwa.domain.repository.StoreRepository;
 import com.scit45.kiminomenyuwa.domain.repository.UserRepository;
 
@@ -33,6 +35,7 @@ public class StoreSearchService {
 	private final UserRepository userRepository;
 	private final StoreRepository storeRepository;
 	private final FavoriteRepository favoriteRepository;
+	private final StorePhotoRepository storePhotoRepository;
 
 	/**
 	 * 특정 위치와 반경을 기준으로 주변 상점을 검색하고 DTO로 매핑합니다.
@@ -137,6 +140,11 @@ public class StoreSearchService {
 				StoreResponseDTO dto = mapToDTO(f.getStore());
 				dto.setFavorited(true);
 				dto.setFavoritedTime(f.getCreatedAt());
+
+				dto.setPhotoUrls(storePhotoRepository.findAllByStoreStoreId(f.getStore().getStoreId())
+					.stream()
+					.map(StorePhotoEntity::getPhotoUrl).toList());
+
 				return dto;
 			})
 			.collect(Collectors.toList());
