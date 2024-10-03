@@ -21,6 +21,7 @@ DROP TABLE IF EXISTS friendships;
 DROP TABLE IF EXISTS store_photo;
 DROP TABLE IF EXISTS favorite;
 DROP TABLE IF EXISTS budget;
+DROP TABLE IF EXISTS discount;
 
 -- 외래 키 제약을 다시 활성화
 SET FOREIGN_KEY_CHECKS = 1;
@@ -254,3 +255,16 @@ CREATE TABLE `favorite`
     FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`) ON DELETE CASCADE,
     UNIQUE KEY unique_favorite (user_id, store_id)
 );
+
+-- Discount 테이블 생성
+CREATE TABLE Discount (
+    discount_id INT AUTO_INCREMENT PRIMARY KEY,
+    menu_id INT NOT NULL,
+    original_price DECIMAL(10, 2) NOT NULL,
+    discounted_price DECIMAL(10, 2) NOT NULL,
+    discount_rate INT NOT NULL,
+    FOREIGN KEY (menu_id) REFERENCES Menu(menu_id)
+);
+ALTER TABLE discount MODIFY COLUMN original_price DECIMAL(10, 2) NOT NULL;
+ALTER TABLE discount MODIFY COLUMN discounted_price DECIMAL(10, 2) NOT NULL;
+

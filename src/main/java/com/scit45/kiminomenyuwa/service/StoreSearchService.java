@@ -9,6 +9,9 @@ import java.util.stream.Collectors;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -60,12 +63,11 @@ public class StoreSearchService {
 		String userId = null;
 		Set<Integer> favoritedStoreIds = new HashSet<>();
 
-		if (authentication != null && authentication.isAuthenticated() &&
-			!authentication.getPrincipal().equals("anonymousUser")) {
+		if (authentication != null && authentication.isAuthenticated() && !authentication.getPrincipal()
+			.equals("anonymousUser")) {
 			userId = authentication.getName();
 			// 사용자의 찜한 상점 목록 조회
-			UserEntity user = userRepository.findById(userId)
-				.orElse(null);
+			UserEntity user = userRepository.findById(userId).orElse(null);
 			if (user != null) {
 				List<FavoriteEntity> favorites = favoriteRepository.findByUser(user);
 				favoritedStoreIds = favorites.stream()
@@ -131,23 +133,19 @@ public class StoreSearchService {
 
 		// 찜한 상점 목록 조회
 		List<FavoriteEntity> favorites = favoriteRepository.findByUser(user);
-		List<StoreResponseDTO> favoritedStores
-			= favorites.stream()
-			.map(f -> {
-				StoreResponseDTO dto = mapToDTO(f.getStore());
-				dto.setFavorited(true);
-				dto.setFavoritedTime(f.getCreatedAt());
-				return dto;
-			})
-			.collect(Collectors.toList());
+		List<StoreResponseDTO> favoritedStores = favorites.stream().map(f -> {
+			StoreResponseDTO dto = mapToDTO(f.getStore());
+			dto.setFavorited(true);
+			dto.setFavoritedTime(f.getCreatedAt());
+			return dto;
+		}).collect(Collectors.toList());
 
 		// 정렬 적용
 		switch (sortBy.toLowerCase()) {
 			case "distance":
 				favoritedStores = favoritedStores.stream()
 					.sorted(Comparator.comparingDouble(
-						store -> calculateDistance(latitude, longitude, store.getLatitude(),
-							store.getLongitude())))
+						store -> calculateDistance(latitude, longitude, store.getLatitude(), store.getLongitude())))
 					.collect(Collectors.toList());
 				break;
 			case "newest":
@@ -187,12 +185,52 @@ public class StoreSearchService {
 		double latDistance = Math.toRadians(lat2 - lat1);
 		double lonDistance = Math.toRadians(lon2 - lon1);
 
-		double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
-			+ Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
-			* Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+		double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2) + Math.cos(Math.toRadians(lat1)) * Math.cos(
+			Math.toRadians(lat2)) * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
 
 		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
 		return EARTH_RADIUS * c;
+	}
+
+	/**
+	 * 이름으로 상점을 검색하고 DTO로 매핑합니다.
+	 *
+	 * @return 상점 목록 DTO
+	 */
+	@Transactional(readOnly = true)
+	public Page<StoreResponseDTO> getStoresByName(String keyword, Pageable pageable) {
+		// StoreEntity 리스트 조회
+		Page<StoreEntity> storeEntities = storeRepository.findByNameContaining(keyword, pageable);
+
+		// 현재 인증된 사용자 가져오기
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String userId = null;
+		Set<Integer> favoritedStoreIds = new HashSet<>();
+
+		if (authentication != null && authentication.isAuthenticated() && !authentication.getPrincipal()
+			.equals("anonymousUser")) {
+			userId = authentication.getName();
+			// 사용자의 찜한 상점 목록 조회
+			UserEntity user = userRepository.findById(userId).orElse(null);
+			if (user != null) {
+				List<FavoriteEntity> favorites = favoriteRepository.findByUser(user);
+				favoritedStoreIds = favorites.stream()
+					.map(fav -> fav.getStore().getStoreId())
+					.collect(Collectors.toSet());
+			}
+		}
+
+		// StoreEntity를 StoreResponseDTO로 매핑하면서 favorited 필드 설정
+		final Set<Integer> finalFavoritedStoreIds = favoritedStoreIds;
+		List<StoreResponseDTO> dtoList = storeEntities.stream()
+			.map(store -> {
+				StoreResponseDTO dto = mapToDTO(store);
+				dto.setFavorited(finalFavoritedStoreIds.contains(store.getStoreId()));
+				return dto;
+			})
+			.collect(Collectors.toList());
+
+		return new PageImpl<>(dtoList, pageable, storeEntities.getTotalElements());
 	}
 }
