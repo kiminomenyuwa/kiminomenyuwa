@@ -2,8 +2,36 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <div th:fragment="header">
     <header>
-        <h1>My Application Header</h1>
-        <!-- 추가 헤더 내용 -->
+        <!-- Header Content -->
+        <div class="header-left">
+            <button class="hamburger-menu" id="hamburger" aria-label="메뉴 열기" aria-expanded="false">&#9776;</button>
+            <a th:href="@{/}">
+                <img th:src="@{/images/logo.png}" alt="사이트 로고" class="logo">
+            </a>
+        </div>
+
+        <div class="header-center">
+            <div class="search-container">
+                <input type="text" class="search-bar" placeholder="검색어를 입력하세요">
+                <span class="divider"></span>
+                <span class="location-text">New York, NY</span>
+            </div>
+        </div>
+        <div class="header-right">
+                <span class="user-avatar" id="profile-menu-btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+                    <img th:src="@{/images/avatar.jpg}" alt="User Avatar" class="profile-pic">
+                </span>
+            <div class="dropdown-menu" id="dropdown-menu">
+                <ul>
+                    <li><a th:href="@{/profile}"><i class="fas fa-user"></i> 마이페이지</a></li>
+                    <li><a th:href="@{/friends}"><i class="fas fa-user-friends"></i> 친구 찾기</a></li>
+                    <li><a th:href="@{/notifications}"><i class="fas fa-bell"></i> 알림</a></li>
+                    <li><a th:href="@{/settings}"><i class="fas fa-cog"></i> 설정</a></li>
+                    <li><a th:href="@{/help}"><i class="fas fa-question-circle"></i> 도움말</a></li>
+                    <li><a th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i> 로그아웃</a></li>
+                </ul>
+            </div>
+        </div>
     </header>
 </div>
 </html>

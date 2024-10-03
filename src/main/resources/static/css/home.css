@@ -1,285 +1,142 @@
-/* src/main/resources/static/css/home.css */
-
-/* 오버레이 스타일 */
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  /* 회색 오버레이 */
-  display: none;
-  /* 기본적으로는 숨김 */
-  z-index: 2000;
-  /* 헤더보다 더 높은 z-index 값 */
+/* 게임 시작 버튼 스타일 설정 */
+#user-start-game {
+  display: inline-block; /* 요소를 인라인 블록으로 설정 */
+  width: 150px; /* 버튼 너비 */
+  height: 50px; /* 버튼 높이 */
+  font-size: 16px; /* 버튼 텍스트 크기 */
+  border: 2px solid #ccc; /* 회색 테두리 */
+  border-radius: 5px; /* 모서리를 둥글게 처리 */
+  background-color: #f9f9f9; /* 배경색 설정 */
+  cursor: pointer; /* 마우스 커서를 포인터로 변경 */
+  text-align: center; /* 텍스트를 중앙 정렬 */
+  /* line-height: 50px; 텍스트를 버튼 높이에 맞춰 세로 중앙 정렬 */
+  font-weight: bold; /* 텍스트를 굵게 설정 */
 }
 
-/* Header */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 40px;
-  /* 양쪽 끝에 40px 여백 추가 */
-  max-width: 1200px;
-  /* 헤더의 최대 너비 설정 */
-  margin: 0 auto;
-  /* 헤더를 가운데 정렬 */
-  margin-top: 5px;
-  height: 60px;
-  /* 헤더 높이 */
-  background-color: white;
-  /* 배경색 */
+/* "좋아요" 버튼 스타일 설정 */
+#user-like-button {
+  display: inline-block; /* 요소를 인라인 블록으로 설정 */
+  width: 150px; /* 버튼 너비를 "싫어요" 버튼과 동일하게 설정 */
+  height: 50px; /* 버튼 높이를 "싫어요" 버튼과 동일하게 설정 */
+  font-size: 16px; /* 버튼 텍스트 크기 */
+  border: 2px solid #ccc; /* 회색 테두리 */
+  border-radius: 5px; /* 모서리를 둥글게 처리 */
+  background-color: #f9f9f9; /* 배경색 설정 */
+  cursor: pointer; /* 마우스 커서를 포인터로 변경 */
+  position: relative; /* 자식 요소의 위치 설정을 위한 상대적 위치 지정 */
+  text-align: center; /* 텍스트를 중앙 정렬 */
+  line-height: 50px; /* 텍스트를 버튼 높이에 맞춰 세로 중앙 정렬 */
+  font-weight: bold; /* 텍스트를 굵게 설정 */
+  overflow: hidden; /* 자식 요소가 버튼을 넘어가지 않도록 숨김 */
 }
 
-.header-left {
-  display: flex;
-  align-items: center;
+/* "싫어요" 버튼 스타일 설정 (좋아요 버튼과 동일한 크기로 설정) */
+#user-dislike-button {
+  display: inline-block; /* 요소를 인라인 블록으로 설정 */
+  width: 150px; /* 버튼 너비 */
+  height: 50px; /* 버튼 높이 */
+  font-size: 16px; /* 버튼 텍스트 크기 */
+  border: 2px solid #ccc; /* 회색 테두리 */
+  border-radius: 5px; /* 모서리를 둥글게 처리 */
+  background-color: #f9f9f9; /* 배경색 설정 */
+  cursor: pointer; /* 마우스 커서를 포인터로 변경 */
+  text-align: center; /* 텍스트를 중앙 정렬 */
+  /* line-height: 50px; 텍스트를 버튼 높이에 맞춰 세로 중앙 정렬 */
+  font-weight: bold; /* 텍스트를 굵게 설정 */
 }
 
-.header-center {
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
+/* 별점 컨테이너 스타일 설정 (기본적으로 숨김 처리) */
+.stars {
+  position: absolute; /* 부모 요소를 기준으로 절대 위치 지정 */
+  top: 50%; /* 부모 요소의 세로 중앙에 위치 */
+  left: 50%; /* 부모 요소의 가로 중앙에 위치 */
+  transform: translate(-50%, -50%); /* 정확한 중앙 위치를 위해 변환 */
+  display: flex; /* 별들을 플렉스 컨테이너로 설정 */
+  justify-content: center; /* 별들을 가로 중앙 정렬 */
+  align-items: center; /* 별들을 세로 중앙 정렬 */
+  font-size: 24px; /* 별의 크기 */
+  width: auto; /* 별 컨테이너의 너비를 내용에 맞게 자동 설정 */
+  height: 24px; /* 별 컨테이너의 높이 */
+  display: none; /* 기본적으로 숨김 처리 */
 }
 
-/* 기본 헤더 */
-.header-right {
-  position: relative;
+/* 기본 별 스타일 설정 */
+.star {
+  color: #ccc; /* 별의 기본 색상 (회색) */
+  cursor: pointer; /* 마우스 커서를 포인터로 변경 */
+  margin: 0; /* 별 사이의 기본 간격 제거 */
+  letter-spacing: -3px; /* 별들 사이의 간격 조정 */
 }
 
-/* 프로필 사진 스타일 */
-.profile-pic {
-  width: 40px;
-  /* height: 40px; */
-  border-radius: 50%;
-  cursor: pointer;
+/* 노란색으로 채워지는 별 스타일 설정 */
+.star.fill {
+  color: #ffcc00; /* 채워진 별의 색상을 노란색으로 설정 */
 }
 
-/* 드롭다운 메뉴 스타일 */
-.dropdown-menu-custom {
-  position: absolute;
-  top: 60px;
-  /* 프로필 사진 아래에 위치 */
-  right: 0;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  display: none;
-  /* 기본적으로는 숨김 */
-  width: 200px;
-  z-index: 1000;
+/* user-rating-controls 내 콘텐츠들을 중앙에 정렬 */
+#user-rating-controls {
+  display: flex; /* 컨트롤을 플렉스 박스로 설정 */
+  justify-content: left; /* 버튼들을 왼쪽 정렬 */
+  align-items: center; /* 버튼들을 세로 중앙 정렬 */
+  gap: 10px; /* 버튼들 사이의 간격 조절 */
 }
-
-.dropdown-menu-custom ul {
-  list-style-type: none;
-  padding: 10px;
-  margin: 0;
-}
-
-.dropdown-menu-custom ul li {
-  padding: 10px 15px;
-  border-bottom: 1px solid #eee;
-}
-
-.dropdown-menu-custom ul li:last-child {
-  border-bottom: none;
-}
-
-.dropdown-menu-custom ul li a {
-  text-decoration: none;
-  color: #333;
-  font-size: 14px;
-  display: flex;
+/* 슬롯머신 css */
+.slot-machine {
+  /* display: flex; */
+  flex-direction: column;
   align-items: center;
 }
 
-.dropdown-menu-custom ul li:hover {
-  background-color: #f9f9f9;
-}
-
-.user-avatar img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  /* 원형 이미지로 만듦 */
-  object-fit: cover;
-  /* 이미지가 잘리지 않도록 */
-}
-
-.hamburger-menu {
-  font-size: 24px;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.logo {
-  width: 100px;
-  margin-left: 15px;
-}
-
-.header-location {
+.reels {
   display: flex;
-  align-items: center;
-  font-size: 16px;
-  color: #333;
-}
-
-.location-icon {
-  margin-right: 5px;
-}
-
-.location-text {
-  font-weight: bold;
-}
-
-.search-container {
-  display: flex;
-  align-items: center;
-  background-color: #f0f0f0;
-  border-radius: 30px;
-  padding: 10px 20px;
-  width: 100%;
-  max-width: 800px;
-  /* 검색창의 최대 너비 */
-}
-
-.search-bar {
-  flex: 1;
-  /* 검색 부분이 반을 차지 */
-  border: none;
-  background: transparent;
-  font-size: 16px;
-  padding-left: 10px;
-  outline: none;
-}
-
-.divider {
-  width: 1px;
-  height: 24px;
-  background-color: #ccc;
-  margin: 0 15px;
-}
-
-.location-text {
-  flex: 1;
-  /* 위치 부분도 반을 차지 */
-  font-size: 16px;
-  color: #666;
-  text-align: left;
-  /* 위치 텍스트를 오른쪽으로 정렬 */
-}
-
-.search-icon {
-  position: absolute;
-  left: 15px;
-  width: 20px;
-  height: 20px;
-  background-image: url('/images/magnif.png');
-  /* 검색 아이콘 경로 */
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-
-.user-avatar img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-}
-
-.side-menu {
-  /* 추가적인 사이드 메뉴 스타일링이 필요한 경우 작성 */
-}
-
-/* Side Menu */
-.hbg-menu {
-  position: fixed;
-  top: 0;
-  left: -250px;
-  /* 숨김 상태에서 시작 */
-  width: 250px;
-  height: 100%;
-  background-color: #fff;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-  transition: left 0.3s ease-in-out;
-  z-index: 1000;
-}
-
-.hbg-menu.open {
-  left: 0;
-}
-
-.hbg-menu-content {
-  padding: 20px;
-}
-
-.hbg-menu-content h3 {
-  font-size: 18px;
+  /* justify-content: center; */
   margin-bottom: 20px;
 }
 
-.hbg-menu-content nav ul {
-  list-style: none;
-  padding: 0;
+.reel {
+  width: 150px;
+  height: 80px;
+  overflow: hidden;
+  border: 2px solid white;
+  background-color: #444;
+  position: relative;
 }
 
-.hbg-menu-content nav ul li {
-  margin-bottom: 15px;
-}
-
-.hbg-menu-content nav ul li a {
-  text-decoration: none;
-  font-size: 16px;
-  color: #333;
-}
-
-.hbg-menu-content .logout {
-  margin-top: 20px;
-  display: block;
-  text-decoration: none;
-  font-size: 14px;
-  color: #ff0000;
-}
-
-.overlay {
-  position: fixed;
+.symbols {
+  display: flex;
+  flex-direction: column;
+  animation: none;
+  position: absolute;
   top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: none;
-  z-index: 500;
+  transition: top 1s ease-out;
 }
 
-.overlay.active {
-  display: block;
-}
-
-.profile {
+.symbol {
+  width: 150px;
+  height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  background-color: #444;
+  color: white;
   text-align: center;
 }
 
-.profile-pic {
-  width: 100px;
-  border-radius: 50%;
-}
-
-.profile h3 {
-  margin-top: 10px;
-  font-size: 18px;
-}
-
-.profile button {
-  display: block;
-  margin: 10px auto;
-  padding: 8px 10px;
-  background-color: #007bff;
-  color: #fff;
+button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #61dafb;
   border: none;
-  border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #21a1f1;
+}
+
+.result {
+  margin-top: 20px;
+  font-size: 1.5rem;
 }

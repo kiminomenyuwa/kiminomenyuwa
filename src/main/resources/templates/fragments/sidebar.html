@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <div th:fragment="sidebar">
-    <aside>
-        <nav>
-            <ul>
-                <li><a th:href="@{/}">홈</a></li>
-                <li><a th:href="@{/about}">소개</a></li>
-                <li><a th:href="@{/contact}">문의하기</a></li>
-                <!-- 추가 네비게이션 항목 -->
-            </ul>
-        </nav>
-    </aside>
+    <!-- 오버레이 -->
+    <div id="overlay" class="overlay"></div>
+
+    <!-- 사이드 메뉴 -->
+    <nav id="hbgMenu" class="side-menu">
+        <ul>
+            <li><a th:href="@{/}"><i class="fas fa-home"></i> 홈</a></li>
+            <li><a th:href="@{/about}"><i class="fas fa-info-circle"></i> 소개</a></li>
+            <li><a th:href="@{/contact}"><i class="fas fa-envelope"></i> 문의하기</a></li>
+            <!-- 추가 메뉴 항목 -->
+        </ul>
+    </nav>
 </div>
 </html>
