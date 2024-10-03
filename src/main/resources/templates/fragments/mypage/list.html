@@ -1,0 +1,96 @@
+<style th:fragment="styles">
+    /*!* Hover 효과 *!*/
+    /*.hover-bg:hover {*/
+    /*    background-color: #f0f0f0;*/
+    /*    transition: background-color 0.3s ease;*/
+    /*}*/
+
+    /* 프로필 이미지 테두리 스타일 */
+    .profile-pic {
+        border: 2px solid #007bff;
+    }
+
+    /* 아이콘과 텍스트 간의 간격 조정 */
+    .me-2 {
+        margin-right: 0.5rem !important;
+    }
+
+    .me-3 {
+        margin-right: 1rem !important;
+    }
+
+    /* 활성화된 메뉴 항목 스타일 */
+    .nav-active {
+        background-color: #e0e0e0;
+        border-radius: 5px;
+    }
+
+</style>
+
+<div th:fragment="list">
+    <!-- Sidebar Container -->
+    <div class="d-flex flex-column align-items-center p-4 bg-light rounded" style="width: 250px;">
+        <!-- Profile Section -->
+        <div class="text-center mb-4">
+            <img src="./images/avatar.jpg" alt="Profile" class="rounded-circle mb-2 profile-pic" width="100" height="100">
+            <h4 class="mb-3">간을 좋아하는 범고래</h4>
+
+            <div class="d-flex justify-content-center gap-2">
+                <!-- 프로필 편집 링크 -->
+                <a href="/edit-profile" class="text-decoration-none text-primary d-flex align-items-center">
+                    <i class="fas fa-user-edit me-2"></i>
+                    <span>프로필 편집</span>
+                </a>
+
+                <!-- 친구 추가 링크 -->
+                <a href="/add-friend" class="text-decoration-none text-success d-flex align-items-center">
+                    <i class="fas fa-user-plus me-2"></i>
+                    <span>친구 추가</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Navigation Menu -->
+        <nav class="w-100">
+            <ul class="list-unstyled">
+                <li class="mb-2">
+                    <a href="/mypage/mypageMain" class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg">
+                        <i class="fas fa-user me-3"></i>
+                        <span>내 프로필</span>
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="/reviews" class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg">
+                        <i class="fas fa-star me-3"></i>
+                        <span>내 리뷰</span>
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="/friends" class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg">
+                        <i class="fas fa-user-friends me-3"></i>
+                        <span>친구</span>
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="/collections" class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg">
+                        <i class="fas fa-box-open me-3"></i>
+                        <span>컬렉션</span>
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="/events" class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg">
+                        <i class="fas fa-calendar-alt me-3"></i>
+                        <span>내 이벤트</span>
+                    </a>
+                </li>
+                <li class="mb-2">
+                    <a href="/calendar" class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg">
+                        <i class="fas fa-calendar-check me-3"></i>
+                        <span>내 달력</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+

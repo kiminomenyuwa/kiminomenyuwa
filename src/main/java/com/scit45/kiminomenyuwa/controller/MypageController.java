@@ -52,6 +52,11 @@ public class MypageController {
 		return "mypageView/mypageMain";
 	}
 
+	@GetMapping
+	public String mypage() {
+		return "mypageView/mypage";
+	}
+
 	/**
 	 * 먹은 음식 내역
 	 * @return diningHistory.html
