@@ -79,9 +79,27 @@ public class FriendshipController {
 
 		// 본인 확인 (본인 아이디를 검색한 경우)
 		if (loggedInUserId.equals(friendId)) {
-			response.put("exists", true);
-			response.put("isSelf", true);
-			response.put("message", "본인입니다.");
+			// 본인 정보 조회
+			Optional<UserEntity> currentUserOpt = userService.findByUserId(loggedInUserId);
+			if (currentUserOpt.isPresent()) {
+				UserEntity currentUser = currentUserOpt.get();
+				String profileImg = (currentUser.getProfileImgUuid() != null
+					&& !currentUser.getProfileImgUuid().isEmpty())
+						? "/files/" + currentUser.getProfileImgUuid()
+						: "/images/default-profile.png";
+
+				response.put("exists", true);
+				response.put("isSelf", true);
+				response.put("message", "본인입니다.");
+				response.put("name", currentUser.getName());
+				response.put("profileImg", profileImg);
+				response.put("isFriend", false); // 본인은 자기 자신과 친구 관계가 아니므로 false
+				response.put("hasPendingRequest", false); // 본인은 자기 자신에게 요청을 보낼 수 없으므로 false
+			} else {
+				// 로그인한 사용자가 존재하지 않는 경우 (비정상적인 상황)
+				response.put("exists", false);
+				response.put("message", "사용자를 찾을 수 없습니다.");
+			}
 		} else {
 			// 사용자 정보 조회
 			Optional<UserEntity> user = userService.findByUserId(friendId);
@@ -92,8 +110,10 @@ public class FriendshipController {
 				boolean hasPendingRequest = friendshipService.hasPendingRequest(loggedInUserId, friendId);
 
 				// 프로필 사진이 없는 경우 기본 이미지 경로 설정
-				String profileImg = user.get().getProfileImgUuid() != null ? "/files/" + user.get().getProfileImgUuid()
-					: "/images/default-profile.png"; // 기본 이미지 경로
+				String profileImg = (user.get().getProfileImgUuid() != null
+					&& !user.get().getProfileImgUuid().isEmpty())
+						? "/files/" + user.get().getProfileImgUuid()
+						: "/images/default-profile.png";
 
 				// 사용자 정보 및 상태 응답에 추가
 				response.put("exists", true);
@@ -101,18 +121,20 @@ public class FriendshipController {
 				response.put("isFriend", isFriend);
 				response.put("hasPendingRequest", hasPendingRequest);
 				response.put("name", user.get().getName()); // 사용자 이름 추가
-				response.put("profileImg", user.get().getProfileImgUuid() != null ? user.get().getProfileImgUuid()
-					: "/images/default-profile.png");
+				response.put("profileImg", profileImg);
 
 				// 상태에 따른 메시지 추가
 				if (isFriend) {
 					response.put("message", "이미 친구입니다.");
 				} else if (hasPendingRequest) {
 					response.put("message", "이미 친구 요청을 보냈습니다.");
+				} else {
+					response.put("message", "친구 요청을 보낼 수 있습니다.");
 				}
 			} else {
 				// 사용자 존재하지 않을 경우
 				response.put("exists", false);
+				response.put("message", "존재하지 않는 아이디입니다.");
 			}
 		}
 

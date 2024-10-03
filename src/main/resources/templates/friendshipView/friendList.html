@@ -276,6 +276,7 @@
         });
 
         // 검색 요청 처리 함수
+        // 검색 요청 처리 함수
         function performSearch() {
           const friendId = $("#searchFriendId").val(); // 입력된 친구 ID 값 가져오기
           if (friendId.length > 0) {
@@ -284,6 +285,7 @@
               "/friendships/checkUser",
               { friendId: friendId },
               function (data) {
+                console.log("서버 응답:", data); // 응답 데이터 확인
                 if (data.exists) {
                   let name = data.name ? data.name : "본인입니다"; // 이름이 없으면 "본인입니다"로 처리
                   let buttonHtml = "";
@@ -301,30 +303,25 @@
 
                   // 검색 결과 출력
                   $("#searchResult").html(`
-    <div class="d-flex align-items-center border p-3">
-        <div class="me-3">
-            <img src="${
-              data.profileImg
-                ? "/files/" + data.profileImg
-                : "/images/default-profile.png"
-            }" 
-                 alt="프로필 이미지" 
-                 style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
-        </div>
-        <div class="flex-grow-1">
-            <strong>${friendId}</strong><br>
-            <span>${name}</span>
-        </div>
-        <div>
-            ${buttonHtml}
-        </div>
-    </div>
-`);
-
-                  // 프로필 이미지가 있는 경우, 기본 이미지 위에 덮어씌우기
-                  if (data.profileImg) {
-                    $("#profile-img").attr("src", data.profileImg);
-                  }
+                    <div class="d-flex align-items-center border p-3">
+                      <div class="me-3">
+                        <img src="${
+                          data.profileImg
+                            ? data.profileImg
+                            : "/images/default-profile.png"
+                        }" 
+                             alt="프로필 이미지" 
+                             style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;">
+                      </div>
+                      <div class="flex-grow-1">
+                        <strong>${friendId}</strong><br>
+                        <span>${name}</span>
+                      </div>
+                      <div>
+                        ${buttonHtml}
+                      </div>
+                    </div>
+                  `);
 
                   // 친구 요청 버튼 클릭 시 처리
                   if (
