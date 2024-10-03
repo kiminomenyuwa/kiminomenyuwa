@@ -73,4 +73,7 @@ public interface MenuRepository extends JpaRepository<MenuEntity, Integer> {
 	MenuEntity findRandomMenuWithinRadius(@Param("point")
 	String pointWKT, @Param("radius")
 	double radius);
+
+	// 메뉴 이름을 통한 메뉴 엔티티 검색
+	MenuEntity findByName(String description);
 }

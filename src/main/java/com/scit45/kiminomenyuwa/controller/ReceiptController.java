@@ -16,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.scit45.kiminomenyuwa.domain.dto.receipt.ReceiptDTO;
 import com.scit45.kiminomenyuwa.domain.dto.receipt.ReceiptUploadResponseDTO;
+import com.scit45.kiminomenyuwa.service.MyPageService;
+import com.scit45.kiminomenyuwa.service.UserDiningHistoryService;
 import com.scit45.kiminomenyuwa.service.verification.ReceiptRecognitionService;
 import com.scit45.kiminomenyuwa.service.verification.ReceiptVerificationService;
 
@@ -30,6 +32,7 @@ public class ReceiptController {
 
 	private final ReceiptRecognitionService receiptRecognitionService;
 	private final ReceiptVerificationService receiptVerificationService;
+	private final UserDiningHistoryService userDiningHistoryService;
 
 	/**
 	 * 영수증 업로드 페이지 표시
@@ -59,6 +62,14 @@ public class ReceiptController {
 			// 현재 로그인된 사용자 정보 가져오기
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			String loggedInUserId = authentication.getName();
+
+			// 영수증 항목 처리: description 추출
+			receiptDTO.getItems().forEach(item -> {
+				String description = item.getDescription();
+				log.info("Description: " + description);
+				// TODO: 이곳에서 description을 이용하여 메뉴를 찾고 필요한 로직 추가
+				userDiningHistoryService.saveDiningHistory(loggedInUserId, description);
+			});
 
 			// 영수증 인증
 			boolean isVerified = receiptVerificationService.verifyReceipt(receiptDTO, loggedInUserId);
