@@ -107,7 +107,7 @@ header {
     align-items: center;
 }
 
-.profile-pic {
+#header-profile-pic {
     height: 40px;
     width: 40px;
     border-radius: 50%;
