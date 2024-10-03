@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.locationtech.jts.geom.Coordinate;
@@ -17,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.scit45.kiminomenyuwa.domain.dto.DiscountDTO;
 import com.scit45.kiminomenyuwa.domain.dto.FoodCategoryDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.ReviewResponseDTO;
@@ -24,12 +26,14 @@ import com.scit45.kiminomenyuwa.domain.dto.StoreResponseDTO;
 import com.scit45.kiminomenyuwa.domain.dto.store.MenuRegistrationDTO;
 import com.scit45.kiminomenyuwa.domain.dto.store.StoreDetailsDTO;
 import com.scit45.kiminomenyuwa.domain.dto.store.StoreRegistrationDTO;
+import com.scit45.kiminomenyuwa.domain.entity.DiscountEntity;
 import com.scit45.kiminomenyuwa.domain.entity.FoodCategoryEntity;
 import com.scit45.kiminomenyuwa.domain.entity.MenuCategoryMappingEntity;
 import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
 import com.scit45.kiminomenyuwa.domain.entity.StoreEntity;
 import com.scit45.kiminomenyuwa.domain.entity.StorePhotoEntity;
 import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
+import com.scit45.kiminomenyuwa.domain.repository.DiscountRepository;
 import com.scit45.kiminomenyuwa.domain.repository.FoodCategoryRepository;
 import com.scit45.kiminomenyuwa.domain.repository.MenuCategoryMappingRepository;
 import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
@@ -56,6 +60,8 @@ public class MerchantService {
 	private final MenuCategoryMappingRepository menuCategoryMappingRepository;
 	private final FoodCategoryRepository foodCategoryRepository;
 	private final ReviewRepository reviewRepository; // 리뷰 리포지토리 추가
+	private final DiscountRepository discountRepository; // 추가
+
 	// application.properties에서 파일 업로드 경로를 읽어옴
 	@Value("${file.storage.location}")
 	private String uploadDir;
@@ -132,7 +138,7 @@ public class MerchantService {
 			.map(StorePhotoEntity::getPhotoUrl)
 			.collect(Collectors.toList()));
 
-		// 메뉴 목록 조회
+		// 메뉴 목록 조회 (할인 정보 포함)
 		dto.setMenus(getMenusForStore(dto.getStoreId()));
 
 		// 리뷰 목록 조회
@@ -153,7 +159,7 @@ public class MerchantService {
 	}
 
 	/**
-	 * 특정 가게의 메뉴 목록을 조회
+	 * 특정 가게의 메뉴 목록을 조회 (할인 정보 포함)
 	 *
 	 * @param storeId 가게 ID
 	 * @return 메뉴 목록
@@ -188,6 +194,19 @@ public class MerchantService {
 					.collect(Collectors.toList());
 				menuDTO.setCategories(categories);
 
+				// **할인 정보 조회 및 설정**
+				DiscountEntity discountEntity = discountRepository.findByMenu(menu);
+				if (discountEntity != null) {
+					DiscountDTO discountDTO = DiscountDTO.builder()
+						.discountId(discountEntity.getDiscountId())
+						.menuId(discountEntity.getMenu().getMenuId())
+						.originalPrice(discountEntity.getOriginalPrice())
+						.discountedPrice(discountEntity.getDiscountedPrice())
+						.discountRate(discountEntity.getDiscountRate())
+						.build();
+					menuDTO.setDiscount(discountDTO);
+				}
+
 				return menuDTO;
 			})
 			.collect(Collectors.toList());
@@ -204,11 +223,9 @@ public class MerchantService {
 
 		GeometryFactory geometryFactory = new GeometryFactory();
 
-		// TODO: 입력받은 주소로 경도 위도 받아와서 저장하게 하기
-		// Point location = geometryFactory.createPoint(
-		// 	new Coordinate(storeRegistrationDTO.getLongitude(), storeRegistrationDTO.getLatitude()));
-
-		Point location = geometryFactory.createPoint(new Coordinate(127.000, 37.0));
+		//		Point location = geometryFactory.createPoint(
+		//			new Coordinate(storeRegistrationDTO.getLongitude(), storeRegistrationDTO.getLatitude()));
+		Point location = geometryFactory.createPoint(new Coordinate(127.00, 37.00));
 
 		StoreEntity storeEntity = StoreEntity.builder()
 			.user(merchant)
@@ -400,4 +417,40 @@ public class MerchantService {
 		return userRepository.findById(userId)
 			.orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
 	}
+
+	/**
+	 * 메뉴의 소유권 확인
+	 *
+	 * @param menuId    메뉴 ID
+	 * @param merchantId 사장님 ID (username)
+	 * @return 메뉴가 해당 사장님의 것이라면 true, 아니면 false
+	 */
+	public boolean isMenuOwnedByMerchant(Integer menuId, String merchantId) {
+	    Optional<MenuEntity> menuOpt = menuRepository.findById(menuId);
+	    if (menuOpt.isPresent()) {
+	        MenuEntity menu = menuOpt.get();
+	        StoreEntity store = menu.getStore();
+	        if (store != null && store.getUser() != null) {
+	            return store.getUser().getUserId().equals(merchantId);
+	        }
+	    }
+	    return false;
+	}
+
+	// 할인 삭제 메서드
+	@Transactional
+	public void deleteDiscount(Integer menuId, String merchantId) {
+	    // 메뉴가 현재 사장님의 가게에 속하는지 확인
+	    MenuEntity menu = menuRepository.findById(menuId)
+	        .orElseThrow(() -> new EntityNotFoundException("해당 메뉴를 찾을 수 없습니다."));
+
+	    StoreEntity store = menu.getStore();
+	    if (store == null || store.getUser() == null || !store.getUser().getUserId().equals(merchantId)) {
+	        throw new IllegalArgumentException("해당 메뉴의 할인 정보를 삭제할 권한이 없습니다.");
+	    }
+
+	    // 할인 정보 삭제
+	    discountRepository.deleteByMenu_MenuId(menuId);
+	}
+
 }

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.scit45.kiminomenyuwa.domain.entity.FoodCategoryEntity;
 
 @Repository
-public interface FoodCategoryRepository extends JpaRepository<FoodCategoryEntity, String> {
+public interface FoodCategoryRepository extends JpaRepository<FoodCategoryEntity, Integer> {
 	Optional<FoodCategoryEntity> findByCategoryName(String categoryName);
 
 	Optional<FoodCategoryEntity> findByCategoryId(Integer categoryId);

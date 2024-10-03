@@ -21,6 +21,7 @@ DROP TABLE IF EXISTS friendships;
 DROP TABLE IF EXISTS store_photo;
 DROP TABLE IF EXISTS favorite;
 DROP TABLE IF EXISTS budget;
+DROP TABLE IF EXISTS discount;
 
 -- 외래 키 제약을 다시 활성화
 SET FOREIGN_KEY_CHECKS = 1;
@@ -96,6 +97,7 @@ CREATE TABLE `menu`
     PRIMARY KEY (`menu_id`),                     -- 기본 키 설정
     FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`)
 );
+
 
 -- 메뉴와 카테고리 간의 관계를 저장하는 테이블: 메뉴에 대한 카테고리 정보를 저장
 CREATE TABLE `menu_category_mapping`
@@ -255,7 +257,15 @@ CREATE TABLE `favorite`
     UNIQUE KEY unique_favorite (user_id, store_id)
 );
 
-select * from user where gender = 'other';
-delete from user_dining_history where user_id in (select user_id FROM user WHERE gender = 'other');
-DELETE FROM user WHERE gender = 'other';
-commit;
+-- Discount 테이블 생성 
+CREATE TABLE Discount (
+    discount_id INT AUTO_INCREMENT PRIMARY KEY,
+    menu_id INT NOT NULL,
+    original_price DECIMAL(10, 2) NOT NULL,
+    discounted_price DECIMAL(10, 2) NOT NULL,
+    discount_rate INT NOT NULL,
+    FOREIGN KEY (menu_id) REFERENCES Menu(menu_id)
+);
+ALTER TABLE discount MODIFY COLUMN original_price DECIMAL(10, 2) NOT NULL;
+ALTER TABLE discount MODIFY COLUMN discounted_price DECIMAL(10, 2) NOT NULL;
+

@@ -50,11 +50,13 @@ public class ReviewService {
         UserEntity reviewer = userRepository.findById(loggedUserId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
+
+        // TODO : 여기 주석 풀기 (테스트를 위해서 주석처리 해두었음)
         // 2. 영수증 인증 내역 조회
         // 인증 내역이 존재하지 않으면 리뷰 작성 불가
         // ReceiptVerificationEntity receiptVerification = receiptVerificationRepository.findByReviewerAndTargetStore(
         //                 reviewer, store)
-        //         .orElseThrow(() -> new IllegalArgumentException("Receipt verification not found"));
+        //         .orElseThrow(() -> new IllegalArgumentException("인증 내역이 존재하지 않습니다."));
         //
         // // 3. 이미 리뷰가 작성된 인증 내역인지 확인
         // if (receiptVerification.getReview() != null) {
