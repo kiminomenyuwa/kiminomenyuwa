@@ -21,6 +21,7 @@ import com.scit45.kiminomenyuwa.service.UserDiningHistoryService;
 import com.scit45.kiminomenyuwa.service.verification.ReceiptRecognitionService;
 import com.scit45.kiminomenyuwa.service.verification.ReceiptVerificationService;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,7 +49,8 @@ public class ReceiptController {
 	@PostMapping("/uploadAjax")
 	@ResponseBody
 	public ResponseEntity<?> handleUploadAjax(
-		@RequestParam("receiptFile") MultipartFile receiptFile) {
+		@RequestParam("receiptFile") MultipartFile receiptFile,
+		HttpSession session) { // 세션 객체를 추가합니다.
 		if (receiptFile.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 				.body("파일을 선택하지 않았습니다.");
@@ -59,22 +61,16 @@ public class ReceiptController {
 			String jsonResult = receiptRecognitionService.analyzeReceipt(receiptFile);
 			ReceiptDTO receiptDTO = receiptRecognitionService.parseReceiptJson(jsonResult);
 			log.debug(receiptDTO.toString());
+
 			// 현재 로그인된 사용자 정보 가져오기
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			String loggedInUserId = authentication.getName();
 
-			// 음식 내역에 저장하기 위해 ReceiptDTO의 List<ItemDTO>에서 description들 가져오기
-			receiptDTO.getItems().forEach(item -> {
-				String description = item.getDescription();
-				log.debug("Description: {}", description);
-
-				// 먹은 내역 저장
-				userDiningHistoryService.saveDiningHistory(loggedInUserId, description);
-			});
+			// 세션에 영수증 정보 저장
+			session.setAttribute("uploadedReceipt", receiptDTO);  // 영수증 정보를 세션에 저장
 
 			// 영수증 인증
 			boolean isVerified = receiptVerificationService.verifyReceipt(receiptDTO, loggedInUserId);
-			// boolean isVerified = true;
 
 			if (isVerified) {
 				return ResponseEntity.ok(new ReceiptUploadResponseDTO(true, "영수증 인증이 완료되었습니다.", receiptDTO));
