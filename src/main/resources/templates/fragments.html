@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
+<head th:fragment="fragments">
+    <title th:fragment="title">My Application</title>
+</head>
+<body>
+<div th:fragment="header">
+    <h1>Header Content</h1>
+</div>
+<div th:fragment="sidebar">
+    <ul>
+        <li><a th:href="@{/}">Home</a></li>
+        <li><a th:href="@{/about}">About</a></li>
+        <li><a th:href="@{/contact}">Contact</a></li>
+    </ul>
+</div>
+<div th:fragment="footer">
+    <p>© 2024 My Application</p>
+</div>
+</body>
+</html>
