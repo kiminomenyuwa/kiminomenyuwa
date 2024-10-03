@@ -1,5 +1,7 @@
 package com.scit45.kiminomenyuwa.controller;// RecommendationController.java
 
+import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,13 +16,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.scit45.kiminomenyuwa.domain.dto.BudgetDTO;
 import com.scit45.kiminomenyuwa.domain.dto.CategoryCountDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.StoreResponseDTO;
 import com.scit45.kiminomenyuwa.domain.dto.recommendation.MenuRecommendationDTO;
 import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
+import com.scit45.kiminomenyuwa.service.BudgetRecommendService;
 import com.scit45.kiminomenyuwa.service.MenuService;
 import com.scit45.kiminomenyuwa.service.MiniGameService;
+import com.scit45.kiminomenyuwa.service.MyPageService;
 import com.scit45.kiminomenyuwa.service.StoreSearchService;
 import com.scit45.kiminomenyuwa.service.recommendation.HybridRecommendationService;
 
@@ -37,6 +42,8 @@ public class RecommendationController {
 	private final StoreSearchService storeService;
 	private final MenuService menuService;
 	private final MiniGameService minigameService;
+	private final MyPageService mypageService;
+	private final BudgetRecommendService budgetRecommendService;
 
 	@PostMapping("/nearby-menus")
 	@ResponseBody
@@ -80,45 +87,143 @@ public class RecommendationController {
 	 */
 	@ResponseBody
 	@GetMapping("/api/minigame/recommendations")
-	public ResponseEntity<Map<String, Object>> getMiniGameRecommendations(
-		@RequestParam double latitude,
-		@RequestParam double longitude,
+	public ResponseEntity<Map<String, Object>> getMiniGameRecommendations(@RequestParam double latitude,
+		@RequestParam double longitude, @RequestParam(defaultValue = "false") boolean budgetConsidered,
 		@AuthenticationPrincipal AuthenticatedUser user) {
 		String userId = user.getId();
 
-		// 1. 미니게임 카테고리 점수 가져오기
-		List<CategoryCountDTO> minigameCategoryScoreList = minigameService.getCategoryScoresByUserId(userId);
-		log.debug("minigameCategoryScoreList: {}", minigameCategoryScoreList);
+		// 현재 연도와 월을 가져옴
+		YearMonth currentYearMonth = YearMonth.now();
+		int year = currentYearMonth.getYear();
+		int month = currentYearMonth.getMonthValue();
 
-		// 2. 메뉴 점수 맵 가져오기
-		Map<MenuDTO, Integer> menuScoreMap = minigameService.getMenuScoreMap(userId);
-		log.debug("menuScoreMap: {}", menuScoreMap);
-
-		// 3. 메뉴 점수를 내림차순으로 정렬된 리스트로 변환
-		List<Map<String, Object>> sortedMenuList = menuScoreMap.entrySet()
-			.stream()
-			.sorted(Map.Entry.<MenuDTO, Integer>comparingByValue().reversed())
-			.map(entry -> {
-				Map<String, Object> map = new HashMap<>();
-				map.put("menu", entry.getKey());
-				map.put("score", entry.getValue());
-				return map;
-			})
-			.collect(Collectors.toList());
-
-		// 4. 추천 메뉴 가져오기 (상위 10개)
-		List<MenuDTO> recommendedMenus = sortedMenuList.stream()
-			.limit(10)
-			.map(entry -> (MenuDTO) entry.get("menu"))
-			.collect(Collectors.toList());
-
-		// 5. 응답 데이터 구성
 		Map<String, Object> response = new HashMap<>();
-		response.put("minigameCategoryScoreList", minigameCategoryScoreList);
-		response.put("sortedMenuList", sortedMenuList);
-		response.put("recommendedMenus", recommendedMenus);
+
+		if (budgetConsidered) {
+			// 예산을 고려한 추천 메뉴 가져오기
+			int remainingBudget = budgetRecommendService.calculateRemainingBudget(userId, year, month);
+			if (remainingBudget <= 0) {
+				response.put("budgetSet", false);
+				response.put("message", "예산이 설정되지 않았거나 남은 예산이 부족합니다. 예산을 먼저 등록해주세요.");
+				return ResponseEntity.ok(response);
+			}
+
+			// 예산을 고려한 추천 메뉴 가져오기
+			List<MenuDTO> budgetRecommendedMenus = budgetRecommendService.getRecommendedMenus(remainingBudget, 30); // 남은 일수를 30일로 가정
+
+			response.put("budgetSet", true);
+			response.put("recommendedMenus", budgetRecommendedMenus);
+		} else {
+			// 미니게임 카테고리 점수 가져오기
+			List<CategoryCountDTO> minigameCategoryScoreList = minigameService.getCategoryScoresByUserId(userId);
+			log.debug("minigameCategoryScoreList: {}", minigameCategoryScoreList);
+
+			// 메뉴 점수 맵 가져오기
+			Map<MenuDTO, Integer> menuScoreMap = minigameService.getMenuScoreMap(userId);
+			log.debug("menuScoreMap: {}", menuScoreMap);
+
+			// 메뉴 점수를 내림차순으로 정렬된 리스트로 변환
+			List<Map<String, Object>> sortedMenuList = menuScoreMap.entrySet()
+				.stream()
+				.sorted(Map.Entry.<MenuDTO, Integer>comparingByValue().reversed())
+				.map(entry -> {
+					Map<String, Object> map = new HashMap<>();
+					map.put("menu", entry.getKey());
+					map.put("score", entry.getValue());
+					return map;
+				})
+				.collect(Collectors.toList());
+
+			// 추천 메뉴 가져오기 (상위 10개)
+			List<MenuDTO> recommendedMenus = sortedMenuList.stream()
+				.limit(10)
+				.map(entry -> (MenuDTO)entry.get("menu"))
+				.collect(Collectors.toList());
+
+			// 응답 데이터 구성
+			response.put("minigameCategoryScoreList", minigameCategoryScoreList);
+			response.put("sortedMenuList", sortedMenuList);
+			response.put("recommendedMenus", recommendedMenus);
+			response.put("budgetSet", true); // 미니게임 추천은 기본적으로 예산을 고려하지 않으므로 true
+		}
 
 		return ResponseEntity.ok(response);
+	}
+
+
+
+	// 	// 남은 예산 조회
+	// 	BudgetDTO budgetDTO = mypageService.getRemainingBudget(userId, year, month);
+	// 	int remainingBudget = budgetDTO.getBudget();
+	//
+	// 	if (budget == null || budget <= 0) {
+	// 		Map<String, Object> response = new HashMap<>();
+	// 		response.put("budgetSet", false);
+	// 		return ResponseEntity.ok(response);
+	// 	}
+	//
+	// 	// 예산이 설정되지 않았거나 0일 경우
+	// 	if (remainingBudget <= 0) {
+	// 		Map<String, Object> response = new HashMap<>();
+	// 		response.put("budgetSet", false);
+	// 		return ResponseEntity.ok(response);
+	// 	}
+	//
+	// 	// 예산이 설정되어 있는 경우
+	// 	List<MenuDTO> budgetRecommendedMenus = budgetRecommendService.getRecommendedMenus(remainingBudget,
+	// 		30); // 남은 일수를 30일로 가정
+	//
+	// 	// 1. 미니게임 카테고리 점수 가져오기
+	// 	List<CategoryCountDTO> minigameCategoryScoreList = minigameService.getCategoryScoresByUserId(userId);
+	// 	log.debug("minigameCategoryScoreList: {}", minigameCategoryScoreList);
+	//
+	// 	// 2. 메뉴 점수 맵 가져오기
+	// 	Map<MenuDTO, Integer> menuScoreMap = minigameService.getMenuScoreMap(userId);
+	// 	log.debug("menuScoreMap: {}", menuScoreMap);
+	//
+	// 	// 3. 메뉴 점수를 내림차순으로 정렬된 리스트로 변환
+	// 	List<Map<String, Object>> sortedMenuList = menuScoreMap.entrySet()
+	// 		.stream()
+	// 		.sorted(Map.Entry.<MenuDTO, Integer>comparingByValue().reversed())
+	// 		.map(entry -> {
+	// 			Map<String, Object> map = new HashMap<>();
+	// 			map.put("menu", entry.getKey());
+	// 			map.put("score", entry.getValue());
+	// 			return map;
+	// 		})
+	// 		.collect(Collectors.toList());
+	//
+	// 	// 4. 추천 메뉴 가져오기 (상위 10개)
+	// 	List<MenuDTO> recommendedMenus = sortedMenuList.stream()
+	// 		.limit(10)
+	// 		.map(entry -> (MenuDTO)entry.get("menu"))
+	// 		.collect(Collectors.toList());
+	//
+	// 	// 5. 응답 데이터 구성
+	// 	Map<String, Object> response = new HashMap<>();
+	// 	response.put("minigameCategoryScoreList", minigameCategoryScoreList);
+	// 	response.put("sortedMenuList", sortedMenuList);
+	// 	response.put("recommendedMenus", recommendedMenus);
+	// 	response.put("budgetSet", true);
+	// 	response.put("budgetRecommendedMenus", budgetRecommendedMenus);
+	//
+	// 	return ResponseEntity.ok(response);
+	// }
+
+	/**
+	 * 사용자 예산 조회 API
+	 */
+	@GetMapping("/budget")
+	@ResponseBody
+	public ResponseEntity<BudgetDTO> getUserBudget(@AuthenticationPrincipal AuthenticatedUser user) {
+		String userId = user.getId();
+		YearMonth currentYearMonth = YearMonth.now();
+		int year = currentYearMonth.getYear();
+		int month = currentYearMonth.getMonthValue();
+
+		BudgetDTO budget = mypageService.getRemainingBudget(userId, year, month);
+
+		return ResponseEntity.ok(budget);
 	}
 
 }
