@@ -128,6 +128,25 @@ VALUES
     ('2404', '17693', '안심스테이크', '28000', 'https://m.outback.co.kr/upload/product/20240415/20240415012246748190.jpeg', 1),
     ('2405', '17693', '부쉬맨 브레드', '0', 'https://foodfile.co.kr/_var/1512/20151217_130419__16x9.jpg', 1);
 
+-- 노브랜드버거
+INSERT INTO `menu`
+VALUES
+    ('2501', '17704', '비스크 치즈 새우버거', '6900', 'https://www.shinsegaefood.com/uimages/2024/02/29/%EB%B9%84%EC%8A%A4%ED%81%AC%EC%B9%98%EC%A6%88-%EC%83%88%EC%9A%B0.png', 1),
+    ('2502', '17704', '메가바이트 버거', '6000', 'https://www.shinsegaefood.com/uimages/2019/09/20/%EB%A9%94%EA%B0%80%EB%B0%94%EC%9D%B4%ED%8A%B8.png', 1),
+    ('2503', '17704', 'NBB 시그니처 버거', '5500', 'https://www.shinsegaefood.com/uimages/2019/09/20/NBB%EC%8B%9C%EA%B7%B8%EB%8B%88%EC%B2%98(1).png', 1),
+    ('2504', '17704', '어니언 링', '3000', 'https://www.shinsegaefood.com/uimages/2023/11/14/%EC%96%B4%EB%8B%88%EC%96%B8%EB%A7%81.png', 1),
+    ('2505', '17704', '크리스피 너겟', '3000', 'https://www.shinsegaefood.com/uimages/2023/08/10/NBB_%EC%B9%98%ED%82%A8%EB%84%88%EA%B2%9F_5%EC%A1%B0%EA%B0%81.png', 1);
+
+-- 니뽕내뽕코엑스점
+INSERT INTO `menu`
+VALUES
+    ('2601', '17723', '차뽕', '9500', 'https://ldb-phinf.pstatic.net/20230920_161/1695177794200AA73L_JPEG/%B9%E8%B9%CE_%C2%F7%BB%CD_45.jpg', 1),
+    ('2602', '17723', '일뽕', '9500', 'https://ldb-phinf.pstatic.net/20230920_119/1695178114728RDLfw_PNG/%C0%CF%BB%CD_45.png', 1),
+    ('2603', '17723', '고기차뽕', '12000', 'https://ldb-phinf.pstatic.net/20240625_209/1719304066523lqej0_PNG/%B0%ED%B1%E2%C2%F7%BB%CD.png', 1),
+    ('2604', '17723', '크뽕', '11500', 'https://ldb-phinf.pstatic.net/20230920_30/1695177636073pGc1i_PNG/%C5%A9%BB%CD_45.png', 1),
+    ('2605', '17723', '로뽕', '12500', 'https://ldb-phinf.pstatic.net/20230920_7/1695177661517WW6BW_PNG/%B7%CE%BB%CD_45.png', 1);
+
+-- 메뉴추가 템플릿
 # INSERT INTO `menu`
 # VALUES
 #     ('', '', '', '', '', 1);
