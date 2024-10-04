@@ -143,3 +143,51 @@ INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
 SELECT 2204, `category_id` FROM `food_category` WHERE `category_name` IN ('중식', '만두', '새우', '찜', '저칼로리', '담백한', '점심');
 INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
 SELECT 2205, `category_id` FROM `food_category` WHERE `category_name` IN ('중식', '라이스롤', '새우', '구이', '저칼로리', '담백한', '점심');
+
+-- 토리키치
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2301, `category_id` FROM `food_category` WHERE `category_name` IN ('일식', '야키토리', '닭고기', '구이', '제한없음', '짠', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2302, `category_id` FROM `food_category` WHERE `category_name` IN ('일식', '꼬치', '닭고기', '구이', '제한없음', '짠', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2303, `category_id` FROM `food_category` WHERE `category_name` IN ('일식', '꼬치', '닭고기', '구이', '제한없음', '매운', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2304, `category_id` FROM `food_category` WHERE `category_name` IN ('일식', '해물탕', '해산물', '끓임', '제한없음', '짠', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2305, `category_id` FROM `food_category` WHERE `category_name` IN ('음료류', '맥주', '제한없음', '쓴', '저녁');
+
+-- 아웃백스테이크하우스
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2401, `category_id` FROM `food_category` WHERE `category_name` IN ('양식', '스테이크', '소고기', '구이', '제한없음', '짠', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2402, `category_id` FROM `food_category` WHERE `category_name` IN ('양식', '스테이크', '소고기', '구이', '제한없음', '짠', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2403, `category_id` FROM `food_category` WHERE `category_name` IN ('양식', '감자튀김', '감자', '튀김', '제한없음', '짠', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2404, `category_id` FROM `food_category` WHERE `category_name` IN ('양식', '스테이크', '소고기', '구이', '제한없음', '짠', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2405, `category_id` FROM `food_category` WHERE `category_name` IN ('제과류', '빵', '제한없음', '담백한', '간식');
+
+-- 노브랜드버거
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2501, `category_id` FROM `food_category` WHERE `category_name` IN ('패스트푸드', '햄버거', '새우', '구이', '제한없음', '짠', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2502, `category_id` FROM `food_category` WHERE `category_name` IN ('패스트푸드', '햄버거', '소고기', '구이', '제한없음', '짠', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2503, `category_id` FROM `food_category` WHERE `category_name` IN ('패스트푸드', '햄버거', '소고기', '구이', '제한없음', '짠', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2504, `category_id` FROM `food_category` WHERE `category_name` IN ('패스트푸드', '사이드', '양파', '튀김', '제한없음', '짠', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2505, `category_id` FROM `food_category` WHERE `category_name` IN ('패스트푸드', '사이드', '닭고기', '튀김', '제한없음', '짠', '점심');
+
+-- 니뽕내뽕코엑스점
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2601, `category_id` FROM `food_category` WHERE `category_name` IN ('일식', '짬뽕', '소고기', '삶음', '제한없음', '매운', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2602, `category_id` FROM `food_category` WHERE `category_name` IN ('일식', '짬뽕', '해산물', '삶음', '제한없음', '매운', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2603, `category_id` FROM `food_category` WHERE `category_name` IN ('일식', '짬뽕', '돼지고기', '삶음', '제한없음', '매운', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2604, `category_id` FROM `food_category` WHERE `category_name` IN ('일식', '짬뽕', '해산물', '삶음', '제한없음', '매운', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2605, `category_id` FROM `food_category` WHERE `category_name` IN ('일식', '짬뽕', '해산물', '삶음', '제한없음', '매운', '저녁');
