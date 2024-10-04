@@ -125,6 +125,12 @@
     <div id="minigame-recommendations">
         <!-- 미니게임 추천 메뉴 카드가 여기서 동적으로 추가됩니다 -->
     </div>
+
+    <!-- 미니게임 슬라이더 네비게이션 버튼 -->
+    <div class="d-flex justify-content-center mt-3">
+        <button class="btn btn-secondary mr-2 slick-prev-minigame">이전</button>
+        <button class="btn btn-secondary slick-next-minigame">다음</button>
+    </div>
 </div>
 
 <!-- jQuery, Bootstrap JS -->
@@ -178,6 +184,40 @@
                     }
                 ]
             });
+
+            // 미니게임 추천 슬라이더 초기화
+            $('.minigame-slider').slick({
+                slidesToShow: 3,
+                slidesToScroll: 3,
+                infinite: false,
+                dots: true,
+                arrows: false,
+                speed: 500,
+                cssEase: 'ease-in-out',
+                responsive: [
+                    {
+                        breakpoint: 1200,
+                        settings: {
+                            slidesToShow: 3,
+                            slidesToScroll: 3
+                        }
+                    },
+                    {
+                        breakpoint: 992,
+                        settings: {
+                            slidesToShow: 2,
+                            slidesToScroll: 2
+                        }
+                    },
+                    {
+                        breakpoint: 576,
+                        settings: {
+                            slidesToShow: 1,
+                            slidesToScroll: 1
+                        }
+                    }
+                ]
+            });
         }
 
         // Slick Slider 네비게이션 버튼 설정
@@ -188,6 +228,13 @@
             });
             $('.slick-next-menu').click(function () {
                 $('.menu-slider').slick('slickNext');
+            });
+            // 미니게임 추천 네비게이션
+            $('.slick-prev-minigame').click(function () {
+                $('.minigame-slider').slick('slickPrev');
+            });
+            $('.slick-next-minigame').click(function () {
+                $('.minigame-slider').slick('slickNext');
             });
         }
 
@@ -433,10 +480,18 @@
         function displayMinigameRecommendations(menus) {
             console.log('Displaying minigame recommendations:', menus);
             const minigameRecommendations = $('#minigame-recommendations');
+            const minigameSlider = $('.minigame-slider');
             minigameRecommendations.empty(); // 이전 추천 목록 삭제
 
+            // 슬라이더가 이미 초기화되었는지 확인
+            if (minigameSlider.hasClass('slick-initialized')) {
+                minigameSlider.slick('unslick'); // 슬라이더 파괴
+            }
+
+            minigameSlider.empty(); // 기존 슬라이드 제거
+
             if (menus.length === 0) {
-                minigameRecommendations.append('<p class="text-muted">미니게임 기반 추천 메뉴가 없습니다.</p>');
+                minigameSlider.append('<div><p class="text-muted">미니게임 기반 추천 메뉴가 없습니다.</p></div>');
                 return;
             }
 
