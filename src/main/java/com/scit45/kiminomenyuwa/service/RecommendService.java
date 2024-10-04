@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class RecommandService {
+public class RecommendService {
 	private final UserDiningHistoryService userDiningHistoryService;
 	private final MiniGameService miniGameService;
 	private final MenuService menuService;
@@ -41,9 +41,9 @@ public class RecommandService {
 	 * @param userId 현재 로그인 중인 userId
 	 * @return 카테고리 기반 추천된 메뉴 리스트
 	 */
-	public List<MenuDTO> recommendMenusByUntriedCategory(String userId) {
+	public List<MenuDTO> recommendMenusByUntriedCategory(String userId, List<MenuDTO> menus) {
 		// 사용자가 먹지 않은 메뉴 리스트
-		List<MenuDTO> notTriedMenuList = userDiningHistoryService.getMenusNotTried(userId);
+		List<MenuDTO> notTriedMenuList = userDiningHistoryService.getMenusNotTried(userId, menus);
 
 		// 사용자가 먹은 음식 내역 중 카테고리 TOP 10
 		List<CategoryCountDTO> categoryTop10 = userDiningHistoryService.getTopCategoriesByUserId(userId);
@@ -91,12 +91,13 @@ public class RecommandService {
 	 * @param userId 로그인 중인 userId
 	 * @return 미니게임 점수 기반 추천된 메뉴(미니게임 점수 기반 내림차순 정렬)
 	 */
-	public List<MenuDTO> recommendMenusByCategoryScores(String userId) {
+	public List<MenuDTO> recommendMenusByCategoryScores(String userId, List<MenuDTO> menus) {
 		// 1. 사용자 카테고리 점수 불러오기 (내림차순으로 정렬됨)
 		List<CategoryCountDTO> categoryScores = miniGameService.getCategoryScoresByUserId(userId);
 
 		// 2. 모든 메뉴 불러오기
-		List<MenuDTO> allMenus = menuService.getAllMenus();
+		// List<MenuDTO> allMenus = menuService.getAllMenus();
+		// 모든 메뉴 불러오기에서 메뉴 리스트를 파라미터로 받도록 수정
 
 		// 3. 카테고리 점수를 빠르게 조회하기 위한 Map 생성
 		Map<String, Integer> categoryScoreMap = new HashMap<>();
@@ -108,7 +109,7 @@ public class RecommandService {
 		Map<MenuDTO, Integer> menuScoreMap = new HashMap<>();
 
 		// 5. 각 메뉴의 카테고리 점수를 합산하여 메뉴 점수 계산
-		for (MenuDTO menu : allMenus) {
+		for (MenuDTO menu : menus) {
 			int totalScore = 0;
 
 			if (menu.getCategories() != null) {
@@ -137,7 +138,8 @@ public class RecommandService {
 	 * @param ageGroup 연령대 (예: "20대")
 	 * @return 연령대별 인기 메뉴 리스트
 	 */
-	public List<MenuDTO> recommendPopularMenusByAgeGroup(String ageGroup) {
+	// 메뉴 리스트를 받아서 그 안에서 필터링 하여 반환하도록 변경
+	public List<MenuDTO> recommendPopularMenusByAgeGroup(String ageGroup, List<MenuDTO> nearByMenus) {
 		// AgeUtils의 getAgeRange 메서드로 연령대 시작과 끝 값을 가져옴
 		int[] ageRange = AgeUtils.getAgeRange(ageGroup);
 		int ageStart = ageRange[0];
@@ -150,10 +152,14 @@ public class RecommandService {
 		List<MenuCountDTO> popularMenus = userDiningHistoryRepository.findTopMenusByAgeGroupAndDateRange(
 			ageStart, ageEnd, sevenDaysAgo, PageRequest.of(0, 5)); // 상위 5개 메뉴 가져오기
 
+		Set<Integer> nearByMenusIdSet = nearByMenus.stream().map(MenuDTO::getMenuId).collect(Collectors.toSet());
+
 		// MenuCountDTO를 MenuDTO로 변환
 		List<MenuDTO> menuDTOList = popularMenus.stream()
+			.filter(menuCountDTO -> nearByMenusIdSet.contains(menuCountDTO.getMenuId()))
 			.map(menu -> MenuDTO.builder()
 				.menuId(menu.getMenuId())
+				.storeId(menu.getStoreId())
 				.name(menu.getName())
 				.price(menu.getPrice())
 				.pictureUrl(menu.getPictureUrl())
