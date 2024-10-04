@@ -78,9 +78,9 @@ public class HomeController {
 				model.addAttribute("profilePhotoUrl", "/images/default-profile.png");
 			}
 		}
-
+		model.addAttribute("page", "home");
 		// 홈 페이지 템플릿으로 이동
-		return "home";
+		return "homepage";
 	}
 
 	// 로그인한 사용자의 ID를 가져오는 메서드

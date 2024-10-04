@@ -306,9 +306,11 @@
             <div id="searchResult" class="mt-3"></div>
           </div>
         </div>
-      </div>
     </div>
+</main>
 
+<!-- scripts 프래그먼트 -->
+<div layout:fragment="scripts">
     <script>
       $(document).ready(function () {
         // 친구 삭제 버튼 클릭 이벤트 처리
@@ -326,8 +328,6 @@
             ).fail(function () {
               alert("친구 삭제 중 오류가 발생했습니다.");
             });
-          }
-        });
 
         // 친구 요청 수락 버튼 클릭 이벤트 처리
         $(".accept-btn").on("click", function () {
@@ -347,8 +347,6 @@
             ).fail(function () {
               alert("수락 중 오류가 발생했습니다.");
             });
-          }
-        });
 
         // 친구 요청 거절 버튼 클릭 이벤트 처리
         $(".decline-btn").on("click", function () {
@@ -382,9 +380,9 @@
               }
             ).fail(function () {
               alert("친구 요청 취소 중 오류가 발생했습니다.");
+
             });
-          }
-        });
+
 
         // 친구 검색 기능 처리
         $("#searchFriendButton").on("click", performSearch);
@@ -407,17 +405,9 @@
                 if (data.exists) {
                   let name = data.name ? data.name : "본인입니다";
                   let buttonHtml = "";
-
-                  // 검색된 사용자 상태에 따라 버튼 표시
-                  if (data.isSelf) {
-                    buttonHtml = `<button type="button" class="btn btn-secondary" disabled>본인입니다</button>`;
-                  } else if (data.isFriend) {
-                    buttonHtml = `<button type="button" class="btn btn-secondary" disabled>이미 친구입니다</button>`;
-                  } else if (data.hasPendingRequest) {
-                    buttonHtml = `<button type="button" class="btn btn-secondary" disabled>친구 요청을 보냈습니다</button>`;
-                  } else {
-                    buttonHtml = `<button type="button" class="btn btn-success" id="sendFriendRequestButton">친구 요청 보내기</button>`;
-                  }
+                            if (data.profileImg) {
+                                $("#profile-img").attr("src", data.profileImg);
+                            }
 
                   // 검색 결과 출력
                   $("#searchResult").html(`
@@ -456,11 +446,9 @@
                           $("#friendSearchModal").modal("hide");
                           window.location.reload();
                         }
-                      ).fail(function () {
-                        alert("친구 요청 중 오류가 발생했습니다.");
-                      });
+                    }).fail(function () {
+                        $("#searchResult").html("<p>오류가 발생했습니다.</p>");
                     });
-                  }
                 } else {
                   $("#searchResult").html(
                     `<p>${friendId}는 존재하지 않는 아이디입니다.</p>`
@@ -476,5 +464,4 @@
         }
       });
     </script>
-  </body>
-</html>
+</div>

@@ -1,0 +1,34 @@
+*,
+*::after,
+*::before {
+    box-sizing: border-box;
+}
+
+/* root */
+:root {
+    /* color */
+    --whiteColor: #fff;
+    --blackColor: #222;
+    --borderColor: #ddd;
+    --primaryColor: #FF7878;
+    --lightNavyColor: #697390;
+}
+
+body,
+html {
+    font-family: 'SUIT-Regular';
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    cursor: pointer;
+}
+
+button>i,
+button>i::before {
+    pointer-events: none;
+}
