@@ -98,7 +98,6 @@ CREATE TABLE `menu`
     FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`)
 );
 
-
 -- 메뉴와 카테고리 간의 관계를 저장하는 테이블: 메뉴에 대한 카테고리 정보를 저장
 CREATE TABLE `menu_category_mapping`
 (
@@ -229,7 +228,7 @@ CREATE TABLE store_photo
 (
     photo_id  INT AUTO_INCREMENT PRIMARY KEY,
     store_id  INT          NOT NULL,
-    photo_url VARCHAR(255) NOT NULL,
+    photo_url VARCHAR(1000) NOT NULL,
     is_main BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (store_id) REFERENCES store (store_id) ON DELETE CASCADE
 );
@@ -257,7 +256,7 @@ CREATE TABLE `favorite`
     UNIQUE KEY unique_favorite (user_id, store_id)
 );
 
--- Discount 테이블 생성 
+-- Discount 테이블 생성
 CREATE TABLE Discount (
     discount_id INT AUTO_INCREMENT PRIMARY KEY,
     menu_id INT NOT NULL,

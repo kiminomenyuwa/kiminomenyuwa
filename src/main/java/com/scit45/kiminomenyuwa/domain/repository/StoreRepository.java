@@ -73,4 +73,7 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
 	List<StoreEntity> findStoresByNameAndCategory(@Param("name")
 	String name, @Param("category")
 	String category);
+
+	// 키워드로 가게 이름을 검색하면서 페이징을 지원하는 메서드
+	Page<StoreEntity> findByNameContaining(String keyword, Pageable pageable);
 }

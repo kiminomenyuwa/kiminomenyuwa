@@ -248,10 +248,8 @@ public class MiniGameService {
 		// 4. Map을 List<CategoryCountDTO>로 변환
 		List<CategoryCountDTO> categoryScoreList = new ArrayList<>();
 		for (Map.Entry<String, Long> entry : categoryScores.entrySet()) {
-			categoryScoreList.add(CategoryCountDTO.builder()
-				.categoryName(entry.getKey())
-				.categoryCount(entry.getValue())
-				.build());
+			categoryScoreList.add(
+				CategoryCountDTO.builder().categoryName(entry.getKey()).categoryCount(entry.getValue()).build());
 		}
 
 		// 5. 내림차순으로 정렬 (점수가 높은 순서대로)

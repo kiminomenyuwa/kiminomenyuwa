@@ -1,29 +1,17 @@
-INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`)
-VALUES ('user01', 4454, '2024-09-06 12:15:46');
-INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`)
-VALUES ('user01', 4456, '2024-09-06 12:15:46');
-INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`)
-VALUES ('user01', 7855, '2024-08-24 00:49:24');
-INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`)
-VALUES ('user01', 3951, '2024-08-08 12:22:13');
-INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`)
-VALUES ('user01', 3968, '2024-08-08 12:22:13');
-INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`)
-VALUES ('user01', 3995, '2024-08-08 12:22:13');
-INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`)
-VALUES ('user01', 4037, '2024-07-20 18:41:33');
-INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`)
-VALUES ('user01', 3502, '2024-08-09 09:22:01');
-INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`)
-VALUES ('user01', 3480, '2024-08-09 09:22:01');
-INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`)
-VALUES ('user01', 3484, '2024-08-09 09:22:01');
-INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`)
-VALUES ('user01', 4854, '2024-09-19 04:07:07');
-INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`)
-VALUES ('user01', 4861, '2024-09-19 04:07:07');
-INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`)
-VALUES ('user01', 4850, '2024-09-19 04:07:07');
+INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`) VALUES ('user01', 4454, '2024-09-29 22:47:00');
+INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`) VALUES ('user01', 4456, '2024-09-26 08:48:50');
+INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`) VALUES ('user01', 7855, '2024-09-27 20:05:21');
+INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`) VALUES ('user01', 3951, '2024-09-27 04:19:07');
+INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`) VALUES ('user01', 3968, '2024-09-29 01:03:56');
+INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`) VALUES ('user01', 1001, '2024-09-30 17:50:31');
+INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`) VALUES ('user01', 1000, '2024-10-01 22:01:52');
+INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`) VALUES ('user01', 3502, '2024-09-30 08:38:27');
+INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`) VALUES ('user01', 3480, '2024-09-27 22:25:44');
+INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`) VALUES ('user01', 3484, '2024-09-27 07:00:18');
+INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`) VALUES ('user01', 4854, '2024-09-30 16:55:48');
+INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`) VALUES ('user01', 4861, '2024-09-27 22:56:08');
+INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`) VALUES ('user01', 4850, '2024-09-30 00:31:41');
+
 INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`)
 VALUES ('user02', 3933, '2024-07-18 21:51:18');
 INSERT INTO `user_dining_history` (`user_id`, `menu_id`, `dining_date`)

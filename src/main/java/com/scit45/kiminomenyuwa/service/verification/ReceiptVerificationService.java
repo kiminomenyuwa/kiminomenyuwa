@@ -62,7 +62,7 @@ public class ReceiptVerificationService {
 		// 검증 성공 시 영수증 인증 정보를 저장
 
 		UserEntity user = userRepository.findById("user01").get();
-		StoreEntity store = storeRepository.findById(15481).get();
+		StoreEntity store = storeRepository.findById(5831).get();
 		receipt.setStoreId(store.getStoreId());
 		saveReceiptVerification(user, store);
 

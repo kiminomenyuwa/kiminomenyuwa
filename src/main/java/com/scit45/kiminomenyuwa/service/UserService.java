@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional; // 변경된 임포트
 
 import com.scit45.kiminomenyuwa.domain.dto.UserDTO;
 import com.scit45.kiminomenyuwa.domain.entity.Role;
@@ -11,17 +12,12 @@ import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
 import com.scit45.kiminomenyuwa.domain.repository.UserRepository;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * 유저(계정 관련) 서비스
- * 사용자 등록, 조회 및 ID 확인 등의 계정 관련 기능을 처리하는 서비스 클래스
- */
 @Slf4j
 @Service
-@Transactional
+@Transactional // 변경된 애노테이션
 @RequiredArgsConstructor
 public class UserService {
 
