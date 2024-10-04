@@ -155,42 +155,6 @@
             $('#setBudgetButton').on('click', function () {
                 monthlyBudget = parseInt($('#monthlyBudget').val()) || 0;  // 예산 설정
                 saveMonthlyBudget(); // 예산 저장 호출
-               });
-        // 남은 예산을 계산하는 함수
-        function updateRemainingBudget() {
-            if (monthlyBudget === null || monthlyBudget === 0) { // 예산이 설정되지 않은 경우
-                $('#remainingBudget').text('입력한 예산이 없습니다.');
-            } else {
-                const remainingBudget = monthlyBudget - totalSpent;  // 남은 예산 = 예산 - 총 소비 금액
-                console.log("남은 예산", remainingBudget);
-                $('#remainingBudget').text(remainingBudget.toLocaleString() + "원"); // 남은 예산 표시
-            }
-        }
-
-        // 초기 로드 시 예산 불러오기
-        function loadMonthlyBudget() {
-            const currentUserId = '[[${#authentication.name}]]';
-            const year = currentDate.getFullYear();
-            const month = calendar.getDate().getMonth() + 1; // JavaScript 월은 0부터 시작
-
-            console.log("Loading Budget - Year:", year, "Month:", month);
-
-            $.ajax({
-                url: '/mypage/api/budget/remaining', // 절대 경로로 수정
-                method: 'GET',
-                data: {
-                    year: year,
-                    month: month
-                },
-                success: function (data) {
-                    console.log('불러온 예산 데이터', data);
-                    monthlyBudget = data.budget || 0; // 불러온 예산 설정
-                    updateRemainingBudget(); // 남은 예산 업데이트
-                },
-                error: function (e) {
-                    console.log(JSON.stringify(e));
-                    console.error('예산을 불러오는 데 실패했습니다.');
-                }
             });
 
             // 예산 초기화 버튼 클릭 시 예산 초기화
@@ -202,9 +166,13 @@
 
             // 남은 예산을 계산하는 함수
             function updateRemainingBudget() {
-                const remainingBudget = monthlyBudget - totalSpent;  // 남은 예산 = 예산 - 총 소비 금액
-                console.log("남은 예산", remainingBudget);
-                $('#remainingBudget').text(remainingBudget.toLocaleString());         // 남은 예산 표시
+                if (monthlyBudget === null || monthlyBudget === 0) { // 예산이 설정되지 않은 경우
+                    $('#remainingBudget').text('입력한 예산이 없습니다.');
+                } else {
+                    const remainingBudget = monthlyBudget - totalSpent;  // 남은 예산 = 예산 - 총 소비 금액
+                    console.log("남은 예산", remainingBudget);
+                    $('#remainingBudget').text(remainingBudget.toLocaleString() + "원"); // 남은 예산 표시
+                }
             }
 
             // 초기 로드 시 예산 불러오기
@@ -440,6 +408,7 @@
             console.log("loadDiningHistory", calendar);
             loadMonthlyBudget();
         });
+    </script>
     </script>
 </div>
 </html>
