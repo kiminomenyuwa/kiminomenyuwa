@@ -19,6 +19,7 @@
 <!--        <th>storeId</th>-->
 <!--        <th>name</th>-->
 <!--        <th>price</th>-->
+<!--&lt;!&ndash;        <th>pictureUrl</th>&ndash;&gt;-->
 <!--        <th>enabled</th>-->
 <!--    </tr>-->
 <!--    <tr th:each="menuList : ${menuList}">-->
@@ -26,6 +27,7 @@
 <!--        <td th:text="${menuList.storeId}"></td>-->
 <!--        <td th:text="${menuList.name}"></td>-->
 <!--        <td th:text="${menuList.price}"></td>-->
+<!--&lt;!&ndash;        <td th:text="${menuList.pictureUrl}"></td>&ndash;&gt;-->
 <!--        <td th:text="${menuList.enabled}"></td>-->
 <!--    </tr>-->
 <!--</table>-->
@@ -87,6 +89,7 @@
         <th>storeId</th>
         <th>name</th>
         <th>price</th>
+<!--        <th>pictureUrl</th>-->
         <th>enabled</th>
     </tr>
     <tr th:each="menu : ${notTriedMenuList}">
@@ -94,6 +97,7 @@
         <td th:text="${menu.storeId}"></td>
         <td th:text="${menu.name}"></td>
         <td th:text="${menu.price}"></td>
+<!--        <td th:text="${menu.pictureUrl}"></td>-->
         <td th:text="${menu.enabled}"></td>
     </tr>
 </table>
