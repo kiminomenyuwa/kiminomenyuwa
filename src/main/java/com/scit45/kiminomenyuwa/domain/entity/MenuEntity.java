@@ -1,5 +1,6 @@
 package com.scit45.kiminomenyuwa.domain.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -9,12 +10,15 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * 상점에서 제공하는 메뉴 항목을 저장하는 엔티티 클래스입니다.
@@ -32,8 +36,9 @@ public class MenuEntity {
 	@Column(name = "menu_id")
 	private Integer menuId;
 
-	@Column(name = "store_id", nullable = false)
-	private Integer storeId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "store_id", nullable = false)
+	private StoreEntity store;
 
 	@Column(name = "name")
 	private String name;
@@ -49,5 +54,6 @@ public class MenuEntity {
 
 	// 메뉴와 카테고리 간의 관계를 나타내는 매핑
 	@OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<MenuCategoryMappingEntity> categoryMappings;
+	@ToString.Exclude // 무한 재귀 방지를 위해 제외
+	private List<MenuCategoryMappingEntity> categoryMappings = new ArrayList<>();
 }

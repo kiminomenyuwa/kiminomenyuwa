@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>예산 기반 추천</title>
+
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+
+    <script>
+        $(document).ready(function () {
+            let currentDate = new Date(); // 현재 날짜
+            let monthlyBudget = 0;  // 설정된 예산
+            let totalSpent = 0;     // 총 소비 금액
+
+            // 남은 예산과 남은 일수를 가져오는 함수
+            function loadRemainingData() {
+                const year = currentDate.getFullYear();
+                const month = currentDate.getMonth() + 1; // JavaScript 월은 0부터 시작
+
+                console.log("loadRemainingData 호출 - 연도:", year, "월:", month);
+
+                $.ajax({
+                    url: '/api/budget/remaining',
+                    method: 'GET',
+                    data: {
+                        year: year,
+                        month: month
+                    },
+                    success: function (data) {
+                        console.log('불러온 예산 데이터', data);
+                        $('#remainingBudget').text(data.budget);
+                        monthlyBudget = data.budget || 0; // 불러온 예산 설정
+
+                        // 남은 일수 계산
+                        const today = new Date();
+                        const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+                        const remainingDays = lastDay.getDate() - today.getDate();
+                        $('#remainingDays').text(remainingDays > 0 ? remainingDays : 0);
+
+                        // 추천 메뉴 불러오기
+                        loadRecommendedMenus(monthlyBudget, remainingDays);
+                    },
+                    error: function (e) {
+                        console.log("남은 예산 불러오기 실패:", e);
+                        alert('남은 예산을 불러오는 데 실패했습니다.');
+                    }
+                });
+            }
+
+            // 남은 예산과 남은 일수를 기반으로 추천 메뉴를 가져오는 함수
+            function loadRecommendedMenus(budget, days) {
+                console.log("loadRecommendedMenus 호출 - 예산:", budget, "남은 일수:", days);
+
+                $.ajax({
+                    url: '/api/menus/budgetRecommended',
+                    method: 'GET',
+                    data: {
+                        budget: budget,
+                        days: days
+                    },
+                    success: function (menus) {
+                        console.log('받은 추천 메뉴:', menus);
+                        const tbody = $('#recommendedMenus');
+                        tbody.empty(); // 기존 추천 메뉴 지우기
+
+                        if (menus.length === 0) {
+                            tbody.append('<tr><td colspan="3" class="text-center">추천 메뉴가 없습니다.</td></tr>');
+                        } else {
+                            menus.forEach(function (menu) {
+                                const row = `
+                        <tr>
+                            <td>${menu.name}</td>
+                            <td>${menu.price.toLocaleString()}</td>
+                        </tr>
+                    `;
+                                tbody.append(row);
+                            });
+                        }
+                    },
+                    error: function (e) {
+                        console.log("추천 메뉴 불러오기 실패:", e);
+                        alert('추천 메뉴를 불러오는 데 실패했습니다.');
+                    }
+                });
+            }
+
+            // 예산 저장 함수
+            function saveMonthlyBudget(formData) {
+                $.ajax({
+                    url: 'api/budget',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function () {
+                        console.log(formData);
+                        alert('예산이 저장되었습니다.');
+                        loadRemainingData(); // 남은 예산과 추천 메뉴 업데이트
+                    },
+                    error: function (e) {
+                        console.log("예산 저장 실패:", e);
+                        alert('예산 저장에 실패했습니다.');
+                    }
+                });
+            }
+
+            // 예산 초기화 함수
+            function initializeBudget(year, month) {
+                $.ajax({
+                    url: 'api/budget/initialize',
+                    method: 'POST',
+                    data: {
+                        year: year,
+                        month: month
+                    },
+                    success: function () {
+                        alert('예산이 초기화되었습니다.');
+                        loadRemainingData(); // 남은 예산과 추천 메뉴 업데이트
+                    },
+                    error: function (e) {
+                        console.log("예산 초기화 실패:", e);
+                        alert('예산 초기화에 실패했습니다.');
+                    }
+                });
+            }
+
+            // 예산 설정 버튼 클릭 시
+            $('#setBudgetButton').on('click', function () {
+                const budgetAmount = parseInt($('#monthlyBudget').val()) || 0;  // 예산 입력 값
+                const year = currentDate.getFullYear();
+                const month = currentDate.getMonth() + 1;
+
+                const formData = {
+                    userId: '[[${#authentication.name}]]', // Thymeleaf 표현식
+                    year: year,
+                    month: month,
+                    budget: budgetAmount
+                };
+
+                saveMonthlyBudget(formData); // 예산 저장 호출
+            });
+
+            // 초기 로드 시 남은 데이터와 추천 메뉴를 불러옵니다
+            loadRemainingData();
+        });
+    </script>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2>예산별 추천 메뉴</h2>
+
+    <div class="mb-4">
+        <p>남은 예산: <span id="remainingBudget">0</span>원</p>
+        <p>남은 일수: <span id="remainingDays">0</span>일</p>
+    </div>
+
+    <table class="table table-bordered">
+        <thead class="thead-light">
+        <tr>
+            <th>메뉴 이름</th>
+            <th>가격 (원)</th>
+        </tr>
+        </thead>
+        <tbody id="recommendedMenus">
+        <!-- 추천 메뉴가 여기에 표시됩니다 -->
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

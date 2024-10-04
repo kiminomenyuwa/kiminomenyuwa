@@ -1,7 +1,10 @@
 package com.scit45.kiminomenyuwa.domain.repository;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -28,10 +31,14 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
 		"LOWER(REPLACE(s.detailAddress, ' ', '')) LIKE LOWER(CONCAT('%', REPLACE(:detailAddress, ' ', ''), '%')) OR " +
 		"s.phoneNumber LIKE CONCAT('%', :phoneNumber, '%'))")
 	List<StoreEntity> findPotentialMatches(
-		@Param("name") String name,
-		@Param("roadNameAddress") String roadNameAddress,
-		@Param("detailAddress") String detailAddress,
-		@Param("phoneNumber") String phoneNumber);
+		@Param("name")
+		String name,
+		@Param("roadNameAddress")
+		String roadNameAddress,
+		@Param("detailAddress")
+		String detailAddress,
+		@Param("phoneNumber")
+		String phoneNumber);
 
 	StoreEntity findByName(String name);
 
@@ -46,18 +53,27 @@ public interface StoreRepository extends JpaRepository<StoreEntity, Integer> {
 		"WHERE ST_Distance_Sphere(s.location, ST_GeomFromText(:point)) <= :radius " +
 		"ORDER BY ST_Distance_Sphere(s.location, ST_GeomFromText(:point)) ASC", nativeQuery = true)
 	List<StoreEntity> findStoresWithinRadius(
-		@Param("point") String pointWKT,
-		@Param("radius") double radius);
+		@Param("point")
+		String pointWKT,
+		@Param("radius")
+		double radius);
 
 	/**
-	 * 상점 이름과 카테고리로 상점을 검색합니다.
+	 * 상점 ID로 상점 정보를 조회하는 메서드입니다.
 	 *
-	 * @param name     상점 이름 (옵션)
-	 * @param category 상점 카테고리 (옵션)
-	 * @return 검색된 상점 목록
+	 * @param storeId 상점 ID
+	 * @return 상점 엔티티 Optional 객체
 	 */
+	Optional<StoreEntity> findByStoreId(Integer storeId);
+
+	Page<StoreEntity> findByUser_UserId(String userId, Pageable pageable);
 	@Query("SELECT s FROM StoreEntity s " +
 		"WHERE (:name IS NULL OR LOWER(s.name) LIKE LOWER(CONCAT('%', :name, '%'))) " +
 		"AND (:category IS NULL OR s.category = :category)")
-	List<StoreEntity> findStoresByNameAndCategory(@Param("name") String name, @Param("category") String category);
+	List<StoreEntity> findStoresByNameAndCategory(@Param("name")
+	String name, @Param("category")
+	String category);
+
+	// 키워드로 가게 이름을 검색하면서 페이징을 지원하는 메서드
+	Page<StoreEntity> findByNameContaining(String keyword, Pageable pageable);
 }

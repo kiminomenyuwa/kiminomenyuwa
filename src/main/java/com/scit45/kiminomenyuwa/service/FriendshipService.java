@@ -151,13 +151,14 @@ public class FriendshipService {
 	 * @return 요청 취소 성공 여부
 	 */
 	public boolean cancelFriendRequest(String loggedInUserId, String friendId) {
-		// PENDING 상태의 친구 요청 찾기
-		Optional<FriendshipEntity> friendship = friendshipRepository.findByUserIdAndFriendIdAndStatus(
+		// PENDING 상태의 친구 요청 찾기 (여러 개 있을 수 있으므로 List로 받아옴)
+		List<FriendshipEntity> friendships = friendshipRepository.findByUserIdAndFriendIdAndStatus(
 			loggedInUserId, friendId, FriendshipStatus.PENDING);
 
-		if (friendship.isPresent()) {
-			// 친구 요청 삭제
-			friendshipRepository.delete(friendship.get());
+		if (!friendships.isEmpty()) {
+			// 첫 번째 친구 요청만 삭제
+			FriendshipEntity friendshipToCancel = friendships.get(0);
+			friendshipRepository.delete(friendshipToCancel);
 			return true; // 취소 성공
 		} else {
 			log.warn("취소할 친구 요청을 찾을 수 없습니다.");
@@ -253,4 +254,22 @@ public class FriendshipService {
 		return friendshipRepository.existsByUserIdAndFriendIdAndStatus(userId, friendId, FriendshipStatus.PENDING)
 			|| friendshipRepository.existsByUserIdAndFriendIdAndStatus(friendId, userId, FriendshipStatus.PENDING);
 	}
+
+	/**
+	 * 친구 관계를 삭제하는 메서드.
+	 *
+	 * @param loggedInUserId 현재 로그인한 사용자 ID
+	 * @param friendId 삭제할 친구의 ID
+	 * @return 항상 true를 반환하여 삭제 성공을 나타냄
+	 */
+	public boolean deleteFriendship(String loggedInUserId, String friendId) {
+		// 양방향 친구 관계를 삭제
+		friendshipRepository.deleteFriendshipBothDirections(loggedInUserId, friendId);
+
+		// 확인 로그 출력
+		log.info("친구 관계 ({} <-> {})가 삭제되었습니다.", loggedInUserId, friendId);
+
+		return true; // 삭제 성공
+	}
+
 }

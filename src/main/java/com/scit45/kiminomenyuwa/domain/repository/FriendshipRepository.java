@@ -11,6 +11,8 @@ import org.springframework.data.repository.query.Param;
 import com.scit45.kiminomenyuwa.domain.entity.FriendshipEntity;
 import com.scit45.kiminomenyuwa.domain.entity.FriendshipEntity.FriendshipStatus;
 
+import jakarta.transaction.Transactional;
+
 /**
  * 친구 관계(Friendship) 엔티티를 처리하는 리포지토리 인터페이스
  */
@@ -76,7 +78,7 @@ public interface FriendshipRepository extends JpaRepository<FriendshipEntity, In
 	 * @return 해당 상태의 친구 관계 반환
 	 */
 	@Query("SELECT f FROM FriendshipEntity f WHERE ((f.userId = :userId AND f.friendId = :friendId) OR (f.userId = :friendId AND f.friendId = :userId)) AND f.status = :status")
-	Optional<FriendshipEntity> findByUserIdAndFriendIdAndStatus(@Param("userId")
+	List<FriendshipEntity> findByUserIdAndFriendIdAndStatus(@Param("userId")
 	String userId, @Param("friendId")
 	String friendId, @Param("status")
 	FriendshipStatus status);
@@ -164,4 +166,30 @@ public interface FriendshipRepository extends JpaRepository<FriendshipEntity, In
 	@Query("SELECT f FROM FriendshipEntity f WHERE (f.userId = :loggedInUserId OR f.friendId = :loggedInUserId) AND f.status = 'ACCEPTED' AND f.friendId <> :loggedInUserId")
 	List<FriendshipEntity> findAcceptedFriendsExcludingSelf(@Param("loggedInUserId")
 	String loggedInUserId);
+
+	/**
+	 * 주어진 사용자 ID와 친구 ID에 해당하는 양방향 친구 관계를 삭제하는 메서드.
+	 *
+	 * @param userId 사용자 ID
+	 * @param friendId 친구 ID
+	 */
+	@Modifying
+	@Query("DELETE FROM FriendshipEntity f WHERE (f.userId = :userId AND f.friendId = :friendId) OR (f.userId = :friendId AND f.friendId = :userId)")
+	void deleteByUserIdAndFriendId(@Param("userId")
+	String userId, @Param("friendId")
+	String friendId);
+
+	/**
+	 * 양방향 친구 관계를 삭제하는 메서드.
+	 *
+	 * @param userId 사용자 ID
+	 * @param friendId 친구 ID
+	 */
+	@Modifying
+	@Transactional
+	@Query("DELETE FROM FriendshipEntity f WHERE (f.userId = :userId AND f.friendId = :friendId) OR (f.userId = :friendId AND f.friendId = :userId)")
+	void deleteFriendshipBothDirections(@Param("userId")
+	String userId, @Param("friendId")
+	String friendId);
+
 }

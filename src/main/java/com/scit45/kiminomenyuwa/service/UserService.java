@@ -4,23 +4,20 @@ import java.util.Optional;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional; // 변경된 임포트
 
 import com.scit45.kiminomenyuwa.domain.dto.UserDTO;
 import com.scit45.kiminomenyuwa.domain.entity.Role;
 import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
 import com.scit45.kiminomenyuwa.domain.repository.UserRepository;
 
-import jakarta.transaction.Transactional;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * 유저(계정 관련) 서비스
- * 사용자 등록, 조회 및 ID 확인 등의 계정 관련 기능을 처리하는 서비스 클래스
- */
 @Slf4j
 @Service
-@Transactional
+@Transactional // 변경된 애노테이션
 @RequiredArgsConstructor
 public class UserService {
 
@@ -80,5 +77,29 @@ public class UserService {
 	public Optional<UserEntity> findByUserId(String userId) {
 		// 사용자 ID를 기반으로 사용자 정보를 조회
 		return userRepository.findByUserId(userId);
+	}
+
+	/**
+	 * 사용자 정보를 불러오는 메서드
+	 * @param userId 현재 로그인 중인 userId
+	 * @return 사용자 정보가 담긴 UserDTO
+	 */
+	public UserDTO getUserByUserId(String userId) {
+		return userRepository.findByUserId(userId)
+			.map(user -> UserDTO.builder()
+				.userId(user.getUserId())
+				.name(user.getName())
+				.birthDate(user.getBirthDate()) // 사실 연령대를 구하기 위해 이게 필요했음
+				.email(user.getEmail())
+				.roadNameAddress(user.getRoadNameAddress())
+				.detailAddress(user.getDetailAddress())
+				.zipcode(user.getZipcode())
+				.phoneNumber(user.getPhoneNumber())
+				.profileImgUuid(user.getProfileImgUuid())
+				.role(user.getRole())
+				.enabled(user.getEnabled())
+				.createdTime(user.getCreatedTime())
+				.build())
+			.orElseThrow(() -> new EntityNotFoundException("User not found with id: " + userId));
 	}
 }

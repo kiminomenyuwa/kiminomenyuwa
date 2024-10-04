@@ -3,24 +3,26 @@ package com.scit45.kiminomenyuwa.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
-import java.util.Set;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.scit45.kiminomenyuwa.domain.dto.CategoryCountDTO;
+import com.scit45.kiminomenyuwa.domain.dto.FoodCategoryDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MiniGameMenuRatingDTO;
 import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
 import com.scit45.kiminomenyuwa.domain.entity.MiniGameMenuRatingEntity;
+import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
 import com.scit45.kiminomenyuwa.domain.repository.MenuCategoryMappingRepository;
 import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
 import com.scit45.kiminomenyuwa.domain.repository.MiniGameMenuRatingRepository;
+import com.scit45.kiminomenyuwa.domain.repository.StoreRepository;
+import com.scit45.kiminomenyuwa.domain.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.Builder;
@@ -43,6 +45,8 @@ public class MiniGameService {
 	private final MiniGameMenuRatingRepository ratingRepository;
 	private final MenuCategoryMappingRepository menuCategoryMappingRepository;
 	private final MenuService menuService;
+	private final UserRepository userRepository;
+	private final StoreRepository storeRepository;
 
 	/**
 	 * 모든 메뉴를 조회하고, DTO 리스트로 변환하여 반환하는 메서드.
@@ -59,7 +63,7 @@ public class MiniGameService {
 			// MenuEntity를 MenuDTO로 변환하여 리스트에 추가
 			menuDTOs.add(MenuDTO.builder()
 				.menuId(menuEntity.getMenuId())
-				.storeId(menuEntity.getStoreId())
+				.storeId(menuEntity.getStore().getStoreId())
 				.name(menuEntity.getName())
 				.price(menuEntity.getPrice())
 				.pictureUrl(menuEntity.getPictureUrl())
@@ -96,7 +100,7 @@ public class MiniGameService {
 			MenuEntity menu = menuEntity.get();
 			return MenuDTO.builder()
 				.menuId(menu.getMenuId())
-				.storeId(menu.getStoreId())
+				.storeId(menu.getStore().getStoreId())
 				.name(menu.getName())
 				.price(menu.getPrice())
 				.pictureUrl(menu.getPictureUrl())
@@ -129,6 +133,7 @@ public class MiniGameService {
 		return MenuDTO.builder()
 			.menuId(selectedMenu.getMenuId())
 			.name(selectedMenu.getName())
+			.pictureUrl(selectedMenu.getPictureUrl()) // 이미지 URL 추가
 			.build();
 	}
 
@@ -142,10 +147,15 @@ public class MiniGameService {
 	public void rateMenu(String userId, int menuId, float rating) {
 		log.info("평가 저장 시작 - userId: {}, menuId: {}, rating: {}", userId, menuId, rating);
 
+		UserEntity user = userRepository.findById(userId)
+			.orElseThrow(() -> new IllegalArgumentException("user : " + userId + "가 존재하지 않습니다."));
+		MenuEntity menu = menuRepository.findById(menuId)
+			.orElseThrow(() -> new IllegalArgumentException("menu :" + menuId + "가 존재하지 않습니다"));
+
 		// 평가 정보를 담은 엔티티 객체 생성
 		MiniGameMenuRatingEntity ratingEntity = new MiniGameMenuRatingEntity();
-		ratingEntity.setUserId(userId);
-		ratingEntity.setMenuId(menuId);
+		ratingEntity.setUser(user);
+		ratingEntity.setMenu(menu);
 		ratingEntity.setRating(rating);
 		ratingEntity.setRatingDate(LocalDateTime.now());
 
@@ -181,6 +191,7 @@ public class MiniGameService {
 		return MenuDTO.builder()
 			.menuId(selectedMenu.getMenuId())
 			.name(selectedMenu.getName())
+			.pictureUrl(selectedMenu.getPictureUrl()) // 이미지 URL 추가
 			.build();
 	}
 
@@ -193,13 +204,13 @@ public class MiniGameService {
 		// 별점 기준 내림차순으로 정렬
 		Sort sort = Sort.by(Sort.Direction.DESC, "rating");
 
-		List<MiniGameMenuRatingEntity> ratingEntities = ratingRepository.findByUserId(userId, sort);
+		List<MiniGameMenuRatingEntity> ratingEntities = ratingRepository.findByUser_UserId(userId, sort);
 		List<MiniGameMenuRatingDTO> miniGameRatingList = new ArrayList<>();
 		for (MiniGameMenuRatingEntity entity : ratingEntities) {
 			miniGameRatingList.add(MiniGameMenuRatingDTO.builder()
 				.ratingId(entity.getRatingId())
-				.userId(entity.getUserId())
-				.menuId(entity.getMenuId())
+				.userId(entity.getUser().getUserId())
+				.menuId(entity.getMenu().getMenuId())
 				.rating(entity.getRating())
 				.ratingDate(entity.getRatingDate())
 				.build());
@@ -215,7 +226,7 @@ public class MiniGameService {
 	public List<CategoryCountDTO> getCategoryScoresByUserId(String userId) {
 		// 1. 미니게임 내역을 불러옴
 		Sort sort = Sort.by(Sort.Direction.DESC, "rating");
-		List<MiniGameMenuRatingEntity> ratingEntities = ratingRepository.findByUserId(userId, sort);
+		List<MiniGameMenuRatingEntity> ratingEntities = ratingRepository.findByUser_UserId(userId, sort);
 
 		// 2. 카테고리별 점수 저장을 위한 Map 생성
 		Map<String, Long> categoryScores = new HashMap<>();
@@ -223,7 +234,7 @@ public class MiniGameService {
 		// 3. 각 미니게임 내역을 돌면서 카테고리 점수 계산
 		for (MiniGameMenuRatingEntity entity : ratingEntities) {
 			int rating = Math.round(entity.getRating()); // 평가 점수
-			Integer menuId = entity.getMenuId();
+			Integer menuId = entity.getMenu().getMenuId();
 
 			// 메뉴 ID로 해당 메뉴의 카테고리를 조회
 			List<String> categories = menuCategoryMappingRepository.findCategoriesByMenuId(menuId);
@@ -237,10 +248,8 @@ public class MiniGameService {
 		// 4. Map을 List<CategoryCountDTO>로 변환
 		List<CategoryCountDTO> categoryScoreList = new ArrayList<>();
 		for (Map.Entry<String, Long> entry : categoryScores.entrySet()) {
-			categoryScoreList.add(CategoryCountDTO.builder()
-				.categoryName(entry.getKey())
-				.categoryCount(entry.getValue())
-				.build());
+			categoryScoreList.add(
+				CategoryCountDTO.builder().categoryName(entry.getKey()).categoryCount(entry.getValue()).build());
 		}
 
 		// 5. 내림차순으로 정렬 (점수가 높은 순서대로)
@@ -275,10 +284,10 @@ public class MiniGameService {
 			int totalScore = 0;
 
 			if (menu.getCategories() != null) {
-				for (String category : menu.getCategories()) {
+				for (FoodCategoryDTO category : menu.getCategories()) {
 					// 카테고리가 categoryScoreMap에 존재하면 해당 카테고리의 점수를 더함
-					if (categoryScoreMap.containsKey(category)) {
-						totalScore += categoryScoreMap.get(category);
+					if (categoryScoreMap.containsKey(category.getCategoryName())) {
+						totalScore += categoryScoreMap.get(category.getCategoryName());
 					}
 				}
 			}
@@ -291,48 +300,26 @@ public class MiniGameService {
 		return menuScoreMap;
 	}
 
-	/**
-	 * 미니게임 점수 메뉴 추천 최종 메서드
-	 * @param userId 로그인 중인 userId
-	 * @return 미니게임 점수 기반 추천된 메뉴(미니게임 점수 기반 내림차순 정렬)
-	 */
-	public List<MenuDTO> recommendMenusByCategoryScores(String userId) {
-		// 1. 사용자 카테고리 점수 불러오기 (내림차순으로 정렬됨)
-		List<CategoryCountDTO> categoryScores = getCategoryScoresByUserId(userId);
+	public MenuDTO getRandomMenuByLocation(double latitude, double longitude, double radius) {
+		String pointWKT = String.format("POINT(%s %s)", longitude, latitude);
+		MenuEntity randomMenu = menuRepository.findRandomMenuWithinRadius(pointWKT, radius);
 
-		// 2. 모든 메뉴 불러오기
-		List<MenuDTO> allMenus = menuService.getAllMenus();
-
-		// 3. 카테고리 점수를 빠르게 조회하기 위한 Map 생성
-		Map<String, Integer> categoryScoreMap = new HashMap<>();
-		for (CategoryCountDTO categoryScore : categoryScores) {
-			categoryScoreMap.put(categoryScore.getCategoryName(), categoryScore.getCategoryCount().intValue());
+		if (randomMenu != null) {
+			return convertToMenuDTO(randomMenu);
+		} else {
+			return null; // 반경 내에 메뉴가 없는 경우
 		}
-
-		// 4. 각 메뉴별 점수를 저장할 Map 생성
-		Map<MenuDTO, Integer> menuScoreMap = new HashMap<>();
-
-		// 5. 각 메뉴의 카테고리 점수를 합산하여 메뉴 점수 계산
-		for (MenuDTO menu : allMenus) {
-			int totalScore = 0;
-
-			if (menu.getCategories() != null) {
-				for (String category : menu.getCategories()) {
-					// 카테고리가 categoryScoreMap에 존재하면 해당 카테고리의 점수를 더함
-					if (categoryScoreMap.containsKey(category)) {
-						totalScore += categoryScoreMap.get(category);
-					}
-				}
-			}
-
-			// 메뉴의 총 점수를 Map에 저장
-			menuScoreMap.put(menu, totalScore);
-		}
-		log.debug("menuScoreMap: {}", menuScoreMap);
-		// 6. 점수에 따라 메뉴를 내림차순으로 정렬
-		List<MenuDTO> recommendedMenus = new ArrayList<>(menuScoreMap.keySet());
-		recommendedMenus.sort((m1, m2) -> menuScoreMap.get(m2) - menuScoreMap.get(m1));
-
-		return recommendedMenus;
 	}
+
+	public MenuDTO convertToMenuDTO(MenuEntity menuEntity) {
+		return MenuDTO.builder()
+			.menuId(menuEntity.getMenuId())
+			.storeId(menuEntity.getStore().getStoreId()) // StoreEntity를 통해 storeId를 가져옴
+			.name(menuEntity.getName())
+			.price(menuEntity.getPrice())
+			.pictureUrl(menuEntity.getPictureUrl()) // 이미지 URL 포함
+			.enabled(menuEntity.getEnabled())
+			.build();
+	}
+
 }

@@ -3,11 +3,11 @@ package com.scit45.kiminomenyuwa.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
-import com.scit45.kiminomenyuwa.service.FriendshipService;
 import com.scit45.kiminomenyuwa.domain.dto.ProfilePhotoDTO;
 import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
+import com.scit45.kiminomenyuwa.service.FriendshipService;
 import com.scit45.kiminomenyuwa.service.MiniGameService;
 import com.scit45.kiminomenyuwa.service.ProfilePhotoService;
 
@@ -49,11 +49,12 @@ public class HomeController {
 	 * @return 홈 페이지 템플릿의 이름 (home.html)
 	 */
 	@GetMapping("/")
-	public String home(Model model, @AuthenticationPrincipal AuthenticatedUser user, HttpSession session) {
-    // 현재 로그인한 사용자의 ID 가져오기
+	public String home(Model model, @AuthenticationPrincipal
+	AuthenticatedUser user, HttpSession session) {
+		// 현재 로그인한 사용자의 ID 가져오기
 		String loggedInUserId = getLoggedInUserId();
 
-    // MiniGameService를 통해 DB에서 메뉴의 총 개수를 가져와 모델에 추가
+		// MiniGameService를 통해 DB에서 메뉴의 총 개수를 가져와 모델에 추가
 		long menuCount = miniGameService.countAllMenus();
 		model.addAttribute("menuCount", menuCount);
 
@@ -77,9 +78,9 @@ public class HomeController {
 				model.addAttribute("profilePhotoUrl", "/images/default-profile.png");
 			}
 		}
-
+		model.addAttribute("page", "home");
 		// 홈 페이지 템플릿으로 이동
-		return "home";
+		return "homepage";
 	}
 
 	// 로그인한 사용자의 ID를 가져오는 메서드
@@ -103,18 +104,15 @@ public class HomeController {
 	@ResponseBody
 	public MenuDTO saveRandomNumber(@RequestParam("randomNumber")
 	int randomNumber, HttpSession session) {
-		// 세션에서 이미 선택된 숫자 리스트를 가져옴, 없으면 빈 리스트 초기화
 		List<Integer> selectedNumbers = (List<Integer>)session.getAttribute("selectedNumbers");
 		if (selectedNumbers == null) {
 			selectedNumbers = new ArrayList<>();
 		}
 
-		// 새로운 랜덤 숫자를 리스트에 추가하고 세션에 저장
 		selectedNumbers.add(randomNumber);
 		session.setAttribute("selectedNumbers", selectedNumbers);
 
-		// 선택된 메뉴의 정보를 MiniGameService를 통해 조회하고 반환
-		return miniGameService.getMenuById(randomNumber);
+		return miniGameService.getMenuById(randomNumber); // MenuDTO 반환
 	}
 
 	/**
@@ -131,28 +129,44 @@ public class HomeController {
 
 	/**
 	 * 사용자가 메뉴 추천을 요청했을 때, DB에서 랜덤으로 메뉴를 가져와 반환하는 메서드입니다.
+	 * 위치 기반 추천을 위해 latitude, longitude, radius가 제공될 수 있습니다.
 	 *
+	 * @param latitude 사용자의 위도 (선택적)
+	 * @param longitude 사용자의 경도 (선택적)
+	 * @param radius 반경 (선택적)
 	 * @param session 사용자 세션을 관리하는 HttpSession 객체
 	 * @return 랜덤으로 선택된 메뉴의 정보를 담은 MenuDTO 객체
 	 */
 	@PostMapping("/get-random-menu")
 	@ResponseBody
-	public MenuDTO getRandomMenu(HttpSession session) {
-		// MiniGameService를 통해 랜덤으로 메뉴를 선택
-		MenuDTO randomMenu = miniGameService.getRandomMenu();
+	public MenuDTO getRandomMenu(
+		@RequestParam(value = "latitude", required = false)
+		Double latitude,
+		@RequestParam(value = "longitude", required = false)
+		Double longitude,
+		@RequestParam(value = "radius", required = false)
+		Double radius,
+		HttpSession session) {
 
-		// 이미 선택된 숫자를 세션에서 가져오기
 		List<Integer> selectedNumbers = (List<Integer>)session.getAttribute("selectedNumbers");
 		if (selectedNumbers == null) {
 			selectedNumbers = new ArrayList<>();
 		}
 
-		// 선택된 메뉴 ID를 리스트에 추가
+		MenuDTO randomMenu;
+
+		// 위치 정보가 있으면 위치 기반 메뉴 추천, 그렇지 않으면 일반 랜덤 추천
+		if (latitude != null && longitude != null && radius != null) {
+			randomMenu = miniGameService.getRandomMenuByLocation(latitude, longitude, radius);
+		} else {
+			randomMenu = miniGameService.getRandomMenu();
+		}
+
+		// 이미 선택된 메뉴는 다시 선택되지 않도록 처리
 		selectedNumbers.add(randomMenu.getMenuId());
 		session.setAttribute("selectedNumbers", selectedNumbers);
 
-		// 선택된 메뉴 정보를 반환
-		return randomMenu;
+		return randomMenu; // MenuDTO 반환
 	}
 
 	/**
@@ -183,4 +197,24 @@ public class HomeController {
 			throw e;
 		}
 	}
+
+	@PostMapping("/get-random-menu-by-location")
+	public ResponseEntity<MenuDTO> getRandomMenuByLocation(
+		@RequestParam("latitude")
+		double latitude,
+		@RequestParam("longitude")
+		double longitude,
+		@RequestParam("radius")
+		double radius) {
+
+		log.info("Received request with latitude: {}, longitude: {}, radius: {}", latitude, longitude, radius);
+
+		MenuDTO menu = miniGameService.getRandomMenuByLocation(latitude, longitude, radius);
+		if (menu != null) {
+			return ResponseEntity.ok(menu);
+		} else {
+			return ResponseEntity.noContent().build(); // 반경 내에 메뉴가 없는 경우
+		}
+	}
+
 }
