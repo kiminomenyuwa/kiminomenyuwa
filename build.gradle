@@ -45,8 +45,11 @@ dependencies {
     // Hibernate Spatial
     implementation 'org.hibernate.orm:hibernate-spatial:6.2.7.Final'
 
-    // Thymeleaf Layout Dialect 의존성
-    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0'
+    // 타임리프 레이아웃 다이얼렉트 의존성
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+
+    // Thymeleaf Spring Security Dialect
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6' // 최신 버전 확인 후 사용
 }
 
 tasks.named('test') {

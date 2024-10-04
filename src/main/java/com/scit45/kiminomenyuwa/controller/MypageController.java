@@ -52,6 +52,11 @@ public class MypageController {
 		return "mypageView/mypageMain";
 	}
 
+	@GetMapping
+	public String mypage() {
+		return "mypageView/mypage";
+	}
+
 	/**
 	 * 먹은 음식 내역
 	 * @return diningHistory.html
@@ -120,8 +125,8 @@ public class MypageController {
 		// 사용자의 미니게임 내역
 		List<MiniGameMenuRatingDTO> miniGameRatingList = miniGameService.getUsersMiniGameRatingAll(user.getId());
 		model.addAttribute("miniGameRatingList", miniGameRatingList);
-        return "mypageView/minigameHistory";
-    }
+		return "mypageView/minigameHistory";
+	}
 
 	/**
 	 * 예산을 저장하는 API

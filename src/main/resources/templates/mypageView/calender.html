@@ -1,20 +1,21 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{myPageLayout}">
+
+<th:block layout:fragment="styles">
     <meta charset="UTF-8">
     <title>식사 기록 캘린더</title>
 
     <!-- 필수 메타 태그 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap" rel="stylesheet">
 
     <!-- FullCalendar CSS -->
-    <link th:href="@{/fullcalendar/packages/core/main.css}" rel='stylesheet'/>
-    <link th:href="@{/fullcalendar/packages/daygrid/main.css}" rel='stylesheet'/>
+    <link rel='stylesheet' th:href="@{/fullcalendar/packages/core/main.css}"/>
+    <link rel='stylesheet' th:href="@{/fullcalendar/packages/daygrid/main.css}"/>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" th:href="@{/css/CalendarCss/bootstrap.min.css}">
@@ -22,113 +23,9 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" th:href="@{/css/CalendarCss/style.css}">
     <link rel="stylesheet" th:href="@{/css/CalendarCss/header.css}">
-</head>
+</th:block>
 
-<body>
-<!-- Header -->
-<header class="header">
-    <div class="header-left">
-        <button class="hamburger-menu" id="hamburger">&#9776;</button>
-        <img th:src="@{/images/logosample.png}" alt="사이트 로고" class="logo">
-    </div>
-
-    <div class="header-center">
-        <div class="search-container">
-            <!-- 검색창 왼쪽 -->
-            <input type="text" class="search-bar" placeholder="검색어를 입력하세요">
-
-            <!-- 구분 바 -->
-            <span class="divider"></span>
-
-            <!-- 위치 텍스트 -->
-            <span class="location-text">New York, NY</span>
-        </div>
-    </div>
-    <div class="header-right">
-            <span class="user-avatar" id="profile-menu-btn">
-                <img th:src="@{/images/avatar.jpg}" alt="User Avatar" class="profile-pic">
-            </span>
-
-        <!-- Dropdown Menu -->
-        <div class="dropdown-menu" id="dropdown-menu">
-            <ul>
-                <li><a href="#">마이페이지</a></li>
-                <li><a href="#">Find Friends</a></li>
-                <li><a href="#">Log Out</a></li>
-            </ul>
-        </div>
-    </div>
-</header>
-
-<!-- Hidden Sidebar Menu -->
-<div id="sideMenu" class="side-menu">
-    <div class="side-menu-content">
-        <h3>user name</h3>
-        <nav>
-            <ul>
-                <li><a href="#">link to MyPage</a></li>
-                <li><a href="#">link to business page</a></li>
-            </ul>
-        </nav>
-        <a href="#" class="logout">log out</a>
-    </div>
-</div>
-
-<!-- Overlay -->
-<div id="overlay" class="overlay"></div>
-
-<!-- Main Container -->
-<div class="container">
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="profile">
-            <img th:src="@{/images/avatar.jpg}" alt="Profile" class="profile-pic">
-            <h3>간을 좋아하는 범고래</h3>
-
-            <div class="profile-buttons">
-                <div class="button">
-                    <div class="icon">
-                        <img th:src="@{/images/default-profile.png}" alt="Edit Icon">
-                    </div>
-                    <span>프로필 편집</span>
-                </div>
-
-                <div class="button">
-                    <div class="icon">
-                        <img th:src="@{/images/default-profile.png}" alt="Add Friend Icon">
-                    </div>
-                    <span>친구 추가</span>
-                </div>
-            </div>
-        </div>
-
-        <nav>
-            <ul>
-                <li class="menu-item active">
-                    <img th:src="@{/images/default-profile.png}" alt="Profile Icon">
-                    <span>내 프로필</span>
-                </li>
-                <li class="menu-item">
-                    <img th:src="@{/images/default-profile.png}" alt="Reviews Icon">
-                    <span>내 리뷰</span>
-                </li>
-                <li class="menu-item">
-                    <img th:src="@{/images/default-profile.png}" alt="Drafts Icon">
-                    <span>친구</span>
-                </li>
-                <li class="menu-item">
-                    <img th:src="@{/images/default-profile.png}" alt="Collections Icon">
-                    <span>컬렉션</span>
-                </li>
-                <li class="menu-item">
-                    <img th:src="@{/images/default-profile.png}" alt="Events Icon">
-                    <span>내 이벤트</span>
-                </li>
-            </ul>
-        </nav>
-    </div>
-
-
+<div layout:fragment="content">
     <!-- Main Content -->
     <main class="contents">
         <section class="page-header">
@@ -176,340 +73,343 @@
     </main>
 </div>
 
-<!-- 프론트엔드 스크립트 -->
-<script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-<script th:src='@{/fullcalendar/packages/core/main.js}'></script>
-<script th:src='@{/fullcalendar/packages/interaction/main.js}'></script>
-<script th:src="@{/fullcalendar/packages/daygrid/main.js}"></script>
+<div layout:fragment="scripts">
+    <!-- 프론트엔드 스크립트 -->
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <script th:src='@{/fullcalendar/packages/core/main.js}'></script>
+    <script th:src='@{/fullcalendar/packages/interaction/main.js}'></script>
+    <script th:src="@{/fullcalendar/packages/daygrid/main.js}"></script>
 
-<!-- Bootstrap JS 및 의존성 (Popper.js) 추가 -->
-<script th:src="@{/js/CalendarJs/popper.min.js}"></script>
-<script th:src="@{/js/CalendarJs/bootstrap.min.js}"></script>
+    <!-- Bootstrap JS 및 의존성 (Popper.js) 추가 -->
+    <script th:src="@{/js/CalendarJs/popper.min.js}"></script>
+    <script th:src="@{/js/CalendarJs/bootstrap.min.js}"></script>
 
-<!-- 추가적인 스크립트가 필요하면 여기에 추가 -->
-<script>
-    $(document).ready(function () {
-        let currentDate = new Date(); // 현재 날짜
-        let selectedDate = null;
-        let selectedMenuId = null;
-        let monthlyBudget = 0;  // 설정된 예산
-        let totalSpent = 0;     // 총 소비 금액
+    <!-- 추가적인 스크립트가 필요하면 여기에 추가 -->
+    <script>
+        $(document).ready(function () {
+            let currentDate = new Date(); // 현재 날짜
+            let selectedDate = null;
+            let selectedMenuId = null;
+            let monthlyBudget = 0;  // 설정된 예산
+            let totalSpent = 0;     // 총 소비 금액
 
-        // 예산을 저장하는 함수
-        function saveMonthlyBudget() {
-            const currentUserId = '[[${#authentication.name}]]';
-            const year = currentDate.getFullYear();
-            // const month = currentDate.getMonth() + 1; // JavaScript 월은 0부터 시작
-            const month = calendar.getDate().getMonth() + 1;
-            console.log("현재 달력 달 : " + month);
+            // 예산을 저장하는 함수
+            function saveMonthlyBudget() {
+                const currentUserId = '[[${#authentication.name}]]';
+                const year = currentDate.getFullYear();
+                // const month = currentDate.getMonth() + 1; // JavaScript 월은 0부터 시작
+                const month = calendar.getDate().getMonth() + 1;
+                console.log("현재 달력 달 : " + month);
 
-            console.log("Saving Budget - Year:", year, "Month:", month, "Budget:", monthlyBudget);
+                console.log("Saving Budget - Year:", year, "Month:", month, "Budget:", monthlyBudget);
 
-            const formData = {
-                userId: currentUserId,
-                year: year,
-                month: month,
-                budget: monthlyBudget
-            };
-
-            $.ajax({
-                url: '/mypage/api/budget', // 절대 경로로 수정
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(formData),
-                success: function () {
-                    console.log(formData);
-                    alert('예산이 저장되었습니다.');
-                    loadMonthlyBudget(); // 남은 예산 업데이트
-                },
-                error: function (e) {
-                    console.log(JSON.stringify(e));
-                    alert('예산 저장에 실패했습니다.');
-                }
-            });
-        }
-
-        // 예산 초기화하는 함수
-        function initializeMonthlyBudget() {
-            const currentUserId = '[[${#authentication.name}]]';
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth() + 1; // JavaScript 월은 0부터 시작
-
-            $.ajax({
-                url: '/mypage/api/budget/initialize', // 절대 경로로 수정
-                method: 'POST',
-                data: {
-                    year: year,
-                    month: month
-                },
-                success: function () {
-                    alert('예산이 초기화되었습니다.');
-                    loadMonthlyBudget(); // 초기화 후 예산 다시 불러오기
-                },
-                error: function (e) {
-                    console.log(JSON.stringify(e));
-                    alert('예산 초기화에 실패했습니다.');
-                }
-            });
-        }
-
-        // 예산 설정 버튼 클릭 시 예산을 설정하고 저장
-        $('#setBudgetButton').on('click', function () {
-            monthlyBudget = parseInt($('#monthlyBudget').val()) || 0;  // 예산 설정
-            saveMonthlyBudget(); // 예산 저장 호출
-        });
-
-        // 예산 초기화 버튼 클릭 시 예산 초기화
-        $('#initializeBudgetButton').on('click', function () {
-            if (confirm('해당 월의 예산을 0으로 초기화하시겠습니까?')) {
-                initializeMonthlyBudget(); // 예산 초기화 호출
-            }
-        });
-
-        // 남은 예산을 계산하는 함수
-        function updateRemainingBudget() {
-            if (monthlyBudget === null || monthlyBudget === 0) { // 예산이 설정되지 않은 경우
-                $('#remainingBudget').text('입력한 예산이 없습니다.');
-            } else {
-                const remainingBudget = monthlyBudget - totalSpent;  // 남은 예산 = 예산 - 총 소비 금액
-                console.log("남은 예산", remainingBudget);
-                $('#remainingBudget').text(remainingBudget.toLocaleString() + "원"); // 남은 예산 표시
-            }
-        }
-
-        // 초기 로드 시 예산 불러오기
-        function loadMonthlyBudget() {
-            const currentUserId = '[[${#authentication.name}]]';
-            const year = currentDate.getFullYear();
-            const month = calendar.getDate().getMonth() + 1; // JavaScript 월은 0부터 시작
-
-            console.log("Loading Budget - Year:", year, "Month:", month);
-
-            $.ajax({
-                url: '/mypage/api/budget/remaining', // 절대 경로로 수정
-                method: 'GET',
-                data: {
-                    year: year,
-                    month: month
-                },
-                success: function (data) {
-                    console.log('불러온 예산 데이터', data);
-                    monthlyBudget = data.budget || 0; // 불러온 예산 설정
-                    updateRemainingBudget(); // 남은 예산 업데이트
-                },
-                error: function (e) {
-                    console.log(JSON.stringify(e));
-                    console.error('예산을 불러오는 데 실패했습니다.');
-                }
-            });
-        }
-
-        // 식사 기록을 저장하는 함수
-        function saveDiningHistory(selectedMenuName, selectedMenuPrice, calendar) {
-            const menuId = selectedMenuId;  // 실제 선택된 메뉴 ID로 대체
-            // 사용자가 선택한 날짜로 저장하도록 수정
-            const diningDate = `${selectedDate}T00:00:00`;
-            const currentUserId = '[[${#authentication.name}]]';
-
-            console.log('Selected Date:', selectedDate);
-            console.log('Dining Date:', diningDate);
-
-            $.ajax({
-                url: '/mypage/api/dining-history', // 절대 경로로 수정
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
+                const formData = {
                     userId: currentUserId,
-                    menuId: menuId,
-                    diningDate: diningDate // 수정된 부분
-                }),
-                success: function () {
-                    alert('식사 기록이 저장되었습니다.');
-                    // FullCalendar에 이벤트 추가
-                    calendar.addEvent({
-                        title: selectedMenuName,
-                        start: selectedDate, // 'YYYY-MM-DD' 형식
-                        allDay: true
-                    });
-
-                    totalSpent += selectedMenuPrice;
-                    updateRemainingBudget();
-                },
-                error: function () {
-                    alert('식사 기록을 저장하는 데 실패했습니다.');
-                    console.log(currentUserId);
-                }
-            });
-        }
-
-        // 식사 기록 불러오기
-        function loadDiningHistory(calendar) {
-            const currentUserId = '[[${#authentication.name}]]';
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth() + 1;
-            calendar.removeAllEvents();
-            $.ajax({
-                url: '/mypage/api/dining-history', // 절대 경로로 수정
-                method: 'GET',
-                data: {
                     year: year,
-                    month: month
-                },
-                success: function (data) {
-                    console.log("식사기록", data);
-                    totalSpent = 0; // 매 달 이동 시 초기화
-                    data.forEach(record => {
-                        try {
-                            console.log('Record diningDate:', record.diningDate);
+                    month: month,
+                    budget: monthlyBudget
+                };
 
-                            // diningDate가 배열인지 확인하고 배열인 경우 처리
-                            if (Array.isArray(record.diningDate)) {
-                                const [year, month, day] = record.diningDate;
+                $.ajax({
+                    url: '/mypage/api/budget', // 절대 경로로 수정
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function () {
+                        console.log(formData);
+                        alert('예산이 저장되었습니다.');
+                        loadMonthlyBudget(); // 남은 예산 업데이트
+                    },
+                    error: function (e) {
+                        console.log(JSON.stringify(e));
+                        alert('예산 저장에 실패했습니다.');
+                    }
+                });
+            }
 
-                                // JavaScript의 Date 객체는 월을 0부터 시작하므로 month-1로 설정
-                                const diningDate = new Date(year, month - 1, day);
+            // 예산 초기화하는 함수
+            function initializeMonthlyBudget() {
+                const currentUserId = '[[${#authentication.name}]]';
+                const year = currentDate.getFullYear();
+                const month = currentDate.getMonth() + 1; // JavaScript 월은 0부터 시작
 
-                                if (isNaN(diningDate)) {
-                                    console.error('Invalid diningDate after parsing:', record.diningDate);
-                                    return; // 유효하지 않은 경우 다음 반복으로 넘어감
-                                }
+                $.ajax({
+                    url: '/mypage/api/budget/initialize', // 절대 경로로 수정
+                    method: 'POST',
+                    data: {
+                        year: year,
+                        month: month
+                    },
+                    success: function () {
+                        alert('예산이 초기화되었습니다.');
+                        loadMonthlyBudget(); // 초기화 후 예산 다시 불러오기
+                    },
+                    error: function (e) {
+                        console.log(JSON.stringify(e));
+                        alert('예산 초기화에 실패했습니다.');
+                    }
+                });
+            }
 
-                                const parsedYear = diningDate.getFullYear();
-                                const parsedMonth = diningDate.getMonth(); // 0부터 시작
-                                console.log('Parsed Year:', parsedYear);
-                                console.log('Parsed Month:', parsedMonth);
+            // 예산 설정 버튼 클릭 시 예산을 설정하고 저장
+            $('#setBudgetButton').on('click', function () {
+                monthlyBudget = parseInt($('#monthlyBudget').val()) || 0;  // 예산 설정
+                saveMonthlyBudget(); // 예산 저장 호출
+            });
 
-                                // 해당 연도와 월에 맞는지 확인
-                                if (parsedYear === currentDate.getFullYear() && parsedMonth === currentDate.getMonth()) {
-                                    // 이후 로직 실행
-                                    $.ajax({
-                                        url: `/mypage/api/menus/${record.menuId}`, // 절대 경로로 수정
-                                        method: 'GET',
-                                        success: function (menu) {
-                                            const menuName = menu.name;  // 가져온 메뉴 이름
-                                            const menuPrice = menu.price;   // 메뉴 가격 추가
-                                            console.log('불러온 메뉴 가격:', menuPrice);
-
-                                            // FullCalendar에 이벤트 추가
-                                            calendar.addEvent({
-                                                title: menuName,
-                                                start: diningDate.toISOString().split('T')[0], // 'YYYY-MM-DD' 형식
-                                                allDay: true
-                                            });
-
-                                            totalSpent += menuPrice;  // 총 소비 금액 업데이트
-                                            updateRemainingBudget();  // 남은 예산 업데이트
-                                        },
-                                        error: function (e) {
-                                            console.error('Failed to fetch menu name for menuId:', record.menuId);
-                                            console.error('AJAX request failed with response:', e);
-                                        }
-                                    });
-                                }
-                            } else {
-                                console.error('Unexpected format for diningDate:', record.diningDate);
-                            }
-                        } catch (error) {
-                            console.error('Error processing dining record:', error);
-                        }
-                    });
-                },
-                error: function (e) {
-                    console.log(JSON.stringify(e));
-                    alert('식사 기록을 불러오는 데 실패했습니다.');
+            // 예산 초기화 버튼 클릭 시 예산 초기화
+            $('#initializeBudgetButton').on('click', function () {
+                if (confirm('해당 월의 예산을 0으로 초기화하시겠습니까?')) {
+                    initializeMonthlyBudget(); // 예산 초기화 호출
                 }
             });
-        }
 
-        // 가게 이름 입력 후 확인 버튼 클릭 시 메뉴 가져오기
-        $('#storeSubmitButton').on('click', function () {
-            const storeName = $('#storeNameInput').val();
-            if (storeName) {
-                // AJAX로 해당 가게의 메뉴 불러오기
+            // 남은 예산을 계산하는 함수
+            function updateRemainingBudget() {
+                if (monthlyBudget === null || monthlyBudget === 0) { // 예산이 설정되지 않은 경우
+                    $('#remainingBudget').text('입력한 예산이 없습니다.');
+                } else {
+                    const remainingBudget = monthlyBudget - totalSpent;  // 남은 예산 = 예산 - 총 소비 금액
+                    console.log("남은 예산", remainingBudget);
+                    $('#remainingBudget').text(remainingBudget.toLocaleString() + "원"); // 남은 예산 표시
+                }
+            }
+
+            // 초기 로드 시 예산 불러오기
+            function loadMonthlyBudget() {
+                const currentUserId = '[[${#authentication.name}]]';
+                const year = currentDate.getFullYear();
+                const month = calendar.getDate().getMonth() + 1; // JavaScript 월은 0부터 시작
+
+                console.log("Loading Budget - Year:", year, "Month:", month);
+
                 $.ajax({
-                    url: '/mypage/api/menus/store', // 절대 경로로 수정
+                    url: '/mypage/api/budget/remaining', // 절대 경로로 수정
                     method: 'GET',
-                    data: {storeName: storeName},
-                    success: function (menus) {
-                        $('#menuContainer').show();
-                        $('#menuList').empty();
-                        menus.forEach(menu => {
-                            const menuItem = $('<div class="d-flex align-items-center mb-2"></div>').text(menu.name);
-                            const selectButton = $('<button></button>')
-                                .text('선택')
-                                .addClass('btn btn-sm btn-success ml-2')
-                                .on('click', function () {
-                                    // 선택한 메뉴의 ID와 이름을 저장
-                                    selectedMenuId = menu.menuId;
+                    data: {
+                        year: year,
+                        month: month
+                    },
+                    success: function (data) {
+                        console.log('불러온 예산 데이터', data);
+                        monthlyBudget = data.budget || 0; // 불러온 예산 설정
+                        updateRemainingBudget(); // 남은 예산 업데이트
+                    },
+                    error: function (e) {
+                        console.log(JSON.stringify(e));
+                        console.error('예산을 불러오는 데 실패했습니다.');
+                    }
+                });
+            }
 
-                                    // 선택한 메뉴의 이름과 가격을 사용하여 셀에 표시
-                                    const selectedMenuName = menu.name;
-                                    const selectedMenuPrice = menu.price;
+            // 식사 기록을 저장하는 함수
+            function saveDiningHistory(selectedMenuName, selectedMenuPrice, calendar) {
+                const menuId = selectedMenuId;  // 실제 선택된 메뉴 ID로 대체
+                // 사용자가 선택한 날짜로 저장하도록 수정
+                const diningDate = `${selectedDate}T00:00:00`;
+                const currentUserId = '[[${#authentication.name}]]';
 
-                                    // 메뉴 가격도 추가
-                                    saveDiningHistory(selectedMenuName, selectedMenuPrice, calendar); // 선택된 메뉴 이름으로 저장 호출
-                                });
-                            $('#menuList').append(menuItem).append(selectButton);
+                console.log('Selected Date:', selectedDate);
+                console.log('Dining Date:', diningDate);
+
+                $.ajax({
+                    url: '/mypage/api/dining-history', // 절대 경로로 수정
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        userId: currentUserId,
+                        menuId: menuId,
+                        diningDate: diningDate // 수정된 부분
+                    }),
+                    success: function () {
+                        alert('식사 기록이 저장되었습니다.');
+                        // FullCalendar에 이벤트 추가
+                        calendar.addEvent({
+                            title: selectedMenuName,
+                            start: selectedDate, // 'YYYY-MM-DD' 형식
+                            allDay: true
+                        });
+
+                        totalSpent += selectedMenuPrice;
+                        updateRemainingBudget();
+                    },
+                    error: function () {
+                        alert('식사 기록을 저장하는 데 실패했습니다.');
+                        console.log(currentUserId);
+                    }
+                });
+            }
+
+            // 식사 기록 불러오기
+            function loadDiningHistory(calendar) {
+                const currentUserId = '[[${#authentication.name}]]';
+                const year = currentDate.getFullYear();
+                const month = currentDate.getMonth() + 1;
+                calendar.removeAllEvents();
+                $.ajax({
+                    url: '/mypage/api/dining-history', // 절대 경로로 수정
+                    method: 'GET',
+                    data: {
+                        year: year,
+                        month: month
+                    },
+                    success: function (data) {
+                        console.log("식사기록", data);
+                        totalSpent = 0; // 매 달 이동 시 초기화
+                        data.forEach(record => {
+                            try {
+                                console.log('Record diningDate:', record.diningDate);
+
+                                // diningDate가 배열인지 확인하고 배열인 경우 처리
+                                if (Array.isArray(record.diningDate)) {
+                                    const [year, month, day] = record.diningDate;
+
+                                    // JavaScript의 Date 객체는 월을 0부터 시작하므로 month-1로 설정
+                                    const diningDate = new Date(year, month - 1, day);
+
+                                    if (isNaN(diningDate)) {
+                                        console.error('Invalid diningDate after parsing:', record.diningDate);
+                                        return; // 유효하지 않은 경우 다음 반복으로 넘어감
+                                    }
+
+                                    const parsedYear = diningDate.getFullYear();
+                                    const parsedMonth = diningDate.getMonth(); // 0부터 시작
+                                    console.log('Parsed Year:', parsedYear);
+                                    console.log('Parsed Month:', parsedMonth);
+
+                                    // 해당 연도와 월에 맞는지 확인
+                                    if (parsedYear === currentDate.getFullYear() && parsedMonth === currentDate.getMonth()) {
+                                        // 이후 로직 실행
+                                        $.ajax({
+                                            url: `/mypage/api/menus/${record.menuId}`, // 절대 경로로 수정
+                                            method: 'GET',
+                                            success: function (menu) {
+                                                const menuName = menu.name;  // 가져온 메뉴 이름
+                                                const menuPrice = menu.price;   // 메뉴 가격 추가
+                                                console.log('불러온 메뉴 가격:', menuPrice);
+
+                                                // FullCalendar에 이벤트 추가
+                                                calendar.addEvent({
+                                                    title: menuName,
+                                                    start: diningDate.toISOString().split('T')[0], // 'YYYY-MM-DD' 형식
+                                                    allDay: true
+                                                });
+
+                                                totalSpent += menuPrice;  // 총 소비 금액 업데이트
+                                                updateRemainingBudget();  // 남은 예산 업데이트
+                                            },
+                                            error: function (e) {
+                                                console.error('Failed to fetch menu name for menuId:', record.menuId);
+                                                console.error('AJAX request failed with response:', e);
+                                            }
+                                        });
+                                    }
+                                } else {
+                                    console.error('Unexpected format for diningDate:', record.diningDate);
+                                }
+                            } catch (error) {
+                                console.error('Error processing dining record:', error);
+                            }
                         });
                     },
                     error: function (e) {
                         console.log(JSON.stringify(e));
-                        alert('메뉴를 불러오는 데 실패했습니다.');
+                        alert('식사 기록을 불러오는 데 실패했습니다.');
                     }
                 });
             }
-        });
 
-        // FullCalendar 초기화
-        var calendarEl = document.getElementById('calendar');
+            // 가게 이름 입력 후 확인 버튼 클릭 시 메뉴 가져오기
+            $('#storeSubmitButton').on('click', function () {
+                const storeName = $('#storeNameInput').val();
+                if (storeName) {
+                    // AJAX로 해당 가게의 메뉴 불러오기
+                    $.ajax({
+                        url: '/mypage/api/menus/store', // 절대 경로로 수정
+                        method: 'GET',
+                        data: {storeName: storeName},
+                        success: function (menus) {
+                            $('#menuContainer').show();
+                            $('#menuList').empty();
+                            menus.forEach(menu => {
+                                const menuItem = $('<div class="d-flex align-items-center mb-2"></div>').text(menu.name);
+                                const selectButton = $('<button></button>')
+                                    .text('선택')
+                                    .addClass('btn btn-sm btn-success ml-2')
+                                    .on('click', function () {
+                                        // 선택한 메뉴의 ID와 이름을 저장
+                                        selectedMenuId = menu.menuId;
 
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            plugins: ['interaction', 'dayGrid'],
-            initialView: 'dayGridMonth',
-            locale: 'ko',
-            editable: true,
-            eventLimit: true,
-            dateClick: function (info) { // 날짜 클릭 이벤트 핸들러 수정
-                // 클릭한 날짜 얻기
-                selectedDate = info.dateStr; // 'YYYY-MM-DD' 형식
-                console.log('Clicked Date:', selectedDate);
+                                        // 선택한 메뉴의 이름과 가격을 사용하여 셀에 표시
+                                        const selectedMenuName = menu.name;
+                                        const selectedMenuPrice = menu.price;
 
-                // 기존의 가게 입력 폼 표시
-                $('#storeForm').show();
-                $('#menuContainer').hide();
-            },
-            datesSet: function (info) {
-                // 캘린더 월이 변경될 때 예산 불러오기
-                currentDate = info.view.currentStart;
-                console.log("Updated currentDate: ", currentDate);
+                                        // 메뉴 가격도 추가
+                                        saveDiningHistory(selectedMenuName, selectedMenuPrice, calendar); // 선택된 메뉴 이름으로 저장 호출
+                                    });
+                                $('#menuList').append(menuItem).append(selectButton);
+                            });
+                        },
+                        error: function (e) {
+                            console.log(JSON.stringify(e));
+                            alert('메뉴를 불러오는 데 실패했습니다.');
+                        }
+                    });
+                }
+            });
+
+            // FullCalendar 초기화
+            var calendarEl = document.getElementById('calendar');
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                plugins: ['interaction', 'dayGrid'],
+                initialView: 'dayGridMonth',
+                locale: 'ko',
+                editable: true,
+                eventLimit: true,
+                dateClick: function (info) { // 날짜 클릭 이벤트 핸들러 수정
+                    // 클릭한 날짜 얻기
+                    selectedDate = info.dateStr; // 'YYYY-MM-DD' 형식
+                    console.log('Clicked Date:', selectedDate);
+
+                    // 기존의 가게 입력 폼 표시
+                    $('#storeForm').show();
+                    $('#menuContainer').hide();
+                },
+                datesSet: function (info) {
+                    // 캘린더 월이 변경될 때 예산 불러오기
+                    currentDate = info.view.currentStart;
+                    console.log("Updated currentDate: ", currentDate);
+                    loadMonthlyBudget();
+                }
+
+            });
+
+            calendar.render();
+
+            // 전월 버튼 클릭 시 예산 불러오기
+            $(document).on('click', '.fc-prev-button', function () {
+                currentDate = calendar.getDate(); // 현재 달의 시작 날짜 가져오기
+                console.log("Prev button clicked. Updated currentDate: ", currentDate);
                 loadMonthlyBudget();
-            }
+                loadDiningHistory(calendar);
+            });
 
-        });
+            // 다음 달 버튼 클릭 시 예산 불러오기
+            $(document).on('click', '.fc-next-button', function () {
+                currentDate = calendar.getDate(); // 현재 달의 시작 날짜 가져오기
+                console.log("Next button clicked. Updated currentDate: ", currentDate);
+                loadMonthlyBudget();
+                loadDiningHistory(calendar);
+            });
 
-        calendar.render();
-
-        // 전월 버튼 클릭 시 예산 불러오기
-        $(document).on('click', '.fc-prev-button', function () {
-            currentDate = calendar.getDate(); // 현재 달의 시작 날짜 가져오기
-            console.log("Prev button clicked. Updated currentDate: ", currentDate);
-            loadMonthlyBudget();
+            // 초기 로드 시 식사 기록 불러오기 및 예산 불러오기
             loadDiningHistory(calendar);
-        });
-
-        // 다음 달 버튼 클릭 시 예산 불러오기
-        $(document).on('click', '.fc-next-button', function () {
-            currentDate = calendar.getDate(); // 현재 달의 시작 날짜 가져오기
-            console.log("Next button clicked. Updated currentDate: ", currentDate);
+            console.log("loadDiningHistory", calendar);
             loadMonthlyBudget();
-            loadDiningHistory(calendar);
         });
-
-        // 초기 로드 시 식사 기록 불러오기 및 예산 불러오기
-        loadDiningHistory(calendar);
-        console.log("loadDiningHistory", calendar);
-        loadMonthlyBudget();
-    });
-</script>
-</body>
+    </script>
+    </script>
+</div>
 </html>
+
