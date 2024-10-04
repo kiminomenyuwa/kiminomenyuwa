@@ -1,60 +1,96 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+          content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>ID 중복확인</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <style>
-        p {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        body {
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        h1 {
+            color: #0d6efd;
+        }
+        .result-message {
+            margin-top: 20px;
+        }
+        #inputbutton i {
+            vertical-align: middle;
         }
     </style>
+
     <script>
         $(document).ready(function () {
+            // "ID 사용하기" 버튼 클릭 시 부모 창의 #id 필드에 값 설정 후 팝업 닫기
             $('#inputbutton').click(function () {
                 let id = $(this).data('id');
-                //let id = $(this).attr('data-id')
+                // 부모 창의 #id 필드에 값 설정
                 $(opener.document).find('#id').val(id);
-                //opener.document.getElementById('id').value = id;
-
-                // opener : 나를 부른 부모 창
+                // 팝업 창 닫기
                 window.close();
+            });
+
+            // 검색 폼 제출 시 검색 버튼을 비활성화하고 로딩 스피너 표시
+            $('#searchForm').on('submit', function () {
+                let $submitBtn = $(this).find('button[type="submit"]');
+                $submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> 검색 중...');
+                // 스피너 표시
+                $('#loadingSpinner').removeClass('d-none');
             });
         });
     </script>
 </head>
 <body>
-<h1>[ ID 중복 확인 ]</h1>
-<section>
-    <form id="searchForm" action="idCheck" method="post">
-        검색할 ID <input type="text" name="searchId" id="searchId"> <input
-            type="submit" value="검색">
+<div class="container">
+    <h1 class="text-center mb-4">ID 중복 확인</h1>
+    <form id="searchForm" action="idCheck" method="post" class="mb-4">
+        <div class="row g-3 justify-content-center align-items-center">
+            <div class="col-md-4">
+                <label for="searchId" class="col-form-label">검색할 ID</label>
+                <input type="text" name="searchId" id="searchId" class="form-control" placeholder="ID를 입력하세요" required>
+            </div>
+            <div class="col-md-2 position-relative">
+                <button type="submit" class="btn btn-primary w-100">검색</button>
+                <!-- 로딩 스피너 추가 -->
+                <div class="spinner-border text-primary spinner-border-sm position-absolute top-50 start-100 translate-middle-y ms-2 d-none" id="loadingSpinner" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
     </form>
 
-    <!-- 검색 후에만 출력 -->
-    <div th:if="${searchId != null}">
-        <!-- 사용 가능한 경우에만 출력 -->
-        <div th:if="${result}">
-            <p>
-                <span th:text="${searchId}"></span> <span> : 사용할 수 있는 ID입니다.</span>
-            </p>
-            <p>
-                <input type="button" value="ID사용하기" id="inputbutton"
-                       th:data-id="${searchId}">
-            </p>
+    <!-- 검색 후 결과 표시 -->
+    <div th:if="${searchId != null}" class="result-message">
+        <!-- 사용 가능한 경우 -->
+        <div th:if="${result}" class="alert alert-success d-flex justify-content-between align-items-center" role="alert">
+            <div>
+                <strong th:text="${searchId}"></strong> : 사용할 수 있는 ID입니다.
+            </div>
+            <button type="button" class="btn btn-success btn-sm" id="inputbutton" th:data-id="${searchId}" aria-label="ID 사용하기">
+                <i class="fas fa-check-circle me-1"></i> ID 사용하기
+            </button>
         </div>
-        <!-- 사용 불가능한 경우에만 출력 -->
-        <div th:if="${not result}">
-            <p>
-                <span th:text="${searchId}"></span><span> : 이미 사용중인 ID입니다.</span>
-            </p>
+        <!-- 사용 불가능한 경우 -->
+        <div th:if="${!result}" class="alert alert-danger" role="alert">
+            <strong th:text="${searchId}"></strong> : 이미 사용 중인 ID입니다.
         </div>
     </div>
-</section>
+</div>
 </body>
 </html>

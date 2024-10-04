@@ -29,7 +29,7 @@ public class BudgetRecommendController {
 
 	@GetMapping("/recommend/recommendByBudget")
 	public String recommendByBudget() {
-		return "recommendView/recommendByBudget"; // ��플�� 경로 변경
+		return "recommendView/recommendByBudget";
 	}
 
 	/**

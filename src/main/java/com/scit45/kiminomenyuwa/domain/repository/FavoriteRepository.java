@@ -17,4 +17,6 @@ public interface FavoriteRepository extends JpaRepository<FavoriteEntity, Intege
 
 	// 특정 사용자가 찜한 모든 상점 조회
 	List<FavoriteEntity> findByUser(UserEntity user);
+
+	Optional<FavoriteEntity> findByUser_UserIdAndStore_StoreId(String userId, Integer storeId);
 }

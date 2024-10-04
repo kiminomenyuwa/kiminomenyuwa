@@ -1,5 +1,6 @@
 package com.scit45.kiminomenyuwa.domain.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -38,7 +39,7 @@ public class MenuEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "store_id", nullable = false)
 	private StoreEntity store;
-	
+
 	@Column(name = "name")
 	private String name;
 
@@ -54,5 +55,5 @@ public class MenuEntity {
 	// 메뉴와 카테고리 간의 관계를 나타내는 매핑
 	@OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@ToString.Exclude // 무한 재귀 방지를 위해 제외
-	private List<MenuCategoryMappingEntity> categoryMappings;
+	private List<MenuCategoryMappingEntity> categoryMappings = new ArrayList<>();
 }

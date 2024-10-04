@@ -21,6 +21,7 @@ DROP TABLE IF EXISTS friendships;
 DROP TABLE IF EXISTS store_photo;
 DROP TABLE IF EXISTS favorite;
 DROP TABLE IF EXISTS budget;
+DROP TABLE IF EXISTS discount;
 
 -- 외래 키 제약을 다시 활성화
 SET FOREIGN_KEY_CHECKS = 1;
@@ -36,7 +37,7 @@ CREATE TABLE `category_type`
 -- 카테고리 테이블: 카테고리 항목을 정의 (예: 고추, 중식, 굽기)
 CREATE TABLE `food_category`
 (
-    `category_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `category_id`   INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `category_name` VARCHAR(50) NOT NULL, -- 카테고리 이름 (예: '고추', '중식', '굽기')
     `type_id`       INT         NOT NULL, -- 카테고리 타입 ID (외래 키)
     FOREIGN KEY (`type_id`) REFERENCES `category_type` (`type_id`)
@@ -79,7 +80,7 @@ CREATE TABLE `store`
     `category`          VARCHAR(30),                           -- 상점 카테고리
     `description`       TEXT,                                  -- 상점 설명
     `enabled`           TINYINT(1)         NOT NULL DEFAULT 1, -- 상점 활성화 여부
-    `location` POINT,
+    `location`          POINT,
     PRIMARY KEY (`store_id`),                                  -- 기본 키 설정
     FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`)
 );
@@ -226,9 +227,9 @@ CREATE UNIQUE INDEX friendship_unique_index ON friendships (user_id, friend_id);
 CREATE TABLE store_photo
 (
     photo_id  INT AUTO_INCREMENT PRIMARY KEY,
-    store_id  INT          NOT NULL,
-    photo_url VARCHAR(255) NOT NULL,
-    is_main BOOLEAN DEFAULT FALSE,
+    store_id  INT           NOT NULL,
+    photo_url VARCHAR(1000) NOT NULL,
+    is_main   BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (store_id) REFERENCES store (store_id) ON DELETE CASCADE
 );
 
@@ -254,3 +255,19 @@ CREATE TABLE `favorite`
     FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`) ON DELETE CASCADE,
     UNIQUE KEY unique_favorite (user_id, store_id)
 );
+
+-- Discount 테이블 생성
+CREATE TABLE Discount
+(
+    discount_id      INT AUTO_INCREMENT PRIMARY KEY,
+    menu_id          INT            NOT NULL,
+    original_price   DECIMAL(10, 2) NOT NULL,
+    discounted_price DECIMAL(10, 2) NOT NULL,
+    discount_rate    INT            NOT NULL,
+    FOREIGN KEY (menu_id) REFERENCES Menu (menu_id)
+);
+ALTER TABLE discount
+    MODIFY COLUMN original_price DECIMAL(10, 2) NOT NULL;
+ALTER TABLE discount
+    MODIFY COLUMN discounted_price DECIMAL(10, 2) NOT NULL;
+

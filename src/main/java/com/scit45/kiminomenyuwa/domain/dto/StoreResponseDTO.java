@@ -1,6 +1,8 @@
 package com.scit45.kiminomenyuwa.domain.dto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import lombok.Data;
 
@@ -19,6 +21,7 @@ public class StoreResponseDTO {
 	Boolean enabled;
 	Double longitude;
 	Double latitude;
-	Boolean favorited = false;
+	List<String> photoUrls = new ArrayList<>();
+	Boolean favorited;
 	LocalDateTime favoritedTime;
 }

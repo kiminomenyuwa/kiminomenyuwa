@@ -17,7 +17,6 @@ import com.scit45.kiminomenyuwa.domain.entity.ReviewEntity;
 import com.scit45.kiminomenyuwa.domain.entity.ReviewPhotoEntity;
 import com.scit45.kiminomenyuwa.domain.entity.StoreEntity;
 import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
-import com.scit45.kiminomenyuwa.domain.entity.verification.ReceiptVerificationEntity;
 import com.scit45.kiminomenyuwa.domain.repository.ReceiptVerificationRepository;
 import com.scit45.kiminomenyuwa.domain.repository.ReviewPhotoRepository;
 import com.scit45.kiminomenyuwa.domain.repository.ReviewRepository;
@@ -51,16 +50,18 @@ public class ReviewService {
         UserEntity reviewer = userRepository.findById(loggedUserId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
+
+        // TODO : 여기 주석 풀기 (테스트를 위해서 주석처리 해두었음)
         // 2. 영수증 인증 내역 조회
         // 인증 내역이 존재하지 않으면 리뷰 작성 불가
-        ReceiptVerificationEntity receiptVerification = receiptVerificationRepository.findByReviewerAndTargetStore(
-                        reviewer, store)
-                .orElseThrow(() -> new IllegalArgumentException("Receipt verification not found"));
-
-        // 3. 이미 리뷰가 작성된 인증 내역인지 확인
-        if (receiptVerification.getReview() != null) {
-            throw new IllegalArgumentException("A review has already been submitted for this receipt verification.");
-        }
+        // ReceiptVerificationEntity receiptVerification = receiptVerificationRepository.findByReviewerAndTargetStore(
+        //                 reviewer, store)
+        //         .orElseThrow(() -> new IllegalArgumentException("인증 내역이 존재하지 않습니다."));
+        //
+        // // 3. 이미 리뷰가 작성된 인증 내역인지 확인
+        // if (receiptVerification.getReview() != null) {
+        //     throw new IllegalArgumentException("A review has already been submitted for this receipt verification.");
+        // }
 
         // 4. 리뷰 생성 및 저장
         ReviewEntity reviewEntity = new ReviewEntity(store, reviewer, reviewRequestDTO.getRating(),
@@ -89,7 +90,7 @@ public class ReviewService {
         responseDTO.setUserId(savedReview.getUser().getUserId());
         responseDTO.setRating(savedReview.getRating());
         responseDTO.setComment(savedReview.getComment());
-        responseDTO.setCreatedTime(savedReview.getCreatedTime().toString()); // 필요에 따라 형식 수정
+        responseDTO.setCreatedTime(savedReview.getCreatedTime());
         responseDTO.setPhotoUrls(photoUrls);
 
         return responseDTO;
@@ -124,15 +125,7 @@ public class ReviewService {
         log.debug("filePath = {}", filePath);
 
         // 저장된 파일의 경로 반환 (예: "{reviewId}/{uniqueFileName}")
-        return "files/review/" + reviewId + "/" + uniqueFileName;
-    }
-
-    /**
-     * 가게 ID로 리뷰 목록을 조회하는 메서드
-     */
-    public List<ReviewEntity> getReviewsByStoreId(int storeId) {
-        // 가게 ID로 리뷰 목록 조회
-        return reviewRepository.findByStoreStoreId(storeId);
+        return "/files/review/" + reviewId + "/" + uniqueFileName;
     }
 
     /**
@@ -165,7 +158,7 @@ public class ReviewService {
         responseDTO.setUserId(reviewEntity.getUser().getUserId());
         responseDTO.setRating(reviewEntity.getRating());
         responseDTO.setComment(reviewEntity.getComment());
-        responseDTO.setCreatedTime(reviewEntity.getCreatedTime().toString());
+        responseDTO.setCreatedTime(reviewEntity.getCreatedTime());
 
         // 리뷰의 사진 URL 리스트 설정
         responseDTO.setPhotoUrls(getReviewPhotosByReviewId(reviewEntity.getReviewId()));

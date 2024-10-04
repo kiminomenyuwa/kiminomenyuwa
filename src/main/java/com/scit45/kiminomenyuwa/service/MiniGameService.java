@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.scit45.kiminomenyuwa.domain.dto.CategoryCountDTO;
+import com.scit45.kiminomenyuwa.domain.dto.FoodCategoryDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MiniGameMenuRatingDTO;
 import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
@@ -20,6 +21,7 @@ import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
 import com.scit45.kiminomenyuwa.domain.repository.MenuCategoryMappingRepository;
 import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
 import com.scit45.kiminomenyuwa.domain.repository.MiniGameMenuRatingRepository;
+import com.scit45.kiminomenyuwa.domain.repository.StoreRepository;
 import com.scit45.kiminomenyuwa.domain.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -44,6 +46,7 @@ public class MiniGameService {
 	private final MenuCategoryMappingRepository menuCategoryMappingRepository;
 	private final MenuService menuService;
 	private final UserRepository userRepository;
+	private final StoreRepository storeRepository;
 
 	/**
 	 * 모든 메뉴를 조회하고, DTO 리스트로 변환하여 반환하는 메서드.
@@ -130,6 +133,7 @@ public class MiniGameService {
 		return MenuDTO.builder()
 			.menuId(selectedMenu.getMenuId())
 			.name(selectedMenu.getName())
+			.pictureUrl(selectedMenu.getPictureUrl()) // 이미지 URL 추가
 			.build();
 	}
 
@@ -187,6 +191,7 @@ public class MiniGameService {
 		return MenuDTO.builder()
 			.menuId(selectedMenu.getMenuId())
 			.name(selectedMenu.getName())
+			.pictureUrl(selectedMenu.getPictureUrl()) // 이미지 URL 추가
 			.build();
 	}
 
@@ -243,10 +248,8 @@ public class MiniGameService {
 		// 4. Map을 List<CategoryCountDTO>로 변환
 		List<CategoryCountDTO> categoryScoreList = new ArrayList<>();
 		for (Map.Entry<String, Long> entry : categoryScores.entrySet()) {
-			categoryScoreList.add(CategoryCountDTO.builder()
-				.categoryName(entry.getKey())
-				.categoryCount(entry.getValue())
-				.build());
+			categoryScoreList.add(
+				CategoryCountDTO.builder().categoryName(entry.getKey()).categoryCount(entry.getValue()).build());
 		}
 
 		// 5. 내림차순으로 정렬 (점수가 높은 순서대로)
@@ -281,10 +284,10 @@ public class MiniGameService {
 			int totalScore = 0;
 
 			if (menu.getCategories() != null) {
-				for (String category : menu.getCategories()) {
+				for (FoodCategoryDTO category : menu.getCategories()) {
 					// 카테고리가 categoryScoreMap에 존재하면 해당 카테고리의 점수를 더함
-					if (categoryScoreMap.containsKey(category)) {
-						totalScore += categoryScoreMap.get(category);
+					if (categoryScoreMap.containsKey(category.getCategoryName())) {
+						totalScore += categoryScoreMap.get(category.getCategoryName());
 					}
 				}
 			}
@@ -296,4 +299,27 @@ public class MiniGameService {
 		// 6. menuScoreMap을 반환
 		return menuScoreMap;
 	}
+
+	public MenuDTO getRandomMenuByLocation(double latitude, double longitude, double radius) {
+		String pointWKT = String.format("POINT(%s %s)", longitude, latitude);
+		MenuEntity randomMenu = menuRepository.findRandomMenuWithinRadius(pointWKT, radius);
+
+		if (randomMenu != null) {
+			return convertToMenuDTO(randomMenu);
+		} else {
+			return null; // 반경 내에 메뉴가 없는 경우
+		}
+	}
+
+	public MenuDTO convertToMenuDTO(MenuEntity menuEntity) {
+		return MenuDTO.builder()
+			.menuId(menuEntity.getMenuId())
+			.storeId(menuEntity.getStore().getStoreId()) // StoreEntity를 통해 storeId를 가져옴
+			.name(menuEntity.getName())
+			.price(menuEntity.getPrice())
+			.pictureUrl(menuEntity.getPictureUrl()) // 이미지 URL 포함
+			.enabled(menuEntity.getEnabled())
+			.build();
+	}
+
 }

@@ -1,0 +1,223 @@
+<!-- src/main/resources/templates/merchantView/menuRegistration.html -->
+<!DOCTYPE html>
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>메뉴 등록</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 70px;
+        }
+
+        /* 선택된 카테고리 태그 스타일 */
+        .selected-category {
+            display: inline-block;
+            padding: 0.25em 0.4em;
+            margin: 0.2em;
+            font-size: 75%;
+            font-weight: 700;
+            line-height: 1;
+            color: #fff;
+            background-color: #0d6efd;
+            border-radius: 0.2rem;
+        }
+
+        .selected-category .remove-category {
+            margin-left: 0.5em;
+            cursor: pointer;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // 카테고리 검색 입력 필드에서 입력이 변경될 때마다 검색
+            $('#categorySearch').on('input', function () {
+                const query = $(this).val();
+                if (query.length > 1) { // 최소 2글자 이상 입력 시 검색 실행
+                    $.ajax({
+                        url: '/stores/api/search-categories',
+                        method: 'GET',
+                        data: {query: query},
+                        success: function (categories) {
+                            $('#searchResults').empty();
+                            categories.forEach(category => {
+                                const categoryItem = $('<button></button>')
+                                    .addClass('btn btn-outline-secondary me-2 mb-2')
+                                    .text(category.categoryName)
+                                    .click(function () {
+                                        addCategoryToSelectedList(category);
+                                        $('#categorySearch').val(''); // 검색 입력 필드 초기화
+                                        $('#searchResults').empty(); // 검색 결과 초기화
+                                    });
+                                $('#searchResults').append(categoryItem);
+                            });
+                        },
+                        error: function () {
+                            alert('카테고리를 검색하는 데 실패했습니다.');
+                        }
+                    });
+                } else {
+                    $('#searchResults').empty();
+                }
+            });
+
+            // 카테고리를 선택된 목록에 추가하는 함수
+            function addCategoryToSelectedList(category) {
+                // 중복된 카테고리 방지
+                if ($('#selectedCategories').find(`[data-id="${category.categoryId}"]`).length === 0) {
+                    const listItem = $('<li></li>')
+                        .addClass('selected-category')
+                        .attr('data-id', category.categoryId)
+                        .text(category.categoryName);
+                    const removeSpan = $('<span>&times;</span>')
+                        .addClass('remove-category')
+                        .click(function () {
+                            listItem.remove();
+                        });
+                    listItem.append(removeSpan);
+                    $('#selectedCategories').append(listItem);
+                }
+            }
+
+            // 메뉴 등록 버튼 클릭 시 동작
+            $('#registerMenuButton').click(function () {
+                const selectedCategories = [];
+                $('#selectedCategories li').each(function () {
+                    selectedCategories.push($(this).attr('data-id'));
+                });
+
+                if (selectedCategories.length === 0) {
+                    alert('최소 하나 이상의 카테고리를 선택해야 합니다.');
+                    return;
+                }
+
+                // 폼 데이터 수집
+                let formData = new FormData($('#menuForm')[0]);
+                selectedCategories.forEach(categoryId => {
+                    formData.append('categories', categoryId);
+                });
+
+                $.ajax({
+                    url: $('#registerMenuButton').data('url'),
+                    type: 'post',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        alert('메뉴가 정상적으로 등록되었습니다.');
+                        window.location.href = response; // 성공 시 메뉴 목록 페이지로 이동
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                        alert('메뉴 등록에 실패했습니다: ' + xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<!-- 네비게이션 바 -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/merchant/stores">가게 관리</a>
+        <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+                data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/merchant/stores">가게 목록</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/merchant/stores/registration">가게 등록</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/merchant/stores/registration">메뉴 등록</a>
+                </li>
+                <li class="nav-item">
+                    <span class="nav-link">
+                        로그인한 사장님: <strong th:text="${#authentication.principal.username}">사장님 이름</strong>
+                    </span>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/user/logout">로그아웃</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- 페이지 콘텐츠 -->
+<div class="container">
+    <h1 class="mb-4">메뉴 등록</h1>
+
+    <!-- 가게 정보 표시 -->
+    <div class="mb-4">
+        <h3>가게 정보</h3>
+        <p><strong>가게 이름:</strong> <span th:text="${storeDetails.name}">가게 이름</span></p>
+        <p><strong>카테고리:</strong> <span th:text="${storeDetails.category}">카테고리</span></p>
+    </div>
+
+    <!-- 메뉴 등록 폼 -->
+    <form enctype="multipart/form-data" id="menuForm">
+        <!-- 가게 ID를 숨겨진 필드로 포함 -->
+        <input name="storeId" th:value="${menuRegistrationDTO.storeId}" type="hidden"/>
+
+        <div class="mb-3">
+            <label class="form-label" for="name">메뉴 이름</label>
+            <input class="form-control" id="name" name="name" required type="text">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="price">가격</label>
+            <input class="form-control" id="price" min="0" name="price" required step="0.01" type="number">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="photo">메뉴 사진</label>
+            <input accept="image/*" class="form-control" id="photo" name="photo" required type="file">
+        </div>
+
+        <!-- 카테고리 검색 및 선택 -->
+        <div class="mb-3">
+            <label class="form-label" for="categorySearch">카테고리 검색</label>
+            <input class="form-control" id="categorySearch" placeholder="카테고리 검색" type="text">
+        </div>
+
+        <!-- 검색 결과가 표시되는 영역 -->
+        <div class="mb-3" id="searchResults">
+            <!-- 검색된 카테고리 항목이 동적으로 추가됩니다. -->
+        </div>
+
+        <!-- 선택된 카테고리 목록 -->
+        <h5>선택된 카테고리:</h5>
+        <ul class="list-group mb-3" id="selectedCategories"></ul>
+
+        <div class="mb-3">
+            <label class="form-label" for="enabled">활성화 상태</label>
+            <select class="form-select" id="enabled" name="enabled" required>
+                <option value="true">활성</option>
+                <option value="false">비활성</option>
+            </select>
+        </div>
+
+        <button class="btn btn-primary" id="registerMenuButton"
+                th:attr="data-url=@{'/merchant/stores/' + ${menuRegistrationDTO.storeId} + '/menus/registration'}"
+                type="button">메뉴 등록
+        </button>
+    </form>
+
+    <p class="mt-3 text-danger" id="response"></p>
+</div>
+
+<!-- Bootstrap JS 및 의존성 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

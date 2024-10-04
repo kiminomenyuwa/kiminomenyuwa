@@ -2,6 +2,7 @@ package com.scit45.kiminomenyuwa.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -11,10 +12,13 @@ import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.UserDiningHistoryDTO;
 import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
 import com.scit45.kiminomenyuwa.domain.entity.UserDiningHistoryEntity;
+import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
 import com.scit45.kiminomenyuwa.domain.repository.MenuCategoryMappingRepository;
 import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
 import com.scit45.kiminomenyuwa.domain.repository.UserDiningHistoryRepository;
+import com.scit45.kiminomenyuwa.domain.repository.UserRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +31,7 @@ public class UserDiningHistoryService {
 	private final MenuRepository menuRepository;
 	private final UserDiningHistoryRepository userDiningHistoryRepository;
 	private final MenuCategoryMappingRepository menuCategoryMappingRepository;
+	private final UserRepository userRepository;
 
 	/**
 	 * 현재 로그인 중인 사용자의 음식 먹은 내역을 List로 가져오는 메서드
@@ -88,7 +93,7 @@ public class UserDiningHistoryService {
 				.price(menuEntity.getPrice())
 				.pictureUrl(menuEntity.getPictureUrl())
 				.enabled(menuEntity.getEnabled())
-				.categories(categories) // 카테고리 리스트 추가
+				// .categories(categories) // 카테고리 리스트 추가
 				.build());
 		}
 
@@ -105,5 +110,23 @@ public class UserDiningHistoryService {
 			.stream()
 			.limit(10)
 			.collect(Collectors.toList());
+	}
+
+	/**
+	 * 사용자가 먹은 음식 내역을 저장하는 메서드
+	 * @param loggedInUserId 현재 로그인중인 UserId
+	 * @param foodName 음식의 이름
+	 */
+	public void saveDiningHistory(String loggedInUserId, String foodName) {
+		MenuEntity menu = menuRepository.findByName(foodName);
+		UserEntity user = userRepository.findById(loggedInUserId)
+			.orElseThrow(() -> new EntityNotFoundException("해당 Id의 유져가 없습니다 : " + loggedInUserId));
+
+        UserDiningHistoryEntity userDiningHistory = UserDiningHistoryEntity.builder()
+            .user(user)
+            .menu(menu)
+            .diningDate(java.time.LocalDateTime.now())
+            .build();
+        userDiningHistoryRepository.save(userDiningHistory);
 	}
 }

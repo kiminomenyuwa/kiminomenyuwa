@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class FoodCategoryDTO {
-
-	private String categoryName;
-	private Integer typeId;
+	Integer categoryId;
+	String categoryName;
+	Integer typeId;
 }
