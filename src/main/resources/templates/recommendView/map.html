@@ -150,6 +150,7 @@
         .highlighted-marker {
             animation: pulse 1.5s infinite;
         }
+
         @keyframes pulse {
             0% {
                 transform: scale(1);
@@ -171,6 +172,79 @@
             z-index: 2000;
             display: none;
         }
+
+        /* 가격 슬라이더 스타일링 */
+        .price-slider-container {
+            position: relative;
+            padding: 0 15px;
+        }
+
+        .price-slider-container::before,
+        .price-slider-container::after {
+            content: '0원';
+            position: absolute;
+            top: 0;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .price-slider-container::before {
+            left: 0;
+        }
+
+        .price-slider-container::after {
+            right: 0;
+            content: '30,000원';
+        }
+
+        #price-range {
+            width: 100%;
+            margin: 15px 0;
+            -webkit-appearance: none;
+            height: 8px;
+            border-radius: 5px;
+            background: #d3d3d3;
+            outline: none;
+            opacity: 0.7;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+        }
+
+        #price-range:hover {
+            opacity: 1;
+        }
+
+        #price-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #0d6efd;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 2px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        #price-range::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #0d6efd;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 2px rgba(0,0,0,0.5);
+        }
+
+        /* 현재 선택된 가격 표시 */
+        #price-display {
+            display: block;
+            text-align: center;
+            font-weight: bold;
+            margin-top: -10px;
+            color: #0d6efd;
+        }
     </style>
 </head>
 <body>
@@ -187,15 +261,24 @@
                     <select id="category-filter" class="form-select">
                         <option value="">모든 카테고리</option>
                         <!-- 카테고리 옵션을 여기에 동적으로 추가 -->
+                        <option value="한식">한식</option>
+                        <option value="중식">중식</option>
+                        <option value="일식">일식</option>
+                        <option value="양식">양식</option>
+                        <option value="분식">분식</option>
+                        <!-- 필요에 따라 추가 -->
                     </select>
                 </div>
                 <div class="col-md-6 mb-3 mb-md-0">
                     <label for="price-range" class="form-label">가격 범위</label>
-                    <input type="range" class="form-range" id="price-range" min="0" max="100000" step="1000">
-                    <span id="price-display">50,000원</span>
+                    <div class="price-slider-container">
+                        <input type="range" class="form-range" id="price-range" min="0" max="50000" step="1000" value="15000">
+                        <span id="price-display">15,000원</span>
+                    </div>
                 </div>
-                <div class="col-md-2 d-flex align-items-end">
-                    <button id="apply-filters" class="btn btn-primary w-100">필터 적용</button>
+                <div class="col-md-2 d-flex flex-column align-items-stretch">
+                    <button id="apply-filters" class="btn btn-primary w-100 mb-2">필터 적용</button>
+                    <button id="reset-filters" class="btn btn-secondary w-100">필터 초기화</button>
                 </div>
             </div>
         </div>
@@ -301,10 +384,19 @@
                     latitude: latitude,
                     longitude: longitude,
                     radius: 1000,
-                    limit: 10
+                    limit: 50 // 클라이언트 측에서 필터링할 수 있도록 더 많은 데이터를 가져옵니다.
                 },
                 success: function (response) {
                     console.log("Received response:", response);
+
+                    // 응답 데이터 유효성 검증
+                    if (!response || !response.recommendedMenus || !response.nearbyStores) {
+                        console.error("Invalid response structure:", response);
+                        alert("잘못된 데이터가 반환되었습니다. 다시 시도해주세요.");
+                        $('.loading-spinner').hide();
+                        isFetching = false;
+                        return;
+                    }
 
                     allRecommendations = {
                         hybrid: response.recommendedMenus,
@@ -320,14 +412,16 @@
 
                     console.log("Updated allStores:", allStores);
 
-                    // 추천 메뉴 슬라이더 업데이트
-                    displayRecommendations('hybrid', response.recommendedMenus);
-                    displayRecommendations('category', response.recommendedByCategoryScores);
-                    displayRecommendations('age', response.recommendedByUserAgeGroup);
-                    displayRecommendations('minigame', response.recommendedByMinigameScores);
+                    // 필터를 적용하여 메뉴를 필터링하고 슬라이더를 업데이트합니다.
+                    applyFilters();
 
-                    // 지도에 마커 표시 (초기 로딩 시)
+                    // 지도에 마커 표시 (초기 로딩 시 기본 추천 유형)
                     showRecommendationsOnMap('hybrid');
+
+                    // 결과가 없을 경우 사용자에게 알림
+                    if (response.recommendedMenus.length === 0) {
+                        alert("추천 메뉴가 없습니다.");
+                    }
 
                     // 로딩 스피너 숨기기
                     $('.loading-spinner').hide();
@@ -338,7 +432,41 @@
                     // 로딩 스피너 숨기기
                     $('.loading-spinner').hide();
                     isFetching = false; // 요청 완료
+                    alert("추천 메뉴를 가져오는 데 실패했습니다. 다시 시도해주세요.");
                 }
+            });
+        }
+
+        // 필터를 적용하여 추천 메뉴를 필터링하고 슬라이더를 업데이트하는 함수
+        function applyFilters() {
+            const category = $('#category-filter').val();
+            const maxPrice = Number($('#price-range').val());
+
+            // 각 추천 유형에 대해 필터링된 메뉴를 생성
+            const filteredRecommendations = {
+                hybrid: filterMenus(allRecommendations.hybrid, category, maxPrice),
+                category: filterMenus(allRecommendations.category, category, maxPrice),
+                age: filterMenus(allRecommendations.age, category, maxPrice),
+                minigame: filterMenus(allRecommendations.minigame, category, maxPrice)
+            };
+
+            // 추천 메뉴 슬라이더 업데이트
+            displayRecommendations('hybrid', filteredRecommendations.hybrid);
+            displayRecommendations('category', filteredRecommendations.category);
+            displayRecommendations('age', filteredRecommendations.age);
+            displayRecommendations('minigame', filteredRecommendations.minigame);
+
+            // 지도에 마커 업데이트
+            const activeType = $('.show-on-map.active').data('recommendation-type');
+            showRecommendationsOnMap(activeType);
+        }
+
+        // 메뉴를 카테고리와 가격으로 필터링하는 함수
+        function filterMenus(menus, category, maxPrice) {
+            return menus.filter(menu => {
+                const matchesCategory = category === '' || (menu.categories && menu.categories.some(cat => cat.categoryName === category));
+                const matchesPrice = Number(menu.price) <= maxPrice;
+                return matchesCategory && matchesPrice;
             });
         }
 
@@ -350,7 +478,20 @@
         // 메뉴 슬라이더 생성 함수
         function displayMenuSlider(containerId, menus) {
             const container = $(`#${containerId}`);
+
+            // 슬라이더가 이미 초기화되어 있다면 파괴(unslick)
+            if (container.hasClass('slick-initialized')) {
+                container.slick('unslick');
+            }
+
+            // 슬라이더 컨테이너 비우기
             container.empty();
+
+            // 새로운 슬라이드 추가
+            if (menus.length === 0) {
+                container.append('<p>해당 조건에 맞는 메뉴가 없습니다.</p>');
+                return;
+            }
 
             menus.forEach((menu, index) => {
                 let rankingClass = 'normal';
@@ -364,7 +505,7 @@
                     <img src="${menu.pictureUrl || '/images/default-menu.png'}" class="card-img-top menu-photo" alt="${menu.name}">
                     <div class="card-body">
                         <h5 class="card-title">${menu.name}</h5>
-                        <p class="card-text">가격: ${menu.price}원</p>
+                        <p class="card-text">가격: ${Number(menu.price).toLocaleString()}원</p>
                         <p class="card-text">${formatCategories(menu.categories)}</p>
                     </div>
                 </div>
@@ -372,11 +513,7 @@
                 container.append(menuCard);
             });
 
-            // 이미 slick이 초기화되어 있다면 초기화 해제
-            if (container.hasClass('slick-initialized')) {
-                container.slick('unslick');
-            }
-
+            // 슬라이더 초기화
             container.slick({
                 slidesToShow: 3,
                 slidesToScroll: 1,
@@ -421,6 +558,7 @@
 
         // 카테고리 포맷팅 함수
         function formatCategories(categories) {
+            if (!categories || !Array.isArray(categories)) return '';
             return categories.map(category =>
                 `<span class="badge bg-secondary badge-category">${category.categoryName}</span>`
             ).join(' ');
@@ -452,7 +590,7 @@
                     }
                 }
 
-                // 기존 아이콘 저장
+                // 기존 아이콘 저장 (필요 시)
                 const originalIcon = marker.getIcon();
 
                 // 마커 아이콘 변경 (강조)
@@ -493,7 +631,7 @@
             });
 
             const storeMenus = allRecommendations['hybrid'].filter(menu => menu.storeId === storeId);
-            const menuList = storeMenus.map(menu => `<li>${menu.name} - ${menu.price}원</li>`).join('');
+            const menuList = storeMenus.map(menu => `<li>${menu.name} - ${Number(menu.price).toLocaleString()}원</li>`).join('');
 
             const infoWindow = new naver.maps.InfoWindow({
                 content: `
@@ -555,7 +693,7 @@
                     });
 
                     const storeMenus = menus.filter(menu => menu.storeId === storeId);
-                    const menuList = storeMenus.map(menu => `<li>${menu.name} - ${menu.price}원</li>`).join('');
+                    const menuList = storeMenus.map(menu => `<li>${menu.name} - ${Number(menu.price).toLocaleString()}원</li>`).join('');
 
                     const infoWindow = new naver.maps.InfoWindow({
                         content: `
@@ -612,14 +750,14 @@
         // 지도 초기화
         initMap();
 
-        // 현재 위치 기반 추천 메뉴 가져오기
+        // 현재 위치 기반 추천 메뉴 가져오기 (초기 로딩)
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 const latitude = position.coords.latitude;
                 const longitude = position.coords.longitude;
 
                 map.setCenter(new naver.maps.LatLng(latitude, longitude));
-                fetchRecommendations(latitude, longitude);
+                fetchRecommendations(latitude, longitude); // 모든 카테고리, 최대 가격 30,000원은 클라이언트 측 필터링
             }, function () {
                 alert("위치 정보를 가져올 수 없습니다.");
             });
@@ -629,13 +767,18 @@
 
         // 필터 적용 버튼 클릭 이벤트
         $('#apply-filters').click(function () {
-            const category = $('#category-filter').val();
-            const maxPrice = $('#price-range').val();
+            applyFilters();
+        });
 
-            // 필터링 로직 추가
-            // 예: AJAX 요청을 다시 보내거나, 클라이언트 측에서 필터링
-            // 현재는 필터링 로직이 구현되지 않았습니다.
-            alert(`필터 적용: 카테고리 - ${category || '모든 카테고리'}, 최대 가격 - ${Number(maxPrice).toLocaleString()}원`);
+        // 필터 초기화 버튼 클릭 이벤트
+        $('#reset-filters').click(function () {
+            $('#category-filter').val('');
+            $('#price-range').val(15000); // 기본값을 15,000원으로 설정
+            $('#price-display').text('15,000원');
+
+            console.log(`Resetting filters - Category: All, Max Price: 15,000`);
+
+            applyFilters();
         });
 
         // 가격 범위 입력 시 표시 업데이트
@@ -655,7 +798,9 @@
         $('.get-recommendations').click(function () {
             if (!isFetching) {
                 const center = map.getCenter();
-                fetchRecommendations(center.lat(), center.lng());
+                const latitude = center.lat();
+                const longitude = center.lng();
+                fetchRecommendations(latitude, longitude);
             }
         });
 
