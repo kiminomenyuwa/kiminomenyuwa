@@ -34,9 +34,103 @@ VALUES
     ('1304', '20062', '콜드브루 아메리카노', '4300', 'http://imagefarm.baemin.com/smartmenuimage/upload/image/2024/1/19/zJxR401OnFKfgGr3W68yyzHB1Q2KVaujQHpjBEdEorhcBGcIbpiiZB7vjyDkyi6tv-_n6DhwUPlyC_F9QLuDrA==.jpg', 1),
     ('1305', '20062', '딸기 초코 라떼', '4900', 'http://imagefarm.baemin.com/smartmenuimage/upload/image/2024/6/20/fdP6CvUrXj8BMOEV8PVxS8dR9Crh8ERsYalnrXJ95gMHP5Ql3QW6BnWoo0hl3GWaTmqXfturDjbPrLpgqDwhgg==.jpg', 1);
 
+-- 밥스키친
 INSERT INTO `menu`
 VALUES
-    ('', '', '', '', '', 1);
+    ('1401', '22643', '9900뷔페', '9900', 'https://search.pstatic.net/common/?src=https%3A%2F%2Fpup-review-phinf.pstatic.net%2FMjAyNDAyMjhfMjkx%2FMDAxNzA5MDg0Mzc5Nzgx.ssp0af6G-TIyaZpzmhHa-7BTdD5G-nFsiPioiuyvduQg.aCF5cQk0d3-L6Ma_8G4rntXzT6Jalpig1rlB2dNLyHkg.JPEG%2F20240223_131037.jpg%3Ftype%3Dw1500_60_sharpen', 1),
+    ('1402', '22643', '튀김류', '9900', 'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzA5MjJfMzkg%2FMDAxNjk1MzcxNzgxODA2.h_TazHAnwEroVQSzif2i2-hz0fqK7nwd5__4LnoT5Cgg.E6GQzHZq2T5KayjbYhGcijflMVe72SIG4uXcdFNRZYgg.PNG.kakabuka%2Fimage.png', 1);
+
+-- KFC코엑스Mall
+INSERT INTO `menu`
+VALUES
+    ('1501', '22668 ', '핫크리스피통다리', '9600', 'https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20240517_205%2F1715914911852zdbwW_PNG%2F%25C7%25D6%25C5%25A9%25B8%25AE%25BD%25BA%25C7%25C7%25C5%25EB%25B4%25D9%25B8%25AE_8%25C1%25B6%25B0%25A2.png', 1),
+    ('1502', '22668 ', '핫크리스피치킨', '9300', 'https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20240517_37%2F1715914897487FszdX_PNG%2FHC_8%25C1%25B6%25B0%25A2.png', 1),
+    ('1503', '22668 ', '징거버거', '5900', 'https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20240319_228%2F17108198145082wAbb_PNG%2F%25C2%25A1%25B0%25C5%25B9%25F6%25B0%25C5_%25B4%25DC%25C7%25B0.png', 1),
+    ('1504', '22668 ', '징거타워버거', '6800', 'https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20240517_115%2F1715914863594SSs82_PNG%2F%25C2%25A1%25B0%25C5%25C5%25B8%25BF%25F6%25B9%25F6%25B0%25C5_%25B4%25DC%25C7%25B0.png', 1);
+
+-- 폴바셋
+INSERT INTO `menu`
+VALUES
+    ('1601', '22691', '커피(룽고)', '4900', 'https://ldb-phinf.pstatic.net/20241004_35/1728001524865k0UdC_JPEG/%B7%EE%B0%ED.jpg', 1),
+    ('1602', '22691', 'THE 아이스크림 카페라떼', '7000', 'https://www.baristapaulbassett.co.kr/upload/product/A/thumbnail_1_202406120442586881.png', 1),
+    ('1603', '22691', '까눌레', '4000', 'https://www.baristapaulbassett.co.kr/upload/product/D/thumbnail_1_201903210638467491.jpg', 1),
+    ('1604', '22691', 'BELT 샌드위치', '7000', 'https://www.baristapaulbassett.co.kr/upload/product/D/thumbnail_1_202405070416088281.png', 1),
+    ('1605', '22691', '베이컨에그 잉글리시머핀', '7000', 'https://www.baristapaulbassett.co.kr/upload/product/D/thumbnail_2_202403060133499500.png', 1);
+
+-- 신사골감자탕
+INSERT INTO `menu`
+VALUES
+    ('1701', '9734', '뼈해장국', '8000', 'https://ldb-phinf.pstatic.net/20211210_269/1639125471419JFbXy_JPEG/common6EU1GRL8.jpg', 1),
+    ('1702', '9734', '辛사골 감자탕', '25000', 'https://ldb-phinf.pstatic.net/20211210_221/163912552256969fNz_JPEG/KakaoTalk_20211209_173226292.jpg', 1),
+    ('1703', '9734', '황태해장국', '7000', 'https://ldb-phinf.pstatic.net/20211210_148/16391254876989wgS0_JPEG/commonKEW97I38.jpg', 1),
+    ('1704', '9734', '辛대왕 등뼈찜', '28000', 'https://ldb-phinf.pstatic.net/20211210_295/1639125671873Jn6Nv_JPEG/commonQ1T2R5N4.jpg', 1);
+
+-- 고씨떡볶이삼성점
+INSERT INTO `menu`
+VALUES
+    ('1801', '11370', '야채 떡볶이 2~3인', '13000', 'https://ldb-phinf.pstatic.net/20201208_78/1607374325072h3nHR_PNG/PiBoTBgkMrZWOTxX-tIFhWYH.png', 1),
+    ('1802', '11370', '순대', '6000', 'https://search.pstatic.net/common/?src=https%3A%2F%2Fpup-review-phinf.pstatic.net%2FMjAyMzA0MTZfNzMg%2FMDAxNjgxNjE4MDQzMjc5.5pqjP4ZICAA4kLQY0KLhvb_uQMFlBt-TKHlmRHqesFQg.nSBFcY7RYIKpXiDApSJrfffFym1vBtoFBmK7UXo4VDIg.JPEG%2F20230413_182312.jpg%3Ftype%3Dw1500_60_sharpen', 1),
+    ('1803', '11370', '오징어튀김추가', '1000', 'https://search.pstatic.net/common/?src=https%3A%2F%2Fpup-review-phinf.pstatic.net%2FMjAyMzA3MTZfMjI2%2FMDAxNjg5NDgwMjYxODY1.0muFg4PnISIOf75rzVIbRXYXDeJCOu2VRGMEW0tlynsg.A55fPQHdNjqC30ercJhOGSTWMrLiZmW0Btl1XEVRnagg.JPEG%2F1689479650610.jpg%3Ftype%3Dw1500_60_sharpen', 1),
+    ('1804', '11370', '볶음밥추가', '2000', 'https://search.pstatic.net/common/?src=https%3A%2F%2Fpup-review-phinf.pstatic.net%2FMjAyNDA1MDFfMTQ0%2FMDAxNzE0NTcxNDI0MTYy.b83vYyq-aOnikp-ZJ_r4fRTLaFSe9UIWKjTMawSxUzwg.G2eCv7Gaaye5f_XIr5pzHl41xnZk4ge7j5sHV9BZsl4g.JPEG%2F75626553-A7AE-44FF-9256-754E13EA4E9A.jpeg%3Ftype%3Dw1500_60_sharpen', 1),
+    ('1805', '11370', '쿨피스', '2000', 'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA5MDFfMjc5%2FMDAxNzI1MTE2NDAxMzI4.QqJSnteUUQYM-XbpDe19Mnb18dPZ1L4c5heUctKTZQAg.zAyb4r-thAYRy3CTagcv8tvtA7Zz903QnmI_6ZGGxV4g.JPEG%2FIMG_3128.jpg', 1);
+
+-- 153구포국수
+INSERT INTO `menu`
+VALUES
+    ('1901', '11374', '잔치국수', '7000', 'https://ldb-phinf.pstatic.net/20240529_216/17169095424707HJUC_JPEG/%C0%DC%C4%A1%B1%B9%BC%F6.jpg', 1),
+    ('1902', '11374', '153지단(계란) 김밥', '5000', 'https://search.pstatic.net/common/?src=https%3A%2F%2Fldb-phinf.pstatic.net%2F20240529_289%2F1716909626403hTVNL_JPEG%2F%25C1%25F6%25B4%25DC%25B0%25E8%25B6%25F5%25B1%25E8%25B9%25E4.jpg', 1),
+    ('1903', '11374', '비빔국수', '7500', 'https://ldb-phinf.pstatic.net/20240529_275/1716909593031Fm7GI_JPEG/%BA%F1%BA%F6%B1%B9%BC%F6.jpg', 1),
+    ('1904', '11374', '냉국수', '8000', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFYEf2EW2wcC3jtfIGROYMfpsj9sYafedGgA&s', 1),
+    ('1905', '11374', '매콤국수', '8000', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhafGQ0nrtQnO_lpotoyiJwhwVAExXsSxNHA&s', 1);
+
+-- 치킨잇수다
+INSERT INTO `menu`
+VALUES
+    ('2001', '13200', '순살후라이드', '18000', 'https://search.pstatic.net/common/?src=https%3A%2F%2Fpup-review-phinf.pstatic.net%2FMjAyNDAyMTZfMTE4%2FMDAxNzA4MDM2NjkwMjgy.lai1sagmIA3QOU4mNVkJ9w6cz5Q3TALx61k3IHpfcC8g.u9iu0PzmI0y5OTSFvelqmXvhfD7RIeIGDGxjqPm77iYg.JPEG%2F109535F3-58F6-471D-A8F2-CEB3FC7133E1.jpeg%3Ftype%3Dw1500_60_sharpen', 1),
+    ('2002', '13200', '순살양념치킨', '18000', 'https://search.pstatic.net/common/?src=https%3A%2F%2Fpup-review-phinf.pstatic.net%2FMjAyMzEwMTlfMjgy%2FMDAxNjk3NzE0NzI2OTkx.iFwFN3qkTiJZpUVh7eOEVcv8s8EBpiiI0J9ocvh5QUQg.mAKMI5AUXynbYrqBauMIcDAZ0e6zNQJa4HXNKLuqWPgg.JPEG%2Fupload_4f04851870899d50c7241a255492aabc.jpeg%3Ftype%3Dw1500_60_sharpen', 1),
+    ('2003', '13200', '순살데리야끼', '18000', 'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA3MDJfMTE5%2FMDAxNzE5OTI5MDM2NDUw.XNuGadSWHwTCQtsn1PCdZUWluvVmTinIxEAi0reNEXUg.rNxfzlzvsmbSwUdpRI2XiN0U80GjHGAVB1jx0yqaWHog.JPEG%2FIMG_2918.jpg', 1),
+    ('2004', '13200', '순살파닭', '18000', 'https://search.pstatic.net/common/?src=https%3A%2F%2Fpup-review-phinf.pstatic.net%2FMjAyMjA4MzBfMTQ0%2FMDAxNjYxODIwMTMxOTMx.nHbZLxSLW0-jrmpyXs_yXx1VFRAr8P8F04-JACX-G_Ug.8uGRLTBw18yqQak_0Eh83RHN1Roy5EShKviaB16CID4g.JPEG%2FF26FFB28-3B03-419E-9966-D9B7935F72EC.jpeg%3Ftype%3Dw1500_60_sharpen', 1),
+    ('2005', '13200', '생맥주', '5000', 'https://img.freepik.com/free-photo/front-view-of-glasses-of-beer-with-wheat_23-2148755010.jpg?size=626&ext=jpg&ga=GA1.1.1297763733.1727913600&semt=ais_hybrid', 1);
+
+-- 공차코엑스몰점
+INSERT INTO `menu`
+VALUES
+    ('2101', '13204', '블랙 밀크티 + 펄', '5000', 'https://www.gong-cha.co.kr/uploads/product/20231115/e3LFaozp5ymfJBjq_20231115.png', 1),
+    ('2102', '13204', '초콜렛 밀크티', '4500', 'https://www.gong-cha.co.kr/uploads/product/20231115/EcyZOUlTq9a82vXd_20231115.png', 1),
+    ('2103', '13204', '브라운슈가 쥬얼리 밀크티', '5500', 'https://www.gong-cha.co.kr/uploads/product/20231115/B9UxHobvNFipAdc6_20231115.png', 1),
+    ('2104', '13204', '밀크 쿠앤크 스무디', '5300', 'https://www.gong-cha.co.kr/uploads/product/20240429/y4EAQ10pzTc6tJPn_20240429.png', 1),
+    ('2105', '13204', '미니펄 트리플 딸기 크러쉬', '7100', 'https://www.gong-cha.co.kr/uploads/product/20240610/fZjqxPeT7gCNKBSv_20240610.png', 1);
+
+-- 팀호완삼성점
+INSERT INTO `menu`
+VALUES
+    ('2201', '13208', '하가우(3pcs)', '7500', 'https://timhowanusa.com/wp-content/uploads/elementor/thumbs/tim-ho-wan_steamed_steamed-shrimp-dumplings-ha-jiao_01_02-q5xmiqi0nx70n9y1vfs7u46pet8jcl1qh4wk2pmmpc.jpg', 1),
+    ('2202', '13208', '샤오마이(3pcs)', '7000', 'https://timhowanusa.com/wp-content/uploads/elementor/thumbs/tim-ho-wan_steamed_steamed-pork-dumpling-with-shrimp_01_02-q5xminoi3f35og25bwkc4mwbmnmfphqjgqy3mvqt80.jpg', 1),
+    ('2203', '13208', '차슈 라이스 롤(3pcs)', '8500', 'https://timhowanusa.com/wp-content/uploads/elementor/thumbs/tim-ho-wan_steamed-rice-roll_steamed-rice-rolls-stuffed-with-bbq-pork_02_01_web-q5xmj4llifqbhfdkl3vmdimmblb1k1lpj2ou9v1q40.jpg', 1),
+    ('2204', '13208', '부채교(3pcs)', '7000', 'https://timhowanusa.com/wp-content/uploads/elementor/thumbs/tim-ho-wan_steamed_steamed-shrimp-and-chives-dumplings_web-q5xmjd257y1wdx1a7pj9hyhro25chbjak8k7lcp6k0.jpg', 1),
+    ('2205', '13208', '새우 라이스 롤(3pcs)', '9500', 'https://timhowanusa.com/wp-content/uploads/elementor/thumbs/tim-ho-wan_steamed-rice-roll_steamed-rice-rolls-with-shrimp-and-chinese-chives_01_01_web-q5xmj5jfp9rlt1c7fma8y0e2wz6erqpfv7cbr50bxs.jpg', 1);
+
+-- 토리키치
+INSERT INTO `menu`
+VALUES
+    ('2301', '15491', '특선 야키토리 세트', '39000', 'https://ldb-phinf.pstatic.net/20240509_289/1715208105286vx7h8_PNG/%BD%BA%C5%A9%B8%B0%BC%A6_2024-03-21_%BF%C0%C0%FC_7.35.36.png', 1),
+    ('2302', '15491', '야키토리/쿠시카츠', '2900', 'https://ldb-phinf.pstatic.net/20240509_28/1715208170873cvbLK_PNG/%BD%BA%C5%A9%B8%B0%BC%A6_2024-03-26_%BF%C0%C0%FC_8.58.33.png', 1),
+    ('2303', '15491', '매운 테바나카 1pcs', '790', 'https://ldb-phinf.pstatic.net/20240509_92/1715208294536fSxhA_PNG/%BD%BA%C5%A9%B8%B0%BC%A6_2024-03-26_%BF%C0%C0%FC_9.01.50.png', 1),
+    ('2304', '15491', '해물탕', '23900', 'https://ldb-phinf.pstatic.net/20240509_217/17152082677081ok6L_PNG/%BD%BA%C5%A9%B8%B0%BC%A6_2024-05-04_%BF%C0%C0%FC_8.34.59.png', 1),
+    ('2305', '15491', '테라 병맥주', '5900', 'https://ldb-phinf.pstatic.net/20240509_257/1715208388874BFGIi_PNG/%BD%BA%C5%A9%B8%B0%BC%A6_2024-02-29_%BF%C0%C0%FC_9.03.14.png', 1);
+
+-- 아웃백스테이크하우스
+INSERT INTO `menu`
+VALUES
+    ('2401', '17693', '토마호크', '26000', 'https://ldb-phinf.pstatic.net/20240414_132/17131013629363Bup2_JPEG/%C5%E4%B8%B6%C8%A3%C5%A9%28%BC%F6%C1%A4%29.jpg', 1),
+    ('2402', '17693', '포터하우스', '30000', 'https://ldb-phinf.pstatic.net/20240716_56/1721095662763Ej8Tr_JPEG/04_%C6%F7%C5%CD%C7%CF%BF%EC%BD%BA.jpg', 1),
+    ('2403', '17693', '오지치즈후라이', '12000', 'https://mblogthumb-phinf.pstatic.net/MjAxODA0MjJfNzYg/MDAxNTI0Mzk2NTA4ODM5.KZ40KNSdPDnxXotl6zZeaSIAUrMtrnMwmEB1vo0CEGkg.RgC2DKP1csOnbnFGpWNHre4ONUZYt0boA1fC15MKnqcg.JPEG.tlrevolution/T_OUTBACK_01.jpg?type=w800', 1),
+    ('2404', '17693', '안심스테이크', '28000', 'https://m.outback.co.kr/upload/product/20240415/20240415012246748190.jpeg', 1),
+    ('2405', '17693', '부쉬맨 브레드', '0', 'https://foodfile.co.kr/_var/1512/20151217_130419__16x9.jpg', 1);
+
+# INSERT INTO `menu`
+# VALUES
+#     ('', '', '', '', '', 1);
 
 SET FOREIGN_KEY_CHECKS = 0;
 ALTER TABLE menu MODIFY COLUMN menu_id INT NOT NULL AUTO_INCREMENT;
