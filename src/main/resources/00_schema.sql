@@ -228,7 +228,7 @@ CREATE TABLE store_photo
 (
     photo_id  INT AUTO_INCREMENT PRIMARY KEY,
     store_id  INT          NOT NULL,
-    photo_url VARCHAR(255) NOT NULL,
+    photo_url VARCHAR(1000) NOT NULL,
     is_main BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (store_id) REFERENCES store (store_id) ON DELETE CASCADE
 );
