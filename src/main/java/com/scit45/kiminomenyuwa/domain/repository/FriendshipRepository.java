@@ -192,4 +192,12 @@ public interface FriendshipRepository extends JpaRepository<FriendshipEntity, In
 	String userId, @Param("friendId")
 	String friendId);
 
+	/**
+	 * ACCEPTED 상태의 친구 목록을 조회하는 쿼리 메서드
+	 * @param userId userId
+	 * @return ACCEPTED 상태의 친구 목록 반환
+	 */
+	@Query("SELECT f FROM FriendshipEntity f WHERE f.status = 'ACCEPTED' AND f.userId = :loggedInUserId AND f.friendId like %:query%")
+	List<FriendshipEntity> findFriendshipEntitiesByUserIdAndFriendIdContaining(@Param("loggedInUserId")
+	String userId, @Param("query") String query);
 }

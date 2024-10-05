@@ -23,6 +23,8 @@ DROP TABLE IF EXISTS store_photo;
 DROP TABLE IF EXISTS favorite;
 DROP TABLE IF EXISTS budget;
 DROP TABLE IF EXISTS discount;
+DROP TABLE IF EXISTS meeting;
+DROP TABLE IF EXISTS meeting_participants;
 
 -- 외래 키 제약을 다시 활성화
 SET FOREIGN_KEY_CHECKS = 1;
@@ -270,7 +272,27 @@ ALTER TABLE discount
 ALTER TABLE discount
     MODIFY COLUMN discounted_price DECIMAL(10, 2) NOT NULL;
 
+CREATE TABLE `meeting`
+(
+    `meeting_id`   INT AUTO_INCREMENT PRIMARY KEY,                                  -- 약속의 고유 ID
+    `host_user_id` VARCHAR(20)  NOT NULL,                                           -- 약속을 생성한 사용자 ID
+    `title`        VARCHAR(100) NOT NULL,                                           -- 약속 제목
+    `description`  TEXT,                                                            -- 약속 설명
+    `meeting_date` DATETIME     NOT NULL,                                           -- 약속 날짜 및 시간
+    `location`     VARCHAR(255) NOT NULL,                                           -- 약속 장소 (예: 상점 ID 또는 주소)
+    `created_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                             -- 약속 생성 시간
+    `updated_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- 약속 수정 시간
+    FOREIGN KEY (`host_user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE
+);
 
--- SQLBook: Code
-
--- SQLBook: Code
+CREATE TABLE `meeting_participants`
+(
+    `meeting_participant_id` INT AUTO_INCREMENT PRIMARY KEY,                                     -- 참여 ID
+    `meeting_id`             INT         NOT NULL,                                               -- 약속 ID
+    `user_id`                VARCHAR(20) NOT NULL,                                               -- 참여 사용자 ID
+    `status`                 ENUM ('INVITED', 'ACCEPTED', 'DECLINED') DEFAULT 'INVITED',         -- 참여 상태
+    `invited_time`           TIMESTAMP                                DEFAULT CURRENT_TIMESTAMP, -- 초대 시간
+    FOREIGN KEY (`meeting_id`) REFERENCES `meeting` (`meeting_id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE,
+    UNIQUE KEY `unique_participant` (`meeting_id`, `user_id`)
+);
