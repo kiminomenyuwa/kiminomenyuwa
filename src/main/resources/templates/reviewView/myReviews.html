@@ -13,6 +13,26 @@
     <title>나의 리뷰 내역</title>
 </head>
 <body>
-    <h1>나의 리뷰 내역</h1>
+<h1>나의 리뷰 내역</h1>
+
+<p th:text="|${#authentication.principal.name}님의 리뷰 내역|"></p>
+<table>
+    <tr>
+        <th>reviewId</th>
+        <th>userId</th>
+        <th>userProfileUrl</th>
+        <th>rating</th>
+        <th>comment</th>
+        <th>createdTime</th>
+    </tr>
+    <tr th:each="rvList : ${myReviewLists}">
+        <td th:text="${rvList.reviewId}"></td>
+        <td th:text="${rvList.userId}"></td>
+        <td th:text="${rvList.userProfileUrl}"></td>
+        <td th:text="${rvList.rating}"></td>
+        <td th:text="${rvList.comment}"></td>
+        <td th:text="${rvList.createdTime}"></td>
+    </tr>
+</table>
 </body>
 </html>
