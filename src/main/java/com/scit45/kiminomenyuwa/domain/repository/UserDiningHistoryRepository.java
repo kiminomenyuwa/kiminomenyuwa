@@ -19,7 +19,7 @@ public interface UserDiningHistoryRepository extends JpaRepository<UserDiningHis
 
 	//음식 내역중 중복으로 먹은 내역 제거
 	@Query("SELECT DISTINCT udh.menu.menuId FROM UserDiningHistoryEntity udh WHERE udh.user.userId = :userId")
-	List<Long> findDistinctMenuIdsByUserId(@Param("userId") String userId);
+	List<Integer> findDistinctMenuIdsByUserId(@Param("userId") String userId);
 
 	//사용자가 먹은 음식 내역의 카테고리 카운트 TOP 10
 	@Query(
@@ -44,7 +44,8 @@ public interface UserDiningHistoryRepository extends JpaRepository<UserDiningHis
 	 * @param pageable     결과 페이징 처리를 위한 Pageable 객체 (예: 상위 5개의 메뉴를 가져오기 위해 사용)
 	 * @return MenuCountDTO 리스트로, 각 메뉴의 ID, 먹은 횟수, 이름, 사진 URL이 포함됨
 	 */
-	@Query("SELECT new com.scit45.kiminomenyuwa.domain.dto.MenuCountDTO(udh.menu.menuId, COUNT(udh.menu.menuId), m.name, m.pictureUrl, m.price) " +
+	@Query("SELECT new com.scit45.kiminomenyuwa.domain.dto.MenuCountDTO(udh.menu.menuId, udh.menu.store.storeId, COUNT(udh.menu.menuId), m.name, m.pictureUrl, m.price) "
+		+
 		"FROM UserDiningHistoryEntity udh " +
 		"JOIN udh.user u " +
 		"JOIN udh.menu m " +

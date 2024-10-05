@@ -1,5 +1,3 @@
-delete
-from menu;
 -- 이마트 테스트 데이터
 INSERT INTO `menu`
 VALUES

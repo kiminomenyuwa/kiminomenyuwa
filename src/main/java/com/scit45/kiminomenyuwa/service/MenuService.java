@@ -70,32 +70,32 @@ public class MenuService {
 		return menuDTOs;
 	}
 
-	public List<MenuDTO> getMenusNotTried(String userId) {
-		List<Long> eatenMenuIds = userDiningHistoryRepository.findDistinctMenuIdsByUserId(userId);
-
-		// 메뉴와 카테고리 정보를 함께 가져오기
-		List<Object[]> menuWithCategories = menuRepository.findMenusWithCategoriesNotInMenuIds(eatenMenuIds);
-
-		List<MenuDTO> menuDTOs = new ArrayList<>();
-		for (Object[] row : menuWithCategories) {
-			MenuEntity menuEntity = (MenuEntity)row[0];
-			String categories = (String)row[1];
-
-			// MenuEntity를 MenuDTO로 변환하고 카테고리 리스트 추가
-			MenuDTO menuDTO = MenuDTO.builder()
-				.menuId(menuEntity.getMenuId())
-				.storeId(menuEntity.getStore().getStoreId())
-				.name(menuEntity.getName())
-				.price(menuEntity.getPrice())
-				.pictureUrl(menuEntity.getPictureUrl())
-				.enabled(menuEntity.getEnabled())
-//				.categories(Arrays.asList(categories.split(", "))) // 카테고리 추가
-				.build();
-
-			menuDTOs.add(menuDTO);
-		}
-		return menuDTOs;
-	}
+// 	public List<MenuDTO> getMenusNotTried(String userId) {
+// 		List<Long> eatenMenuIds = userDiningHistoryRepository.findDistinctMenuIdsByUserId(userId);
+//
+// 		// 메뉴와 카테고리 정보를 함께 가져오기
+// 		List<Object[]> menuWithCategories = menuRepository.findMenusWithCategoriesNotInMenuIds(eatenMenuIds);
+//
+// 		List<MenuDTO> menuDTOs = new ArrayList<>();
+// 		for (Object[] row : menuWithCategories) {
+// 			MenuEntity menuEntity = (MenuEntity)row[0];
+// 			String categories = (String)row[1];
+//
+// 			// MenuEntity를 MenuDTO로 변환하고 카테고리 리스트 추가
+// 			MenuDTO menuDTO = MenuDTO.builder()
+// 				.menuId(menuEntity.getMenuId())
+// 				.storeId(menuEntity.getStore().getStoreId())
+// 				.name(menuEntity.getName())
+// 				.price(menuEntity.getPrice())
+// 				.pictureUrl(menuEntity.getPictureUrl())
+// 				.enabled(menuEntity.getEnabled())
+// //				.categories(Arrays.asList(categories.split(", "))) // 카테고리 추가
+// 				.build();
+//
+// 			menuDTOs.add(menuDTO);
+// 		}
+// 		return menuDTOs;
+// 	}
 
 	/**
 	 * 특정 가게 ID에 속한 모든 메뉴를 조회하여 MenuDTO 리스트로 반환
