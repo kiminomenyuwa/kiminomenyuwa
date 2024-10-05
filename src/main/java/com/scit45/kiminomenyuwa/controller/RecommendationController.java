@@ -94,9 +94,6 @@ public class RecommendationController {
 			.map(Map.Entry::getKey)
 			.toList();
 
-
-
-
 		// 두 리스트를 포함하는 맵을 생성하여 반환합니다.
 		Map<String, Object> response = new HashMap<>();
 		response.put("nearbyStores", nearbyStores);
