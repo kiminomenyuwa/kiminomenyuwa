@@ -1053,3 +1053,23 @@ VALUES ('user59', '111.jpg', '111.jpg');
 INSERT INTO `profile_photo` (`user_id`, `original_name`, `saved_name`)
 VALUES ('user60', '111.jpg', '111.jpg');
 
+-- 친구 관계 추가
+INSERT INTO friendships (user_id, friend_id, status)
+VALUES
+    ('user01', 'user02', 'ACCEPTED'),
+    ('user01', 'user03', 'ACCEPTED'),
+    ('user02', 'user03', 'ACCEPTED'),
+    ('user02', 'user04', 'ACCEPTED'),
+    ('user03', 'user04', 'PENDING'),
+    ('user04', 'user05', 'ACCEPTED'),
+    ('user05', 'user06', 'ACCEPTED'),
+    ('user06', 'user07', 'ACCEPTED'),
+    ('user07', 'user08', 'PENDING'),
+    ('user08', 'user09', 'ACCEPTED'),
+    ('user09', 'user10', 'DECLINED'),
+    ('user01', 'user05', 'ACCEPTED'),
+    ('user02', 'user06', 'BLOCKED'),
+    ('user03', 'user07', 'ACCEPTED'),
+    ('user04', 'user08', 'PENDING'),
+    ('user05', 'user09', 'ACCEPTED'),
+    ('user06', 'user10', 'DECLINED');
