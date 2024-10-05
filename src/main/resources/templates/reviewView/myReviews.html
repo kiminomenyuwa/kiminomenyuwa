@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <!-- 테이블용 간단 css 호출 -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style01.css}"/>
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <title>나의 리뷰 내역</title>
+</head>
+<body>
+<h1>나의 리뷰 내역</h1>
+
+<p th:text="|${#authentication.principal.name}님의 리뷰 내역|"></p>
+<table>
+    <tr>
+        <th>reviewId</th>
+        <th>userId</th>
+        <th>userProfileUrl</th>
+        <th>rating</th>
+        <th>comment</th>
+        <th>createdTime</th>
+        <th>reviewPhoto</th>
+    </tr>
+    <tr th:each="rvList : ${myReviewLists}">
+        <td th:text="${rvList.reviewId}"></td>
+        <td th:text="${rvList.userId}"></td>
+        <td th:text="${rvList.userProfileUrl}"></td>
+        <td th:text="${rvList.rating}"></td>
+        <td th:text="${rvList.comment}"></td>
+        <td th:text="${rvList.createdTime}"></td>
+        <td>
+            <!-- photoUrls 리스트의 각 사진 URL을 출력하는 반복문 -->
+            <div th:each="photoUrl : ${rvList.photoUrls}">
+                <img th:src="@{${photoUrl}}" alt="review photo" style="width: 100px; height: auto;">
+            </div>
+        </td>
+    </tr>
+</table>
+</body>
+</html>
