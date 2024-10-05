@@ -92,7 +92,7 @@ public class RecommendationController {
 			.stream()
 			.sorted(Map.Entry.<MenuDTO, Integer>comparingByValue(Comparator.reverseOrder()))
 			.map(Map.Entry::getKey)
-			.toList().subList(0, 9);
+			.toList();
 
 
 
