@@ -78,7 +78,7 @@ public class HomeController {
 				model.addAttribute("profilePhotoUrl", "/images/default-profile.png");
 			}
 		}
-		model.addAttribute("page", "home");
+
 		// 홈 페이지 템플릿으로 이동
 		return "homepage";
 	}

@@ -10,9 +10,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.scit45.kiminomenyuwa.domain.dto.ProfilePhotoDTO;
+import com.scit45.kiminomenyuwa.domain.dto.UserProfileDTO;
 import com.scit45.kiminomenyuwa.domain.entity.ProfilePhotoEntity;
+import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
 import com.scit45.kiminomenyuwa.domain.repository.ProfilePhotoRepository;
+import com.scit45.kiminomenyuwa.domain.repository.UserRepository;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ProfilePhotoService {
 	//프로필 사진 DB처리
 	private final ProfilePhotoRepository profilePhotoRepository;
+	private final UserRepository userRepository;
 
 	/**
 	 * 프로필 사진 저장 메서드 : 파일명 UUID 변환 및 PhotoEntity에 저장
@@ -91,5 +96,25 @@ public class ProfilePhotoService {
 		ProfilePhotoDTO profilePhotoDTO = convertEntityToDTO(profilePhotoEntity);
 
 		return profilePhotoDTO;
+	}
+
+	public UserProfileDTO getUserWithProfilePhoto(String userId) {
+		UserEntity user = userRepository.findByUserId(userId).orElseThrow(EntityNotFoundException::new);
+		ProfilePhotoEntity profilePhoto = profilePhotoRepository.findByUserId(userId)
+			.orElseThrow(EntityNotFoundException::new);
+
+		return UserProfileDTO.builder()
+			.userId(user.getUserId())
+			.userName(user.getName())
+			.birthday(user.getBirthDate())
+			.sex(user.getGender().toString())
+			.profileUrl(profilePhoto.getSavedName())
+			.build();
+	}
+
+	public String getProfilePhotoUrlByUserId(String userId) {
+		return "/files" + profilePhotoRepository.findByUserId(userId)
+			.orElseThrow(EntityNotFoundException::new)
+			.getSavedName();
 	}
 }

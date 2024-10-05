@@ -34,8 +34,10 @@
 
             <!-- 로그인한 사용자에게 표시 -->
             <div sec:authorize="isAuthenticated()" class="user-menu">
+                <div class="welcome-message" sec:authorize="isAuthenticated()"
+                     th:text="|${#authentication.principal.name}님 환영합니다|"></div>
                 <span class="user-avatar" id="profile-menu-btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
-                    <img th:src="@{/images/avatar.jpg}" alt="User Avatar" id="header-profile-pic">
+                    <img th:src="@{${profilePhotoUrl}}" alt="User Avatar" id="header-profile-pic">
                 </span>
 
                 <div class="dropdown-menu dropdown-menu-right" id="dropdown-menu">
@@ -44,13 +46,41 @@
                         <li><a class="dropdown-item" th:href="@{/mypage}"><i
                                 class="fas fa-user me-2"></i>
                             마이페이지</a></li>
-                        <li><a class="dropdown-item" th:href="@{/friendships/list}"><i class="fas fa-user-friends me-2"></i> 친구
+                        <li><a class="dropdown-item" th:href="@{/friendships/list}"><i
+                                class="fas fa-user-friends me-2"></i> 친구
                             찾기</a></li>
-                                  <li><a class="dropdown-item" th:href="@{/user/logout}"><i class="fas fa-sign-out-alt me-2"></i>
-                                로그아웃</a></li>
+                        <li><a class="dropdown-item" th:href="@{/user/logout}"><i class="fas fa-sign-out-alt me-2"></i>
+                            로그아웃</a></li>
                     </ul>
                 </div>
             </div>
         </div>
     </header>
+
+    <style>
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .welcome-message {
+            font-size: 0.9rem;
+            margin-right: 15px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px;
+        }
+
+        @media (max-width: 768px) {
+            .welcome-message {
+                display: none;
+            }
+        }
+    </style>
 </div>
