@@ -9,7 +9,13 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Slick Slider CSS (필요 시) -->
     <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" rel="stylesheet" type="text/css"/>
-    <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" rel="stylesheet" type="text/css"/>
+    <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" rel="stylesheet"
+          type="text/css"/>
+
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+          integrity="sha512-dYq6CjV0i0y5+v/tTcnQm4M0W1KSkAoz1iQmB5F3Y5u/SxOf7HBLt/NZkMZy8Lg1E4CgVEoWdjvB5qRCbMqw2w=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <style>
         body {
             padding-top: 70px;
@@ -27,6 +33,45 @@
             margin-right: 5px;
         }
         /* 추가적인 스타일이 필요하면 여기에 작성 */
+        .header-center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .search-container {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+        }
+        .search-bar {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+        .divider {
+            width: 1px;
+            height: 24px;
+            background-color: #ced4da;
+            margin: 0 15px;
+        }
+        .location-text {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+        /* 검색 버튼 스타일 */
+        .search-button {
+            background-color: transparent;
+            border: none;
+            outline: none;
+            cursor: pointer;
+        }
+        .search-button .fa-search {
+            color: white;
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 <body>
@@ -38,7 +83,9 @@
             <input type="text" id="search-keyword" class="form-control" placeholder="가게 키워드를 입력하세요">
         </div>
         <div class="col-md-4">
-            <button id="search-button" class="btn btn-primary btn-block">검색</button>
+            <button id="search-button" class="btn btn-primary btn-block">
+                <i class="fas fa-search text-white"></i> 검색
+            </button>
         </div>
     </div>
 
@@ -111,7 +158,7 @@
             $.ajax({
                 url: '/stores/api/stores/keywordsearch',
                 type: 'GET',
-                data: { keyword: keyword, page: page, size: size },
+                data: {keyword: keyword, page: page, size: size},
                 success: function (data) {
                     console.log(data);
                     displaySearchResults(data.content)
