@@ -182,4 +182,13 @@ public class ReviewService {
                 .map(p -> "/files/" + p.getPhotoUrl())
                 .collect(Collectors.toList());
     }
+
+    public List<ReviewResponseDTO> getMyReviews(String userId) {
+        List<ReviewEntity> reviewEntities = reviewRepository.findAllByUserUserId(userId);
+
+        // ReviewEntity를 ReviewResponseDTO로 변환하여 DTO 리스트로 반환
+        return reviewEntities.stream()
+               .map(this::convertToDto)
+               .collect(Collectors.toList());
+    }
 }

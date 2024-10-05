@@ -1,5 +1,9 @@
 <div th:fragment="header">
     <header>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+              integrity="sha512-dYq6CjV0i0y5+v/tTcnQm4M0W1KSkAoz1iQmB5F3Y5u/SxOf7HBLt/NZkMZy8Lg1E4CgVEoWdjvB5qRCbMqw2w=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
         <!-- Header Content -->
         <div class="header-left">
             <button class="hamburger-menu" id="hamburger" aria-label="메뉴 열기" aria-expanded="false">&#9776;</button>
@@ -9,8 +13,13 @@
         </div>
 
         <div class="header-center">
-            <div class="search-container">
-                <input type="text" class="search-bar" placeholder="검색어를 입력하세요">
+            <div class="search-container d-flex align-items-center">
+                <form action="/stores/keywordsearch" method="get" class="d-flex align-items-center w-100">
+                    <input type="text" name="keyword" class="search-bar flex-grow-1" placeholder="검색어를 입력하세요" required>
+                    <button type="submit" class="btn btn-primary ml-2" aria-label="검색">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
                 <span class="divider"></span>
                 <span class="location-text">New York, NY</span>
             </div>
@@ -34,13 +43,9 @@
                         <li><a class="dropdown-item" th:href="@{/mypage}"><i
                                 class="fas fa-user me-2"></i>
                             마이페이지</a></li>
-                        <li><a class="dropdown-item" th:href="@{/friends}"><i class="fas fa-user-friends me-2"></i> 친구
+                        <li><a class="dropdown-item" th:href="@{/friendships/list}"><i class="fas fa-user-friends me-2"></i> 친구
                             찾기</a></li>
-                        <li><a class="dropdown-item" th:href="@{/notifications}"><i class="fas fa-bell me-2"></i> 알림</a>
-                        </li>
-                        <li><a class="dropdown-item" th:href="@{/settings}"><i class="fas fa-cog me-2"></i> 설정</a></li>
-                        <li><a class="dropdown-item" th:href="@{/help}"><i class="fas fa-question-circle me-2"></i> 도움말</a>
-                        </li>
+                        
                         <li><a class="dropdown-item" th:href="@{/user/logout}"><i class="fas fa-sign-out-alt me-2"></i>
                             로그아웃</a></li>
                     </ul>

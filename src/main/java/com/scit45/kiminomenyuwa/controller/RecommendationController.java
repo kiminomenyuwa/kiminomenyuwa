@@ -1,7 +1,7 @@
 package com.scit45.kiminomenyuwa.controller;// RecommendationController.java
 
-import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,14 +20,18 @@ import com.scit45.kiminomenyuwa.domain.dto.BudgetDTO;
 import com.scit45.kiminomenyuwa.domain.dto.CategoryCountDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.StoreResponseDTO;
+import com.scit45.kiminomenyuwa.domain.dto.UserDTO;
 import com.scit45.kiminomenyuwa.domain.dto.recommendation.MenuRecommendationDTO;
 import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
 import com.scit45.kiminomenyuwa.service.BudgetRecommendService;
 import com.scit45.kiminomenyuwa.service.MenuService;
 import com.scit45.kiminomenyuwa.service.MiniGameService;
 import com.scit45.kiminomenyuwa.service.MyPageService;
+import com.scit45.kiminomenyuwa.service.RecommendService;
 import com.scit45.kiminomenyuwa.service.StoreSearchService;
+import com.scit45.kiminomenyuwa.service.UserService;
 import com.scit45.kiminomenyuwa.service.recommendation.HybridRecommendationService;
+import com.scit45.kiminomenyuwa.utils.AgeUtils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +48,8 @@ public class RecommendationController {
 	private final MiniGameService minigameService;
 	private final MyPageService mypageService;
 	private final BudgetRecommendService budgetRecommendService;
+	private final RecommendService recommendService;
+	private final UserService userService;
 
 	@PostMapping("/nearby-menus")
 	@ResponseBody
@@ -63,15 +69,44 @@ public class RecommendationController {
 
 		log.debug("nearbyMenus = {}", nearbyMenus);
 		// 추천 순으로 메뉴를 정렬합니다.
-		List<MenuRecommendationDTO> recommendedMenus = hybridRecommendationService.sortMenusByRecommendation(
+		List<MenuRecommendationDTO> recommendedByHybrid = hybridRecommendationService.sortMenusByRecommendation(
 			user.getUsername(), nearbyMenus, limit);
+		log.debug("recommendedByHybrid = {}", recommendedByHybrid);
 
-		log.debug("recommendedMenus = {}", recommendedMenus);
+		// 카테고리 점수 기반 추천된 메뉴 리스트
+		List<MenuDTO> recommendedByCategoryScores = recommendService.recommendMenusByCategoryScores(user.getId(),
+			nearbyMenus);
+
+		// 사용자의 연령대 기반
+		// userId를 통해 UserDTO 조회
+		UserDTO userDTO = userService.getUserByUserId(user.getId());
+		// UserDTO에서 birthDate를 가져와서 연령대 계산
+		String ageGroup = AgeUtils.getAgeGroup(userDTO.getBirthDate());
+		List<MenuDTO> recommendedByUserAgeGroup = recommendService.recommendPopularMenusByAgeGroup(ageGroup,
+			nearbyMenus);
+
+		// 미니게임 기반 추천 순위
+		Map<MenuDTO, Integer> menusWithScore = minigameService.getMenuScoreMap(user.getId(), nearbyMenus);
+		// Map을 점수 기준으로 내림차순 정렬하여 List<MenuDTO> 생성
+		List<MenuDTO> recommendedByMinigameScores = menusWithScore.entrySet()
+			.stream()
+			.sorted(Map.Entry.<MenuDTO, Integer>comparingByValue(Comparator.reverseOrder()))
+			.map(Map.Entry::getKey)
+			.toList().subList(0, 9);
+
+
+
 
 		// 두 리스트를 포함하는 맵을 생성하여 반환합니다.
 		Map<String, Object> response = new HashMap<>();
-		response.put("nearbyStores", nearbyStores.stream().limit(10).collect(Collectors.toList()));
-		response.put("recommendedMenus", recommendedMenus);
+		response.put("nearbyStores", nearbyStores);
+		response.put("recommendedMenus", recommendedByHybrid.subList(0, Math.min(recommendedByHybrid.size(), 9)));
+		response.put("recommendedByCategoryScores",
+			recommendedByCategoryScores.subList(0, Math.min(recommendedByCategoryScores.size(), 9)));
+		response.put("recommendedByUserAgeGroup",
+			recommendedByUserAgeGroup.subList(0, Math.min(recommendedByUserAgeGroup.size(), 9)));
+		response.put("recommendedByMinigameScores",
+			recommendedByMinigameScores.subList(0, Math.min(recommendedByMinigameScores.size(), 9)));
 
 		return ResponseEntity.ok(response);
 	}
@@ -109,7 +144,8 @@ public class RecommendationController {
 			}
 
 			// 예산을 고려한 추천 메뉴 가져오기
-			List<MenuDTO> budgetRecommendedMenus = budgetRecommendService.getRecommendedMenus(remainingBudget, 30); // 남은 일수를 30일로 가정
+			List<MenuDTO> budgetRecommendedMenus = budgetRecommendService.getRecommendedMenus(remainingBudget,
+				30); // 남은 일수를 30일로 가정
 
 			response.put("budgetSet", true);
 			response.put("recommendedMenus", budgetRecommendedMenus);
@@ -149,8 +185,6 @@ public class RecommendationController {
 
 		return ResponseEntity.ok(response);
 	}
-
-
 
 	// 	// 남은 예산 조회
 	// 	BudgetDTO budgetDTO = mypageService.getRemainingBudget(userId, year, month);

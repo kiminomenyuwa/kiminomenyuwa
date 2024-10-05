@@ -1,6 +1,7 @@
 package com.scit45.kiminomenyuwa.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
@@ -16,12 +17,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.scit45.kiminomenyuwa.domain.dto.ReviewRequestDTO;
+import com.scit45.kiminomenyuwa.domain.dto.ReviewResponseDTO;
 import com.scit45.kiminomenyuwa.domain.dto.receipt.ReceiptDTO;
 import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
 import com.scit45.kiminomenyuwa.service.ReviewService;
 import com.scit45.kiminomenyuwa.service.UserDiningHistoryService;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -85,5 +88,19 @@ public class ReviewController {
 			response.put("redirect", "/stores/" + storeId);
 			return ResponseEntity.badRequest().body(response);
 		}
+	}
+
+	/**
+	 * 사용자의 전체 리뷰내역 페이지
+	 * @param user 현재 로그인 중인 id
+	 * @return 개인 리뷰내역 페이지
+	 */
+	@GetMapping("/myReview")
+	public String viewMyReviews(@AuthenticationPrincipal AuthenticatedUser user
+	, Model model) {
+		List<ReviewResponseDTO> myReviewLists = reviewService.getMyReviews(user.getId());
+		model.addAttribute("myReviewLists", myReviewLists);
+
+		return "reviewView/myReviews";
 	}
 }
