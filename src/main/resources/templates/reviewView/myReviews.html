@@ -1,45 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8"/>
-    <meta
-            name="viewport"
-            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-    />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <!-- 테이블용 간단 css 호출 -->
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style01.css}"/>
-    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
-    <title>나의 리뷰 내역</title>
-</head>
-<body>
-<h1>나의 리뷰 내역</h1>
+<html layout:decorate="~{myPageLayout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
 
-<p th:text="|${#authentication.principal.name}님의 리뷰 내역|"></p>
-<table>
-    <tr>
-        <th>reviewId</th>
-        <th>userId</th>
-        <th>userProfileUrl</th>
-        <th>rating</th>
-        <th>comment</th>
-        <th>createdTime</th>
-        <th>reviewPhoto</th>
-    </tr>
-    <tr th:each="rvList : ${myReviewLists}">
-        <td th:text="${rvList.reviewId}"></td>
-        <td th:text="${rvList.userId}"></td>
-        <td th:text="${rvList.userProfileUrl}"></td>
-        <td th:text="${rvList.rating}"></td>
-        <td th:text="${rvList.comment}"></td>
-        <td th:text="${rvList.createdTime}"></td>
-        <td>
-            <!-- photoUrls 리스트의 각 사진 URL을 출력하는 반복문 -->
-            <div th:each="photoUrl : ${rvList.photoUrls}">
-                <img th:src="@{${photoUrl}}" alt="review photo" style="width: 100px; height: auto;">
+<!-- Font Awesome CDN for icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+
+<style layout:fragment="styles">
+    /* 기본 스타일 */
+    .container {
+        display: flex;
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .profile-section {
+        flex: 1;
+        margin-right: 20px;
+    }
+
+    .review-section {
+        flex: 3;
+    }
+
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .card img {
+        max-width: 100px;
+        height: auto;
+        margin-right: 15px;
+    }
+
+    .card-body {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .card-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .review-meta {
+        color: #888;
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    .review-comment {
+        font-size: 16px;
+        color: #555;
+    }
+
+    .photo-container {
+        display: flex;
+        gap: 10px;
+    }
+
+    .photo-container img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+    }
+</style>
+
+<div layout:fragment="content">
+    <h1 class="mb-4 text-center">나의 리뷰 내역</h1>
+
+    <!-- 리뷰가 없는 경우 -->
+    <div class="text-center mt-5" th:if="${#lists.isEmpty(myReviewLists)}">
+        <p class="lead text-muted">작성한 리뷰가 없습니다.</p>
+    </div>
+
+    <!-- 리뷰 리스트 -->
+    <div class="review-section" th:unless="${#lists.isEmpty(myReviewLists)}">
+        <div th:each="rvList : ${myReviewLists}">
+            <div class="card">
+                <div class="card-body">
+                    <div class="review-info">
+                        <!-- 사용자 프로필 사진 -->
+                        <img th:src="${rvList.userProfileUrl}" alt="프로필 사진" class="profile-img rounded-circle">
+                        <div>
+                            <h5 class="card-title" th:text="${rvList.userId}">userId</h5>
+                            <p class="review-meta">
+                                <span th:text="${rvList.createdTime}">작성 시간</span> |
+                                평점: <span th:text="${rvList.rating}">평점</span>
+                            </p>
+                            <p class="review-comment" th:text="${rvList.comment}">리뷰 내용</p>
+                        </div>
+                    </div>
+                    <!-- 리뷰 사진들 -->
+                    <div class="photo-container" th:each="photoUrl : ${rvList.photoUrls}">
+                        <img th:src="@{${photoUrl}}" alt="리뷰 사진">
+                    </div>
+                </div>
             </div>
-        </td>
-    </tr>
-</table>
-</body>
+        </div>
+    </div>
+</div>
+
 </html>
