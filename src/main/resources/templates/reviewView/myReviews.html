@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html layout:decorate="~{myPageLayout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
+
+<!-- Font Awesome CDN for icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+
+<style layout:fragment="styles">
+    /* 기본 스타일 */
+    .container {
+        display: flex;
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .profile-section {
+        flex: 1;
+        margin-right: 20px;
+    }
+
+    .review-section {
+        flex: 3;
+    }
+
+    .card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .card img {
+        max-width: 100px;
+        height: auto;
+        margin-right: 15px;
+    }
+
+    .card-body {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .card-title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .review-meta {
+        color: #888;
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+
+    .review-comment {
+        font-size: 16px;
+        color: #555;
+    }
+
+    .photo-container {
+        display: flex;
+        gap: 10px;
+    }
+
+    .photo-container img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+    }
+
+    .rating-stars {
+        color: #FFD700; /* 별 색상 */
+        font-size: 18px;
+        margin-bottom: 10px; /* 별점과 코멘트 사이의 여백 */
+    }
+</style>
+
+<div layout:fragment="content">
+    <h1 class="mb-4 text-center">나의 리뷰 내역</h1>
+
+    <!-- 리뷰가 없는 경우 -->
+    <div class="text-center mt-5" th:if="${#lists.isEmpty(myReviewLists)}">
+        <p class="lead text-muted">작성한 리뷰가 없습니다.</p>
+    </div>
+
+    <!-- 리뷰 리스트 -->
+    <div class="review-section" th:unless="${#lists.isEmpty(myReviewLists)}">
+        <div th:each="rvList : ${myReviewLists}">
+            <div class="card">
+                <div class="card-body">
+                    <div class="review-info">
+                        <!-- 사용자 프로필 사진 -->
+                        <img th:src="${rvList.userProfileUrl}" alt="프로필 사진" class="profile-img rounded-circle">
+                        <div>
+                            <h5 class="card-title" th:text="${rvList.userId}">userId</h5>
+                            <p class="review-meta">
+                                <span th:text="${rvList.createdTime}">작성 시간</span>
+                            </p>
+
+                            <!-- 평점 표시 (별 모양) -->
+                            <div class="rating-stars">
+                                <i class="fa fa-star" th:each="i : ${#numbers.sequence(1, rvList.rating)}"></i>
+                                <i class="fa fa-star-o" th:each="i : ${#numbers.sequence(rvList.rating + 1, 5)}"></i>
+                            </div>
+
+                            <!-- 리뷰 코멘트 -->
+                            <p class="review-comment" th:text="${rvList.comment}">리뷰 내용</p>
+                        </div>
+                    </div>
+                    <!-- 리뷰 사진들 -->
+                    <div class="photo-container" th:each="photoUrl : ${rvList.photoUrls}">
+                        <img th:src="@{${photoUrl}}" alt="리뷰 사진">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</html>

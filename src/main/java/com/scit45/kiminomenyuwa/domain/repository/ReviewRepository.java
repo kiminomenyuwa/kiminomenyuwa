@@ -13,4 +13,7 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Integer> {
 	List<ReviewEntity> findByStore(StoreEntity store);
 
 	List<ReviewEntity> findByStoreStoreId(Integer storeId);
+
+	// 로그인 중인 사용자의 모든 리뷰 내역을 불러오는 메서드
+	List<ReviewEntity> findAllByUserUserId(String userId);
 }
