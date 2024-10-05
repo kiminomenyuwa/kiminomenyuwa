@@ -24,6 +24,7 @@
         <th>rating</th>
         <th>comment</th>
         <th>createdTime</th>
+        <th>reviewPhoto</th>
     </tr>
     <tr th:each="rvList : ${myReviewLists}">
         <td th:text="${rvList.reviewId}"></td>
@@ -32,6 +33,12 @@
         <td th:text="${rvList.rating}"></td>
         <td th:text="${rvList.comment}"></td>
         <td th:text="${rvList.createdTime}"></td>
+        <td>
+            <!-- photoUrls 리스트의 각 사진 URL을 출력하는 반복문 -->
+            <div th:each="photoUrl : ${rvList.photoUrls}">
+                <img th:src="@{${photoUrl}}" alt="review photo" style="width: 100px; height: auto;">
+            </div>
+        </td>
     </tr>
 </table>
 </body>
