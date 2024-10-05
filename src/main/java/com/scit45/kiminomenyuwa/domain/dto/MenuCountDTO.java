@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MenuCountDTO {
 	Integer menuId;
+	Integer storeId;
 	Long menuCount;
 	String name;
 	String pictureUrl;
