@@ -6,7 +6,7 @@
     /*}*/
 
     /* 프로필 이미지 테두리 스타일 */
-    .profile-pic {
+    .profile-picture {
         border: 2px solid #007bff;
     }
 
@@ -24,28 +24,31 @@
         background-color: #e0e0e0;
         border-radius: 5px;
     }
-
 </style>
 
 <div th:fragment="list">
     <!-- Sidebar Container -->
-    <div class="d-flex flex-column align-items-center p-4 bg-light rounded" style="width: 250px;">
+    <div id="side-box" class="d-flex flex-column align-items-center p-4 bg-light rounded">
         <!-- Profile Section -->
-        <div class="text-center mb-4">
-            <img src="./images/avatar.jpg" alt="Profile" class="rounded-circle mb-2 profile-pic" width="100" height="100">
-            <h4 class="mb-3">간을 좋아하는 범고래</h4>
+        <div class="text-center mb-4" id="side-profile-box">
+            <img th:src="@{/images/avatar.jpg}" alt="Profile" id="side-prof-img"
+                class="rounded-circle mb-2 profile-picture">
+            <h4 class="side-prof-id">간을 좋아하는 범고래</h4>
 
-            <div class="d-flex justify-content-center gap-2">
+            <div class="d-flex justify-content-center gap-2" style="justify-content: space-between !important;
+    margin: 80px 55px;">
                 <!-- 프로필 편집 링크 -->
-                <a th:href="@{/edit-profile}" class="text-decoration-none text-primary d-flex align-items-center">
-                    <i class="fas fa-user-edit me-2"></i>
-                    <span>프로필 편집</span>
+                <a th:href="@{/edit-profile}" id="side-prfo-icon"
+                    class="text-decoration-none text-primary d-flex align-items-center">
+                    <i id="side-prof-icon" class="fas fa-user-edit me-2"></i>
+                    <span id="side-icon-clr">프로필 편집</span>
                 </a>
 
                 <!-- 친구 추가 링크 -->
-                <a th:href="@{/add-friend}" class="text-decoration-none text-success d-flex align-items-center">
-                    <i class="fas fa-user-plus me-2"></i>
-                    <span>친구 추가</span>
+                <a th:href="@{/add-friend}" id="side-prfo-icon"
+                    class="text-decoration-none text-success d-flex align-items-center">
+                    <i id="side-prof-icon" class="fas fa-user-plus me-2"></i>
+                    <span id="side-icon-clr">친구 추가</span>
                 </a>
             </div>
         </div>
@@ -53,40 +56,44 @@
         <!-- Navigation Menu -->
         <nav class="w-100">
             <ul class="list-unstyled">
-                <li class="mb-2">
-                    <a th:href="@{/mypage/mypageMain}" class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg">
+                <li class="mb-2" id="side-menu-list">
+                    <a th:href="@{/mypage/mypageMain}"
+                        class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg">
                         <i class="fas fa-user me-3"></i>
                         <span>내 프로필</span>
                     </a>
                 </li>
-                <li class="mb-2">
-                    <a th:href="@{/reviews}" class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg">
+                <li class="mb-2" id="side-menu-list">
+                    <a th:href="@{/reviews}"
+                        class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg">
                         <i class="fas fa-star me-3"></i>
                         <span>내 리뷰</span>
                     </a>
                 </li>
-                <li class="mb-2">
-                    <a th:href="@{/friendships/list}" class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg">
+                <li class="mb-2" id="side-menu-list">
+                    <a th:href="@{/friendships/list}"
+                        class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg">
                         <i class="fas fa-user-friends me-3"></i>
                         <span>친구</span>
                     </a>
                 </li>
-                <li class="mb-2">
+                <li class="mb-2" id="side-menu-list">
                     <a class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg"
-                       th:href="@{/mypage/favorites}">
+                        th:href="@{/mypage/favorites}">
                         <i class="fas fa-box-open me-3"></i>
                         <span>컬렉션</span>
                     </a>
                 </li>
-                <li class="mb-2">
+                <li class="mb-2" id="side-menu-list">
                     <a class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg"
-                       th:href="@{/mypage/diningHistory}">
+                        th:href="@{/mypage/diningHistory}">
                         <i class="fas fa-calendar-alt me-3"></i>
                         <span>내 이벤트</span>
                     </a>
                 </li>
-                <li class="mb-2">
-                    <a th:href="@{/mypage/calender}" class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg">
+                <li class="mb-2" id="side-menu-list">
+                    <a th:href="@{/mypage/calender}"
+                        class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg">
                         <i class="fas fa-calendar-check me-3"></i>
                         <span>내 달력</span>
                     </a>
@@ -95,4 +102,3 @@
         </nav>
     </div>
 </div>
-

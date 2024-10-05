@@ -4,6 +4,48 @@
     box-sizing: border-box;
 }
 
+#side-box {
+    width: 460px;
+    background-color: #fff !important;
+}
+
+#side-profile-box {
+    border-radius: 10px !important;
+    border: 1px solid #d9d9d9;
+    height: 450px;
+    width: 400px;
+    padding-top: 40px;
+}
+
+#side-prof-img {
+    width: 160px;
+    height: 160px;
+}
+
+#side-prof-id {
+    padding-top: 10px;
+    /* font-weight: 700; */
+}
+
+#side-prfo-icon {
+    flex-direction: column;
+    justify-content: center;
+    color: #697390 !important;
+    margin-bottom: 5px;
+    /* 아이콘과 텍스트 사이 간격 */
+}
+
+#side-icon-clr {
+    color: #697390 !important;
+}
+
+#side-menu-list {
+    border-bottom: 1px solid #d9d9d9;
+    padding-bottom: 14px;
+    padding-top: 10px;
+    margin-right: 70px;
+}
+
 /* Main Container */
 .container {
     display: flex;

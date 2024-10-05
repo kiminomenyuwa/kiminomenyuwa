@@ -1,3 +1,4 @@
+-- SQLBook: Code
 use kiminomenyuwa;
 -- 외래 키 제약을 비활성화
 SET FOREIGN_KEY_CHECKS = 0;
@@ -192,7 +193,6 @@ CREATE TABLE receipt_verification
     store_id                INT         NOT NULL,               -- 가게 ID (StoreEntity와 외래키 관계)
     review_id               INT,                                -- 리뷰 ID (ReviewEntity와 외래키 관계)
     verification_date       DATETIME DEFAULT CURRENT_TIMESTAMP, -- 인증 날짜 (기본값: 현재 시간)
-
     CONSTRAINT FK_user FOREIGN KEY (user_id) REFERENCES User (user_id),
     CONSTRAINT FK_store FOREIGN KEY (store_id) REFERENCES Store (store_id),
     CONSTRAINT FK_review FOREIGN KEY (review_id) REFERENCES review (review_id)
@@ -205,7 +205,6 @@ CREATE TABLE purchased_menu
     receipt_verification_id BIGINT NOT NULL,                   -- 영수증 인증 ID (ReceiptVerificationEntity와 외래키 관계)
     menu_id                 INT    NOT NULL,                   -- 메뉴 ID (MenuEntity와 외래키 관계)
     quantity                INT,                               -- 구매 수량
-
     CONSTRAINT FK_receipt_verification FOREIGN KEY (receipt_verification_id) REFERENCES receipt_verification (receipt_verification_id),
     CONSTRAINT FK_menu FOREIGN KEY (menu_id) REFERENCES `menu` (menu_id)
 );
@@ -271,3 +270,7 @@ ALTER TABLE discount
 ALTER TABLE discount
     MODIFY COLUMN discounted_price DECIMAL(10, 2) NOT NULL;
 
+
+-- SQLBook: Code
+
+-- SQLBook: Code

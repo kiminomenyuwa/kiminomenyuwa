@@ -1,9 +1,3 @@
-*,
-*::after,
-*::before {
-    box-sizing: border-box;
-}
-
 /* root */
 :root {
     /* color */
@@ -14,10 +8,16 @@
     --lightNavyColor: #697390;
 }
 
+@import url('https://hangeul.pstatic.net/hangeul_static/css/nanum-square-neo.css');
+
 body,
 html {
-    font-family: 'SUIT-Regular';
+    font-family: 'NanumSquareNeo' !important;
+    font-family: 'NanumSquareNeoBold';
+    font-family: 'NanumSquareNeoExtraBold';
+    font-family: 'NanumSquareNeoHeavy';
 }
+
 
 a {
     color: inherit;
