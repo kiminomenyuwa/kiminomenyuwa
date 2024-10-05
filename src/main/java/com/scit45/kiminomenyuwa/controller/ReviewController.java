@@ -22,6 +22,7 @@ import com.scit45.kiminomenyuwa.service.ReviewService;
 import com.scit45.kiminomenyuwa.service.UserDiningHistoryService;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -85,5 +86,11 @@ public class ReviewController {
 			response.put("redirect", "/stores/" + storeId);
 			return ResponseEntity.badRequest().body(response);
 		}
+	}
+
+	@GetMapping("/myReview")
+	public String viewMyReviews(@AuthenticationPrincipal AuthenticatedUser user) {
+
+		return "reviewView/myReviews";
 	}
 }
