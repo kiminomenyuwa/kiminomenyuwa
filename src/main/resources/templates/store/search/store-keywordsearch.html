@@ -67,6 +67,21 @@
         const pageSize = 10;
         let currentKeyword = '';
 
+        /**
+         * URL의 쿼리 파라미터에서 키워드 추출
+         */
+        function getQueryParameter(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // URL에서 'keyword' 파라미터 읽기
+        currentKeyword = getQueryParameter('keyword') || '';
+        if (currentKeyword) {
+            $('#search-keyword').val(currentKeyword);
+            searchStores(currentKeyword, currentPage, pageSize);
+        }
+
         // 검색 버튼 클릭 이벤트 핸들러
         $('#search-button').click(function () {
             const keyword = $('#search-keyword').val().trim();

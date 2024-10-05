@@ -10,7 +10,9 @@
 
         <div class="header-center">
             <div class="search-container">
-                <input type="text" class="search-bar" placeholder="검색어를 입력하세요">
+                <form action="/stores/keywordsearch" method="get">
+                    <input type="text" name="keyword" class="search-bar" placeholder="검색어를 입력하세요">
+                </form>
                 <span class="divider"></span>
                 <span class="location-text">New York, NY</span>
             </div>
