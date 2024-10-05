@@ -3,6 +3,13 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{homeLayout}">
+
+<th:block layout:fragment="links">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+</th:block>
+
 <style layout:fragment="styles">
     /* 게임 시작 버튼 스타일 설정 */
     #user-start-game {
@@ -147,6 +154,68 @@
         margin-top: 20px;
         font-size: 1.5rem;
     }
+
+    /* 추가된 슬릭 슬라이더 스타일 */
+    .menu-card {
+        transition: transform 0.3s;
+        margin: 0 10px;
+    }
+
+    .menu-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .menu-photo {
+        height: 200px;
+        object-fit: cover;
+        width: 100%;
+    }
+
+    .slick-prev:before, .slick-next:before {
+        color: #000;
+    }
+
+    .ranking-icon {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        color: white;
+        z-index: 10;
+    }
+
+    .ranking-icon.gold {
+        background-color: #FFD700;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+
+    .ranking-icon.silver {
+        background-color: #C0C0C0;
+        width: 35px;
+        height: 35px;
+        font-size: 1.1rem;
+    }
+
+    .ranking-icon.bronze {
+        background-color: #CD7F32;
+        width: 30px;
+        height: 30px;
+        font-size: 1rem;
+    }
+
+    .ranking-icon.normal {
+        background-color: rgba(0, 0, 0, 0.5);
+        width: 25px;
+        height: 25px;
+        font-size: 0.9rem;
+    }
+
 </style>
 <div layout:fragment="content">
     <!-- 로그인한 사용자에게 환영 메시지 표시 -->
@@ -166,15 +235,6 @@
         <p>
             <a href="/merchant/stores">사장님 가게 페이지</a>
         </p>
-        <ul>
-            <li><a href="recommend/test">메뉴추천(테스트페이지)</a></li>
-            <li><a href="recommend/recommendUntriedFood">안먹어본 메뉴 추천</a></li>
-            <li><a href="recommend/recommendByMinigame">미니게임 결과에 따른 메뉴 추천</a></li>
-        </ul>
-
-        <ul>
-            <li><a href="/recommendations/map">추천 검색 페이지</a></li>
-        </ul>
     </div>
 
     <!-- 비회원용 메뉴 추천 섹션 -->
@@ -254,113 +314,246 @@
             <!-- 싫어요 버튼 -->
             <button id="user-dislike-button">싫어요</button>
         </div>
+
+        <!--  슬라이더 슬릭  -->
+        <div class="container mt-5">
+            <!-- 더 많은 메뉴를 보고 싶다면? 버튼을 절대 위치로 설정 -->
+            <h2 class="mb-4">추천 메뉴 목록</h2>
+            <a th:href="@{/recommendations/map}" class="btn btn-lg d-flex align-items-center top-0 end-0 m-3">
+                <i class="fas fa-arrow-right me-2"></i> 더 많은 메뉴를 보고 싶다면?
+            </a>
+            <!-- 슬라이더와 버튼을 감싸는 상대 위치의 컨테이너 -->
+            <div class="menu-slider-container position-relative">
+
+                <!-- 슬릭 슬라이더 -->
+                <div class="menu-slider">
+                    <!-- 메뉴 카드들이 여기에 동적으로 추가됩니다 -->
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<script layout:fragment="scripts">
-    $(document).ready(function () {
-        // 현재 위치 불러오기
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition, showError);
-        } else {
-            $('#current-address').text("Geolocation is not supported by this browser.");
-            $('#user-current-address').text("Geolocation is not supported by this browser.");
-        }
-
-        function showPosition(position) {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-
-            // 네이버 지도 Geocoder 사용하여 주소 변환
-            const geocoder = new naver.maps.Geocoder();
-
-            geocoder.coord2Address(lng, lat, function (status, response) {
-                if (status === naver.maps.Service.Status.OK) {
-                    const address = response.v2.address.jibunAddress || response.v2.address.roadAddress;  // 지번 주소나 도로명 주소 중 사용
-                    $('#current-address').text(address);
-                    $('#user-current-address').text(address);
-                } else {
-                    $('#current-address').text("주소를 불러올 수 없습니다.");
-                    $('#user-current-address').text("주소를 불러올 수 없습니다.");
-                }
-            });
-        }
-
-        function showError(error) {
-            switch (error.code) {
-                case error.PERMISSION_DENIED:
-                    $('#current-address').text("사용자가 위치 정보 제공을 거부했습니다.");
-                    $('#user-current-address').text("사용자가 위치 정보 제공을 거부했습니다.");
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    $('#current-address').text("위치 정보를 사용할 수 없습니다.");
-                    $('#user-current-address').text("위치 정보를 사용할 수 없습니다.");
-                    break;
-                case error.TIMEOUT:
-                    $('#current-address').text("위치 정보를 가져오는 데 시간이 초과되었습니다.");
-                    $('#user-current-address').text("위치 정보를 가져오는 데 시간이 초과되었습니다.");
-                    break;
-                case error.UNKNOWN_ERROR:
-                    $('#current-address').text("알 수 없는 오류가 발생했습니다.");
-                    $('#user-current-address').text("알 수 없는 오류가 발생했습니다.");
-                    break;
+<th:block layout:fragment="scripts">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            // 현재 위치 불러오기
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                $('#current-address').text("Geolocation is not supported by this browser.");
+                $('#user-current-address').text("Geolocation is not supported by this browser.");
             }
-        }
 
-        // 게임 시작 버튼 클릭 이벤트
-        $('#start-game, #user-start-game').click(function () {
-            // 임의의 메뉴 추천 로직 (예시)
-            const menus = [
-                {name: "김치찌개", image: "/images/kimchi_jjigae.jpg"},
-                {name: "비빔밥", image: "/images/bibimbap.jpg"},
-                {name: "불고기", image: "/images/bulgogi.jpg"},
-                {name: "삼겹살", image: "/images/samgyeopsal.jpg"},
-                {name: "떡볶이", image: "/images/tteokbokki.jpg"}
-            ];
+            function showPosition(position) {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
 
-            const randomMenu = menus[Math.floor(Math.random() * menus.length)];
+                // 네이버 지도 Geocoder 사용하여 주소 변환
+                const geocoder = new naver.maps.Geocoder();
 
-            if ($(this).attr('id') === 'start-game') {
-                $('#menu-header').text(randomMenu.name);
-                $('#menu-image').attr('src', randomMenu.image).show();
-            } else if ($(this).attr('id') === 'user-start-game') {
-                $('#user-menu-header').text(randomMenu.name);
-                $('#user-menu-image').attr('src', randomMenu.image).show();
-                $('#user-rating-controls').show();
-            }
-        });
-
-        // 별점 선택 이벤트
-        $('.star').click(function () {
-            const rating = $(this).data('value');
-            $('.star').each(function () {
-                if ($(this).data('value') <= rating) {
-                    $(this).addClass('selected');
-                } else {
-                    $(this).removeClass('selected');
-                }
-            });
-        });
-
-        // 싫어요 버튼 클릭 이벤트
-        $('#user-dislike-button').click(function () {
-            alert("싫어요를 선택하셨습니다.");
-        });
-
-        // 좋아요 3점 고정 체크박스 이벤트
-        $('#fixed-rating-checkbox').change(function () {
-            if ($(this).is(':checked')) {
-                $('.star').removeClass('selected');
-                $('.star').each(function () {
-                    if ($(this).data('value') <= 3) {
-                        $(this).addClass('selected');
+                geocoder.coord2Address(lng, lat, function (status, response) {
+                    if (status === naver.maps.Service.Status.OK) {
+                        const address = response.v2.address.jibunAddress || response.v2.address.roadAddress;  // 지번 주소나 도로명 주소 중 사용
+                        $('#current-address').text(address);
+                        $('#user-current-address').text(address);
+                    } else {
+                        $('#current-address').text("주소를 불러올 수 없습니다.");
+                        $('#user-current-address').text("주소를 불러올 수 없습니다.");
                     }
                 });
-                $('.star').css('pointer-events', 'none'); // 더 이상 클릭 불가능하게 설정
-            } else {
-                $('.star').css('pointer-events', 'auto');
             }
+
+            function showError(error) {
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        $('#current-address').text("사용자가 위치 정보 제공을 거부했습니다.");
+                        $('#user-current-address').text("사용자가 위치 정보 제공을 거부했습니다.");
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        $('#current-address').text("위치 정보를 사용할 수 없습니다.");
+                        $('#user-current-address').text("위치 정보를 사용할 수 없습니다.");
+                        break;
+                    case error.TIMEOUT:
+                        $('#current-address').text("위치 정보를 가져오는 데 시간이 초과되었습니다.");
+                        $('#user-current-address').text("위치 정보를 가져오는 데 시간이 초과되었습니다.");
+                        break;
+                    case error.UNKNOWN_ERROR:
+                        $('#current-address').text("알 수 없는 오류가 발생했습니다.");
+                        $('#user-current-address').text("알 수 없는 오류가 발생했습니다.");
+                        break;
+                }
+            }
+
+            // 게임 시작 버튼 클릭 이벤트
+            $('#start-game, #user-start-game').click(function () {
+                // 임의의 메뉴 추천 로직 (예시)
+                const menus = [
+                    {name: "김치찌개", image: "/images/kimchi_jjigae.jpg"},
+                    {name: "비빔밥", image: "/images/bibimbap.jpg"},
+                    {name: "불고기", image: "/images/bulgogi.jpg"},
+                    {name: "삼겹살", image: "/images/samgyeopsal.jpg"},
+                    {name: "떡볶이", image: "/images/tteokbokki.jpg"}
+                ];
+
+                const randomMenu = menus[Math.floor(Math.random() * menus.length)];
+
+                if ($(this).attr('id') === 'start-game') {
+                    $('#menu-header').text(randomMenu.name);
+                    $('#menu-image').attr('src', randomMenu.image).show();
+                } else if ($(this).attr('id') === 'user-start-game') {
+                    $('#user-menu-header').text(randomMenu.name);
+                    $('#user-menu-image').attr('src', randomMenu.image).show();
+                    $('#user-rating-controls').show();
+                }
+            });
+
+            // 별점 선택 이벤트
+            $('.star').click(function () {
+                const rating = $(this).data('value');
+                $('.star').each(function () {
+                    if ($(this).data('value') <= rating) {
+                        $(this).addClass('selected');
+                    } else {
+                        $(this).removeClass('selected');
+                    }
+                });
+            });
+
+            // 싫어요 버튼 클릭 이벤트
+            $('#user-dislike-button').click(function () {
+                alert("싫어요를 선택하셨습니다.");
+            });
+
+            // 좋아요 3점 고정 체크박스 이벤트
+            $('#fixed-rating-checkbox').change(function () {
+                if ($(this).is(':checked')) {
+                    $('.star').removeClass('selected');
+                    $('.star').each(function () {
+                        if ($(this).data('value') <= 3) {
+                            $(this).addClass('selected');
+                        }
+                    });
+                    $('.star').css('pointer-events', 'none'); // 더 이상 클릭 불가능하게 설정
+                } else {
+                    $('.star').css('pointer-events', 'auto');
+                }
+            });
         });
-    });
-</script>
+        // 추천 메뉴 슬라이더 관련 스크립트 추가
+        let allRecommendations = {};
+
+        function fetchRecommendations(latitude, longitude) {
+            if ($('#user-menu-section').length > 0) {
+                $.ajax({
+                    url: '/recommendations/nearby-menus',
+                    type: 'POST',
+                    data: {
+                        latitude: latitude,
+                        longitude: longitude,
+                        radius: 1000,
+                        limit: 50
+                    },
+                    success: function (response) {
+                        console.log("Received response:", response);
+
+                        if (!response || !response.recommendedMenus) {
+                            console.error("Invalid response structure:", response);
+                            alert("잘못된 데이터가 반환되었습니다. 다시 시도해주세요.");
+                            return;
+                        }
+
+                        allRecommendations = response.recommendedMenus;
+                        displayRecommendations(allRecommendations);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error fetching recommendations:", error);
+                        alert("추천 메뉴를 가져오는 데 실패했습니다. 다시 시도해주세요.");
+                    }
+                });
+            }
+        }
+
+        function displayRecommendations(menus) {
+            const menuSlider = $('.menu-slider');
+            menuSlider.empty();
+
+            if (menus.length === 0) {
+                menuSlider.append('<p>추천 메뉴가 없습니다.</p>');
+                return;
+            }
+
+            menus.forEach((menu, index) => {
+                let rankingClass = 'normal';
+                if (index === 0) rankingClass = 'gold';
+                else if (index === 1) rankingClass = 'silver';
+                else if (index === 2) rankingClass = 'bronze';
+
+                const menuCard = `
+                        <div>
+                            <div class="card menu-card">
+                                <div class="ranking-icon ${rankingClass}">${index + 1}</div>
+                                <img src="${menu.pictureUrl || '/images/default-menu.png'}" class="card-img-top menu-photo" alt="${menu.name}">
+                                <div class="card-body">
+                                    <h5 class="card-title">${menu.name}</h5>
+                                    <p class="card-text">가격: ${Number(menu.price).toLocaleString()}원</p>
+                                    <p class="card-text">${formatCategories(menu.categories)}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                menuSlider.append(menuCard);
+            });
+
+            initSlick();
+        }
+
+        function initSlick() {
+            $('.menu-slider').slick({
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 3000,
+                dots: true,
+                arrows: true,
+                responsive: [
+                    {
+                        breakpoint: 992,
+                        settings: {
+                            slidesToShow: 2
+                        }
+                    },
+                    {
+                        breakpoint: 576,
+                        settings: {
+                            slidesToShow: 1
+                        }
+                    }
+                ]
+            });
+        }
+
+        function formatCategories(categories) {
+            if (!categories || !Array.isArray(categories)) return '';
+            return categories.map(category =>
+                `<span class="badge bg-secondary badge-category">${category.categoryName}</span>`
+            ).join(' ');
+        }
+
+        // 페이지 로드 시 추천 메뉴 가져오기
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+                fetchRecommendations(latitude, longitude);
+            }, function () {
+                alert("위치 정보를 가져올 수 없습니다.");
+            });
+        } else {
+            alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
+        }
+    </script>
+</th:block>
 </html>
