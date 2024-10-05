@@ -298,6 +298,10 @@
             }
         });
 
+        // 결과 없음 메시지를 표시할 요소 추가
+        $('#friendSearch').after('<div id="noResultsMessage" class="text-muted mt-2" style="display: none;">검색 결과가 없습니다.</div>');
+
+
         // 친구 검색 자동완성 기능
         $('#friendSearch').friendAutocomplete({
             source: function (request, response) {
@@ -309,16 +313,24 @@
                         query: request.term
                     },
                     success: function (data) {
-                        response($.map(data, function (item) {
-                            return {
-                                label: item.userName + ' (' + item.userId + ')',
-                                value: item.userId,
-                                name: item.userName,
-                                profilePhotoUrl: item.profilePhotoUrl
-                            };
-                        }));
+                        if (data.length === 0) {
+                            // 결과가 없을 때 메시지 표시
+                            $('#noResultsMessage').show();
+                            response([]);
+                        } else {
+                            $('#noResultsMessage').hide();
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.userName + ' (' + item.userId + ')',
+                                    value: item.userId,
+                                    name: item.userName,
+                                    profilePhotoUrl: item.profilePhotoUrl
+                                };
+                            }));
+                        }
                     },
                     error: function () {
+                        $('#noResultsMessage').show();
                         response([]);
                     }
                 });
@@ -344,6 +356,10 @@
                 // 입력 필드 초기화
                 $(this).val('');
                 return false;
+            },
+            close: function () {
+                // 자동완성 목록이 닫힐 때 "결과 없음" 메시지 숨기기
+                $('#noResultsMessage').hide();
             }
         });
 
