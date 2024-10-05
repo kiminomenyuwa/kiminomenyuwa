@@ -419,9 +419,9 @@
                     showRecommendationsOnMap('hybrid');
 
                     // 결과가 없을 경우 사용자에게 알림
-                    if (response.recommendedMenus.length === 0) {
-                        alert("추천 메뉴가 없습니다.");
-                    }
+                    // if (response.recommendedMenus.length === 0) {
+                    //     alert("추천 메뉴가 없습니다.");
+                    // }
 
                     // 로딩 스피너 숨기기
                     $('.loading-spinner').hide();
@@ -432,7 +432,7 @@
                     // 로딩 스피너 숨기기
                     $('.loading-spinner').hide();
                     isFetching = false; // 요청 완료
-                    alert("추천 메뉴를 가져오는 데 실패했습니다. 다시 시도해주세요.");
+                    // alert("추천 메뉴를 가져오는 데 실패했습니다. 다시 시도해주세요.");
                 }
             });
         }
