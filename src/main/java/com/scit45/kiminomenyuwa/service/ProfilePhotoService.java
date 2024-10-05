@@ -92,4 +92,5 @@ public class ProfilePhotoService {
 
 		return profilePhotoDTO;
 	}
+
 }

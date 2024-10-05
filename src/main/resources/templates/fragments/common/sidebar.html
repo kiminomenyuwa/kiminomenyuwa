@@ -4,12 +4,187 @@
 
     <!-- 사이드 메뉴 -->
     <nav id="hbgMenu" class="side-menu">
-        <ul>
-            <li><a th:href="@{/static}"><i class="fas fa-home"></i> 홈</a></li>
-            <li><a th:href="@{/about}"><i class="fas fa-info-circle"></i> 소개</a></li>
-            <li><a th:href="@{/contact}"><i class="fas fa-envelope"></i> 문의하기</a></li>
+        <!-- 로그인한 사용자의 프로필 섹션 -->
+        <div class="profile-section" sec:authorize="isAuthenticated()">
+            <div class="profile-image-container">
+                <img th:src="@{${profilePhotoUrl}}"
+                     alt="프로필 사진"
+                     class="profile-image"/>
+            </div>
+            <div class="user-info">
+                <span class="user-name" th:text="${#authentication.name}">사용자 이름</span>
+                <a th:href="@{/mypage}" class="edit-profile-link">프로필 편집</a>
+            </div>
+        </div>
+
+        <!-- 로그인된 사용자용 메뉴 -->
+        <div class="user-links" sec:authorize="isAuthenticated()">
+            <a href="/friendships/list" class="user-link">
+                <i class="fas fa-users"></i> 친구
+                <span class="badge" th:text="${friendCount}">0</span>
+            </a>
+            <a href="/merchant/stores" class="user-link">
+                <i class="fas fa-store"></i> 사장님 가게 페이지
+            </a>
+        </div>
+
+        <ul class="menu-list">
+            <li><a th:href="@{/}"><i class="fas fa-home"></i> 홈</a></li>
+            <th:block sec:authorize="isAuthenticated()">
+                <li><a th:href="@{/mypage}"><i class="fas fa-user"></i> 마이페이지</a></li>
+                <li><a th:href="@{/recommendations/map}"><i class="fas fa-utensils"></i> 메뉴 추천</a></li>
+                <li><a th:href="@{/reviews/write}"><i class="fas fa-edit"></i> 리뷰쓰기</a></li>
+            </th:block>
             <!-- 추가 메뉴 항목 -->
         </ul>
-    </nav>
-</div>
 
+        <div class="logout-container" sec:authorize="isAuthenticated()">
+            <a th:href="@{/user/logout}" class="logout-button">
+                <i class="fas fa-sign-out-alt"></i> 로그아웃
+            </a>
+        </div>
+    </nav>
+
+    <style>
+        .side-menu {
+            background-color: #f8f9fa;
+            padding: 20px;
+            height: 100vh;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: -250px;
+            transition: 0.3s;
+            overflow-y: auto;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-section {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 20px;
+        }
+
+        .profile-image-container {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 15px;
+            overflow: hidden;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-info {
+            margin-top: 10px;
+        }
+
+        .user-name {
+            display: block;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .edit-profile-link {
+            font-size: 14px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .user-links {
+            margin-bottom: 20px;
+        }
+
+        .user-link {
+            display: block;
+            padding: 10px;
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            transition: 0.2s;
+            border-radius: 5px;
+        }
+
+        .user-link:hover {
+            background-color: #e9ecef;
+        }
+
+        .user-link i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .badge {
+            background-color: #007bff;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 50%;
+            font-size: 12px;
+            float: right;
+        }
+
+        .menu-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .menu-list li {
+            margin-bottom: 10px;
+        }
+
+        .menu-list a {
+            display: block;
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            transition: 0.2s;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .menu-list a:hover {
+            background-color: #e9ecef;
+        }
+
+        .menu-list i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .logout-container {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .logout-button {
+            display: block;
+            padding: 10px;
+            color: #dc3545;
+            text-decoration: none;
+            font-size: 16px;
+            transition: 0.2s;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .logout-button:hover {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .logout-button i {
+            margin-right: 10px;
+        }
+    </style>
+</div>
