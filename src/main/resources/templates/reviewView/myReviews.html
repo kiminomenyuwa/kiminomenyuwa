@@ -73,6 +73,12 @@
         height: 100px;
         object-fit: cover;
     }
+
+    .rating-stars {
+        color: #FFD700; /* 별 색상 */
+        font-size: 18px;
+        margin-bottom: 10px; /* 별점과 코멘트 사이의 여백 */
+    }
 </style>
 
 <div layout:fragment="content">
@@ -94,9 +100,16 @@
                         <div>
                             <h5 class="card-title" th:text="${rvList.userId}">userId</h5>
                             <p class="review-meta">
-                                <span th:text="${rvList.createdTime}">작성 시간</span> |
-                                평점: <span th:text="${rvList.rating}">평점</span>
+                                <span th:text="${rvList.createdTime}">작성 시간</span>
                             </p>
+
+                            <!-- 평점 표시 (별 모양) -->
+                            <div class="rating-stars">
+                                <i class="fa fa-star" th:each="i : ${#numbers.sequence(1, rvList.rating)}"></i>
+                                <i class="fa fa-star-o" th:each="i : ${#numbers.sequence(rvList.rating + 1, 5)}"></i>
+                            </div>
+
+                            <!-- 리뷰 코멘트 -->
                             <p class="review-comment" th:text="${rvList.comment}">리뷰 내용</p>
                         </div>
                     </div>
