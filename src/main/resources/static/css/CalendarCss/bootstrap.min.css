@@ -2820,8 +2820,8 @@ fieldset:disabled a.btn {
 
 .btn-primary {
     color: #fff;
-    background-color: #007bff;
-    border-color: #007bff
+    background-color: #FF7878;
+    border-color: #FF7878;
 }
 
 .btn-primary:hover {
@@ -2833,9 +2833,9 @@ fieldset:disabled a.btn {
 .btn-primary.focus,
 .btn-primary:focus {
     color: #fff;
-    background-color: #0069d9;
-    border-color: #0062cc;
-    box-shadow: 0 0 0 .2rem rgba(38, 143, 255, .5)
+    background-color: #e15050;
+    border-color: #e15050;
+    box-shadow: 0 0 0 .2rem rgba(255, 120, 120, 0.37)
 }
 
 .btn-primary.disabled,
@@ -5619,8 +5619,9 @@ a.badge-secondary:focus {
 }
 
 .badge-success {
+    height: 47px;
     color: #fff;
-    background-color: #28a745
+    background-color: #e8e8e8;
 }
 
 a.badge-success:focus,

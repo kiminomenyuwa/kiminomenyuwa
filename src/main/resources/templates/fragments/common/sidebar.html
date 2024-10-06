@@ -19,7 +19,7 @@
         <div class="user-links" sec:authorize="isAuthenticated()">
             <a href="/friendships/list" class="user-link">
                 <i class="fas fa-users"></i> 친구
-                <span class="badge" th:text="${friendCount}">0</span>
+                <span class="badgeIcon" th:text="${friendCount}">0</span>
             </a>
             <a href="/merchant/stores" class="user-link">
                 <i class="fas fa-store"></i> 사장님 가게 페이지
@@ -122,7 +122,7 @@
             text-align: center;
         }
 
-        .badge {
+        .badgeIcon {
             background-color: #007bff;
             color: white;
             padding: 2px 6px;
