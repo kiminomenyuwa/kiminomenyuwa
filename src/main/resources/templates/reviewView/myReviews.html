@@ -8,81 +8,175 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
 
 <style layout:fragment="styles">
-    /* 기본 스타일 */
     .container {
-        display: flex;
-        padding: 20px;
-        max-width: 1200px;
+        max-width: 1000px;
         margin: 0 auto;
-    }
-
-    .profile-section {
-        flex: 1;
-        margin-right: 20px;
-    }
-
-    .review-section {
-        flex: 3;
-    }
-
-    .card {
-        border: 1px solid #ddd;
-        border-radius: 8px;
         padding: 20px;
-        margin-bottom: 20px;
-        background-color: #fff;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
-    .card img {
-        max-width: 100px;
-        height: auto;
+    .review-card {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .review-header {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        background-color: #f8f9fa;
+    }
+
+    .profile-img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
         margin-right: 15px;
     }
 
-    .card-body {
+    .user-info {
+        flex-grow: 1;
+    }
+
+    .user-name {
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .review-date {
+        font-size: 0.8em;
+        color: #6c757d;
+    }
+
+    .rating-stars {
+        color: #ffc107; /* 별 색상 */
+        font-size: 1.2em;
+    }
+
+    .rating-stars .fas {
+        color: #ffc107; /* 채워진 별 색상 */
+    }
+
+    .rating-stars .far {
+        color: #e4e5e9; /* 빈 별 색상 */
+    }
+
+    .review-content {
+        padding: 15px;
         display: flex;
         justify-content: space-between;
-        align-items: center;
     }
 
-    .card-title {
-        font-size: 18px;
-        font-weight: bold;
-        color: #333;
-    }
-
-    .review-meta {
-        color: #888;
-        font-size: 14px;
-        margin-bottom: 10px;
+    .review-text {
+        flex: 2;
+        margin-right: 20px;
     }
 
     .review-comment {
-        font-size: 16px;
-        color: #555;
+        margin-bottom: 15px;
     }
 
     .photo-container {
+        flex: 1;
         display: flex;
         gap: 10px;
+        overflow-x: auto;
+        padding-bottom: 10px;
     }
 
     .photo-container img {
         width: 100px;
         height: 100px;
         object-fit: cover;
+        border-radius: 4px;
     }
 
-    .rating-stars {
-        color: #FFD700; /* 별 색상 */
-        font-size: 18px;
-        margin-bottom: 10px; /* 별점과 코멘트 사이의 여백 */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        list-style: none;
+        padding: 0;
+        margin-top: 20px;
+    }
+
+    .pagination li {
+        margin: 0 5px;
+    }
+
+    .pagination a {
+        text-decoration: none;
+        padding: 8px 12px;
+        border: 1px solid #007bff;
+        color: #007bff;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+    }
+
+    .pagination .active a,
+    .pagination a:hover {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .pagination .disabled a {
+        border-color: #6c757d;
+        color: #6c757d;
+        pointer-events: none;
+    }
+
+    .filter-section {
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+    }
+
+    .filter-section select {
+        padding: 8px;
+        margin-right: 10px;
+        border-radius: 4px;
+        border: 1px solid #ced4da;
+    }
+
+    .filter-section button {
+        padding: 8px 15px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .filter-section button:hover {
+        background-color: #0056b3;
     }
 </style>
 
 <div layout:fragment="content">
     <h1 class="mb-4 text-center">나의 리뷰 내역</h1>
+
+    <!-- 필터 섹션 -->
+    <div class="filter-section">
+        <form th:action="@{/reviews/myReview}" method="get">
+            <select name="rating">
+                <option value="">모든 평점</option>
+                <option value="5">5점</option>
+                <option value="4">4점</option>
+                <option value="3">3점</option>
+                <option value="2">2점</option>
+                <option value="1">1점</option>
+            </select>
+            <select name="sortBy">
+                <option value="createdTime">최신순</option>
+                <option value="rating">평점순</option>
+            </select>
+            <button type="submit">필터 적용</button>
+        </form>
+    </div>
 
     <!-- 리뷰가 없는 경우 -->
     <div class="text-center mt-5" th:if="${#lists.isEmpty(myReviewLists)}">
@@ -91,36 +185,53 @@
 
     <!-- 리뷰 리스트 -->
     <div class="review-section" th:unless="${#lists.isEmpty(myReviewLists)}">
-        <div th:each="rvList : ${myReviewLists}">
-            <div class="card">
-                <div class="card-body">
-                    <div class="review-info">
-                        <!-- 사용자 프로필 사진 -->
-                        <img th:src="${rvList.userProfileUrl}" alt="프로필 사진" class="profile-img rounded-circle">
-                        <div>
-                            <h5 class="card-title" th:text="${rvList.userId}">userId</h5>
-                            <p class="review-meta">
-                                <span th:text="${rvList.createdTime}">작성 시간</span>
-                            </p>
-
-                            <!-- 평점 표시 (별 모양) -->
-                            <div class="rating-stars">
-                                <i class="fa fa-star" th:each="i : ${#numbers.sequence(1, rvList.rating)}"></i>
-                                <i class="fa fa-star-o" th:each="i : ${#numbers.sequence(rvList.rating + 1, 5)}"></i>
-                            </div>
-
-                            <!-- 리뷰 코멘트 -->
-                            <p class="review-comment" th:text="${rvList.comment}">리뷰 내용</p>
-                        </div>
-                    </div>
-                    <!-- 리뷰 사진들 -->
-                    <div class="photo-container" th:each="photoUrl : ${rvList.photoUrls}">
-                        <img th:src="@{${photoUrl}}" alt="리뷰 사진">
-                    </div>
+        <div class="review-card" th:each="rvList : ${myReviewLists}">
+            <div class="review-header">
+                <img th:src="${rvList.userProfileUrl}" alt="프로필 사진" class="profile-img">
+                <div class="user-info">
+                    <h5 class="user-name" th:text="${rvList.userId}">userId</h5>
+                    <span class="review-date" th:text="${#temporals.format(rvList.createdTime, 'yyyy-MM-dd HH:mm')}">작성 시간</span>
+                </div>
+                <div class="rating-stars">
+                    <i class="fas fa-star" th:each="i : ${#numbers.sequence(1, rvList.rating)}"></i>
+                </div>
+            </div>
+            <div class="review-content">
+                <div class="review-text">
+                    <p class="review-comment" th:text="${rvList.comment}">리뷰 내용</p>
+                </div>
+                <div class="photo-container" th:if="${not #lists.isEmpty(rvList.photoUrls)}">
+                    <img th:each="photoUrl : ${rvList.photoUrls}" th:src="@{${photoUrl}}" alt="리뷰 사진">
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- 페이지네이션 -->
+    <nav aria-label="Page navigation" th:if="${totalPages > 1}">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${currentPage == 0 ? 'disabled' : ''}">
+                <a class="page-link"
+                   th:href="@{/reviews/myReview(page=${currentPage - 1}, size=5, rating=${param.rating}, sortBy=${param.sortBy})}"
+                   aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item" th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+                th:classappend="${pageNum == currentPage ? 'active' : ''}">
+                <a class="page-link"
+                   th:href="@{/reviews/myReview(page=${pageNum}, size=5, rating=${param.rating}, sortBy=${param.sortBy})}"
+                   th:text="${pageNum + 1}"></a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages - 1 ? 'disabled' : ''}">
+                <a class="page-link"
+                   th:href="@{/reviews/myReview(page=${currentPage + 1}, size=5, rating=${param.rating}, sortBy=${param.sortBy})}"
+                   aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>
 
 </html>

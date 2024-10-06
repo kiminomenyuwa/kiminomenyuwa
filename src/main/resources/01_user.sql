@@ -33,7 +33,6 @@ INSERT INTO `user` (`user_id`,
                     `created_time`)
 VALUES
 -- 기존 5명 데이터
-
 ('user01',
  '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS',
  '김하늘',
@@ -48,7 +47,6 @@ VALUES
  'ROLE_USER',
  1,
  CURRENT_TIMESTAMP),
-
 ('user02',
  '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS',
  '박지민',

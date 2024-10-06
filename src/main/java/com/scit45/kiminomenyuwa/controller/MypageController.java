@@ -20,12 +20,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.scit45.kiminomenyuwa.domain.dto.BudgetDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MiniGameMenuRatingDTO;
+import com.scit45.kiminomenyuwa.domain.dto.ProfilePhotoDTO;
 import com.scit45.kiminomenyuwa.domain.dto.StoreResponseDTO;
 import com.scit45.kiminomenyuwa.domain.dto.UserDiningHistoryDTO;
 import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
 import com.scit45.kiminomenyuwa.service.MenuService;
 import com.scit45.kiminomenyuwa.service.MiniGameService;
 import com.scit45.kiminomenyuwa.service.MyPageService;
+import com.scit45.kiminomenyuwa.service.ProfilePhotoService;
 import com.scit45.kiminomenyuwa.service.StoreSearchService;
 import com.scit45.kiminomenyuwa.service.UserDiningHistoryService;
 
@@ -42,19 +44,28 @@ public class MypageController {
 	private final MyPageService myPageService;
 	private final MiniGameService miniGameService;
 	private final StoreSearchService storeSearchService;
+	private final ProfilePhotoService profilePhotoService;
 
 	/**
 	 * 마이페이지 메인화면
-	 * @return mypageMain.html
+	 * @return calendar.html
 	 */
-	@GetMapping("mypageMain")
-	public String mypageMain() {
-		return "mypageView/mypageMain";
-	}
-
 	@GetMapping
-	public String mypage() {
-		return "mypageView/mypage";
+	public String calendar(Model model, @AuthenticationPrincipal AuthenticatedUser user) {
+		// 현재 로그인한 사용자의 프로필 사진 URL 추가
+		if (user != null) {
+			String userId = user.getUsername(); // 로그인한 사용자의 ID 가져오기
+			ProfilePhotoDTO profilePhotoDTO = profilePhotoService.getUserProfilePhotoInfo(userId);
+			if (profilePhotoDTO != null) {
+				// 프로필 사진의 URL을 모델에 추가
+				String profilePhotoUrl = "/files/" + profilePhotoDTO.getSavedName();
+				model.addAttribute("profilePhotoUrl", profilePhotoUrl);
+			} else {
+				// 프로필 사진이 없는 경우 기본 이미지를 사용하도록 설정
+				model.addAttribute("profilePhotoUrl", "/images/default-profile.png");
+			}
+		}
+		return "mypageView/calendar";
 	}
 
 	/**
@@ -68,12 +79,21 @@ public class MypageController {
 		List<UserDiningHistoryDTO> diningHistoryDTOList = userDiningHistoryService.getDiningHistory(user.getId());
 		model.addAttribute("diningHistoryList", diningHistoryDTOList);
 
-		return "mypageView/diningHistory";
-	}
+		// 현재 로그인한 사용자의 프로필 사진 URL 추가
+		if (user != null) {
+			String userId = user.getUsername(); // 로그인한 사용자의 ID 가져오기
+			ProfilePhotoDTO profilePhotoDTO = profilePhotoService.getUserProfilePhotoInfo(userId);
+			if (profilePhotoDTO != null) {
+				// 프로필 사진의 URL을 모델에 추가
+				String profilePhotoUrl = "/files/" + profilePhotoDTO.getSavedName();
+				model.addAttribute("profilePhotoUrl", profilePhotoUrl);
+			} else {
+				// 프로필 사진이 없는 경우 기본 이미지를 사용하도록 설정
+				model.addAttribute("profilePhotoUrl", "/images/default-profile.png");
+			}
+		}
 
-	@GetMapping("calender")
-	public String calendar() {
-		return "mypageView/calender";
+		return "mypageView/diningHistory";
 	}
 
 	/**
@@ -123,6 +143,21 @@ public class MypageController {
 	@GetMapping("minigameHistory")
 	public String minigameHistory(Model model, @AuthenticationPrincipal AuthenticatedUser user) {
 		// 사용자의 미니게임 내역
+
+		// 현재 로그인한 사용자의 프로필 사진 URL 추가
+		if (user != null) {
+			String userId = user.getUsername(); // 로그인한 사용자의 ID 가져오기
+			ProfilePhotoDTO profilePhotoDTO = profilePhotoService.getUserProfilePhotoInfo(userId);
+			if (profilePhotoDTO != null) {
+				// 프로필 사진의 URL을 모델에 추가
+				String profilePhotoUrl = "/files/" + profilePhotoDTO.getSavedName();
+				model.addAttribute("profilePhotoUrl", profilePhotoUrl);
+			} else {
+				// 프로필 사진이 없는 경우 기본 이미지를 사용하도록 설정
+				model.addAttribute("profilePhotoUrl", "/images/default-profile.png");
+			}
+		}
+
 		List<MiniGameMenuRatingDTO> miniGameRatingList = miniGameService.getUsersMiniGameRatingAll(user.getId());
 		model.addAttribute("miniGameRatingList", miniGameRatingList);
 		return "mypageView/minigameHistory";
@@ -213,6 +248,20 @@ public class MypageController {
 		@RequestParam(value = "radius", defaultValue = "1000") double radius,
 		@AuthenticationPrincipal AuthenticatedUser user,
 		Model model) {
+
+		// 현재 로그인한 사용자의 프로필 사진 URL 추가
+		if (user != null) {
+			String userId = user.getUsername(); // 로그인한 사용자의 ID 가져오기
+			ProfilePhotoDTO profilePhotoDTO = profilePhotoService.getUserProfilePhotoInfo(userId);
+			if (profilePhotoDTO != null) {
+				// 프로필 사진의 URL을 모델에 추가
+				String profilePhotoUrl = "/files/" + profilePhotoDTO.getSavedName();
+				model.addAttribute("profilePhotoUrl", profilePhotoUrl);
+			} else {
+				// 프로필 사진이 없는 경우 기본 이미지를 사용하도록 설정
+				model.addAttribute("profilePhotoUrl", "/images/default-profile.png");
+			}
+		}
 
 		String userId = user.getUsername(); // 현재 사용자 ID 가져오기
 		List<StoreResponseDTO> favorites = storeSearchService.getUserFavorites(userId, sortBy,
