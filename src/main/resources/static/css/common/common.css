@@ -13,6 +13,20 @@ a {
     text-decoration: none;
 }
 
+#our-h1 {
+    font-size: 24px;
+    margin-bottom: 0;
+}
+
+#our-h3 {
+    font-size: 20px;
+}
+
+#our-span {
+    color: #8f8f8f;
+    font-size: 12px;
+}
+
 button {
     cursor: pointer;
 }

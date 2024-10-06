@@ -7268,14 +7268,17 @@ button.bg-primary:hover {
 }
 
 .bg-secondary {
-    background-color: #6c757d !important
+    border: 1px solid #e9e9ec !important;
+    background: #fff !important;
+    font-size: 12px !important;
+
 }
 
 a.bg-secondary:focus,
 a.bg-secondary:hover,
 button.bg-secondary:focus,
 button.bg-secondary:hover {
-    background-color: #545b62 !important
+    background-color: #fff !important;
 }
 
 .bg-success {

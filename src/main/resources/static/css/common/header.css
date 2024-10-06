@@ -49,6 +49,38 @@ header {
     padding-left: 10px;
 }
 
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+}
+
+.welcome-message {
+    font-size: 14px;
+    margin-right: 50px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+}
+
+#header-btn {
+    color: #000;
+    background-color: transparent;
+    border-color: transparent;
+}
+
+#header-btn:hover {
+    color: #fff;
+    background-color: #697390;
+    border-color: #697390;
+    height: 35px;
+}
+
 /* 로고 링크 기본 스타일 제거 */
 .header-left a {
     display: flex;
@@ -66,7 +98,7 @@ header {
     justify-content: center;
 }
 
-.search-container {
+.header-search {
     height: 35px;
     display: flex;
     align-items: center;
