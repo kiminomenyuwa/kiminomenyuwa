@@ -9,7 +9,7 @@
 
 /* 헤더 전체 스타일 */
 header {
-    display: flex;
+    display: flex !important;
     justify-content: space-between;
     align-items: center;
     background-color: #ffffff;
