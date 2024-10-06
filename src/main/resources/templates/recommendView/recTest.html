@@ -60,6 +60,18 @@
     </tr>
 </table>
 
+<h2>사용자 기반 메뉴별 점수 (내림차순 정렬)</h2>
+<table>
+    <tr>
+        <th>메뉴 이름</th>
+        <th>점수</th>
+    </tr>
+    <!-- sortedMenuList의 데이터만 출력 -->
+    <tr th:each="entry : ${menuScoreMap}">
+            <td th:text="${entry.key}"></td>
+            <td th:text="${entry.value}"></td>
+        </tr>
+    </table>
 
 
 <br><hr>

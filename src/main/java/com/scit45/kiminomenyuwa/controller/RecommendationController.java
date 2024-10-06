@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.scit45.kiminomenyuwa.domain.dto.BudgetDTO;
 import com.scit45.kiminomenyuwa.domain.dto.CategoryCountDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
+import com.scit45.kiminomenyuwa.domain.dto.MiniGameMenuRatingDTO;
 import com.scit45.kiminomenyuwa.domain.dto.StoreResponseDTO;
 import com.scit45.kiminomenyuwa.domain.dto.UserDTO;
 import com.scit45.kiminomenyuwa.domain.dto.recommendation.MenuRecommendationDTO;
@@ -319,6 +321,34 @@ public class RecommendationController {
 		BudgetDTO budget = mypageService.getRemainingBudget(userId, year, month);
 
 		return ResponseEntity.ok(budget);
+	}
+
+	/**
+	 * 발표용 자료 추출 테스트 페이지
+	 * @param user 로그인중인 userId
+	 * @return recTest.html
+	 */
+	@GetMapping("test")
+	public String recommendTest(@AuthenticationPrincipal AuthenticatedUser user
+		, Model model) {
+		// 사용자의 미니게임 내역
+		List<MiniGameMenuRatingDTO> miniGameRatingList = minigameService.getUsersMiniGameRatingAll(user.getId());
+		model.addAttribute("miniGameRatingList", miniGameRatingList);
+
+		// 사용자 ID를 가져와서 카테고리 점수를 계산
+		List<CategoryCountDTO> categoryScores = minigameService.getCategoryScoresByUserId(user.getId());
+		model.addAttribute("categoryScores", categoryScores);
+
+		// 메뉴의 총 점수를 서비스에서 가져옴
+		Map<MenuDTO, Integer> menuScoreMap = minigameService.getMenuScoreMap(user.getId());
+		model.addAttribute("menuScoreMap", menuScoreMap);
+
+		// menuScoreMap을 정렬된 리스트로 변환 (Map 구조라서 아래의 별도 작업이 필요했음ㄷㄷ)
+		List<Map.Entry<MenuDTO, Integer>> sortedMenuList = new ArrayList<>(menuScoreMap.entrySet());
+		sortedMenuList.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue())); // 내림차순 정렬
+		model.addAttribute("sortedMenuList", sortedMenuList); // 정렬된 리스트 추가
+
+		return "recommendView/recTest";
 	}
 
 }
