@@ -12,25 +12,31 @@
     <!-- Slick Slider CSS -->
     <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" rel="stylesheet" type="text/css"/>
     <!-- Slick Slider Theme CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" rel="stylesheet"
-          type="text/css"/>
+    <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" rel="stylesheet" type="text/css"/>
     <!-- jQuery UI CSS -->
     <link href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" rel="stylesheet">
     <style>
         body, html {
             height: 100%;
-            overflow: hidden;
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .navbar {
+            background-color: #343a40;
         }
 
         .content-wrapper {
             display: flex;
-            height: calc(100vh - 56px); /* Navbar height subtracted */
+            height: calc(100vh - 56px);
         }
 
         .menu-container {
             width: 50%;
             overflow-y: auto;
             padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         .map-container {
@@ -44,8 +50,9 @@
 
         .menu-photo {
             width: 100%;
-            height: 150px;
+            height: 180px;
             object-fit: cover;
+            border-radius: 8px 8px 0 0;
         }
 
         .recommendation-section {
@@ -57,28 +64,47 @@
             top: 10px;
             right: 10px;
             z-index: 1000;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(255, 255, 255, 0.9);
             padding: 10px;
             border-radius: 5px;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .filter-bar {
-            background-color: #f8f9fa;
-            padding: 15px;
+            background-color: #f1f3f5;
+            padding: 20px;
             margin-bottom: 20px;
-            border-radius: 5px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
         .card {
             cursor: pointer;
-            transition: transform 0.3s;
+            transition: all 0.3s ease;
+            border: none;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-body {
+            padding: 1.25rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-text {
+            font-size: 0.9rem;
+            color: #6c757d;
         }
 
         .slick-slide {
@@ -89,53 +115,140 @@
             margin: 0 -10px;
         }
 
-        .loading-spinner {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            display: none;
-        }
-
         #friendSearch {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
         #selected-friends {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
         }
 
         .selected-friend {
             display: inline-flex;
             align-items: center;
             background-color: #e9ecef;
-            padding: 5px 10px;
+            padding: 5px 12px;
             margin: 5px;
             border-radius: 20px;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .selected-friend:hover {
+            background-color: #dee2e6;
+        }
+
+        .friend-photo {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 8px;
+            object-fit: cover;
         }
 
         .remove-friend {
-            margin-left: 5px;
+            margin-left: 8px;
             cursor: pointer;
             color: #dc3545;
+            font-size: 1.2rem;
         }
 
         .ui-autocomplete {
             max-height: 200px;
             overflow-y: auto;
             overflow-x: hidden;
+            border-radius: 0 0 4px 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .ui-menu-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 10px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .ui-menu-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .ui-menu-item img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+
+        .ui-menu-item span {
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        /* 로딩 스피너 중앙 배치 */
+        .food-loading-spinner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: none; /* 기본적으로 숨김 */
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .food-loading-spinner i {
+            font-size: 40px;
+            margin: 0 10px;
+            animation: foodSpin 1s linear infinite;
+        }
+
+        .food-loading-spinner i:nth-child(1) {
+            color: #FF6347;
+        }
+
+        .food-loading-spinner i:nth-child(2) {
+            color: #DEB887;
+            animation-delay: 0.25s;
+        }
+
+        .food-loading-spinner i:nth-child(3) {
+            color: #87CEFA;
+            animation-delay: 0.5s;
+        }
+
+        .food-loading-spinner i:nth-child(4) {
+            color: #D2691E;
+            animation-delay: 0.75s;
+        }
+
+        @keyframes foodSpin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
 </head>
-<body>
 <!-- 네비게이션 바 -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">KimiNoMenu</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -191,7 +304,12 @@
                     <input class="form-control" id="keywords" placeholder="예: 맵고, 달콤한, 저칼로리" type="text">
                 </div>
             </div>
-            <button class="btn btn-primary" id="fetchRecommendations" type="button">추천 받기</button>
+            <!-- 약속 시간 입력 필드 추가 -->
+            <div class="mb-3">
+                <label for="appointmentTime" class="form-label">약속 시간</label>
+                <input class="form-control" id="appointmentTime" type="datetime-local">
+            </div>
+            <button class="btn btn-primary w-100" id="fetchRecommendations" type="button">추천 받기</button>
         </div>
 
         <!-- 추천 메뉴 목록 -->
@@ -211,17 +329,33 @@
     <div class="map-container">
         <div id="map"></div>
         <div class="map-buttons">
-            <button class="btn btn-primary btn-sm" id="centerOnUser">현재 위치로</button>
+            <button class="btn btn-primary btn-sm mb-2" id="centerOnUser">현재 위치로</button>
             <button class="btn btn-secondary btn-sm" id="showAllStores">모든 가게 보기</button>
         </div>
     </div>
 </div>
 
-<!-- 로딩 스피너 -->
-<div class="loading-spinner">
-    <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
+<!-- 1위 메뉴 팝업 -->
+<div class="modal fade" id="topMenuModal" tabindex="-1" aria-labelledby="topMenuModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered"> <!-- modal-dialog-centered 클래스 추가 -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="topMenuModalLabel">1위 추천 메뉴</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="topMenuContent">
+                <!-- 1위 메뉴 내용이 여기에 동적으로 추가됩니다 -->
+            </div>
+        </div>
     </div>
+</div>
+
+<!-- 로딩 스피너 중앙 배치 -->
+<div class="food-loading-spinner">
+    <i class="fas fa-pizza-slice"></i>
+    <i class="fas fa-hamburger"></i>
+    <i class="fas fa-ice-cream"></i>
+    <i class="fas fa-cookie"></i>
 </div>
 
 <!-- 스크립트 -->
@@ -231,12 +365,13 @@
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=t06c4jgb48&submodules=geocoder"></script>
 
-<!-- 여기에 JavaScript 코드가 들어갑니다 -->
 <script>
     $(document).ready(function () {
         let map;
         let markers = [];
+        let appointmentMarker = null;
         let selectedFriends = [];
+        let appointmentLocation = null;
 
         // 지도 초기화
         function initMap() {
@@ -244,6 +379,47 @@
                 center: new naver.maps.LatLng(37.5665, 126.9780),
                 zoom: 15
             });
+
+            // 지도 클릭 이벤트 추가
+            naver.maps.Event.addListener(map, 'click', function (e) {
+                setAppointmentLocation(e.latlng);
+            });
+
+            // 지도 드래그 종료 이벤트 추가
+            naver.maps.Event.addListener(map, 'dragend', function () {
+                const center = map.getCenter();
+                setAppointmentLocation(center);
+            });
+        }
+
+        // 약속 장소 설정 함수
+        function setAppointmentLocation(latlng) {
+            // 기존 약속 마커가 있다면 제거
+            if (appointmentMarker) {
+                appointmentMarker.setMap(null);
+            }
+
+            // 새 약속 마커 추가 (기본 마커 사용)
+            appointmentMarker = new naver.maps.Marker({
+                position: latlng,
+                map: map,
+                icon: {
+                    content: '<i class="fas fa-map-marker-alt" style="font-size:24px;color:red;"></i>',
+                    anchor: new naver.maps.Point(12, 24)
+                }
+            });
+
+            // 약속 위치 저장
+            appointmentLocation = {
+                latitude: latlng.lat(),
+                longitude: latlng.lng()
+            };
+
+            // 약속 장소 정보 표시
+            const infoWindow = new naver.maps.InfoWindow({
+                content: `<div style="padding:10px;min-width:200px;">약속 장소</div>`
+            });
+            infoWindow.open(map, appointmentMarker);
         }
 
         // 자동완성 설정
@@ -258,7 +434,8 @@
                             return {
                                 label: item.userName + " (" + item.userId + ")",
                                 value: item.userId,
-                                name: item.userName
+                                name: item.userName,
+                                profilePhotoUrl: item.profilePhotoUrl
                             };
                         }));
                     }
@@ -270,15 +447,25 @@
                     selectedFriends.push(ui.item.value);
                     $("#selected-friends").append(
                         `<span class="selected-friend" data-id="${ui.item.value}">
-                        ${ui.item.name}
-                        <span class="remove-friend">&times;</span>
-                    </span>`
+                            <img src="${ui.item.profilePhotoUrl}" alt="${ui.item.name}" class="friend-photo" />
+                            <span>${ui.item.name}</span>
+                            <i class="fas fa-times remove-friend"></i>
+                        </span>`
                     );
+                } else {
+                    alert("이미 선택된 친구입니다.");
                 }
                 $(this).val("");
                 return false;
             }
-        });
+        }).autocomplete("instance")._renderItem = function (ul, item) {
+            return $("<li>")
+                .append(`<div>
+                        <img src="${item.profilePhotoUrl}" alt="${item.name}" />
+                        <span>${item.label}</span>
+                     </div>`)
+                .appendTo(ul);
+        };
 
         // 친구 제거
         $(document).on("click", ".remove-friend", function () {
@@ -294,31 +481,48 @@
                 return;
             }
 
-            $(".loading-spinner").show();
+            if (!appointmentLocation) {
+                alert("약속 장소를 설정해주세요.");
+                return;
+            }
 
-            const center = map.getCenter();
+            const appointmentTime = $("#appointmentTime").val();
+            if (!appointmentTime) {
+                alert("약속 시간을 입력해주세요.");
+                return;
+            }
+
+            // 지도 중심을 약속 장소로 설정
+            map.setCenter(new naver.maps.LatLng(appointmentLocation.latitude, appointmentLocation.longitude));
+
+            $(".food-loading-spinner").css("display", "flex"); // 로딩 스피너 표시
+
             $.ajax({
                 url: "/recommendations/nearby-menus-with-friends",
                 method: "POST",
                 data: {
-                    latitude: center.lat(),
-                    longitude: center.lng(),
+                    latitude: appointmentLocation.latitude,
+                    longitude: appointmentLocation.longitude,
                     radius: 1000,
                     limit: 10,
                     participantUserIds: selectedFriends,
                     preferredCategories: $("#preferredCategories").val(),
-                    keywords: $("#keywords").val()
+                    keywords: $("#keywords").val(),
+                    appointmentTime: appointmentTime
                 },
                 success: function (response) {
                     displayRecommendedMenus(response.recommendedMenus);
                     displayNearbyStores(response.nearbyStores);
                     updateMap(response.nearbyStores);
+                    if(response.recommendedMenus.length > 0){
+                        showTopMenuPopup(response.recommendedMenus[0]); // 1위 메뉴 팝업 표시
+                    }
                 },
                 error: function () {
                     alert("추천을 가져오는데 실패했습니다.");
                 },
                 complete: function () {
-                    $(".loading-spinner").hide();
+                    $(".food-loading-spinner").css("display", "none"); // 로딩 스피너 숨기기
                 }
             });
         });
@@ -335,10 +539,18 @@
                         <h5 class="card-title">${menu.name}</h5>
                         <p class="card-text">가격: ${menu.price}원</p>
                         <p class="card-text">${menu.categories.map(c => c.categoryName).join(", ")}</p>
+                        <a href="/stores/${menu.storeId}" class="btn btn-primary">가게 보러가기</a>
                     </div>
                 </div>
             `);
             });
+
+            // 기존 슬릭 인스턴스 제거
+            if (slider.hasClass('slick-initialized')) {
+                slider.slick('unslick');
+            }
+
+            // 새로운 슬릭 슬라이더 초기화
             slider.slick({
                 slidesToShow: 3,
                 slidesToScroll: 1,
@@ -361,6 +573,23 @@
             });
         }
 
+        // 1위 메뉴 팝업 표시
+        function showTopMenuPopup(topMenu) {
+            const modalContent = `
+            <div class="card">
+                <img src="${topMenu.pictureUrl || '/images/default-menu.png'}" class="card-img-top menu-photo" alt="${topMenu.name}">
+                <div class="card-body">
+                    <h5 class="card-title">${topMenu.name}</h5>
+                    <p class="card-text">가격: ${topMenu.price}원</p>
+                    <p class="card-text">${topMenu.categories.map(c => c.categoryName).join(", ")}</p>
+                    <a href="/stores/${topMenu.storeId}" class="btn btn-primary">가게 보러가기</a>
+                </div>
+            </div>
+        `;
+            $("#topMenuContent").html(modalContent);
+            new bootstrap.Modal(document.getElementById('topMenuModal')).show();
+        }
+
         // 주변 가게 표시
         function displayNearbyStores(stores) {
             const storeList = $("#store-list");
@@ -379,7 +608,9 @@
                 </div>
             `);
             });
-        }// 지도 업데이트
+        }
+
+        // 지도 업데이트
         function updateMap(stores) {
             // 기존 마커 제거
             markers.forEach(marker => marker.setMap(null));
@@ -423,7 +654,7 @@
                 navigator.geolocation.getCurrentPosition(function (position) {
                     const userLocation = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
                     map.setCenter(userLocation);
-                    map.setZoom(15);
+                    setAppointmentLocation(userLocation); // 약속 장소를 현재 위치로 설정
                 }, function () {
                     alert("위치 정보를 가져올 수 없습니다.");
                 });
@@ -451,9 +682,20 @@
             navigator.geolocation.getCurrentPosition(function (position) {
                 const userLocation = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
                 map.setCenter(userLocation);
+                setAppointmentLocation(userLocation); // 약속 장소를 현재 위치로 설정
             }, function () {
                 console.log("위치 정보를 가져올 수 없습니다.");
+                // 위치 정보를 가져올 수 없는 경우, 기본 위치로 설정
+                const defaultLocation = new naver.maps.LatLng(37.5665, 126.9780);
+                map.setCenter(defaultLocation);
+                setAppointmentLocation(defaultLocation);
             });
+        } else {
+            console.log("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
+            // 위치 정보를 지원하지 않는 경우, 기본 위치로 설정
+            const defaultLocation = new naver.maps.LatLng(37.5665, 126.9780);
+            map.setCenter(defaultLocation);
+            setAppointmentLocation(defaultLocation);
         }
     });
 </script>
