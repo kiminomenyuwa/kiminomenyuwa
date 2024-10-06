@@ -31,7 +31,7 @@ public class FavoriteController {
 	 * @return 성공 메시지 또는 오류 메시지
 	 */
 	@PostMapping("/{storeId}")
-	public ResponseEntity<String> addFavorite(@PathVariable Integer storeId) {
+	public ResponseEntity<String> addFavorite(@PathVariable("storeId") Integer storeId) {
 		try {
 			String userId = getCurrentUserId();
 			favoriteService.addFavorite(userId, storeId);
@@ -50,7 +50,7 @@ public class FavoriteController {
 	 * @return 성공 메시지 또는 오류 메시지
 	 */
 	@DeleteMapping("/{storeId}")
-	public ResponseEntity<String> removeFavorite(@PathVariable Integer storeId) {
+	public ResponseEntity<String> removeFavorite(@PathVariable("storeId") Integer storeId) {
 		try {
 			String userId = getCurrentUserId();
 			favoriteService.removeFavorite(userId, storeId);
