@@ -115,6 +115,13 @@ public class StoreSearchService {
 		dto.setDescription(store.getDescription());
 		dto.setEnabled(store.getEnabled());
 
+		// 상점의 사진 URLs 추가
+		List<StorePhotoEntity> photoEntities = storePhotoRepository.findByStore(store);
+		List<String> photoUrls = photoEntities.stream()
+			.map(StorePhotoEntity::getPhotoUrl)
+			.collect(Collectors.toList());
+		dto.setPhotoUrls(photoUrls);
+
 		// 위치 정보 추출
 		if (store.getLocation() != null) {
 			dto.setLongitude(store.getLocation().getCoordinate().getX());
