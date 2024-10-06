@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -215,5 +217,49 @@ public class ReviewService {
 				}
 			)
 			.collect(Collectors.toList());
+	}
+
+	// 페이지네이션을 적용한 사용자의 리뷰 조회
+	public Page<ReviewResponseDTO> getMyReviewsPageable(String userId, Pageable pageable) {
+		Page<ReviewEntity> reviewPage = reviewRepository.findByUserUserId(userId, pageable);
+		return reviewPage.map(this::convertToDTO);
+	}
+
+	// Review 엔티티를 ReviewResponseDTO로 변환
+	private ReviewResponseDTO convertToDTO(ReviewEntity review) {
+		ProfilePhotoEntity profilePhoto = profilePhotoRepository.findByUserId(review.getUser().getUserId())
+			.orElse(null);
+		List<String> reviewPhotoUrls = reviewPhotoRepository.findByReview(review).stream()
+			.map(ReviewPhotoEntity::getPhotoUrl).toList();
+
+		ReviewResponseDTO dto = ReviewResponseDTO.builder()
+			.reviewId(review.getReviewId())
+			.userId(review.getUser().getName())
+			.rating(review.getRating())
+			.comment(review.getComment())
+			.createdTime(review.getCreatedTime())
+			.photoUrls(reviewPhotoUrls)
+			.build();
+
+		if (profilePhoto != null) {
+			dto.setUserProfileUrl("/files/" + profilePhoto.getSavedName());
+		} else {
+			dto.setUserProfileUrl("/images/default-profile.png");
+		}
+		log.debug(dto.toString());
+		return dto;
+	}
+
+	// 페이지네이션, 필터링, 정렬을 적용한 사용자의 리뷰 조회
+	public Page<ReviewResponseDTO> getMyReviewsPageable(String userId, Pageable pageable, Integer rating, String sortBy) {
+		Page<ReviewEntity> reviewPage;
+		if (rating == null && sortBy.equals("createdTime")) {
+			// 기본 쿼리 사용 (필터링 없음, 생성 시간순 정렬)
+			reviewPage = reviewRepository.findByUserUserId(userId, pageable);
+		} else {
+			// 필터링 또는 정렬이 적용된 쿼리 사용
+			reviewPage = reviewRepository.findByUserIdAndRatingOrderBy(userId, rating, sortBy, pageable);
+		}
+		return reviewPage.map(this::convertToDTO);
 	}
 }
