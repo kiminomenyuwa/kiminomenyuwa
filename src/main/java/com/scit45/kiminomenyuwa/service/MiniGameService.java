@@ -351,7 +351,7 @@ public class MiniGameService {
 		if (randomMenu != null) {
 			return convertToMenuDTO(randomMenu);
 		} else {
-			return null; // 반경 내에 메뉴가 없는 경우
+			return new MenuDTO(); // 반경 내에 메뉴가 없는 경우
 		}
 	}
 
