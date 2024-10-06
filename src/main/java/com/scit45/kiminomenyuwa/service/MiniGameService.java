@@ -335,6 +335,9 @@ public class MiniGameService {
 				}
 			}
 
+			// 로그 추가: 메뉴 이름과 계산된 점수 확인
+			log.debug("Menu Name: {}, Calculated Score: {}", menu.getName(), totalScore);
+
 			// 메뉴의 총 점수를 Map에 저장
 			menuScoreMap.put(menu, totalScore);
 		}

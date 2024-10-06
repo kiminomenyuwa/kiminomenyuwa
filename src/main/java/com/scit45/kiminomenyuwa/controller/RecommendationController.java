@@ -342,6 +342,8 @@ public class RecommendationController {
 		// 메뉴의 총 점수를 서비스에서 가져옴
 		Map<MenuDTO, Integer> menuScoreMap = minigameService.getMenuScoreMap(user.getId());
 		model.addAttribute("menuScoreMap", menuScoreMap);
+		log.debug("menuScoreMap: {}", menuScoreMap);
+
 
 		// menuScoreMap을 정렬된 리스트로 변환 (Map 구조라서 아래의 별도 작업이 필요했음ㄷㄷ)
 		List<Map.Entry<MenuDTO, Integer>> sortedMenuList = new ArrayList<>(menuScoreMap.entrySet());
