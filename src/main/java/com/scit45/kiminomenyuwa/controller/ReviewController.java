@@ -16,15 +16,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.scit45.kiminomenyuwa.domain.dto.ProfilePhotoDTO;
 import com.scit45.kiminomenyuwa.domain.dto.ReviewRequestDTO;
 import com.scit45.kiminomenyuwa.domain.dto.ReviewResponseDTO;
 import com.scit45.kiminomenyuwa.domain.dto.receipt.ReceiptDTO;
 import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
+import com.scit45.kiminomenyuwa.service.ProfilePhotoService;
 import com.scit45.kiminomenyuwa.service.ReviewService;
 import com.scit45.kiminomenyuwa.service.UserDiningHistoryService;
 
 import jakarta.servlet.http.HttpSession;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,6 +36,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ReviewController {
 	private final ReviewService reviewService;
 	private final UserDiningHistoryService userDiningHistoryService;
+	private final ProfilePhotoService profilePhotoService;
 
 	/**
 	 * 영수증 업로드 페이지 표시
@@ -98,6 +100,21 @@ public class ReviewController {
 	@GetMapping("/myReview")
 	public String viewMyReviews(@AuthenticationPrincipal AuthenticatedUser user
 	, Model model) {
+
+		// 현재 로그인한 사용자의 프로필 사진 URL 추가
+		if (user != null) {
+			String userId = user.getUsername(); // 로그인한 사용자의 ID 가져오기
+			ProfilePhotoDTO profilePhotoDTO = profilePhotoService.getUserProfilePhotoInfo(userId);
+			if (profilePhotoDTO != null) {
+				// 프로필 사진의 URL을 모델에 추가
+				String profilePhotoUrl = "/files/" + profilePhotoDTO.getSavedName();
+				model.addAttribute("profilePhotoUrl", profilePhotoUrl);
+			} else {
+				// 프로필 사진이 없는 경우 기본 이미지를 사용하도록 설정
+				model.addAttribute("profilePhotoUrl", "/images/default-profile.png");
+			}
+		}
+
 		List<ReviewResponseDTO> myReviewLists = reviewService.getMyReviews(user.getId());
 		model.addAttribute("myReviewLists", myReviewLists);
 
