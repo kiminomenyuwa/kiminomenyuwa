@@ -43,7 +43,20 @@ public class ReviewController {
 	 * 영수증 업로드 페이지 표시
 	 */
 	@GetMapping("/write")
-	public String showUploadPage() {
+	public String showUploadPage(@AuthenticationPrincipal AuthenticatedUser user, Model model) {
+		// 현재 로그인한 사용자의 프로필 사진 URL 추가
+		if (user != null) {
+			String userId = user.getUsername(); // 로그인한 사용자의 ID 가져오기
+			ProfilePhotoDTO profilePhotoDTO = profilePhotoService.getUserProfilePhotoInfo(userId);
+			if (profilePhotoDTO != null) {
+				// 프로필 사진의 URL을 모델에 추가
+				String profilePhotoUrl = "/files/" + profilePhotoDTO.getSavedName();
+				model.addAttribute("profilePhotoUrl", profilePhotoUrl);
+			} else {
+				// 프로필 사진이 없는 경우 기본 이미지를 사용하도록 설정
+				model.addAttribute("profilePhotoUrl", "/images/default-profile.png");
+			}
+		}
 		return "reviewView/reviewForm"; // 템플릿 경로 변경
 	}
 
@@ -68,7 +81,7 @@ public class ReviewController {
 			reviewService.saveReviewWithPhotos(reviewDTO, loggedInUserId);
 
 			// 세션에서 영수증 정보 가져오기
-			ReceiptDTO receiptDTO = (ReceiptDTO) session.getAttribute("uploadedReceipt");
+			ReceiptDTO receiptDTO = (ReceiptDTO)session.getAttribute("uploadedReceipt");
 			if (receiptDTO != null) {
 				receiptDTO.getItems().forEach(item -> {
 					String description = item.getDescription();
@@ -77,6 +90,7 @@ public class ReviewController {
 					// 먹은 내역 저장
 					userDiningHistoryService.saveDiningHistory(loggedInUserId, description);
 				});
+
 			} else {
 				log.warn("세션에 영수증 정보가 없습니다.");
 			}
@@ -123,7 +137,8 @@ public class ReviewController {
 		}
 
 		// 페이지네이션을 적용한 리뷰 목록 조회
-		Page<ReviewResponseDTO> myReviewPage = reviewService.getMyReviewsPageable(user.getId(), PageRequest.of(page, size), rating, sortBy);
+		Page<ReviewResponseDTO> myReviewPage = reviewService.getMyReviewsPageable(user.getId(),
+			PageRequest.of(page, size), rating, sortBy);
 
 		model.addAttribute("myReviewLists", myReviewPage.getContent());
 		model.addAttribute("currentPage", myReviewPage.getNumber());
