@@ -7,9 +7,7 @@
         <!-- 로그인한 사용자의 프로필 섹션 -->
         <div class="profile-section" sec:authorize="isAuthenticated()">
             <div class="profile-image-container">
-                <img th:src="@{${profilePhotoUrl}}"
-                     alt="프로필 사진"
-                     class="profile-image"/>
+                <img th:src="@{${profilePhotoUrl}}" alt="프로필 사진" class="profile-image" />
             </div>
             <div class="user-info">
                 <span class="user-name" th:text="${#authentication.name}">사용자 이름</span>
@@ -47,13 +45,13 @@
 
     <style>
         .side-menu {
-            background-color: #f8f9fa;
+            background-color: #fff;
             padding: 20px;
             height: 100vh;
-            width: 250px;
+            width: 270px;
             position: fixed;
             top: 0;
-            left: -250px;
+            left: -270px;
             transition: 0.3s;
             overflow-y: auto;
             box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -95,7 +93,7 @@
 
         .edit-profile-link {
             font-size: 14px;
-            color: #007bff;
+            color: #FF7878;
             text-decoration: none;
         }
 
@@ -170,12 +168,12 @@
         .logout-button {
             display: block;
             padding: 10px;
-            color: #dc3545;
+            color: #9e9e9e;
             text-decoration: none;
             font-size: 16px;
             transition: 0.2s;
             border-radius: 5px;
-            text-align: center;
+            text-align: left;
         }
 
         .logout-button:hover {
