@@ -71,7 +71,7 @@ header {
     display: flex;
     align-items: center;
     width: 100%;
-    max-width: 500px;
+    max-width: 800px;
     background-color: #f1f1f1;
     /* 검색창 배경색 */
     border-radius: 25px;
@@ -101,6 +101,9 @@ header {
 .location-text {
     font-size: 14px;
     color: #555;
+    white-space: nowrap;
+    padding-right: 10px;
+    padding-left: 300px;
 }
 
 /* 헤더 오른쪽 섹션 */
