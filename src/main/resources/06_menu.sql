@@ -68,8 +68,8 @@ INSERT INTO `menu`
 VALUES
     ('1801', '11370', '야채 떡볶이 2~3인', '13000', 'https://ldb-phinf.pstatic.net/20201208_78/1607374325072h3nHR_PNG/PiBoTBgkMrZWOTxX-tIFhWYH.png', 1),
     ('1802', '11370', '순대', '6000', 'https://search.pstatic.net/common/?src=https%3A%2F%2Fpup-review-phinf.pstatic.net%2FMjAyMzA0MTZfNzMg%2FMDAxNjgxNjE4MDQzMjc5.5pqjP4ZICAA4kLQY0KLhvb_uQMFlBt-TKHlmRHqesFQg.nSBFcY7RYIKpXiDApSJrfffFym1vBtoFBmK7UXo4VDIg.JPEG%2F20230413_182312.jpg%3Ftype%3Dw1500_60_sharpen', 1),
-    ('1803', '11370', '오징어튀김추가', '1000', 'https://search.pstatic.net/common/?src=https%3A%2F%2Fpup-review-phinf.pstatic.net%2FMjAyMzA3MTZfMjI2%2FMDAxNjg5NDgwMjYxODY1.0muFg4PnISIOf75rzVIbRXYXDeJCOu2VRGMEW0tlynsg.A55fPQHdNjqC30ercJhOGSTWMrLiZmW0Btl1XEVRnagg.JPEG%2F1689479650610.jpg%3Ftype%3Dw1500_60_sharpen', 1),
-    ('1804', '11370', '볶음밥추가', '2000', 'https://search.pstatic.net/common/?src=https%3A%2F%2Fpup-review-phinf.pstatic.net%2FMjAyNDA1MDFfMTQ0%2FMDAxNzE0NTcxNDI0MTYy.b83vYyq-aOnikp-ZJ_r4fRTLaFSe9UIWKjTMawSxUzwg.G2eCv7Gaaye5f_XIr5pzHl41xnZk4ge7j5sHV9BZsl4g.JPEG%2F75626553-A7AE-44FF-9256-754E13EA4E9A.jpeg%3Ftype%3Dw1500_60_sharpen', 1),
+    ('1803', '11370', '오징어튀김', '1000', 'https://search.pstatic.net/common/?src=https%3A%2F%2Fpup-review-phinf.pstatic.net%2FMjAyMzA3MTZfMjI2%2FMDAxNjg5NDgwMjYxODY1.0muFg4PnISIOf75rzVIbRXYXDeJCOu2VRGMEW0tlynsg.A55fPQHdNjqC30ercJhOGSTWMrLiZmW0Btl1XEVRnagg.JPEG%2F1689479650610.jpg%3Ftype%3Dw1500_60_sharpen', 1),
+    ('1804', '11370', '볶음밥', '2000', 'https://search.pstatic.net/common/?src=https%3A%2F%2Fpup-review-phinf.pstatic.net%2FMjAyNDA1MDFfMTQ0%2FMDAxNzE0NTcxNDI0MTYy.b83vYyq-aOnikp-ZJ_r4fRTLaFSe9UIWKjTMawSxUzwg.G2eCv7Gaaye5f_XIr5pzHl41xnZk4ge7j5sHV9BZsl4g.JPEG%2F75626553-A7AE-44FF-9256-754E13EA4E9A.jpeg%3Ftype%3Dw1500_60_sharpen', 1),
     ('1805', '11370', '쿨피스', '2000', 'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA5MDFfMjc5%2FMDAxNzI1MTE2NDAxMzI4.QqJSnteUUQYM-XbpDe19Mnb18dPZ1L4c5heUctKTZQAg.zAyb4r-thAYRy3CTagcv8tvtA7Zz903QnmI_6ZGGxV4g.JPEG%2FIMG_3128.jpg', 1);
 
 -- 153구포국수
