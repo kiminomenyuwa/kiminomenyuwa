@@ -31,9 +31,9 @@
     <div id="side-box" class="d-flex flex-column align-items-center p-4 bg-light rounded">
         <!-- Profile Section -->
         <div class="text-center mb-4" id="side-profile-box">
-            <img th:src="@{/images/avatar.jpg}" alt="Profile" id="side-prof-img"
+            <img th:src="@{${profilePhotoUrl}}" alt="Profile" id="side-prof-img"
                 class="rounded-circle mb-2 profile-picture">
-            <h4 class="side-prof-id">간을 좋아하는 범고래</h4>
+            <h4 class="side-prof-id" th:text="${#authentication.principal.name}">간을 좋아하는 범고래</h4>
 
             <div class="d-flex justify-content-center gap-2" style="justify-content: space-between !important;
     margin: 80px 55px;">
@@ -56,32 +56,39 @@
         <!-- Navigation Menu -->
         <nav class="w-100">
             <ul class="list-unstyled">
+<!--                <li class="mb-2" id="side-menu-list">-->
+<!--                    <a th:href="@{/mypage}"-->
+<!--                        class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg">-->
+<!--                        <i class="fas fa-user me-3"></i>-->
+<!--                        <span>내 프로필</span>-->
+<!--                    </a>-->
+<!--                </li>-->
                 <li class="mb-2" id="side-menu-list">
-                    <a th:href="@{/mypage/mypageMain}"
-                        class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg">
-                        <i class="fas fa-user me-3"></i>
-                        <span>내 프로필</span>
+                    <a th:href="@{/mypage}"
+                       class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg">
+                        <i class="fas fa-calendar-check me-3"></i>
+                        <span>내 식사 달력</span>
+                    </a>
+                </li>
+                <li class="mb-2" id="side-menu-list">
+                    <a th:href="@{/friendships/list}"
+                       class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg">
+                        <i class="fas fa-user-friends me-3"></i>
+                        <span>친구</span>
                     </a>
                 </li>
                 <li class="mb-2" id="side-menu-list">
                     <a th:href="@{/reviews/myReview}"
                         class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg">
                         <i class="fas fa-star me-3"></i>
-                        <span>내 리뷰</span>
-                    </a>
-                </li>
-                <li class="mb-2" id="side-menu-list">
-                    <a th:href="@{/friendships/list}"
-                        class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg">
-                        <i class="fas fa-user-friends me-3"></i>
-                        <span>친구</span>
+                        <span>내가 작성한 리뷰</span>
                     </a>
                 </li>
                 <li class="mb-2" id="side-menu-list">
                     <a class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg"
                         th:href="@{/mypage/favorites}">
                         <i class="fas fa-box-open me-3"></i>
-                        <span>컬렉션</span>
+                        <span>내가 찜한 가게</span>
                     </a>
                 </li>
                 <li class="mb-2" id="side-menu-list">
@@ -89,13 +96,6 @@
                         th:href="@{/mypage/diningHistory}">
                         <i class="fas fa-calendar-alt me-3"></i>
                         <span>내 이벤트</span>
-                    </a>
-                </li>
-                <li class="mb-2" id="side-menu-list">
-                    <a th:href="@{/mypage/calender}"
-                        class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg">
-                        <i class="fas fa-calendar-check me-3"></i>
-                        <span>내 달력</span>
                     </a>
                 </li>
             </ul>

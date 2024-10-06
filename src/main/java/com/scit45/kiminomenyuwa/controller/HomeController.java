@@ -3,6 +3,7 @@ package com.scit45.kiminomenyuwa.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -215,6 +216,16 @@ public class HomeController {
 			return ResponseEntity.ok(menu);
 		} else {
 			return ResponseEntity.noContent().build(); // 반경 내에 메뉴가 없는 경우
+		}
+	}
+
+	@PostMapping("/get-random-menu2")
+	public ResponseEntity<MenuDTO> getRandomMenu() {
+		MenuDTO randomMenu = miniGameService.getRandomMenu();
+		if (randomMenu != null) {
+			return ResponseEntity.ok(randomMenu);
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 	}
 

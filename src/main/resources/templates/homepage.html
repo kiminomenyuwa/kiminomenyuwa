@@ -28,9 +28,13 @@
         /* 이미지 반복 안 함 */
     }
 
-    #selected-menu {
-        display: none;
-        /* 이미지는 배경으로 처리되므로 div 내부의 img는 숨김 */
+    #menu-background {
+        background-image: url("/images/menulogo.png");
+        /* 기본 배경 이미지 */
+        background-size: contain;
+        /* 원본 비율 유지하면서 보여줌 */
+        background-position: center;
+        background-repeat: no-repeat;
     }
 
     /* 배경 이미지가 작은 경우에도 너비 기준으로 정비율 확대 */
@@ -50,6 +54,10 @@
         gap: 10px;
         background-color: transparent;
         color: black;
+    }
+
+    span#current-address {
+        display: block;
     }
 
     /* 상단 왼쪽 [회원용] */
@@ -98,7 +106,8 @@
         /* 가독성을 위한 그림자 */
     }
 
-    #user-start-game {
+    #user-start-game,
+    #start-game {
         width: 150px;
         height: 50px;
         margin-bottom: 0px;
@@ -300,10 +309,9 @@
         <div sec:authorize="not isAuthenticated()" id="menu-section">
             <div class="member-label">[비회원용]</div>
             <!-- 위치와 반경 선택 -->
-            <div id="location-section">
-                <h3>현재 위치</h3>
-                <p id="current-address">위치를 불러오는 중...</p>
-                <label for="radius-select">반경 선택:</label>
+            <div class="location-container" id="location-section">
+                <span id="current-address">위치를 불러오는 중...</span>
+                <label for="radius-select">/ 반경 선택:</label>
                 <select id="radius-select">
                     <option value="300">300m</option>
                     <option value="500" selected>500m</option>
@@ -315,12 +323,14 @@
             <!-- 메뉴 추천 메시지 및 결과 표시 -->
             <div id="selected-menu">
                 <h2 id="menu-header">메뉴 룰렛을 누르세요</h2>
-                <img id="menu-image" src="" alt="메뉴 이미지" style="display: none; width: 200px; height: 200px" />
+                <h2 class="menu-name" id="guest-menu-header">메뉴 룰렛을 누르세요</h2>
             </div>
 
             <!-- 게임 시작 버튼 -->
-            <div class="button" id="menu-controls">
-                <button id="start-game">게임 시작</button>
+            <div class="button-container">
+                <div class="button" id="menu-controls">
+                    <button id="start-game">게임 시작</button>
+                </div>
             </div>
         </div>
 
@@ -343,6 +353,7 @@
             <!-- 메뉴 추천 메시지 및 결과 표시 -->
             <div id="user-selected-menu">
                 <h2 class="menu-name" id="user-menu-header">메뉴 룰렛을 누르세요</h2>
+                <img id="user-menu-image" src="" alt="메뉴 이미지" />
             </div>
 
             <div class="button-container">
@@ -455,30 +466,27 @@
 
             // 비회원용 "게임 시작" 버튼 클릭 이벤트 처리
             $("#start-game").click(function () {
-                const radius = $("#radius-select").val(); // 선택된 반경 값을 가져옴
-
-                if (!latitude || !longitude) {
-                    alert("위치 정보를 가져오지 못했습니다.");
-                    return;
-                }
-
-                $.post(
-                    "/get-random-menu-by-location",
-                    {
-                        latitude: latitude,
-                        longitude: longitude,
-                        radius: radius,
-                    },
-                    function (menu) {
-                        if (menu) {
-                            $("#menu-header").text(menu.name); // 선택된 메뉴의 이름을 화면에 표시
-                            $("#menu-image").attr("src", menu.pictureUrl).show(); // 이미지 표시
-                            $("#start-game").text("다시 시작");
+                $.post("/get-random-menu", {}, function (menu) {
+                    if (menu) {
+                        console.log("Menu received:", menu); // 메뉴 정보 로그로 출력
+                        $("#guest-menu-header").text(menu.name); // 선택된 메뉴의 이름을 화면에 표시
+                        // 이미지 URL이 존재하는 경우 배경 이미지로 설정
+                        if (menu.pictureUrl) {
+                            $("#menu-background").css(
+                                "background-image",
+                                `url(${menu.pictureUrl})`
+                            );
                         } else {
-                            alert("반경 내에 더 이상 메뉴가 없습니다.");
+                            // 이미지가 없으면 배경 이미지 제거
+                            $("#menu-background").css("background-image", "none");
                         }
+                        $("#start-game").text("다시 시작");
+                        // selected-menu를 보이도록 display 스타일 수정
+                        $("#selected-menu").css("display", "block");
+                    } else {
+                        alert("메뉴가 없습니다.");
                     }
-                ).fail(function (xhr, status, error) {
+                }).fail(function (xhr, status, error) {
                     alert("메뉴를 가져오는 데 실패했습니다.");
                     console.log(status, error);
                 });
