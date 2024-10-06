@@ -27,6 +27,11 @@
     .btn i.fa {
         margin-right: 0; /* 아이콘과 텍스트 간격 제거 */
     }
+
+    /* Font Awesome 아이콘 스타일 커스터마이징 (필요 시 추가) */
+    .favorite-btn i {
+        font-size: 1.2rem;
+    }
 </style>
 
 <div layout:fragment="content">
@@ -94,7 +99,7 @@
                                     th:data-favorited="${store.favorited}"
                                     th:data-store-id="${store.storeId}"
                                     type="button">
-                                <i class="fa" th:classappend="${store.favorited} ? 'fa-heart' : 'fa-heart-o'"></i>
+                                <i th:classappend="${store.favorited} ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i>
                             </button>
                         </sec:authorize>
                     </div>
@@ -144,20 +149,21 @@
     <script type="text/javascript">
         $(document).ready(function () {
             // 찜 버튼 클릭 이벤트
+            // 찜 버튼 클릭 이벤트 처리
             $('.favorite-btn').click(function () {
                 var button = $(this);
                 var storeId = button.data('store-id');
                 var favorited = button.data('favorited');
 
                 if (favorited) {
-                    // 찜 취소
+                    // 찜 취소 (DELETE 요청)
                     $.ajax({
                         url: '/api/favorites/' + storeId,
                         type: 'DELETE',
                         success: function (response) {
                             alert(response);
                             button.data('favorited', false);
-                            button.find('i').removeClass('fa-heart').addClass('fa-heart-o'); // 빈 하트로 변경
+                            button.find('i').removeClass('fa-solid fa-heart').addClass('fa-regular fa-heart'); // 빈 하트로 변경
                             button.removeClass('text-danger').addClass('text-secondary'); // 아이콘 색상 변경
                         },
                         error: function (xhr) {
@@ -165,14 +171,14 @@
                         }
                     });
                 } else {
-                    // 찜 추가
+                    // 찜 추가 (POST 요청)
                     $.ajax({
                         url: '/api/favorites/' + storeId,
                         type: 'POST',
                         success: function (response) {
                             alert(response);
                             button.data('favorited', true);
-                            button.find('i').removeClass('fa-heart-o').addClass('fa-heart'); // 꽉 찬 하트로 변경
+                            button.find('i').removeClass('fa-regular fa-heart').addClass('fa-solid fa-heart'); // 꽉 찬 하트로 변경
                             button.removeClass('text-secondary').addClass('text-danger'); // 아이콘 색상 변경
                         },
                         error: function (xhr) {
