@@ -45,7 +45,7 @@
                 </a>
 
                 <!-- 친구 추가 링크 -->
-                <a th:href="@{/add-friend}" id="side-prfo-icon"
+                <a th:href="@{/friendships/list}" id="side-prfo-icon"
                     class="text-decoration-none text-success d-flex align-items-center">
                     <i id="side-prof-icon" class="fas fa-user-plus me-2"></i>
                     <span id="side-icon-clr">친구 추가</span>
@@ -74,7 +74,7 @@
                     <a th:href="@{/friendships/list}"
                        class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg">
                         <i class="fas fa-user-friends me-3"></i>
-                        <span>친구</span>
+                        <span>친구 관리</span>
                     </a>
                 </li>
                 <li class="mb-2" id="side-menu-list">
@@ -89,13 +89,6 @@
                         th:href="@{/mypage/favorites}">
                         <i class="fas fa-box-open me-3"></i>
                         <span>내가 찜한 가게</span>
-                    </a>
-                </li>
-                <li class="mb-2" id="side-menu-list">
-                    <a class="d-flex align-items-center text-decoration-none text-dark p-2 rounded hover-bg"
-                        th:href="@{/mypage/diningHistory}">
-                        <i class="fas fa-calendar-alt me-3"></i>
-                        <span>내 이벤트</span>
                     </a>
                 </li>
             </ul>
