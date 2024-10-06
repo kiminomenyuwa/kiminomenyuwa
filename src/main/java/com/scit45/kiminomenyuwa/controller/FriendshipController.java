@@ -23,10 +23,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.scit45.kiminomenyuwa.domain.dto.FriendDTO;
+import com.scit45.kiminomenyuwa.domain.dto.ProfilePhotoDTO;
 import com.scit45.kiminomenyuwa.domain.dto.recommendation.UserSimpleDTO;
 import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
 import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
 import com.scit45.kiminomenyuwa.service.FriendshipService;
+import com.scit45.kiminomenyuwa.service.ProfilePhotoService;
 import com.scit45.kiminomenyuwa.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -43,6 +45,7 @@ public class FriendshipController {
 
 	private final FriendshipService friendshipService; // 친구 관련 로직을 처리하는 서비스
 	private final UserService userService; // 사용자 관련 로직을 처리하는 서비스
+	private final ProfilePhotoService profilePhotoService;
 
 	/**
 	 * 친구 목록 페이지로 이동
@@ -50,7 +53,22 @@ public class FriendshipController {
 	 * @return friendList 뷰로 이동
 	 */
 	@GetMapping("/list")
-	public String showFriendList(Model model) {
+	public String showFriendList(Model model
+		, @AuthenticationPrincipal AuthenticatedUser user) {
+
+		if (user != null) {
+			String userId = user.getUsername(); // 로그인한 사용자의 ID 가져오기
+			ProfilePhotoDTO profilePhotoDTO = profilePhotoService.getUserProfilePhotoInfo(userId);
+			if (profilePhotoDTO != null) {
+				// 프로필 사진의 URL을 모델에 추가
+				String profilePhotoUrl = "/files/" + profilePhotoDTO.getSavedName();
+				model.addAttribute("profilePhotoUrl", profilePhotoUrl);
+			} else {
+				// 프로필 사진이 없는 경우 기본 이미지를 사용하도록 설정
+				model.addAttribute("profilePhotoUrl", "/images/default-profile.png");
+			}
+		}
+
 		// 로그인한 사용자 ID 가져오기
 		String loggedInUserId = getLoggedInUserId();
 
@@ -66,8 +84,8 @@ public class FriendshipController {
 				if (friendEntity.isPresent()) {
 					String profileImg = (friendEntity.get().getProfileImgUuid() != null
 						&& !friendEntity.get().getProfileImgUuid().isEmpty())
-							? "/files/" + friendEntity.get().getProfileImgUuid()
-							: "/images/default-profile.png";
+						? "/files/" + friendEntity.get().getProfileImgUuid()
+						: "/images/default-profile.png";
 
 					// FriendDTO에 friendshipId 추가
 					return FriendDTO.builder()
@@ -99,8 +117,8 @@ public class FriendshipController {
 				if (friendEntity.isPresent()) {
 					String profileImg = (friendEntity.get().getProfileImgUuid() != null
 						&& !friendEntity.get().getProfileImgUuid().isEmpty())
-							? "/files/" + friendEntity.get().getProfileImgUuid()
-							: "/images/default-profile.png";
+						? "/files/" + friendEntity.get().getProfileImgUuid()
+						: "/images/default-profile.png";
 
 					// FriendDTO 생성
 					return FriendDTO.builder()
@@ -126,8 +144,8 @@ public class FriendshipController {
 				if (friendEntity.isPresent()) {
 					String profileImg = (friendEntity.get().getProfileImgUuid() != null
 						&& !friendEntity.get().getProfileImgUuid().isEmpty())
-							? "/files/" + friendEntity.get().getProfileImgUuid()
-							: "/images/default-profile.png";
+						? "/files/" + friendEntity.get().getProfileImgUuid()
+						: "/images/default-profile.png";
 
 					// FriendDTO 생성
 					return FriendDTO.builder()
@@ -172,8 +190,8 @@ public class FriendshipController {
 				UserEntity currentUser = currentUserOpt.get();
 				String profileImg = (currentUser.getProfileImgUuid() != null
 					&& !currentUser.getProfileImgUuid().isEmpty())
-						? "/files/" + currentUser.getProfileImgUuid()
-						: "/images/default-profile.png";
+					? "/files/" + currentUser.getProfileImgUuid()
+					: "/images/default-profile.png";
 
 				response.put("exists", true);
 				response.put("isSelf", true);
@@ -199,8 +217,8 @@ public class FriendshipController {
 				// 프로필 사진이 없는 경우 기본 이미지 경로 설정
 				String profileImg = (user.get().getProfileImgUuid() != null
 					&& !user.get().getProfileImgUuid().isEmpty())
-						? "/files/" + user.get().getProfileImgUuid()
-						: "/images/default-profile.png";
+					? "/files/" + user.get().getProfileImgUuid()
+					: "/images/default-profile.png";
 
 				// 사용자 정보 및 상태 응답에 추가
 				response.put("exists", true);

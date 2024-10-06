@@ -27,76 +27,138 @@
     .btn i.fa {
         margin-right: 0; /* 아이콘과 텍스트 간격 제거 */
     }
+
+    /* Font Awesome 아이콘 스타일 커스터마이징 (필요 시 추가) */
+    .favorite-btn i {
+        font-size: 1.2rem;
+    }
+
+    /* 수정된 favorite-management 스타일 */
+    .favorite-management {
+        background-color: #fff;
+        min-width: 1000px;
+        min-height: 800px;
+        width: 100%; /* 고정 너비 */
+        padding: 30px;
+        margin: 20px auto; /* 가운데 정렬 */
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        overflow-y: auto; /* 세로 스크롤 추가 */
+    }
+
+    .favorite-management .section-title {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #333;
+        margin: 0;
+    }
+
+    .favorite-management .header-container {
+        position: sticky;
+        top: 0;
+        background-color: #fff;
+        z-index: 1;
+        padding-bottom: 20px;
+    }
+
+    /* 카드 리스트 컨테이너 수정 */
+    .favorite-management .card-list-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: space-around; /* 카드 간격 조절 */
+    }
+
+    /* 스크롤바 스타일 (선택사항) */
+    .favorite-management::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .favorite-management::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    .favorite-management::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+    }
+
+    .favorite-management::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
 </style>
 
 <div layout:fragment="content">
-    <h1 class="mb-4 text-center">내 찜 목록</h1>
-
-    <!-- 검색 버튼 -->
-    <div class="d-flex justify-content-end mb-3">
-        <!-- 정렬 기준 선택 -->
-        <div class="form-inline mb-3 d-flex justify-content-end">
-            <label class="mr-2" for="sortBy">정렬 기준:</label>
-            <select class="form-control" id="sortBy" style="width: 200px;">
-                <option th:selected="${sortBy == 'distance'}" value="distance">거리순</option>
-                <option th:selected="${sortBy == 'newest'}" value="newest">최신순</option>
-                <option th:selected="${sortBy == 'oldest'}" value="oldest">오래된순</option>
-            </select>
+    <div class="favorite-management">
+        <div class="header-container">
+            <h1 class="friend-management section-title">내 찜 목록</h1>
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <!-- 정렬 기준 선택 -->
+                <div class="form-inline">
+                    <label class="mr-2" for="sortBy">정렬 기준:</label>
+                    <select class="form-control" id="sortBy" style="width: 200px;">
+                        <option th:selected="${sortBy == 'distance'}" value="distance">거리순</option>
+                        <option th:selected="${sortBy == 'newest'}" value="newest">최신순</option>
+                        <option th:selected="${sortBy == 'oldest'}" value="oldest">오래된순</option>
+                    </select>
+                </div>
+            </div>
         </div>
-        <a class="btn btn-secondary" href="/stores/search">다시 검색</a>
-    </div>
 
-    <!-- 찜 목록이 없는 경우 -->
-    <div class="text-center mt-5" th:if="${#lists.isEmpty(favorites)}">
-        <p class="lead text-muted">찜한 상점이 없습니다.</p>
-    </div>
+        <!-- 찜 목록이 없는 경우 -->
+        <div class="text-center mt-5" th:if="${#lists.isEmpty(favorites)}">
+            <p class="lead text-muted">찜한 상점이 없습니다.</p>
+        </div>
 
-    <!-- 찜 목록 테이블 -->
-    <div th:unless="${#lists.isEmpty(favorites)}">
-        <div class="row">
-            <!-- 가게 목록 리스트 출력 -->
-            <div class="col-md-4 mb-4" th:each="store : ${favorites}">
-                <div class="card h-100">
-                    <!-- 가게 사진 -->
-                    <a th:href="@{'/stores/' + ${store.storeId}}">
-                        <img alt="가게 사진" class="card-img-top img-fluid"
-                             th:src="${store.photoUrls[0]}" th:unless="${#lists.isEmpty(store.photoUrls)}">
-                    </a>
-
-                    <div class="card-body">
-                        <!-- 가게 이름 -->
-                        <a class="text-decoration-none text-dark" th:href="@{'/stores/' + ${store.storeId}}">
-                            <h5 class="card-title" th:text="${store.name}">가게 이름</h5>
+        <!-- 찜 목록 테이블 -->
+        <div th:unless="${#lists.isEmpty(favorites)}">
+            <div class="row">
+                <!-- 가게 목록 리스트 출력 -->
+                <div class="col-md-4 mb-4" th:each="store : ${favorites}">
+                    <div class="card h-100">
+                        <!-- 가게 사진 -->
+                        <a th:href="@{'/stores/' + ${store.storeId}}">
+                            <img alt="가게 사진" class="card-img-top img-fluid"
+                                 th:src="${store.photoUrls[0]}" th:unless="${#lists.isEmpty(store.photoUrls)}">
                         </a>
 
-                        <!-- 상세 보기 버튼을 아이콘으로 변경 -->
-                        <button class="btn p-0" data-bs-target="#storeModal"
-                                data-bs-toggle="modal"
-                                th:data-category="${store.category}"
-                                th:data-certification="${store.certification}"
-                                th:data-description="${store.description}"
-                                th:data-detail-address="${store.detailAddress}"
-                                th:data-latitude="${store.latitude}"
-                                th:data-longitude="${store.longitude}"
-                                th:data-name="${store.name}"
-                                th:data-phone-number="${store.phoneNumber}"
-                                th:data-road-name-address="${store.roadNameAddress}"
-                                th:data-store-id="${store.storeId}"
-                                th:data-zipcode="${store.zipcode}"
-                                type="button">
-                            <i class="fa fa-info-circle"></i> <!-- 상세 보기 아이콘 -->
-                        </button>
+                        <div class="card-body">
+                            <!-- 가게 이름 -->
+                            <a class="text-decoration-none text-dark" th:href="@{'/stores/' + ${store.storeId}}">
+                                <h5 class="card-title" th:text="${store.name}">가게 이름</h5>
+                            </a>
 
-                        <!-- 찜 여부 (하트 아이콘) -->
-                        <sec:authorize access="!isAnonymous()">
-                            <button class="btn p-0 favorite-btn"
-                                    th:classappend="${store.favorited} ? 'text-danger' : 'text-secondary'"
-                                    th:data-favorited="${store.favorited}"
+                            <!-- 상세 보기 버튼을 아이콘으로 변경 -->
+                            <button class="btn p-0" data-bs-target="#storeModal"
+                                    data-bs-toggle="modal"
+                                    th:data-category="${store.category}"
+                                    th:data-certification="${store.certification}"
+                                    th:data-description="${store.description}"
+                                    th:data-detail-address="${store.detailAddress}"
+                                    th:data-latitude="${store.latitude}"
+                                    th:data-longitude="${store.longitude}"
+                                    th:data-name="${store.name}"
+                                    th:data-phone-number="${store.phoneNumber}"
+                                    th:data-road-name-address="${store.roadNameAddress}"
                                     th:data-store-id="${store.storeId}"
+                                    th:data-zipcode="${store.zipcode}"
                                     type="button">
-                                <i class="fa" th:classappend="${store.favorited} ? 'fa-heart' : 'fa-heart-o'"></i>
+                                <i class="fa fa-info-circle"></i> <!-- 상세 보기 아이콘 -->
                             </button>
-                        </sec:authorize>
+
+                            <!-- 찜 여부 (하트 아이콘) -->
+                            <sec:authorize access="!isAnonymous()">
+                                <button class="btn p-0 favorite-btn"
+                                        th:classappend="${store.favorited} ? 'text-danger' : 'text-secondary'"
+                                        th:data-favorited="${store.favorited}"
+                                        th:data-store-id="${store.storeId}"
+                                        type="button">
+                                    <i th:classappend="${store.favorited} ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"></i>
+                                </button>
+                            </sec:authorize>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -144,20 +206,21 @@
     <script type="text/javascript">
         $(document).ready(function () {
             // 찜 버튼 클릭 이벤트
+            // 찜 버튼 클릭 이벤트 처리
             $('.favorite-btn').click(function () {
                 var button = $(this);
                 var storeId = button.data('store-id');
                 var favorited = button.data('favorited');
 
                 if (favorited) {
-                    // 찜 취소
+                    // 찜 취소 (DELETE 요청)
                     $.ajax({
                         url: '/api/favorites/' + storeId,
                         type: 'DELETE',
                         success: function (response) {
                             alert(response);
                             button.data('favorited', false);
-                            button.find('i').removeClass('fa-heart').addClass('fa-heart-o'); // 빈 하트로 변경
+                            button.find('i').removeClass('fa-solid fa-heart').addClass('fa-regular fa-heart'); // 빈 하트로 변경
                             button.removeClass('text-danger').addClass('text-secondary'); // 아이콘 색상 변경
                         },
                         error: function (xhr) {
@@ -165,14 +228,14 @@
                         }
                     });
                 } else {
-                    // 찜 추가
+                    // 찜 추가 (POST 요청)
                     $.ajax({
                         url: '/api/favorites/' + storeId,
                         type: 'POST',
                         success: function (response) {
                             alert(response);
                             button.data('favorited', true);
-                            button.find('i').removeClass('fa-heart-o').addClass('fa-heart'); // 꽉 찬 하트로 변경
+                            button.find('i').removeClass('fa-regular fa-heart').addClass('fa-solid fa-heart'); // 꽉 찬 하트로 변경
                             button.removeClass('text-secondary').addClass('text-danger'); // 아이콘 색상 변경
                         },
                         error: function (xhr) {

@@ -2,215 +2,291 @@
 <!DOCTYPE html>
 <html xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="UTF-8" />
-	<title th:text="'가게 관리 - ' + ${storeDetails.name}">가게 관리</title>
-	<!-- Bootstrap CSS -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-	<!-- Bootstrap Icons -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-	<style>
-		body {
-			padding-top: 70px;
-		}
+    <meta charset="UTF-8"/>
+    <title th:text="'가게 관리 - ' + ${storeDetails.name}">가게 관리</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+    <style>
+        body {
+            padding-top: 70px;
+        }
 
-		.store-photo {
-			max-width: 100%;
-			height: auto;
-		}
+        .store-photo {
+            max-width: 100%;
+            height: auto;
+        }
 
-		.menu-item, .review-item {
-			margin-bottom: 20px;
-		}
-	</style>
+        .menu-item, .review-item {
+            margin-bottom: 20px;
+        }
+
+        /* 사용자 프로필 사진 스타일 */
+        .review-user {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .review-user img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+        /* 리뷰 사진 스타일 */
+        .review-photos {
+            margin-top: 10px;
+        }
+
+        .review-photos img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
 <!-- 네비게이션 바 -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-	<div class="container-fluid">
-		<a class="navbar-brand" href="/merchant/stores">가게 관리</a>
-		<button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbarNav"
-				data-bs-toggle="collapse" type="button">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="navbarNav">
-			<ul class="navbar-nav ms-auto">
-				<li class="nav-item"><a class="nav-link" href="/merchant/stores">가게 목록</a></li>
-				<li class="nav-item"><a class="nav-link" href="/merchant/stores/registration">가게 등록</a></li>
-				<li class="nav-item"><a class="nav-link" th:href="@{/merchant/stores/{storeId}/menus/registration(storeId = ${storeDetails.storeId})}">메뉴
-					등록</a></li>
-				<li class="nav-item"><span class="nav-link"> 로그인한 사장님: <strong
-						sec:authentication="name">사장님 이름</strong>
+    <div class="container-fluid">
+        <a th:href="@{/}">
+            <img th:src="@{/images/logo.png}" alt="사이트 로고" class="logo" style="width: 100px">
+        </a>
+        <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+                data-bs-target="#navbarNav"
+                data-bs-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/merchant/stores">가게 목록</a></li>
+                <li class="nav-item"><a class="nav-link" href="/merchant/stores/registration">가게 등록</a></li>
+                <li class="nav-item"><a class="nav-link"
+                                        th:href="@{/merchant/stores/{storeId}/menus/registration(storeId = ${storeDetails.storeId})}">메뉴
+                    등록</a></li>
+                <li class="nav-item"><span class="nav-link"> 로그인한 사장님: <strong
+                        sec:authentication="name">사장님 이름</strong>
                </span></li>
-				<li class="nav-item"><a class="nav-link" href="/user/logout">로그아웃</a></li>
-			</ul>
-		</div>
-	</div>
+                <li class="nav-item"><a class="nav-link" href="/user/logout">로그아웃</a></li>
+            </ul>
+        </div>
+    </div>
 </nav>
 
 <!-- 페이지 콘텐츠 -->
 <div class="container">
-	<h1 class="mb-4" th:text="'가게 관리 - ' + ${storeDetails.name}">가게 관리</h1>
+    <h1 class="mb-4" th:text="'가게 관리 - ' + ${storeDetails.name}">가게 관리</h1>
 
-	<!-- 가게 상세 정보 카드 -->
-	<div class="card mb-4">
-		<div class="card-header">가게 정보</div>
-		<div class="card-body">
-			<h5 class="card-title" th:text="${storeDetails.name}">가게 이름</h5>
-			<p class="card-text">
-				<strong>카테고리:</strong> <span th:text="${storeDetails.category}">카테고리</span>
-			</p>
-			<p class="card-text">
-				<strong>인증:</strong> <span th:text="${storeDetails.certification}">인증</span>
-			</p>
-			<p class="card-text">
-				<strong>주소:</strong> <span th:text="${storeDetails.roadNameAddress}">도로명 주소</span>, <span th:text="${storeDetails.detailAddress}">상세 주소</span>, <span
-					th:text="${storeDetails.zipcode}">우편번호</span>
-			</p>
-			<p class="card-text">
-				<strong>전화번호:</strong> <span th:text="${storeDetails.phoneNumber}">전화번호</span>
-			</p>
-			<p class="card-text">
-				<strong>상태:</strong> <span th:text="${storeDetails.enabled} ? '활성' : '비활성'">상태</span>
-			</p>
-			<p class="card-text">
-				<strong>설명:</strong> <span th:text="${storeDetails.description}">설명</span>
-			</p>
-			<p class="card-text">
-				<strong>위도:</strong> <span th:text="${storeDetails.latitude}">위도</span>
-			</p>
-			<p class="card-text">
-				<strong>경도:</strong> <span th:text="${storeDetails.longitude}">경도</span>
-			</p>
-		</div>
-	</div>
+    <!-- 가게 상세 정보 카드 -->
+    <div class="card mb-4">
+        <div class="card-header">가게 정보</div>
+        <div class="card-body">
+            <h5 class="card-title" th:text="${storeDetails.name}">가게 이름</h5>
+            <p class="card-text">
+                <strong>카테고리:</strong> <span th:text="${storeDetails.category}">카테고리</span>
+            </p>
+            <p class="card-text">
+                <strong>인증:</strong> <span th:text="${storeDetails.certification}">인증</span>
+            </p>
+            <p class="card-text">
+                <strong>주소:</strong> <span th:text="${storeDetails.roadNameAddress}">도로명 주소</span>, <span
+                    th:text="${storeDetails.detailAddress}">상세 주소</span>, <span
+                    th:text="${storeDetails.zipcode}">우편번호</span>
+            </p>
+            <p class="card-text">
+                <strong>전화번호:</strong> <span th:text="${storeDetails.phoneNumber}">전화번호</span>
+            </p>
+            <p class="card-text">
+                <strong>상태:</strong> <span th:text="${storeDetails.enabled} ? '활성' : '비활성'">상태</span>
+            </p>
+            <p class="card-text">
+                <strong>설명:</strong> <span th:text="${storeDetails.description}">설명</span>
+            </p>
+            <p class="card-text">
+                <strong>위도:</strong> <span th:text="${storeDetails.latitude}">위도</span>
+            </p>
+            <p class="card-text">
+                <strong>경도:</strong> <span th:text="${storeDetails.longitude}">경도</span>
+            </p>
+        </div>
+    </div>
 
-	<!-- 사진 갤러리 -->
-	<div class="mb-4">
-		<h3>사진 갤러리</h3>
-		<div class="row">
-			<div class="col-md-4" th:each="photoUrl : ${storeDetails.photoUrls}">
-				<img alt="Store Photo" class="store-photo mb-3" th:src="@{${photoUrl}}" />
-			</div>
-		</div>
-	</div>
+    <!-- 사진 갤러리 -->
+    <div class="mb-4">
+        <h3>사진 갤러리</h3>
+        <div class="row">
+            <div class="col-md-4" th:each="photoUrl : ${storeDetails.photoUrls}">
+                <img alt="Store Photo" class="store-photo mb-3" th:src="@{${photoUrl}}"/>
+            </div>
+        </div>
+    </div>
 
-	<!-- 메뉴 목록 -->
-	<div class="mb-4">
-		<h3>메뉴 목록</h3>
-		<div class="row">
-			<div class="col-md-4 menu-item" th:each="menu : ${storeDetails.menus}">
-				<div class="card h-100">
-					<img alt="Menu Picture" class="card-img-top" onerror="this.onerror=null; this.src='/images/default-menu.png';"
-						 th:src="@{'/' + ${menu.pictureUrl}}" />
-					<div class="card-body d-flex flex-column">
-						<h5 class="card-title" th:text="${menu.name}">메뉴 이름</h5>
+    <!-- 메뉴 목록 -->
+    <div class="mb-4">
+        <h3>메뉴 목록</h3>
+        <div class="row">
+            <div class="col-md-4 menu-item" th:each="menu : ${storeDetails.menus}">
+                <div class="card h-100">
+                    <img alt="Menu Picture" class="card-img-top"
+                         onerror="this.onerror=null; this.src='/images/default-menu.png';"
+                         th:src="@{${menu.pictureUrl}}"/>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title" th:text="${menu.name}">메뉴 이름</h5>
 
-						<!-- 할인 중인 경우 할인 배지 표시 -->
-						<div th:if="${menu.discount != null}">
-							<span class="badge bg-danger">할인 중</span>
-						</div>
+                        <!-- 할인 중인 경우 할인 배지 표시 -->
+                        <div th:if="${menu.discount != null}">
+                            <span class="badge bg-danger">할인 중</span>
+                        </div>
 
-						<!-- 가격 표시 -->
-						<p class="card-text">
-							<strong>가격:</strong> <span th:if="${menu.discount == null}" th:text="${#numbers.formatDecimal(menu.price, 0, 0)} + '원'">가격</span>
-							<!-- 할인 중인 경우 -->
-							<span th:if="${menu.discount != null}"> <del th:text="${#numbers.formatDecimal(menu.price, 0, 0)} + '원'"></del> <span
-									th:text="${#numbers.formatDecimal(menu.discount.discountedPrice, 0, 0)} + '원'"></span> (<span
-									th:text="${menu.discount.discountRate} + '% 할인'"></span>)
+                        <!-- 가격 표시 -->
+                        <p class="card-text">
+                            <strong>가격:</strong> <span th:if="${menu.discount == null}"
+                                                       th:text="${#numbers.formatDecimal(menu.price, 0, 0)} + '원'">가격</span>
+                            <!-- 할인 중인 경우 -->
+                            <span th:if="${menu.discount != null}"> <del
+                                    th:text="${#numbers.formatDecimal(menu.price, 0, 0)} + '원'"></del> <span
+                                    th:text="${#numbers.formatDecimal(menu.discount.discountedPrice, 0, 0)} + '원'"></span> (<span
+                                    th:text="${menu.discount.discountRate} + '% 할인'"></span>)
                         </span>
-						</p>
+                        </p>
 
-						<p class="card-text">
-							<strong>카테고리:</strong> <span class="badge bg-secondary me-1" th:each="category : ${menu.categories}" th:text="${category.categoryName}">카테고리</span>
-						</p>
-						<p class="card-text">
-							<strong>상태:</strong> <span th:text="${menu.enabled} ? '활성' : '비활성'">상태</span>
-						</p>
-						<!-- 하단 여백을 채워 카드가 동일한 높이를 유지하도록 함 -->
-						<div class="mt-auto">
-							<a class="btn btn-primary btn-sm" th:href="@{'/merchant/menus/edit/' + ${menu.menuId}}">수정</a>
-							<form method="post" style="display: inline" th:action="@{'/merchant/menus/delete/' + ${menu.menuId}}">
-								<input name="_method" type="hidden" value="delete" />
-								<button class="btn btn-danger btn-sm" onclick="return confirm('정말 삭제하시겠습니까?');" type="submit">삭제</button>
-							</form>
-							<!-- 할인 버튼 추가 -->
-							<button class="btn btn-warning btn-sm discount-button" type="button" th:data-menuid="${menu.menuId}" th:data-menuname="${menu.name}"
-									th:data-originalprice="${menu.price}">할인</button>
-							<!-- 할인 삭제 버튼 추가 (할인 중인 경우에만 표시) -->
-							<button class="btn btn-secondary btn-sm remove-discount-button" type="button" th:data-menuid="${menu.menuId}" th:if="${menu.discount != null}">
-								할인 삭제</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                        <p class="card-text">
+                            <strong>카테고리:</strong> <span class="badge bg-secondary me-1"
+                                                         th:each="category : ${menu.categories}"
+                                                         th:text="${category.categoryName}">카테고리</span>
+                        </p>
+                        <p class="card-text">
+                            <strong>상태:</strong> <span th:text="${menu.enabled} ? '활성' : '비활성'">상태</span>
+                        </p>
+                        <!-- 하단 여백을 채워 카드가 동일한 높이를 유지하도록 함 -->
+                        <div class="mt-auto">
+                            <a class="btn btn-primary btn-sm"
+                               th:href="@{'/merchant/menus/edit/' + ${menu.menuId}}">수정</a>
+                            <form method="post" style="display: inline"
+                                  th:action="@{'/merchant/menus/delete/' + ${menu.menuId}}">
+                                <input name="_method" type="hidden" value="delete"/>
+                                <button class="btn btn-danger btn-sm" onclick="return confirm('정말 삭제하시겠습니까?');"
+                                        type="submit">삭제
+                                </button>
+                            </form>
+                            <!-- 할인 버튼 추가 -->
+                            <button class="btn btn-warning btn-sm discount-button" type="button"
+                                    th:data-menuid="${menu.menuId}" th:data-menuname="${menu.name}"
+                                    th:data-originalprice="${menu.price}">할인
+                            </button>
+                            <!-- 할인 삭제 버튼 추가 (할인 중인 경우에만 표시) -->
+                            <button class="btn btn-secondary btn-sm remove-discount-button" type="button"
+                                    th:data-menuid="${menu.menuId}" th:if="${menu.discount != null}">
+                                할인 삭제
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-	<!-- 리뷰 목록 -->
-	<div class="mb-4">
-		<h3>리뷰 목록</h3>
-		<div class="list-group">
-			<div class="list-group-item review-item" th:each="review : ${storeDetails.reviews}">
-				<h5 th:text="'리뷰 ID: ' + ${review.reviewId}">리뷰 ID</h5>
-				<p>
-					<strong>작성자:</strong> <span th:text="${review.userId}">작성자 ID</span>
-				</p>
-				<p>
-					<strong>평점:</strong> <span th:text="${review.rating}">평점</span>/5
-				</p>
-				<p>
-					<strong>내용:</strong> <span th:text="${review.content}">리뷰 내용</span>
-				</p>
-				<p>
-					<strong>작성일:</strong> <span th:text="${#dates.format(review.createdTime, 'yyyy-MM-dd HH:mm')}">작성일</span>
-				</p>
-			</div>
-		</div>
-	</div>
+    <!-- 리뷰 목록 -->
+    <div class="mb-4">
+        <h3>리뷰 목록</h3>
+        <div class="list-group">
+            <div class="list-group-item review-item" th:each="review : ${storeDetails.reviews}">
+                <!-- 사용자 프로필 사진 및 작성자 정보 -->
+                <div class="review-user">
+                    <img th:src="@{${review.userProfileUrl}}" alt="User Profile"
+                         onerror="this.onerror=null; this.src='/images/default-profile.png';"/>
+                    <div>
+                        <h5 th:text="'작성자 ID: ' + ${review.userId}">작성자 ID</h5>
+                    </div>
+                </div>
 
-	<!-- 가게 수정 및 삭제 버튼 -->
-	<div class="mb-3">
-		<a class="btn btn-primary" th:href="@{'/merchant/stores/edit/' + ${storeDetails.storeId}}">가게 수정</a>
-		<form method="post" style="display: inline" th:action="@{'/merchant/stores/delete/' + ${storeDetails.storeId}}">
-			<input name="_method" type="hidden" value="delete" />
-			<button class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?');" type="submit">가게 삭제</button>
-		</form>
-	</div>
+                <p>
+                    <strong>평점:</strong>
+                    <!-- 평점을 별 아이콘으로 표시 -->
+                    <span>
+                            <i th:text="${review.rating}"></i>
+                    </span>
+                </p>
+                <p>
+                    <strong>내용:</strong> <span th:text="${review.comment}">리뷰 내용</span>
+                </p>
+                <p>
+                    <strong>작성일:</strong> <span th:text="${#temporals.format(review.createdTime, 'yyyy-MM-dd HH:mm')}">작성일</span>
+                </p>
+
+                <!-- 리뷰 사진 갤러리 -->
+                <div class="review-photos"
+                     th:if="${review.photoUrls != null and not #arrays.isEmpty(review.photoUrls)}">
+                    <strong>사진:</strong>
+                    <div class="d-flex flex-wrap">
+                        <img th:each="photoUrl : ${review.photoUrls}"
+                             th:src="${photoUrl}"
+                             alt="Review Photo"
+                             onerror="this.onerror=null; this.src='/images/default-review.png';"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 가게 수정 및 삭제 버튼 -->
+    <div class="mb-3">
+        <a class="btn btn-primary" th:href="@{'/merchant/stores/edit/' + ${storeDetails.storeId}}">가게 수정</a>
+        <form method="post" style="display: inline" th:action="@{'/merchant/stores/delete/' + ${storeDetails.storeId}}">
+            <input name="_method" type="hidden" value="delete"/>
+            <button class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?');" type="submit">가게 삭제</button>
+        </form>
+    </div>
 </div>
 
 <!-- 할인 설정 모달 -->
 <div class="modal fade" id="discountModal" tabindex="-1" aria-labelledby="discountModalLabel" aria-hidden="true">
-	<div class="modal-dialog">
-		<form id="discountForm">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="discountModalLabel">할인 설정</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
-				</div>
-				<div class="modal-body">
-					<div class="mb-3">
-						<label for="menuId" class="form-label">메뉴 ID</label> <input type="text" class="form-control" id="menuId" readonly />
-					</div>
-					<div class="mb-3">
-						<label for="menuName" class="form-label">메뉴 이름</label> <input type="text" class="form-control" id="menuName" readonly />
-					</div>
-					<div class="mb-3">
-						<label for="originalPrice" class="form-label">기존 가격</label> <input type="number" class="form-control" id="originalPrice" readonly />
-					</div>
-					<div class="mb-3">
-						<label for="discountedPrice" class="form-label">할인가격</label> <input type="number" class="form-control" id="discountedPrice" />
-					</div>
-					<div class="mb-3">
-						<label for="discountRate" class="form-label">할인율 (%)</label> <input type="number" class="form-control" id="discountRate" />
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-					<button type="submit" class="btn btn-primary">확인</button>
-				</div>
-			</div>
-		</form>
-	</div>
+    <div class="modal-dialog">
+        <form id="discountForm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="discountModalLabel">할인 설정</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="menuId" class="form-label">메뉴 ID</label> <input type="text" class="form-control"
+                                                                                    id="menuId" readonly/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="menuName" class="form-label">메뉴 이름</label> <input type="text" class="form-control"
+                                                                                      id="menuName" readonly/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="originalPrice" class="form-label">기존 가격</label> <input type="number"
+                                                                                           class="form-control"
+                                                                                           id="originalPrice" readonly/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="discountedPrice" class="form-label">할인가격</label> <input type="number"
+                                                                                            class="form-control"
+                                                                                            id="discountedPrice"/>
+                    </div>
+                    <div class="mb-3">
+                        <label for="discountRate" class="form-label">할인율 (%)</label> <input type="number"
+                                                                                            class="form-control"
+                                                                                            id="discountRate"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="submit" class="btn btn-primary">확인</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
 <!-- Bootstrap JS 및 의존성 -->
@@ -218,135 +294,135 @@
 
 <!-- 할인 기능 관련 스크립트 -->
 <script>
-	document.addEventListener("DOMContentLoaded", function () {
-		// 할인 버튼 클릭 이벤트 처리
-		const discountButtons = document.querySelectorAll(".discount-button");
-		const discountModal = new bootstrap.Modal(
-				document.getElementById("discountModal")
-		);
-		const discountForm = document.getElementById("discountForm");
+    document.addEventListener("DOMContentLoaded", function () {
+        // 할인 버튼 클릭 이벤트 처리
+        const discountButtons = document.querySelectorAll(".discount-button");
+        const discountModal = new bootstrap.Modal(
+            document.getElementById("discountModal")
+        );
+        const discountForm = document.getElementById("discountForm");
 
-		discountButtons.forEach((button) => {
-			button.addEventListener("click", function () {
-				const menuId = this.getAttribute("data-menuid");
-				const menuName = this.getAttribute("data-menuname");
-				const originalPrice = this.getAttribute("data-originalprice");
+        discountButtons.forEach((button) => {
+            button.addEventListener("click", function () {
+                const menuId = this.getAttribute("data-menuid");
+                const menuName = this.getAttribute("data-menuname");
+                const originalPrice = this.getAttribute("data-originalprice");
 
-				// 모달에 값 설정
-				document.getElementById("menuId").value = menuId;
-				document.getElementById("menuName").value = menuName;
-				document.getElementById("originalPrice").value = originalPrice;
-				document.getElementById("discountedPrice").value = "";
-				document.getElementById("discountRate").value = "";
+                // 모달에 값 설정
+                document.getElementById("menuId").value = menuId;
+                document.getElementById("menuName").value = menuName;
+                document.getElementById("originalPrice").value = originalPrice;
+                document.getElementById("discountedPrice").value = "";
+                document.getElementById("discountRate").value = "";
 
-				// 할인 정보 가져오기
-				fetch(`/merchant/discounts/${menuId}`)
-						.then((response) => {
-							if (response.ok) {
-								return response.json();
-							} else {
-								return null;
-							}
-						})
-						.then((data) => {
-							if (data) {
-								// 할인 정보가 있으면 모달에 표시
-								document.getElementById("discountedPrice").value =
-										data.discountedPrice;
-								document.getElementById("discountRate").value =
-										data.discountRate;
-							}
-						});
+                // 할인 정보 가져오기
+                fetch(`/merchant/discounts/${menuId}`)
+                    .then((response) => {
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            return null;
+                        }
+                    })
+                    .then((data) => {
+                        if (data) {
+                            // 할인 정보가 있으면 모달에 표시
+                            document.getElementById("discountedPrice").value =
+                                data.discountedPrice;
+                            document.getElementById("discountRate").value =
+                                data.discountRate;
+                        }
+                    });
 
-				discountModal.show();
-			});
-		});
+                discountModal.show();
+            });
+        });
 
-		// 할인율과 할인가격 연동
-		const discountedPriceInput = document.getElementById("discountedPrice");
-		const discountRateInput = document.getElementById("discountRate");
-		const originalPriceInput = document.getElementById("originalPrice");
+        // 할인율과 할인가격 연동
+        const discountedPriceInput = document.getElementById("discountedPrice");
+        const discountRateInput = document.getElementById("discountRate");
+        const originalPriceInput = document.getElementById("originalPrice");
 
-		discountedPriceInput.addEventListener("input", function () {
-			const originalPrice = parseFloat(originalPriceInput.value);
-			const discountedPrice = parseFloat(this.value);
-			if (originalPrice && discountedPrice) {
-				let rate = Math.floor(
-						((originalPrice - discountedPrice) / originalPrice) * 100
-				);
-				discountRateInput.value = rate;
-			}
-		});
+        discountedPriceInput.addEventListener("input", function () {
+            const originalPrice = parseFloat(originalPriceInput.value);
+            const discountedPrice = parseFloat(this.value);
+            if (originalPrice && discountedPrice) {
+                let rate = Math.floor(
+                    ((originalPrice - discountedPrice) / originalPrice) * 100
+                );
+                discountRateInput.value = rate;
+            }
+        });
 
-		discountRateInput.addEventListener("input", function () {
-			const originalPrice = parseFloat(originalPriceInput.value);
-			const rate = parseInt(this.value);
-			if (originalPrice && rate) {
-				let discountedPrice =
-						originalPrice - Math.floor((originalPrice * rate) / 100);
-				discountedPriceInput.value = discountedPrice;
-			}
-		});
+        discountRateInput.addEventListener("input", function () {
+            const originalPrice = parseFloat(originalPriceInput.value);
+            const rate = parseInt(this.value);
+            if (originalPrice && rate) {
+                let discountedPrice =
+                    originalPrice - Math.floor((originalPrice * rate) / 100);
+                discountedPriceInput.value = discountedPrice;
+            }
+        });
 
-		// 할인 정보 저장
-		discountForm.addEventListener("submit", function (e) {
-			e.preventDefault();
-			const menuId = document.getElementById("menuId").value;
-			const originalPrice = document.getElementById("originalPrice").value;
-			const discountedPrice =
-					document.getElementById("discountedPrice").value;
-			const discountRate = document.getElementById("discountRate").value;
+        // 할인 정보 저장
+        discountForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const menuId = document.getElementById("menuId").value;
+            const originalPrice = document.getElementById("originalPrice").value;
+            const discountedPrice =
+                document.getElementById("discountedPrice").value;
+            const discountRate = document.getElementById("discountRate").value;
 
-			// 서버로 할인 정보 전송
-			fetch("/merchant/discounts", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					menuId: menuId,
-					originalPrice: originalPrice,
-					discountedPrice: discountedPrice,
-					discountRate: discountRate,
-				}),
-			})
-					.then((response) => response.text())
-					.then((data) => {
-						alert("할인 정보가 저장되었습니다.");
-						discountModal.hide();
-						location.reload(); // 페이지 새로고침하여 변경 사항 반영
-					})
-					.catch((error) => {
-						console.error("Error:", error);
-						alert("할인 정보를 저장하는 데 실패했습니다.");
-					});
-		});
+            // 서버로 할인 정보 전송
+            fetch("/merchant/discounts", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    menuId: menuId,
+                    originalPrice: originalPrice,
+                    discountedPrice: discountedPrice,
+                    discountRate: discountRate,
+                }),
+            })
+                .then((response) => response.text())
+                .then((data) => {
+                    alert("할인 정보가 저장되었습니다.");
+                    discountModal.hide();
+                    location.reload(); // 페이지 새로고침하여 변경 사항 반영
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    alert("할인 정보를 저장하는 데 실패했습니다.");
+                });
+        });
 
-		// 할인 삭제 버튼 처리
-		const removeDiscountButtons = document.querySelectorAll(
-				".remove-discount-button"
-		);
+        // 할인 삭제 버튼 처리
+        const removeDiscountButtons = document.querySelectorAll(
+            ".remove-discount-button"
+        );
 
-		removeDiscountButtons.forEach((button) => {
-			button.addEventListener("click", function () {
-				const menuId = this.getAttribute("data-menuid");
-				if (confirm("해당 메뉴의 할인 정보를 삭제하시겠습니까?")) {
-					fetch(`/merchant/discounts/${menuId}`, {
-						method: "DELETE",
-					})
-							.then((response) => response.text())
-							.then((data) => {
-								alert("할인 정보가 삭제되었습니다.");
-								location.reload(); // 페이지 새로고침하여 변경 사항 반영
-							})
-							.catch((error) => {
-								console.error("Error:", error);
-								alert("할인 정보를 삭제하는 데 실패했습니다.");
-							});
-				}
-			});
-		});
-	});
+        removeDiscountButtons.forEach((button) => {
+            button.addEventListener("click", function () {
+                const menuId = this.getAttribute("data-menuid");
+                if (confirm("해당 메뉴의 할인 정보를 삭제하시겠습니까?")) {
+                    fetch(`/merchant/discounts/${menuId}`, {
+                        method: "DELETE",
+                    })
+                        .then((response) => response.text())
+                        .then((data) => {
+                            alert("할인 정보가 삭제되었습니다.");
+                            location.reload(); // 페이지 새로고침하여 변경 사항 반영
+                        })
+                        .catch((error) => {
+                            console.error("Error:", error);
+                            alert("할인 정보를 삭제하는 데 실패했습니다.");
+                        });
+                }
+            });
+        });
+    });
 </script>
 </body>
 </html>
