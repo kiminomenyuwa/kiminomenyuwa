@@ -295,6 +295,11 @@
         </div>
 
         <div class="recommendation-section">
+            <h3>먹어본 적없는 메뉴 기반 추천</h3>
+            <div class="menu-slider" id="untried-recommendations"></div>
+        </div>
+
+        <div class="recommendation-section">
             <h3>연령대 기반 추천</h3>
             <div class="menu-slider" id="age-recommendations"></div>
         </div>
@@ -314,6 +319,9 @@
             </button>
             <button class="btn btn-primary btn-sm show-on-map" data-recommendation-type="category">
                 카테고리 기반
+            </button>
+            <button class="btn btn-primary btn-sm show-on-map" data-recommendation-type="untried">
+                먹어본 적 없는 메뉴 기반
             </button>
             <button class="btn btn-primary btn-sm show-on-map" data-recommendation-type="age">
                 연령대 기반
@@ -402,7 +410,8 @@
                         hybrid: response.recommendedMenus,
                         category: response.recommendedByCategoryScores,
                         age: response.recommendedByUserAgeGroup,
-                        minigame: response.recommendedByMinigameScores
+                        minigame: response.recommendedByMinigameScores,
+                        untried: response.recommendedByUntriedCategories
                     };
 
                     // 모든 가게 정보를 업데이트
@@ -447,7 +456,8 @@
                 hybrid: filterMenus(allRecommendations.hybrid, category, maxPrice),
                 category: filterMenus(allRecommendations.category, category, maxPrice),
                 age: filterMenus(allRecommendations.age, category, maxPrice),
-                minigame: filterMenus(allRecommendations.minigame, category, maxPrice)
+                minigame: filterMenus(allRecommendations.minigame, category, maxPrice),
+                untried: filterMenus(allRecommendations.untried, category, maxPrice),
             };
 
             // 추천 메뉴 슬라이더 업데이트
@@ -455,6 +465,7 @@
             displayRecommendations('category', filteredRecommendations.category);
             displayRecommendations('age', filteredRecommendations.age);
             displayRecommendations('minigame', filteredRecommendations.minigame);
+            displayRecommendations('untried', filteredRecommendations.untried);
 
             // 지도에 마커 업데이트
             const activeType = $('.show-on-map.active').data('recommendation-type');
@@ -478,7 +489,7 @@
         // 메뉴 슬라이더 생성 함수
         function displayMenuSlider(containerId, menus) {
             const container = $(`#${containerId}`);
-
+            console.log(containerId);
             // 슬라이더가 이미 초기화되어 있다면 파괴(unslick)
             if (container.hasClass('slick-initialized')) {
                 container.slick('unslick');
