@@ -19,7 +19,10 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" th:href="@{/css/CalendarCss/style.css}">
-    <link rel="stylesheet" th:href="@{/css/CalendarCss/header.css}">
+    <!-- 헤더 전용 CSS 파일 포함 -->
+    <link rel="stylesheet" th:href="@{/css/common/common.css}">
+    <link rel="stylesheet" th:href="@{/css/common/header.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage/sidebar.css}">
 </th:block>
 
 <div layout:fragment="content">

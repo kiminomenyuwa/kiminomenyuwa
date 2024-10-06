@@ -1,37 +1,42 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>가게 검색</title>
+    <!-- 헤더 전용 CSS 파일 포함 -->
+    <link rel="stylesheet" th:href="@{/css/common/common.css}">
+    <link rel="stylesheet" th:href="@{/css/common/header.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage/sidebar.css}">
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Slick Slider CSS (필요 시) -->
-    <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" rel="stylesheet" type="text/css"/>
+    <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" rel="stylesheet" type="text/css" />
     <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" rel="stylesheet"
-          type="text/css"/>
+        type="text/css" />
 
     <!-- Font Awesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
-          integrity="sha512-dYq6CjV0i0y5+v/tTcnQm4M0W1KSkAoz1iQmB5F3Y5u/SxOf7HBLt/NZkMZy8Lg1E4CgVEoWdjvB5qRCbMqw2w=="
-          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+        integrity="sha512-dYq6CjV0i0y5+v/tTcnQm4M0W1KSkAoz1iQmB5F3Y5u/SxOf7HBLt/NZkMZy8Lg1E4CgVEoWdjvB5qRCbMqw2w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        body {
-            padding-top: 70px;
-        }
         .store-photo {
             width: 100%;
             height: 200px;
             object-fit: cover;
         }
+
         .card-title {
             font-size: 1.25rem;
             font-weight: bold;
         }
+
         .badge-category {
             margin-right: 5px;
         }
+
         /* 추가적인 스타일이 필요하면 여기에 작성 */
         .header-center {
             display: flex;
@@ -39,28 +44,33 @@
             align-items: center;
             margin-bottom: 20px;
         }
+
         .search-container {
             display: flex;
             align-items: center;
             width: 100%;
             max-width: 600px;
         }
+
         .search-bar {
             flex: 1;
             padding: 10px;
             border: 1px solid #ced4da;
             border-radius: 4px;
         }
+
         .divider {
             width: 1px;
             height: 24px;
             background-color: #ced4da;
             margin: 0 15px;
         }
+
         .location-text {
             font-size: 1rem;
             color: #6c757d;
         }
+
         /* 검색 버튼 스타일 */
         .search-button {
             background-color: transparent;
@@ -68,125 +78,130 @@
             outline: none;
             cursor: pointer;
         }
+
         .search-button .fa-search {
             color: white;
             font-size: 1.2rem;
         }
     </style>
 </head>
+
 <body>
-<div class="container mt-5">
-    <h1>가게 검색</h1>
-    <!-- 검색 입력 섹션 -->
-    <div class="row my-4">
-        <div class="col-md-8">
-            <input type="text" id="search-keyword" class="form-control" placeholder="가게 키워드를 입력하세요">
+    <!-- 헤더 프래그먼트 포함 -->
+    <div th:replace="~{/fragments/common/header :: header}"></div>
+    <div th:replace="~{/fragments/common/sidebar :: sidebar}"></div>
+    <div class="container mt-5">
+        <h1>가게 검색</h1>
+        <!-- 검색 입력 섹션 -->
+        <div class="row my-4">
+            <div class="col-md-8">
+                <input type="text" id="search-keyword" class="form-control" placeholder="가게 키워드를 입력하세요">
+            </div>
+            <div class="col-md-4">
+                <button id="search-button" class="btn btn-primary btn-block">
+                    <i class="fas fa-search text-white"></i> 검색
+                </button>
+            </div>
         </div>
-        <div class="col-md-4">
-            <button id="search-button" class="btn btn-primary btn-block">
-                <i class="fas fa-search text-white"></i> 검색
-            </button>
+
+        <!-- 검색 결과 섹션 -->
+        <h3>검색 결과</h3>
+        <div id="search-results" class="row">
+            <!-- 검색된 가게 카드가 여기에 동적으로 추가됩니다 -->
         </div>
+
+        <!-- 페이지네이션 섹션 -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center" id="pagination">
+                <!-- 페이지 버튼이 여기에 동적으로 추가됩니다 -->
+            </ul>
+        </nav>
     </div>
 
-    <!-- 검색 결과 섹션 -->
-    <h3>검색 결과</h3>
-    <div id="search-results" class="row">
-        <!-- 검색된 가게 카드가 여기에 동적으로 추가됩니다 -->
-    </div>
+    <!-- jQuery, Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Slick Slider JS (필요 시) -->
+    <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            let currentPage = 0;
+            const pageSize = 10;
+            let currentKeyword = '';
 
-    <!-- 페이지네이션 섹션 -->
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center" id="pagination">
-            <!-- 페이지 버튼이 여기에 동적으로 추가됩니다 -->
-        </ul>
-    </nav>
-</div>
-
-<!-- jQuery, Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<!-- Slick Slider JS (필요 시) -->
-<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js" type="text/javascript"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        let currentPage = 0;
-        const pageSize = 10;
-        let currentKeyword = '';
-
-        /**
-         * URL의 쿼리 파라미터에서 키워드 추출
-         */
-        function getQueryParameter(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
-        }
-
-        // URL에서 'keyword' 파라미터 읽기
-        currentKeyword = getQueryParameter('keyword') || '';
-        if (currentKeyword) {
-            $('#search-keyword').val(currentKeyword);
-            searchStores(currentKeyword, currentPage, pageSize);
-        }
-
-        // 검색 버튼 클릭 이벤트 핸들러
-        $('#search-button').click(function () {
-            const keyword = $('#search-keyword').val().trim();
-            if (keyword === "") {
-                alert("검색 키워드를 입력해주세요.");
-                return;
+            /**
+             * URL의 쿼리 파라미터에서 키워드 추출
+             */
+            function getQueryParameter(param) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
             }
-            currentKeyword = keyword;
-            currentPage = 0; // 새로운 검색 시 페이지 초기화
-            searchStores(keyword, currentPage, pageSize);
-        });
 
-        // 엔터 키로도 검색 가능하도록 설정
-        $('#search-keyword').keypress(function (e) {
-            if (e.which === 13) { // Enter 키
-                $('#search-button').click();
+            // URL에서 'keyword' 파라미터 읽기
+            currentKeyword = getQueryParameter('keyword') || '';
+            if (currentKeyword) {
+                $('#search-keyword').val(currentKeyword);
+                searchStores(currentKeyword, currentPage, pageSize);
             }
-        });
 
-        /**
-         * 키워드로 가게를 검색하고 결과를 표시합니다.
-         * @param {string} keyword - 검색 키워드
-         * @param {number} page - 페이지 번호
-         * @param {number} size - 페이지당 항목 수
-         */
-        function searchStores(keyword, page, size) {
-            $.ajax({
-                url: '/stores/api/stores/keywordsearch',
-                type: 'GET',
-                data: {keyword: keyword, page: page, size: size},
-                success: function (data) {
-                    console.log(data);
-                    displaySearchResults(data.content)
-                    setupPagination(data.totalPages, data.number);
-                },
-                error: function (xhr, status, error) {
-                    console.error(error);
-                    alert("가게 검색 중 오류가 발생했습니다.");
+            // 검색 버튼 클릭 이벤트 핸들러
+            $('#search-button').click(function () {
+                const keyword = $('#search-keyword').val().trim();
+                if (keyword === "") {
+                    alert("검색 키워드를 입력해주세요.");
+                    return;
+                }
+                currentKeyword = keyword;
+                currentPage = 0; // 새로운 검색 시 페이지 초기화
+                searchStores(keyword, currentPage, pageSize);
+            });
+
+            // 엔터 키로도 검색 가능하도록 설정
+            $('#search-keyword').keypress(function (e) {
+                if (e.which === 13) { // Enter 키
+                    $('#search-button').click();
                 }
             });
-        }
 
-        /**
-         * 검색된 가게들을 페이지에 표시합니다.
-         * @param {Array} stores - 검색된 가게 목록
-         */
-        function displaySearchResults(stores) {
-            const resultsContainer = $('#search-results');
-            resultsContainer.empty();
-
-            if (stores.length === 0) {
-                resultsContainer.append('<div class="col-12"><p class="text-muted">검색 결과가 없습니다.</p></div>');
-                return;
+            /**
+             * 키워드로 가게를 검색하고 결과를 표시합니다.
+             * @param {string} keyword - 검색 키워드
+             * @param {number} page - 페이지 번호
+             * @param {number} size - 페이지당 항목 수
+             */
+            function searchStores(keyword, page, size) {
+                $.ajax({
+                    url: '/stores/api/stores/keywordsearch',
+                    type: 'GET',
+                    data: { keyword: keyword, page: page, size: size },
+                    success: function (data) {
+                        console.log(data);
+                        displaySearchResults(data.content)
+                        setupPagination(data.totalPages, data.number);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(error);
+                        alert("가게 검색 중 오류가 발생했습니다.");
+                    }
+                });
             }
 
-            stores.forEach(function (store) {
-                console.log(store.name);
-                const storeCard = `
+            /**
+             * 검색된 가게들을 페이지에 표시합니다.
+             * @param {Array} stores - 검색된 가게 목록
+             */
+            function displaySearchResults(stores) {
+                const resultsContainer = $('#search-results');
+                resultsContainer.empty();
+
+                if (stores.length === 0) {
+                    resultsContainer.append('<div class="col-12"><p class="text-muted">검색 결과가 없습니다.</p></div>');
+                    return;
+                }
+
+                stores.forEach(function (store) {
+                    console.log(store.name);
+                    const storeCard = `
                         <div class="col-md-4 mb-4">
                             <div class="card h-100">
                                 <img src="${store.photoUrl || '/images/default-store.png'}" class="card-img-top store-photo" alt="${store.name}">
@@ -200,24 +215,24 @@
                             </div>
                         </div>
                     `;
-                resultsContainer.append(storeCard);
-            });
-        }
+                    resultsContainer.append(storeCard);
+                });
+            }
 
-        /**
-         * 페이지네이션 버튼을 설정합니다.
-         * @param {number} totalPages - 전체 페이지 수
-         * @param {number} currentPageNumber - 현재 페이지 번호
-         */
-        function setupPagination(totalPages, currentPageNumber) {
-            const paginationContainer = $('#pagination');
-            paginationContainer.empty();
+            /**
+             * 페이지네이션 버튼을 설정합니다.
+             * @param {number} totalPages - 전체 페이지 수
+             * @param {number} currentPageNumber - 현재 페이지 번호
+             */
+            function setupPagination(totalPages, currentPageNumber) {
+                const paginationContainer = $('#pagination');
+                paginationContainer.empty();
 
-            if (totalPages <= 1) return; // 페이지가 1개 이하이면 페이지네이션 숨김
+                if (totalPages <= 1) return; // 페이지가 1개 이하이면 페이지네이션 숨김
 
-            // 이전 버튼
-            const prevDisabled = currentPageNumber === 0 ? 'disabled' : '';
-            paginationContainer.append(`
+                // 이전 버튼
+                const prevDisabled = currentPageNumber === 0 ? 'disabled' : '';
+                paginationContainer.append(`
                     <li class="page-item ${prevDisabled}">
                         <a class="page-link" href="#" aria-label="Previous" data-page="${currentPageNumber - 1}">
                             <span aria-hidden="true">&laquo;</span>
@@ -225,19 +240,19 @@
                     </li>
                 `);
 
-            // 페이지 번호 버튼
-            for (let i = 0; i < totalPages; i++) {
-                const active = i === currentPageNumber ? 'active' : '';
-                paginationContainer.append(`
+                // 페이지 번호 버튼
+                for (let i = 0; i < totalPages; i++) {
+                    const active = i === currentPageNumber ? 'active' : '';
+                    paginationContainer.append(`
                         <li class="page-item ${active}">
                             <a class="page-link" href="#" data-page="${i}">${i + 1}</a>
                         </li>
                     `);
-            }
+                }
 
-            // 다음 버튼
-            const nextDisabled = currentPageNumber === totalPages - 1 ? 'disabled' : '';
-            paginationContainer.append(`
+                // 다음 버튼
+                const nextDisabled = currentPageNumber === totalPages - 1 ? 'disabled' : '';
+                paginationContainer.append(`
                     <li class="page-item ${nextDisabled}">
                         <a class="page-link" href="#" aria-label="Next" data-page="${currentPageNumber + 1}">
                             <span aria-hidden="true">&raquo;</span>
@@ -245,27 +260,28 @@
                     </li>
                 `);
 
-            // 페이지 버튼 클릭 이벤트 핸들러
-            $('.page-link').click(function (e) {
-                e.preventDefault();
-                const targetPage = parseInt($(this).data('page'));
-                if (isNaN(targetPage) || targetPage < 0 || targetPage >= totalPages) return;
+                // 페이지 버튼 클릭 이벤트 핸들러
+                $('.page-link').click(function (e) {
+                    e.preventDefault();
+                    const targetPage = parseInt($(this).data('page'));
+                    if (isNaN(targetPage) || targetPage < 0 || targetPage >= totalPages) return;
 
-                currentPage = targetPage;
-                searchStores(currentKeyword, currentPage, pageSize);
-            });
-        }
+                    currentPage = targetPage;
+                    searchStores(currentKeyword, currentPage, pageSize);
+                });
+            }
 
-        /**
-         * 카테고리 목록을 배지 형태로 포맷합니다.
-         * @param {Array} categories - 가게의 카테고리 목록
-         * @returns {string} - 포맷된 카테고리 HTML
-         */
-        function formatCategories(categories) {
-            if (!categories || categories.length === 0) return '없음';
-            return categories.map(category => `<span class="badge badge-secondary badge-category">${category.categoryName}</span>`).join(' ');
-        }
-    });
-</script>
+            /**
+             * 카테고리 목록을 배지 형태로 포맷합니다.
+             * @param {Array} categories - 가게의 카테고리 목록
+             * @returns {string} - 포맷된 카테고리 HTML
+             */
+            function formatCategories(categories) {
+                if (!categories || categories.length === 0) return '없음';
+                return categories.map(category => `<span class="badge badge-secondary badge-category">${category.categoryName}</span>`).join(' ');
+            }
+        });
+    </script>
 </body>
+
 </html>

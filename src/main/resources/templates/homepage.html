@@ -1,21 +1,10 @@
 <!DOCTYPE html>
-<html
-        xmlns:th="http://www.thymeleaf.org"
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-        layout:decorate="~{homeLayout}"
->
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorate="~{homeLayout}">
 <th:block layout:fragment="links">
-    <link
-            rel="stylesheet"
-            type="text/css"
-            href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"
-    />
-    <link
-            rel="stylesheet"
-            type="text/css"
-            href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"
-    />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
 </th:block>
 
 <style layout:fragment="styles">
@@ -23,33 +12,42 @@
         position: relative;
         width: 100%;
         max-width: 1000px;
-        height: calc(1000px / 1.618); /* 황금비율 적용 */
+        height: calc(1000px / 1.618);
+        /* 황금비율 적용 */
         margin: 50px auto 0;
-        border: 5px solid rgba(255, 120, 120, 1); /* 대표 컬러로 테두리 */
+        border: 5px solid rgba(255, 120, 120, 1);
+        /* 대표 컬러로 테두리 */
         border-radius: 10px;
 
         /* 이미지를 배경으로 처리 (정비율 유지) */
-        background-size: cover; /* 너비 기준으로 맞추고 비율을 유지 */
-        background-position: center; /* 중앙 정렬 */
-        background-repeat: no-repeat; /* 이미지 반복 안 함 */
+        background-size: cover;
+        /* 너비 기준으로 맞추고 비율을 유지 */
+        background-position: center;
+        /* 중앙 정렬 */
+        background-repeat: no-repeat;
+        /* 이미지 반복 안 함 */
     }
 
     #menu-background {
-        background-image: url("/images/menulogo.png"); /* 기본 배경 이미지 */
-        background-size: contain; /* 원본 비율 유지하면서 보여줌 */
+        background-image: url("/images/menulogo.png");
+        /* 기본 배경 이미지 */
+        background-size: contain;
+        /* 원본 비율 유지하면서 보여줌 */
         background-position: center;
         background-repeat: no-repeat;
     }
 
     /* 배경 이미지가 작은 경우에도 너비 기준으로 정비율 확대 */
     .mini-game-content[data-image-url] {
-        background-image: url(""); /* 자바스크립트에서 동적으로 이미지 설정 */
+        background-image: url("");
+        /* 자바스크립트에서 동적으로 이미지 설정 */
     }
 
     /* 상단 오른쪽 위치 정보 */
     .location-container {
         position: absolute;
-        top: -40px; /* 사진 바깥쪽 */
+        top: -40px;
+        /* 사진 바깥쪽 */
         right: 10px;
         display: flex;
         align-items: center;
@@ -65,7 +63,8 @@
     /* 상단 왼쪽 [회원용] */
     .member-label {
         position: absolute;
-        top: -40px; /* 사진 바깥쪽 */
+        top: -40px;
+        /* 사진 바깥쪽 */
         left: 10px;
         font-size: 1.2rem;
         font-weight: bold;
@@ -76,18 +75,22 @@
     /* 메뉴 이름 (사진 안쪽 상단 오른쪽) */
     .menu-name {
         position: absolute;
-        top: 10px; /* 사진 안쪽 */
+        top: 10px;
+        /* 사진 안쪽 */
         right: 10px;
         font-size: 1.5rem;
         font-weight: bold;
-        color: white; /* 사진 안쪽이므로 흰색 */
-        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* 가독성을 위한 텍스트 그림자 */
+        color: white;
+        /* 사진 안쪽이므로 흰색 */
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        /* 가독성을 위한 텍스트 그림자 */
     }
 
     /* 버튼 컨테이너 (오른쪽 하단 사진 안쪽) */
     .button-container {
         position: absolute;
-        bottom: 20px; /* 사진 안쪽 */
+        bottom: 20px;
+        /* 사진 안쪽 */
         right: 20px;
         display: flex;
         flex-direction: column;
@@ -99,7 +102,8 @@
         margin-bottom: 10px;
         font-size: 1rem;
         color: white;
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* 가독성을 위한 그림자 */
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        /* 가독성을 위한 그림자 */
     }
 
     #user-start-game,
@@ -108,84 +112,131 @@
         height: 50px;
         margin-bottom: 0px;
         font-size: 16px;
-        border: 2px solid rgba(255, 120, 120, 1); /* 대표 컬러로 테두리 */
+        border: 2px solid rgba(255, 120, 120, 1);
+        /* 대표 컬러로 테두리 */
         border-radius: 5px;
-        background-color: rgba(255, 120, 120, 1); /* 대표 컬러로 배경 */
-        color: white; /* 버튼 텍스트를 흰색으로 */
+        background-color: rgba(255, 120, 120, 1);
+        /* 대표 컬러로 배경 */
+        color: white;
+        /* 버튼 텍스트를 흰색으로 */
         cursor: pointer;
         font-weight: bold;
     }
 
     /* "좋아요" 버튼 스타일 설정 */
     #user-like-button {
-        display: inline-block; /* 요소를 인라인 블록으로 설정 */
-        width: 150px; /* 버튼 너비를 "싫어요" 버튼과 동일하게 설정 */
-        height: 50px; /* 버튼 높이를 "싫어요" 버튼과 동일하게 설정 */
-        font-size: 16px; /* 버튼 텍스트 크기 */
-        border: 2px solid rgba(255, 120, 120, 1); /* 대표 컬러로 테두리 */
+        display: inline-block;
+        /* 요소를 인라인 블록으로 설정 */
+        width: 150px;
+        /* 버튼 너비를 "싫어요" 버튼과 동일하게 설정 */
+        height: 50px;
+        /* 버튼 높이를 "싫어요" 버튼과 동일하게 설정 */
+        font-size: 16px;
+        /* 버튼 텍스트 크기 */
+        border: 2px solid rgba(255, 120, 120, 1);
+        /* 대표 컬러로 테두리 */
         border-radius: 5px;
-        background-color: rgba(255, 120, 120, 1); /* 대표 컬러로 배경 */
-        color: white; /* 버튼 텍스트를 흰색으로 */
-        cursor: pointer; /* 마우스 커서를 포인터로 변경 */
-        position: relative; /* 자식 요소의 위치 설정을 위한 상대적 위치 지정 */
-        text-align: center; /* 텍스트를 중앙 정렬 */
-        line-height: 50px; /* 텍스트를 버튼 높이에 맞춰 세로 중앙 정렬 */
-        font-weight: bold; /* 텍스트를 굵게 설정 */
-        overflow: hidden; /* 자식 요소가 버튼을 넘어가지 않도록 숨김 */
+        background-color: rgba(255, 120, 120, 1);
+        /* 대표 컬러로 배경 */
+        color: white;
+        /* 버튼 텍스트를 흰색으로 */
+        cursor: pointer;
+        /* 마우스 커서를 포인터로 변경 */
+        position: relative;
+        /* 자식 요소의 위치 설정을 위한 상대적 위치 지정 */
+        text-align: center;
+        /* 텍스트를 중앙 정렬 */
+        line-height: 50px;
+        /* 텍스트를 버튼 높이에 맞춰 세로 중앙 정렬 */
+        font-weight: bold;
+        /* 텍스트를 굵게 설정 */
+        overflow: hidden;
+        /* 자식 요소가 버튼을 넘어가지 않도록 숨김 */
     }
 
     /* "싫어요" 버튼 스타일 설정 (좋아요 버튼과 동일한 크기로 설정) */
     #user-dislike-button {
-        display: inline-block; /* 요소를 인라인 블록으로 설정 */
-        width: 150px; /* 버튼 너비 */
-        height: 50px; /* 버튼 높이 */
-        font-size: 16px; /* 버튼 텍스트 크기 */
-        border: 2px solid rgba(255, 120, 120, 1); /* 대표 컬러로 테두리 */
+        display: inline-block;
+        /* 요소를 인라인 블록으로 설정 */
+        width: 150px;
+        /* 버튼 너비 */
+        height: 50px;
+        /* 버튼 높이 */
+        font-size: 16px;
+        /* 버튼 텍스트 크기 */
+        border: 2px solid rgba(255, 120, 120, 1);
+        /* 대표 컬러로 테두리 */
         border-radius: 5px;
-        background-color: rgba(255, 120, 120, 1); /* 대표 컬러로 배경 */
-        color: white; /* 버튼 텍스트를 흰색으로 */
-        cursor: pointer; /* 마우스 커서를 포인터로 변경 */
-        text-align: center; /* 텍스트를 중앙 정렬 */
+        background-color: rgba(255, 120, 120, 1);
+        /* 대표 컬러로 배경 */
+        color: white;
+        /* 버튼 텍스트를 흰색으로 */
+        cursor: pointer;
+        /* 마우스 커서를 포인터로 변경 */
+        text-align: center;
+        /* 텍스트를 중앙 정렬 */
         /* line-height: 50px; 텍스트를 버튼 높이에 맞춰 세로 중앙 정렬 */
-        font-weight: bold; /* 텍스트를 굵게 설정 */
+        font-weight: bold;
+        /* 텍스트를 굵게 설정 */
     }
 
     /* 별점 컨테이너 스타일 설정 (기본적으로 숨김 처리) */
     .stars {
-        position: absolute; /* 부모 요소를 기준으로 절대 위치 지정 */
-        top: 50%; /* 부모 요소의 세로 중앙에 위치 */
-        left: 50%; /* 부모 요소의 가로 중앙에 위치 */
-        transform: translate(-50%, -50%); /* 정확한 중앙 위치를 위해 변환 */
-        display: flex; /* 별들을 플렉스 컨테이너로 설정 */
-        justify-content: center; /* 별들을 가로 중앙 정렬 */
-        align-items: center; /* 별들을 세로 중앙 정렬 */
-        font-size: 24px; /* 별의 크기 */
-        width: auto; /* 별 컨테이너의 너비를 내용에 맞게 자동 설정 */
-        height: 24px; /* 별 컨테이너의 높이 */
-        display: none; /* 기본적으로 숨김 처리 */
+        position: absolute;
+        /* 부모 요소를 기준으로 절대 위치 지정 */
+        top: 50%;
+        /* 부모 요소의 세로 중앙에 위치 */
+        left: 50%;
+        /* 부모 요소의 가로 중앙에 위치 */
+        transform: translate(-50%, -50%);
+        /* 정확한 중앙 위치를 위해 변환 */
+        display: flex;
+        /* 별들을 플렉스 컨테이너로 설정 */
+        justify-content: center;
+        /* 별들을 가로 중앙 정렬 */
+        align-items: center;
+        /* 별들을 세로 중앙 정렬 */
+        font-size: 24px;
+        /* 별의 크기 */
+        width: auto;
+        /* 별 컨테이너의 너비를 내용에 맞게 자동 설정 */
+        height: 24px;
+        /* 별 컨테이너의 높이 */
+        display: none;
+        /* 기본적으로 숨김 처리 */
     }
 
     /* 기본 별 스타일 설정 */
     .star {
-        color: #ccc; /* 별의 기본 색상 (회색) */
-        cursor: pointer; /* 마우스 커서를 포인터로 변경 */
-        margin: 0; /* 별 사이의 기본 간격 제거 */
-        letter-spacing: -3px; /* 별들 사이의 간격 조정 */
+        color: #ccc;
+        /* 별의 기본 색상 (회색) */
+        cursor: pointer;
+        /* 마우스 커서를 포인터로 변경 */
+        margin: 0;
+        /* 별 사이의 기본 간격 제거 */
+        letter-spacing: -3px;
+        /* 별들 사이의 간격 조정 */
     }
 
     /* 노란색으로 채워지는 별 스타일 설정 */
     .star.fill {
-        color: #ffcc00; /* 채워진 별의 색상을 노란색으로 설정 */
+        color: #ffcc00;
+        /* 채워진 별의 색상을 노란색으로 설정 */
     }
 
     /* user-rating-controls 내 콘텐츠들을 중앙에 정렬 */
     /* 세로로 정렬되게 하는 코드 추가 */
     #user-rating-controls {
-        display: flex; /* 컨트롤을 플렉스 박스로 설정 */
-        flex-direction: column; /* 버튼들을 세로로 정렬 */
-        justify-content: left; /* 버튼들을 왼쪽 정렬 */
-        align-items: center; /* 버튼들을 세로 중앙 정렬 */
-        gap: 10px; /* 버튼들 사이의 간격 조절 */
+        display: flex;
+        /* 컨트롤을 플렉스 박스로 설정 */
+        flex-direction: column;
+        /* 버튼들을 세로로 정렬 */
+        justify-content: left;
+        /* 버튼들을 왼쪽 정렬 */
+        align-items: center;
+        /* 버튼들을 세로 중앙 정렬 */
+        gap: 10px;
+        /* 버튼들 사이의 간격 조절 */
     }
 
     /* 추가된 슬릭 슬라이더 스타일 */
@@ -302,7 +353,7 @@
             <!-- 메뉴 추천 메시지 및 결과 표시 -->
             <div id="user-selected-menu">
                 <h2 class="menu-name" id="user-menu-header">메뉴 룰렛을 누르세요</h2>
-                <img id="user-menu-image" src="" alt="메뉴 이미지"/>
+                <img id="user-menu-image" src="" alt="메뉴 이미지" />
             </div>
 
             <div class="button-container">
@@ -315,7 +366,7 @@
                 <div id="user-rating-controls" style="display: none">
                     <!-- 3점 고정 체크박스 -->
                     <div class="fixed-rating">
-                        <input type="checkbox" id="fixed-rating-checkbox"/>
+                        <input type="checkbox" id="fixed-rating-checkbox" />
                         <label for="fixed-rating-checkbox">좋아요 3점 고정</label>
                     </div>
 
@@ -342,10 +393,7 @@
     <div class="container mt-5">
         <!-- 더 많은 메뉴를 보고 싶다면? 버튼을 절대 위치로 설정 -->
         <h2 class="mb-4">추천 메뉴 목록</h2>
-        <a
-                th:href="@{/recommendations/map}"
-                class="btn btn-lg d-flex align-items-center top-0 end-0 m-3"
-        >
+        <a th:href="@{/recommendations/map}" class="btn btn-lg d-flex align-items-center top-0 end-0 m-3">
             <i class="fas fa-arrow-right me-2"></i> 더 많은 메뉴를 보고 싶다면?
         </a>
         <!-- 슬라이더와 버튼을 감싸는 상대 위치의 컨테이너 -->
@@ -361,9 +409,7 @@
 
 <th:block layout:fragment="scripts">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script
-            src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 
     <script th:inline="javascript">
         $(document).ready(function () {
@@ -572,7 +618,7 @@
 
                 $.post(
                     "/rate-menu",
-                    {menuId: menuId, rating: rating, radius: radius},
+                    { menuId: menuId, rating: rating, radius: radius },
                     function (menu) {
                         if (menu) {
                             $("#user-menu-header").text(menu.name);
@@ -653,22 +699,19 @@
                     const menuCard = `
                         <div>
                             <div class="card menu-card">
-                                <div class="ranking-icon ${rankingClass}">${
-                        index + 1
-                    }</div>
-                                <img src="${
-                        menu.pictureUrl || "/images/default-menu.png"
-                    }" class="card-img-top menu-photo" alt="${
-                        menu.name
-                    }">
+                                <div class="ranking-icon ${rankingClass}">${index + 1
+                        }</div>
+                                <img src="${menu.pictureUrl || "/images/default-menu.png"
+                        }" class="card-img-top menu-photo" alt="${menu.name
+                        }">
                                 <div class="card-body">
                                     <h5 class="card-title">${menu.name}</h5>
                                     <p class="card-text">가격: ${Number(
-                        menu.price
-                    ).toLocaleString()}원</p>
+                            menu.price
+                        ).toLocaleString()}원</p>
                                     <p class="card-text">${formatCategories(
-                        menu.categories
-                    )}</p>
+                            menu.categories
+                        )}</p>
                                 </div>
                             </div>
                         </div>
@@ -732,4 +775,5 @@
         });
     </script>
 </th:block>
+
 </html>
