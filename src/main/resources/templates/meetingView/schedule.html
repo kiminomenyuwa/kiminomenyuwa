@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>다중 사용자 추천</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Slick Slider CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" rel="stylesheet" type="text/css"/>
+    <!-- Slick Slider Theme CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" rel="stylesheet"
+          type="text/css"/>
+    <!-- jQuery UI CSS -->
+    <link href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css" rel="stylesheet">
+    <style>
+        body, html {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .content-wrapper {
+            display: flex;
+            height: calc(100vh - 56px); /* Navbar height subtracted */
+        }
+
+        .menu-container {
+            width: 50%;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .map-container {
+            width: 50%;
+            position: relative;
+        }
+
+        #map {
+            height: 100%;
+        }
+
+        .menu-photo {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .recommendation-section {
+            margin-bottom: 30px;
+        }
+
+        .map-buttons {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-bar {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .card {
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .slick-slide {
+            margin: 0 10px;
+        }
+
+        .slick-list {
+            margin: 0 -10px;
+        }
+
+        .loading-spinner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            display: none;
+        }
+
+        #friendSearch {
+            margin-bottom: 10px;
+        }
+
+        #selected-friends {
+            margin-bottom: 15px;
+        }
+
+        .selected-friend {
+            display: inline-flex;
+            align-items: center;
+            background-color: #e9ecef;
+            padding: 5px 10px;
+            margin: 5px;
+            border-radius: 20px;
+        }
+
+        .remove-friend {
+            margin-left: 5px;
+            cursor: pointer;
+            color: #dc3545;
+        }
+
+        .ui-autocomplete {
+            max-height: 200px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+<body>
+<!-- 네비게이션 바 -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">KimiNoMenu</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}">홈</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/reviews/write}">리뷰 작성</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/profile}">마이 페이지</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"
+                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">로그아웃</a>
+                    <form id="logout-form" th:action="@{/logout}" method="post" style="display:none;"></form>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="content-wrapper">
+    <!-- 메뉴 리스트 및 필터 영역 -->
+    <div class="menu-container">
+        <h2 class="mt-4 mb-4">다중 사용자 추천</h2>
+
+        <!-- 필터링 및 카테고리 선택 바 -->
+        <div class="filter-bar">
+            <div class="mb-3">
+                <label for="friendSearch" class="form-label">친구 검색</label>
+                <input class="form-control" id="friendSearch" placeholder="친구 이름 또는 이메일로 검색하세요" type="text">
+            </div>
+            <div id="selected-friends"></div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="preferredCategories" class="form-label">선호 카테고리</label>
+                    <select class="form-select" id="preferredCategories" multiple>
+                        <option value="한식">한식</option>
+                        <option value="중식">중식</option>
+                        <option value="일식">일식</option>
+                        <option value="양식">양식</option>
+                        <option value="디저트">디저트</option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="keywords" class="form-label">키워드</label>
+                    <input class="form-control" id="keywords" placeholder="예: 맵고, 달콤한, 저칼로리" type="text">
+                </div>
+            </div>
+            <button class="btn btn-primary" id="fetchRecommendations" type="button">추천 받기</button>
+        </div>
+
+        <!-- 추천 메뉴 목록 -->
+        <div class="recommendation-section">
+            <h3>추천 메뉴</h3>
+            <div class="menu-slider" id="recommended-menus"></div>
+        </div>
+
+        <!-- 주변 가게 목록 -->
+        <div class="recommendation-section">
+            <h3>주변 가게</h3>
+            <div class="row" id="store-list"></div>
+        </div>
+    </div>
+
+    <!-- 지도 영역 -->
+    <div class="map-container">
+        <div id="map"></div>
+        <div class="map-buttons">
+            <button class="btn btn-primary btn-sm" id="centerOnUser">현재 위치로</button>
+            <button class="btn btn-secondary btn-sm" id="showAllStores">모든 가게 보기</button>
+        </div>
+    </div>
+</div>
+
+<!-- 로딩 스피너 -->
+<div class="loading-spinner">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<!-- 스크립트 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+<script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=t06c4jgb48&submodules=geocoder"></script>
+
+<!-- 여기에 JavaScript 코드가 들어갑니다 -->
+<script>
+    $(document).ready(function () {
+        let map;
+        let markers = [];
+        let selectedFriends = [];
+
+        // 지도 초기화
+        function initMap() {
+            map = new naver.maps.Map('map', {
+                center: new naver.maps.LatLng(37.5665, 126.9780),
+                zoom: 15
+            });
+        }
+
+        // 자동완성 설정
+        $("#friendSearch").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/friendships/search",
+                    dataType: "json",
+                    data: {query: request.term},
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return {
+                                label: item.userName + " (" + item.userId + ")",
+                                value: item.userId,
+                                name: item.userName
+                            };
+                        }));
+                    }
+                });
+            },
+            minLength: 2,
+            select: function (event, ui) {
+                if (!selectedFriends.includes(ui.item.value)) {
+                    selectedFriends.push(ui.item.value);
+                    $("#selected-friends").append(
+                        `<span class="selected-friend" data-id="${ui.item.value}">
+                        ${ui.item.name}
+                        <span class="remove-friend">&times;</span>
+                    </span>`
+                    );
+                }
+                $(this).val("");
+                return false;
+            }
+        });
+
+        // 친구 제거
+        $(document).on("click", ".remove-friend", function () {
+            const friendId = $(this).parent().data("id");
+            selectedFriends = selectedFriends.filter(id => id !== friendId);
+            $(this).parent().remove();
+        });
+
+        // 추천 받기
+        $("#fetchRecommendations").click(function () {
+            if (selectedFriends.length === 0) {
+                alert("최소 한 명의 친구를 선택해주세요.");
+                return;
+            }
+
+            $(".loading-spinner").show();
+
+            const center = map.getCenter();
+            $.ajax({
+                url: "/recommendations/nearby-menus-with-friends",
+                method: "POST",
+                data: {
+                    latitude: center.lat(),
+                    longitude: center.lng(),
+                    radius: 1000,
+                    limit: 10,
+                    participantUserIds: selectedFriends,
+                    preferredCategories: $("#preferredCategories").val(),
+                    keywords: $("#keywords").val()
+                },
+                success: function (response) {
+                    displayRecommendedMenus(response.recommendedMenus);
+                    displayNearbyStores(response.nearbyStores);
+                    updateMap(response.nearbyStores);
+                },
+                error: function () {
+                    alert("추천을 가져오는데 실패했습니다.");
+                },
+                complete: function () {
+                    $(".loading-spinner").hide();
+                }
+            });
+        });
+
+        // 추천 메뉴 표시
+        function displayRecommendedMenus(menus) {
+            const slider = $("#recommended-menus");
+            slider.empty();
+            menus.forEach(menu => {
+                slider.append(`
+                <div class="card">
+                    <img src="${menu.pictureUrl || '/images/default-menu.png'}" class="card-img-top menu-photo" alt="${menu.name}">
+                    <div class="card-body">
+                        <h5 class="card-title">${menu.name}</h5>
+                        <p class="card-text">가격: ${menu.price}원</p>
+                        <p class="card-text">${menu.categories.map(c => c.categoryName).join(", ")}</p>
+                    </div>
+                </div>
+            `);
+            });
+            slider.slick({
+                slidesToShow: 3,
+                slidesToScroll: 1,
+                autoplay: true,
+                autoplaySpeed: 3000,
+                responsive: [
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            slidesToShow: 2
+                        }
+                    },
+                    {
+                        breakpoint: 576,
+                        settings: {
+                            slidesToShow: 1
+                        }
+                    }
+                ]
+            });
+        }
+
+        // 주변 가게 표시
+        function displayNearbyStores(stores) {
+            const storeList = $("#store-list");
+            storeList.empty();
+            stores.forEach(store => {
+                storeList.append(`
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="${store.photoUrls[0] || '/images/default-store.png'}" class="card-img-top menu-photo" alt="${store.name}">
+                        <div class="card-body">
+                            <h5 class="card-title">${store.name}</h5>
+                            <p class="card-text">${store.category}</p>
+                            <p class="card-text">${store.phoneNumber}</p>
+                        </div>
+                    </div>
+                </div>
+            `);
+            });
+        }// 지도 업데이트
+        function updateMap(stores) {
+            // 기존 마커 제거
+            markers.forEach(marker => marker.setMap(null));
+            markers = [];
+
+            // 새 마커 추가
+            stores.forEach(store => {
+                const marker = new naver.maps.Marker({
+                    position: new naver.maps.LatLng(store.latitude, store.longitude),
+                    map: map,
+                    title: store.name
+                });
+                markers.push(marker);
+
+                // 마커 클릭 이벤트
+                naver.maps.Event.addListener(marker, 'click', function () {
+                    const infoWindow = new naver.maps.InfoWindow({
+                        content: `
+                        <div style="padding:10px;min-width:200px;">
+                            <h5>${store.name}</h5>
+                            <p>${store.category}</p>
+                            <p>${store.phoneNumber}</p>
+                        </div>
+                    `
+                    });
+                    infoWindow.open(map, marker);
+                });
+            });
+
+            // 모든 마커가 보이도록 지도 범위 조정
+            if (markers.length > 0) {
+                const bounds = new naver.maps.LatLngBounds();
+                markers.forEach(marker => bounds.extend(marker.getPosition()));
+                map.fitBounds(bounds);
+            }
+        }
+
+        // 현재 위치로 이동
+        $("#centerOnUser").click(function () {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    const userLocation = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                    map.setCenter(userLocation);
+                    map.setZoom(15);
+                }, function () {
+                    alert("위치 정보를 가져올 수 없습니다.");
+                });
+            } else {
+                alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
+            }
+        });
+
+        // 모든 가게 보기
+        $("#showAllStores").click(function () {
+            if (markers.length > 0) {
+                const bounds = new naver.maps.LatLngBounds();
+                markers.forEach(marker => bounds.extend(marker.getPosition()));
+                map.fitBounds(bounds);
+            } else {
+                alert("표시할 가게가 없습니다.");
+            }
+        });
+
+        // 지도 초기화
+        initMap();
+
+        // 페이지 로드 시 현재 위치로 지도 중심 설정
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                const userLocation = new naver.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                map.setCenter(userLocation);
+            }, function () {
+                console.log("위치 정보를 가져올 수 없습니다.");
+            });
+        }
+    });
+</script>
+</body>
+</html>
