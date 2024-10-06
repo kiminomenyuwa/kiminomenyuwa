@@ -223,9 +223,9 @@ public class MerchantService {
 
 		GeometryFactory geometryFactory = new GeometryFactory();
 
-		//		Point location = geometryFactory.createPoint(
-		//			new Coordinate(storeRegistrationDTO.getLongitude(), storeRegistrationDTO.getLatitude()));
-		Point location = geometryFactory.createPoint(new Coordinate(127.00, 37.00));
+		Point location = geometryFactory.createPoint(
+			new Coordinate(storeRegistrationDTO.getLongitude(), storeRegistrationDTO.getLatitude()));
+		// Point location = geometryFactory.createPoint(new Coordinate(127.00, 37.00));
 
 		StoreEntity storeEntity = StoreEntity.builder()
 			.user(merchant)
@@ -287,7 +287,7 @@ public class MerchantService {
 		log.debug("filePath = {}", filePath);
 
 		// 저장된 파일의 경로 반환 (예: "{storeId}/{uniqueFileName}")
-		return "files/store/" + storeId + "/" + uniqueFileName;
+		return "/files/store/" + storeId + "/" + uniqueFileName;
 	}
 
 	/**
@@ -332,7 +332,7 @@ public class MerchantService {
 		log.debug("filePath = {}", filePath);
 
 		// 저장된 파일의 경로 반환 (예: "{storeId}/{uniqueFileName}")
-		return "files/menu/" + menuId + "/" + uniqueFileName;
+		return "/files/menu/" + menuId + "/" + uniqueFileName;
 	}
 
 	public Integer saveMenu(MenuRegistrationDTO menuRegistrationDTO) throws IOException {
