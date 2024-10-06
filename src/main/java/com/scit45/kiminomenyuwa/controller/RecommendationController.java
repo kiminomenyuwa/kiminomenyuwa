@@ -97,6 +97,10 @@ public class RecommendationController {
 			.map(Map.Entry::getKey)
 			.toList();
 
+		// 먹어보지 않은 카테고리 기반 추천
+		List<MenuDTO> recommendedByUntriedCategories = recommendService.recommendMenusByUntriedCategory(user.getId(),
+			nearbyMenus);
+
 		// 두 리스트를 포함하는 맵을 생성하여 반환합니다.
 		Map<String, Object> response = new HashMap<>();
 		response.put("nearbyStores", nearbyStores);
@@ -107,6 +111,8 @@ public class RecommendationController {
 			recommendedByUserAgeGroup.subList(0, Math.min(recommendedByUserAgeGroup.size(), 9)));
 		response.put("recommendedByMinigameScores",
 			recommendedByMinigameScores.subList(0, Math.min(recommendedByMinigameScores.size(), 9)));
+		response.put("recommendedByUntriedCategories",
+			recommendedByUntriedCategories.subList(0, Math.min(recommendedByUntriedCategories.size(), 9)));
 
 		return ResponseEntity.ok(response);
 	}
@@ -343,7 +349,6 @@ public class RecommendationController {
 		Map<MenuDTO, Integer> menuScoreMap = minigameService.getMenuScoreMap(user.getId());
 		model.addAttribute("menuScoreMap", menuScoreMap);
 		log.debug("menuScoreMap: {}", menuScoreMap);
-
 
 		// menuScoreMap을 정렬된 리스트로 변환 (Map 구조라서 아래의 별도 작업이 필요했음ㄷㄷ)
 		List<Map.Entry<MenuDTO, Integer>> sortedMenuList = new ArrayList<>(menuScoreMap.entrySet());
