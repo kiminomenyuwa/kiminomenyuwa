@@ -39,7 +39,7 @@ public class StoreEntity {
 	@Column(name = "name", nullable = false)
 	private String name;
 
-	@Column(name = "certification", nullable = false)
+	@Column(name = "certification")
 	private String certification;
 
 	@Column(name = "road_name_address")

@@ -73,7 +73,7 @@ CREATE TABLE `store`
     `store_id`          INT AUTO_INCREMENT NOT NULL,           -- 상점의 고유 식별자
     `user_id`           VARCHAR(20)        NOT NULL,           -- 상점 소유자의 사용자 ID (변경된 필드 이름)
     `name`              VARCHAR(30)        NOT NULL,           -- 상점 이름
-    `certification`     VARCHAR(100)       NOT NULL,           -- 인증 정보
+    `certification`     VARCHAR(100),                          -- 인증 정보
     `road_name_address` VARCHAR(100),                          -- 도로명 주소
     `detail_address`    VARCHAR(100),                          -- 상세 주소
     `zipcode`           VARCHAR(20),                           -- 우편번호
@@ -93,7 +93,7 @@ CREATE TABLE `menu`
     `store_id`    INT        NOT NULL,           -- 메뉴가 속한 상점의 ID
     `name`        VARCHAR(50),                   -- 메뉴 이름
     `price`       INT,                           -- 메뉴 가격
-    `picture_url` VARCHAR(1000),                  -- 메뉴 사진 URL
+    `picture_url` VARCHAR(1000),                 -- 메뉴 사진 URL
     `enabled`     TINYINT(1) NOT NULL DEFAULT 1, -- 메뉴 활성화 여부
     PRIMARY KEY (`menu_id`),                     -- 기본 키 설정
     FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`)
