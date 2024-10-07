@@ -25,6 +25,7 @@ public class WebSecurityConfig {
 		, "/user/uploadProfile"
 		, "/files/**"
 		, "/user/**"
+		, "/get-random-menu"
 	};
 
 	@Bean

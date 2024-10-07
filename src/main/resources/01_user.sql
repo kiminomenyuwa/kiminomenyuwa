@@ -27,6 +27,12 @@ VALUES ('japol', '$2a$10$Z5T.N5kAmGdBxROPhbTfee41IgzH3ob15QuxQf9UYKJcLSc.1IZ.6',
         'japol@naver.com', '경기 고양시 덕양구 화신로 170', '0000동 0000호', '10484', '010-9114-3194',
         '20241007_a7515e4d-eafd-4c29-9dd1-eeead167dcca.jpeg', 'ROLE_USER', 1);
 
+-- 김희윤
+INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`,
+                    `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
+VALUES ('khy960713', '$2a$10$pTAHt65R9ixmDFMihrnMcOiCszqiTnI4yQLZ6t55Sf/pZvm5O13Ku', '김희윤', '1996-07-13', 'male',
+        'heeyoonkim07@gmail.com', '경기 성남시 분당구 판교원로 207', '507동 2803호', '13485', '010-2079-2707',
+        '스크린샷 2024-06-24 163555.jpg', 'ROLE_USER', 1);
 select *
 from profile_photo;
 INSERT INTO `profile_photo`(`user_id`, `original_name`, `saved_name`)
@@ -38,6 +44,9 @@ VALUES ('hyunji123', '20241007_14bf3b18-3707-43dd-8819-27581ceee7c3.jpg',
 INSERT INTO `profile_photo`(`user_id`, `original_name`, `saved_name`)
 VALUES ('japol', '20241007_a7515e4d-eafd-4c29-9dd1-eeead167dcca.jpeg',
         '20241007_a7515e4d-eafd-4c29-9dd1-eeead167dcca.jpeg');
+INSERT INTO `profile_photo`(`user_id`, `original_name`, `saved_name`)
+VALUES ('khy960713', '스크린샷 2024-06-24 163555.jpg',
+        '스크린샷 2024-06-24 163555.jpg');
 
 
 select *
