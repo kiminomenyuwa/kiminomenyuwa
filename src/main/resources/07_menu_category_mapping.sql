@@ -191,3 +191,89 @@ INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
 SELECT 2604, `category_id` FROM `food_category` WHERE `category_name` IN ('일식', '짬뽕', '해산물', '삶음', '제한없음', '매운', '저녁');
 INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
 SELECT 2605, `category_id` FROM `food_category` WHERE `category_name` IN ('일식', '짬뽕', '해산물', '삶음', '제한없음', '매운', '저녁');
+
+-- 공씨네주먹밥
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3000, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '주먹밥', '쌀', '삶음', '제한없음', '담백한', '점심', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3007, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '주먹밥', '날치알', '치즈', '삶음', '제한없음', '고소한', '점심', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3001, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '라면', '면', '끓임', '제한없음', '매운', '점심', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3002, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '라면', '면', '끓임', '제한없음', '담백한', '점심', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3004, `category_id` FROM `food_category`
+WHERE `category_name` IN ('일식', '우동', '어묵', '삶음', '제한없음', '고소한', '점심', '저녁');
+
+-- 이맛콩나물국밥
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3010, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '탕', '갈비', '낙지', '끓임', '제한없음', '담백한', '점심', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3011, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '국밥', '콩나물', '낙지', '끓임', '제한없음', '매운', '점심', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3012, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '국', '소고기', '끓임', '제한없음', '매운', '점심', '저녁');
+
+-- 이태리부대찌개
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3013, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '전골', '햄', '끓임', '제한없음', '매운', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3014, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '볶음', '햄', '볶음', '제한없음', '매운', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3015, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '전골', '햄', '끓임', '제한없음', '고소한', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3016, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '찌개', '햄', '끓임', '제한없음', '매운', '저녁');
+
+-- 순대실록
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3017, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '국', '순대', '끓임', '제한없음', '담백한', '점심', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3018, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '국', '머릿고기', '끓임', '제한없음', '담백한', '점심', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3019, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '국', '곱창', '순대', '끓임', '제한없음', '매운', '점심', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3020, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '순대', '삶음', '제한없음', '고소한', '점심', '저녁');
+
+-- 오봉집
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3021, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '모둠', '해산물', '구이', '제한없음', '풍미가득', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3022, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '오징어', '해산물', '구이', '제한없음', '풍미가득', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3023, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '보쌈', '매생이', '찜', '제한없음', '고소한', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3024, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '탕', '매생이', '끓임', '제한없음', '담백한', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3025, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '낙지', '볶음', '직화', '제한없음', '매운', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3026, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '오징어', '볶음', '직화', '제한없음', '매운', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3027, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '제육', '볶음', '직화', '제한없음', '매운', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3028, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '보쌈', '정식', '삶음', '제한없음', '고소한', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3029, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '막국수', '면', '삶음', '제한없음', '새콤달콤', '점심', '저녁');
+
