@@ -33,6 +33,15 @@ INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, 
 VALUES ('khy960713', '$2a$10$pTAHt65R9ixmDFMihrnMcOiCszqiTnI4yQLZ6t55Sf/pZvm5O13Ku', '김희윤', '1996-07-13', 'male',
         'heeyoonkim07@gmail.com', '경기 성남시 분당구 판교원로 207', '507동 2803호', '13485', '010-2079-2707',
         '스크린샷 2024-06-24 163555.jpg', 'ROLE_USER', 1);
+
+INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`,
+                    `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
+VALUES ('mochirong', '$2a$10$CCeSuSHUiHAH48Nnu/.6De1xU0xAYJsiUqSURM1FBwnHWiOIOjl5e', '이설인', '2004-12-24', 'female',
+        'best_slytherin@hogwarts.com', 'hogwarts', '507동 2803호', '13485', '010-1234-5678',
+        'GUNf3TxaEAAlcvi.jpeg', 'ROLE_USER', 1);
+
+
+
 select *
 from profile_photo;
 INSERT INTO `profile_photo`(`user_id`, `original_name`, `saved_name`)
@@ -47,6 +56,9 @@ VALUES ('japol', '20241007_a7515e4d-eafd-4c29-9dd1-eeead167dcca.jpeg',
 INSERT INTO `profile_photo`(`user_id`, `original_name`, `saved_name`)
 VALUES ('khy960713', '스크린샷 2024-06-24 163555.jpg',
         '스크린샷 2024-06-24 163555.jpg');
+INSERT INTO `profile_photo`(`user_id`, `original_name`, `saved_name`)
+VALUES ('mochirong', 'GUNf3TxaEAAlcvi.jpeg',
+        'GUNf3TxaEAAlcvi.jpeg');
 
 
 select *
