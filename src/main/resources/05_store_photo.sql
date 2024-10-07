@@ -77,3 +77,9 @@ INSERT INTO `store_photo` (`store_id`, `photo_url`, `is_main`)
 VALUES ('30007',
         'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDA3MDNfMjE3%2FMDAxNzE5OTc2Nzg3NzI3.N6PmOAIWMfW8ce1OOIMUTCqkzZUFmo5v0JRrAeDttQsg.mvDExbVbkPgjSrXMvqdJLu8gdKJgDpfUnV6S1kAnphgg.JPEG%2FDSCF3078.JPG',
         TRUE);
+
+-- 에그슬럿
+INSERT INTO `store_photo` (`store_id`, `photo_url`, `is_main`)
+VALUES ('30010',
+        'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDAyMjBfMTg3%2FMDAxNzA4NDAwNDQ2ODg0.mIGOZf4IXdbxlahqF5cFS5J9MqSk6i4HWTbj80wJovsg.YIkJXet7692l7BbBHUW0cqyOmtzFzNxN6vgaeqU5J7sg.JPEG%2FIMG_0827.jpg',
+        TRUE);

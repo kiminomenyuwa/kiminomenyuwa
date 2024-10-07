@@ -326,6 +326,15 @@ VALUES ('3021', '30007', '오봉 스페셜', '56000',
        ('3029', '30007', '쟁반막국수', '9000',
         'https://ldb-phinf.pstatic.net/20220728_207/1658964832530UulFx_JPEG/%C0%EF%B9%DD%B1%B9%BC%F6_%C1%A4%B8%E9.jpg',
         '1');
+
+-- 에그슬럿
+INSERT INTO `menu`
+VALUES ('3030', '30010', '스모키 풀드포크', '11800',
+        'https://lh3.googleusercontent.com/proxy/0yWoZ9DyRSpeUEX9YZz9lVtjwv9RhUFv8SyuyYu30FYk5va4rtU_wYcAtCGlpRw3gB88nO1qmxPZMBR4XUgO10tcrn_Vx616I1-6EyK6KOppWadY',
+        1),
+       ('3031', '30010', '클래식치즈버거w. 에', '6800',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7y4l5CETA9REm6YDMjF7G_fpRCnedBjXrkw&s',
+        '1');
 -- 메뉴추가 템플릿
 # INSERT INTO `menu`
 # VALUES

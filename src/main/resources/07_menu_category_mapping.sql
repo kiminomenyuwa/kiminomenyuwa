@@ -277,3 +277,10 @@ INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
 SELECT 3029, `category_id` FROM `food_category`
 WHERE `category_name` IN ('한식', '막국수', '면', '삶음', '제한없음', '새콤달콤', '점심', '저녁');
 
+-- 에그슬럿
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3030, `category_id` FROM `food_category`
+WHERE `category_name` IN ('양식', '햄버거', '고기', '구이', '제한없음', '풍미가득', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3031, `category_id` FROM `food_category`
+WHERE `category_name` IN ('약식', '햄버거', '고기', '구이', '제한없음', '풍미가득', '저녁');
