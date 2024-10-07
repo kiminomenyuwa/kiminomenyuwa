@@ -102,3 +102,7 @@ VALUES (7947, 'user10', 4, '더블 쿼터파운더 치즈는 맛있었어요. �
        (9734, 'user10', 4, '뼈해장국은 시원하고 깊은 국물 맛이 인상적이었습니다.');
 
 COMMIT;
+
+select * from review;
+
+delete from review where review_id in (74, 75);

@@ -284,3 +284,17 @@ WHERE `category_name` IN ('양식', '햄버거', '고기', '구이', '제한없�
 INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
 SELECT 3031, `category_id` FROM `food_category`
 WHERE `category_name` IN ('약식', '햄버거', '고기', '구이', '제한없음', '풍미가득', '저녁');
+
+-- 리칭본점
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3032, `category_id` FROM `food_category`
+WHERE `category_name` IN ('중식', '짬뽕', '면', '삶음', '제한없음', '매운', '점심', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3033, `category_id` FROM `food_category`
+WHERE `category_name` IN ('중식', '짜장면', '면', '볶음', '제한없음', '짠', '단', '점심', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3034, `category_id` FROM `food_category`
+WHERE `category_name` IN ('중식', '볶음밥', '밥', '볶음', '제한없음', '짠', '단', '점심', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3033, `category_id` FROM `food_category`
+WHERE `category_name` IN ('중식', '탕수육', '고기', '튀김', '제한없음', '새콤달콤', '점심', '저녁');

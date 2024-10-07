@@ -335,6 +335,22 @@ VALUES ('3030', '30010', '스모키 풀드포크', '11800',
        ('3031', '30010', '클래식치즈버거w. 에', '6800',
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7y4l5CETA9REm6YDMjF7G_fpRCnedBjXrkw&s',
         '1');
+
+-- 리칭본점
+INSERT INTO `menu`
+VALUES ('3032', '30011', '해물짬뽕', '8000',
+        'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjA3MjBfMTEx%2FMDAxNjU4MzAzOTI0MTY4.67uKG-DmQnJ2T9_VsmDb77ShTRgIasqFqrWjLtOrTzQg.yUeOc4BXBYb1umL5XXc4ULnGPfyj2vLvmziE8B_UKMQg.JPEG.96bravo%2F20220718_182512.jpg',
+        1),
+       ('3033', '30011', '해물쟁반짜장', '8000',
+        'https://search.pstatic.net/common/?src=https%3A%2F%2Fpup-review-phinf.pstatic.net%2FMjAyNDA4MTZfNjEg%2FMDAxNzIzNzkxMDE3NTMx.gxYTfoscXVjiccyHrPUT3a-zbE9uJNRufCIuPFi6vIgg.7JNz0dCJKAldP3Yga1ABI4WwIjnotwmKqTtVE6Hzjx4g.JPEG%2F1000023286.jpg.jpg%3Ftype%3Dw1500_60_sharpen',
+        '1'),
+       ('3034', '30011', '게살볶음밥', '8000',
+        'https://search.pstatic.net/common/?src=https%3A%2F%2Fpup-review-phinf.pstatic.net%2FMjAyNDAzMDRfNjEg%2FMDAxNzA5NTI1MDc5NjEw.SYf03DZbLLCR4OGOEmRa7povy7KPpVukByb_me9Sy9sg.PV9FbsELeXTFM9zXkD6mLZ49MG90pdUCRJ1pkHr0IP8g.JPEG%2FE1E814D1-E019-408E-8621-757F49798D37.jpeg%3Ftype%3Dw1500_60_sharpen',
+        '1'),
+       ('3035', '30011', '찹쌀탕수육', '23000',
+        'https://search.pstatic.net/common/?src=https%3A%2F%2Fpup-review-phinf.pstatic.net%2FMjAyNDAyMDZfODQg%2FMDAxNzA3MTU1MjkzNzI5.omh2tV4YyPA4r9jjltrKyGYUvBM6iK39erelAB9WKVsg.NYEN_KlIfTEGynSs_VP72kf9zTG526LIyIVZkVvmQ28g.JPEG%2F20240201_203856.jpg.jpg%3Ftype%3Dw1500_60_sharpen',
+        '1');
+
 -- 메뉴추가 템플릿
 # INSERT INTO `menu`
 # VALUES

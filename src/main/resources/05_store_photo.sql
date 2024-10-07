@@ -83,3 +83,9 @@ INSERT INTO `store_photo` (`store_id`, `photo_url`, `is_main`)
 VALUES ('30010',
         'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDAyMjBfMTg3%2FMDAxNzA4NDAwNDQ2ODg0.mIGOZf4IXdbxlahqF5cFS5J9MqSk6i4HWTbj80wJovsg.YIkJXet7692l7BbBHUW0cqyOmtzFzNxN6vgaeqU5J7sg.JPEG%2FIMG_0827.jpg',
         TRUE);
+
+-- 리칭본점
+INSERT INTO `store_photo` (`store_id`, `photo_url`, `is_main`)
+VALUES ('30011',
+        'https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNDAzMjBfNjYg%2FMDAxNzEwOTAzNDEwNTcx.EZIhatU-y8bFZIGkvoFU26l1erUawMvSK5Je0zqjnIwg.gm6PNcQipnAunxy-59r07QaJe3J603F_Y-zFLlwA5-Eg.JPEG%2FIMG_0036.JPG',
+        TRUE);

@@ -1022,7 +1022,6 @@
         <div id="map"></div>
         <div class="map-buttons">
             <button class="btn btn-primary btn-sm mb-2" id="centerOnUser">현재 위치로</button>
-            <button class="btn btn-secondary btn-sm" id="showAllStores">모든 가게 보기</button>
         </div>
     </div>
 </div>
@@ -1434,15 +1433,15 @@
         });
 
         // 모든 가게 보기
-        $("#showAllStores").click(function () {
-            if (markers.length > 0) {
-                const bounds = new naver.maps.LatLngBounds();
-                markers.forEach(marker => bounds.extend(marker.getPosition()));
-                map.fitBounds(bounds);
-            } else {
-                alert("표시할 가게가 없습니다.");
-            }
-        });
+        // $("#showAllStores").click(function () {
+        //     if (markers.length > 0) {
+        //         const bounds = new naver.maps.LatLngBounds();
+        //         markers.forEach(marker => bounds.extend(marker.getPosition()));
+        //         map.fitBounds(bounds);
+        //     } else {
+        //         alert("표시할 가게가 없습니다.");
+        //     }
+        // });
 
         // 지도 초기화
         initMap();
