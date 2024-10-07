@@ -353,7 +353,7 @@
             <!-- 메뉴 추천 메시지 및 결과 표시 -->
             <div id="user-selected-menu">
                 <h2 class="menu-name" id="user-menu-header">메뉴 룰렛을 누르세요</h2>
-<!--                <img id="user-menu-image" src="" alt="메뉴 이미지" />-->
+                <!--                <img id="user-menu-image" src="" alt="메뉴 이미지" />-->
             </div>
 
             <div class="button-container">
@@ -390,11 +390,18 @@
         </div>
     </div>
     <!--  슬라이더 슬릭  -->
-    <div class="container mt-5">
+    <div id="index-container" class="container mt-5">
         <!-- 더 많은 메뉴를 보고 싶다면? 버튼을 절대 위치로 설정 -->
-        <h2 class="mb-4">추천 메뉴 목록</h2>
+        <h1 id="our-h1" class="mb-4" style="
+        margin-bottom: 10px;
+    ">추천 메뉴 목록</h1>
+        <p id="our-p"> 취향에 맞춰 순위별로 메뉴를 추천해드려요
+            🥇영광의 금메달은 어떤 메뉴인지 확인해보세요</p>
         <a th:href="@{/recommendations/map}" class="btn btn-lg d-flex align-items-center top-0 end-0 m-3">
-            <i class="fas fa-arrow-right me-2"></i> 더 많은 메뉴를 보고 싶다면?
+            <i class="fas fa-arrow-right me-2"></i> 더 많은 메뉴를 보고 싶다면? <span id="our-span" style="
+            margin-left: 10px;
+            border-bottom: 1px solid;
+        ">여기를 클릭하세요</span>
         </a>
         <!-- 슬라이더와 버튼을 감싸는 상대 위치의 컨테이너 -->
         <div class="menu-slider-container position-relative">
@@ -405,6 +412,7 @@
         </div>
     </div>
 </div>
+
 <!-- 전체컨텐츠 -->
 
 <th:block layout:fragment="scripts">
