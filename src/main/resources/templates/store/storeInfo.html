@@ -201,9 +201,10 @@
                                 <!-- 리뷰 사진 표시 -->
                                 <div th:if="${review.photoUrls != null} and ${not #lists.isEmpty(review.photoUrls)}">
                                     <div class="d-flex flex-wrap">
-                                        <img alt="리뷰 사진" class="review-photo clickable-image" data-bs-toggle="modal"
-                                            onclick="openModal(this.src)" th:attr="data-bs-target='@{#ids.next(id)}'"
-                                            th:each="photoUrl : ${review.photoUrls}" th:src="${photoUrl}">
+                                        <img alt="리뷰 사진" class="review-photo clickable-image"
+                                             th:each="photoUrl : ${review.photoUrls}"
+                                             th:if="${photoUrl != null}" th:src="${photoUrl}"
+                                             data-bs-toggle="modal" onclick="openModal(this.src)" th:attr="data-bs-target='@{#ids.next(id)}'">
                                     </div>
                                 </div>
                             </div>

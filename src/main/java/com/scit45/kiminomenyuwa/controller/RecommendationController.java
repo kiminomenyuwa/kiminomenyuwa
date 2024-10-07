@@ -22,6 +22,7 @@ import com.scit45.kiminomenyuwa.domain.dto.BudgetDTO;
 import com.scit45.kiminomenyuwa.domain.dto.CategoryCountDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MiniGameMenuRatingDTO;
+import com.scit45.kiminomenyuwa.domain.dto.ProfilePhotoDTO;
 import com.scit45.kiminomenyuwa.domain.dto.StoreResponseDTO;
 import com.scit45.kiminomenyuwa.domain.dto.UserDTO;
 import com.scit45.kiminomenyuwa.domain.dto.recommendation.MenuRecommendationDTO;
@@ -30,6 +31,7 @@ import com.scit45.kiminomenyuwa.service.BudgetRecommendService;
 import com.scit45.kiminomenyuwa.service.MenuService;
 import com.scit45.kiminomenyuwa.service.MiniGameService;
 import com.scit45.kiminomenyuwa.service.MyPageService;
+import com.scit45.kiminomenyuwa.service.ProfilePhotoService;
 import com.scit45.kiminomenyuwa.service.RecommendService;
 import com.scit45.kiminomenyuwa.service.StoreSearchService;
 import com.scit45.kiminomenyuwa.service.UserService;
@@ -53,6 +55,7 @@ public class RecommendationController {
 	private final BudgetRecommendService budgetRecommendService;
 	private final RecommendService recommendService;
 	private final UserService userService;
+	private final ProfilePhotoService profilePhotoService;
 
 	@PostMapping("/nearby-menus")
 	@ResponseBody
@@ -118,7 +121,21 @@ public class RecommendationController {
 	}
 
 	@GetMapping("map")
-	public String map() {
+	public String map(Model model, @AuthenticationPrincipal AuthenticatedUser user) {
+
+		// 현재 로그인한 사용자의 프로필 사진 URL 추가
+		if (user != null) {
+			String userId = user.getUsername(); // 로그인한 사용자의 ID 가져오기
+			ProfilePhotoDTO profilePhotoDTO = profilePhotoService.getUserProfilePhotoInfo(userId);
+			if (profilePhotoDTO != null) {
+				// 프로필 사진의 URL을 모델에 추가
+				String profilePhotoUrl = "/files/" + profilePhotoDTO.getSavedName();
+				model.addAttribute("profilePhotoUrl", profilePhotoUrl);
+			} else {
+				// 프로필 사진이 없는 경우 기본 이미지를 사용하도록 설정
+				model.addAttribute("profilePhotoUrl", "/images/default-profile.png");
+			}
+		}
 		return "recommendView/map";
 	}
 
