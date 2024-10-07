@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.scit45.kiminomenyuwa.domain.dto.CategoryCountDTO;
+import com.scit45.kiminomenyuwa.domain.dto.FoodCategoryDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.UserDiningHistoryDTO;
 import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
@@ -84,17 +85,23 @@ public class UserDiningHistoryService {
 		List<MenuDTO> menuDTOs = new ArrayList<>();
 		for (MenuDTO menu : availableMenus) {
 			// 각 메뉴에 해당하는 카테고리 리스트 가져오기
-			List<String> categories = menuCategoryMappingRepository.findCategoriesByMenuId(menu.getMenuId());
+			List<FoodCategoryDTO> categories = menuCategoryMappingRepository.findCategoriesWithTypeByMenuId(
+					menu.getMenuId())
+				.stream().map(e -> FoodCategoryDTO.builder()
+					.categoryId(e.getFoodCategory().getCategoryId())
+					.typeId(e.getFoodCategory().getCategoryType().getTypeId())
+					.categoryName(e.getFoodCategory().getCategoryName())
+					.build()).toList();
 
 			// MenuDTO에 카테고리 리스트를 추가하여 생성
 			menuDTOs.add(MenuDTO.builder()
 				.menuId(menu.getMenuId())
-				.storeId(menu.getStore().getStoreId())
+				.storeId(menu.getStoreId())
 				.name(menu.getName())
 				.price(menu.getPrice())
 				.pictureUrl(menu.getPictureUrl())
 				.enabled(menu.getEnabled())
-				// .categories(categories) // 카테고리 리스트 추가
+				.categories(categories) // 카테고리 리스트 추가
 				.build());
 		}
 

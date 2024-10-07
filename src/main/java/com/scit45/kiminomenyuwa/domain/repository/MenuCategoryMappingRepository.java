@@ -16,6 +16,13 @@ public interface MenuCategoryMappingRepository extends JpaRepository<MenuCategor
 	@Query("SELECT mcm.foodCategory.categoryName FROM MenuCategoryMappingEntity mcm WHERE mcm.menu.menuId = :menuId")
 	List<String> findCategoriesByMenuId(@Param("menuId") Integer menuId);
 
+	@Query("SELECT mcm FROM MenuCategoryMappingEntity mcm " +
+		"JOIN FETCH mcm.foodCategory fc " +
+		"JOIN FETCH fc.categoryType " +
+		"WHERE mcm.menu.menuId = :menuId")
+	List<MenuCategoryMappingEntity> findCategoriesWithTypeByMenuId(@Param("menuId") Integer menuId);
+
+
 	List<MenuCategoryMappingEntity> findByMenu(MenuEntity menu);
 
 	List<MenuCategoryMappingEntity> findByMenu_MenuId(Integer menu_menuId);
