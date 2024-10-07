@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,7 +16,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.scit45.kiminomenyuwa.domain.dto.ProfilePhotoDTO;
 import com.scit45.kiminomenyuwa.domain.dto.StoreResponseDTO;
+import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
+import com.scit45.kiminomenyuwa.service.ProfilePhotoService;
 import com.scit45.kiminomenyuwa.service.StoreSearchService;
 
 import lombok.Data;
@@ -29,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 public class StoreSearchController {
 
 	private final StoreSearchService storeSearchService;
+	private final ProfilePhotoService profilePhotoService;
 
 	/**
 	 * 검색 페이지를 렌더링합니다.
@@ -37,13 +42,41 @@ public class StoreSearchController {
 	 * @return 검색 페이지 템플릿 이름
 	 */
 	@GetMapping("/search")
-	public String showSearchForm(Model model) {
+	public String showSearchForm(Model model, @AuthenticationPrincipal AuthenticatedUser user) {
+
+		// 현재 로그인한 사용자의 프로필 사진 URL 추가
+		if (user != null) {
+			String userId = user.getUsername(); // 로그인한 사용자의 ID 가져오기
+			ProfilePhotoDTO profilePhotoDTO = profilePhotoService.getUserProfilePhotoInfo(userId);
+			if (profilePhotoDTO != null) {
+				// 프로필 사진의 URL을 모델에 추가
+				String profilePhotoUrl = "/files/" + profilePhotoDTO.getSavedName();
+				model.addAttribute("profilePhotoUrl", profilePhotoUrl);
+			} else {
+				// 프로필 사진이 없는 경우 기본 이미지를 사용하도록 설정
+				model.addAttribute("profilePhotoUrl", "/images/default-profile.png");
+			}
+		}
 		model.addAttribute("searchRequest", new SearchRequest());
 		return "store/search/store-search";
 	}
 
 	@GetMapping("/keywordsearch")
-	public String keywordSearch() {
+	public String keywordSearch(Model model, @AuthenticationPrincipal AuthenticatedUser user) {
+		// 현재 로그인한 사용자의 프로필 사진 URL 추가
+		if (user != null) {
+			String userId = user.getUsername(); // 로그인한 사용자의 ID 가져오기
+			ProfilePhotoDTO profilePhotoDTO = profilePhotoService.getUserProfilePhotoInfo(userId);
+			if (profilePhotoDTO != null) {
+				// 프로필 사진의 URL을 모델에 추가
+				String profilePhotoUrl = "/files/" + profilePhotoDTO.getSavedName();
+				model.addAttribute("profilePhotoUrl", profilePhotoUrl);
+			} else {
+				// 프로필 사진이 없는 경우 기본 이미지를 사용하도록 설정
+				model.addAttribute("profilePhotoUrl", "/images/default-profile.png");
+			}
+		}
+
 		return "store/search/store-keywordsearch";
 	}
 
@@ -88,8 +121,23 @@ public class StoreSearchController {
 	@GetMapping("api/stores/keywordsearch")
 	public ResponseEntity<Page<StoreResponseDTO>> searchStoresByKeyword(@RequestParam("keyword") String keyword,
 		@RequestParam(value = "page", defaultValue = "0") int page,
-		@RequestParam(value = "size", defaultValue = "10") int size) {
-
+		@RequestParam(value = "size", defaultValue = "10") int size,
+		Model model,
+		@AuthenticationPrincipal AuthenticatedUser user
+	) {
+		// 현재 로그인한 사용자의 프로필 사진 URL 추가
+		if (user != null) {
+			String userId = user.getUsername(); // 로그인한 사용자의 ID 가져오기
+			ProfilePhotoDTO profilePhotoDTO = profilePhotoService.getUserProfilePhotoInfo(userId);
+			if (profilePhotoDTO != null) {
+				// 프로필 사진의 URL을 모델에 추가
+				String profilePhotoUrl = "/files/" + profilePhotoDTO.getSavedName();
+				model.addAttribute("profilePhotoUrl", profilePhotoUrl);
+			} else {
+				// 프로필 사진이 없는 경우 기본 이미지를 사용하도록 설정
+				model.addAttribute("profilePhotoUrl", "/images/default-profile.png");
+			}
+		}
 		Pageable pageable = PageRequest.of(page, size);
 		Page<StoreResponseDTO> stores = storeSearchService.getStoresByName(keyword, pageable);
 		return ResponseEntity.ok(stores);
