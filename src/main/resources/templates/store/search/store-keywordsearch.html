@@ -201,7 +201,7 @@
                     const storeCard = `
                         <div class="col-md-4 mb-4">
                             <div class="card h-100">
-                                <img src="${store.photoUrl || '/images/default-store.png'}" class="card-img-top store-photo" alt="${store.name}">
+                                <img src="${store.photoUrls[0] || '/images/default-store.png'}" class="card-img-top store-photo" alt="${store.name}">
                                 <div class="card-body d-flex flex-column">
                                     <h5 class="card-title">${store.name}</h5>
                                     <p class="card-text"><strong>카테고리:</strong> ${formatCategories(store.categories)}</p>
