@@ -26,6 +26,7 @@ public class WebSecurityConfig {
 		, "/files/**"
 		, "/user/**"
 		, "/get-random-menu"
+		, "/**"
 	};
 
 	@Bean
