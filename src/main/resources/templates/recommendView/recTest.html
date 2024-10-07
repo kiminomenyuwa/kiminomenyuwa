@@ -67,14 +67,17 @@
         <th>점수</th>
     </tr>
     <!-- sortedMenuList의 데이터만 출력 -->
-    <tr th:each="entry : ${menuScoreMap}">
-            <td th:text="${entry.key.name}"></td>
-            <td th:text="${entry.value}"></td>
-        </tr>
-    </table>
+    <tr th:each="entry : ${sortedMenuList}">
+        <td th:text="${entry.key.name}"></td>
+        <td th:text="${entry.value}"></td>
+    </tr>
+
+    </tr>
+</table>
 
 
-<br><hr>
+<br>
+<hr>
 <p th:text="|${#authentication.principal.name}님의 먹은 음식 내역|"></p>
 <table>
     <tr>
@@ -101,7 +104,7 @@
         <th>storeId</th>
         <th>name</th>
         <th>price</th>
-<!--        <th>pictureUrl</th>-->
+        <!--        <th>pictureUrl</th>-->
         <th>enabled</th>
     </tr>
     <tr th:each="menu : ${notTriedMenuList}">
@@ -109,7 +112,7 @@
         <td th:text="${menu.storeId}"></td>
         <td th:text="${menu.name}"></td>
         <td th:text="${menu.price}"></td>
-<!--        <td th:text="${menu.pictureUrl}"></td>-->
+        <!--        <td th:text="${menu.pictureUrl}"></td>-->
         <td th:text="${menu.enabled}"></td>
     </tr>
 </table>
