@@ -5,7 +5,7 @@
     <meta content="IE=edge" http-equiv="X-UA-Compatible">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>다중 사용자 추천</title>
-    <!-- Font Awesome -->
+    <!-- Font Awesome (6.4.0 버전 사용) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -22,9 +22,7 @@
             background-color: #f8f9fa;
         }
 
-        .navbar {
-            background-color: #343a40;
-        }
+        /* 기존 네비게이션 바 스타일 제거 */
 
         .content-wrapper {
             display: flex;
@@ -244,37 +242,765 @@
                 transform: rotate(360deg);
             }
         }
+
+        .logo {
+            height: 40px;
+        }
+
+        .divider {
+            width: 1px;
+            height: 24px;
+            background-color: #6c757d;
+            margin: 0 15px;
+        }
+
+        .location-text {
+            font-size: 0.9rem;
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .welcome-message {
+            margin-right: 10px;
+            font-size: 0.9rem;
+        }
+
+        .user-avatar img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background-color: #ffffff;
+            color: #000000;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            display: none;
+            min-width: 150px;
+            z-index: 1000;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 10px 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            color: #000000;
+            text-decoration: none;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .dropdown-item i {
+            margin-right: 8px;
+        }
+    </style>
+
+    <style>
+        /* header.css */
+
+        /* 기본 스타일 초기화 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 헤더 전체 스타일 */
+        header {
+            display: flex !important;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #ffffff;
+            /* 배경색 변경 가능 */
+            padding: 3px 123px;
+            /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+            border: 1px solid #efefef;
+            position: relative;
+            z-index: 1000;
+            /* 헤더 z-index */
+        }
+
+        /* 헤더 왼쪽 섹션 */
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .hamburger-menu {
+            padding-bottom: 8px;
+            font-size: 27px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .hamburger-menu:focus {
+            outline: none;
+        }
+
+        .logo {
+            height: 22px;
+            /* 로고 높이 조절 */
+            width: auto;
+            padding-left: 10px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .welcome-message {
+            font-size: 14px;
+            margin-right: 50px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 150px;
+        }
+
+        #header-btn {
+            color: #000;
+            background-color: transparent;
+            border-color: transparent;
+        }
+
+        #header-btn:hover {
+            color: #fff;
+            background-color: #697390;
+            border-color: #697390;
+            height: 35px;
+        }
+
+        /* 로고 링크 기본 스타일 제거 */
+        .header-left a {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-left a img {
+            display: block;
+        }
+
+        /* 헤더 중앙 섹션 */
+        .header-center {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .header-search {
+            height: 35px;
+            display: flex;
+            align-items: center;
+            width: 100%;
+            max-width: 800px;
+            background-color: #f1f1f1;
+            /* 검색창 배경색 */
+            border-radius: 25px;
+            padding: 5px 15px;
+        }
+
+        .search-bar {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 8px 10px;
+            font-size: 14px;
+            border-radius: 25px;
+        }
+
+        .search-bar:focus {
+            outline: none;
+        }
+
+        .divider {
+            width: 1px;
+            height: 24px;
+            background-color: #ccc;
+            margin: 0 10px;
+        }
+
+        .location-text {
+            font-size: 14px;
+            color: #555;
+            white-space: nowrap;
+            padding-right: 10px;
+            padding-left: 300px;
+        }
+
+        /* 헤더 오른쪽 섹션 */
+        .header-right {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-avatar {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        #header-profile-pic {
+            height: 40px;
+            width: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* 드롭다운 메뉴 스타일 */
+        .dropdown-menu {
+            display: none;
+            /* 기본적으로 숨김 */
+            position: absolute;
+            top: 60px;
+            /* 헤더 아래에 위치 */
+            right: 0;
+            background-color: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            border-radius: 5px;
+            width: 200px;
+            z-index: 1100;
+            /* 헤더보다 높은 z-index로 수정 */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .dropdown-menu ul {
+            list-style: none;
+        }
+
+        .dropdown-menu li {
+            border-bottom: 1px solid #eee;
+        }
+
+        .dropdown-menu li:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-menu a {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f5f5f5;
+            color: #007BFF;
+        }
+
+        .dropdown-menu a i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        /* 드롭다운 메뉴 표시를 위한 클래스 */
+        .dropdown-menu.show {
+            display: block;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* 사이드 메뉴 스타일 */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            left: -250px;
+            /* 숨김 위치 */
+            width: 250px;
+            height: 100%;
+            background-color: #ffffff;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            transition: left 0.3s ease;
+            z-index: 1100;
+            /* 헤더보다 높은 z-index로 수정 */
+        }
+
+        .side-menu.open {
+            left: 0;
+            /* 열림 위치 */
+        }
+
+        .side-menu ul {
+            list-style: none;
+        }
+
+        .side-menu ul li {
+            margin-bottom: 15px;
+        }
+
+        .side-menu ul li a {
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .side-menu ul li a:hover {
+            color: #007BFF;
+        }
+
+        /* 오버레이 스타일 */
+        .overlay {
+            display: none;
+            /* 기본적으로 숨김 */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgb(0 0 0 / 65%);
+            z-index: 1050;
+            /* 헤더보다 낮고 사이드 메뉴보다 낮게 설정 */
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .header-center {
+                display: none;
+                /* 작은 화면에서는 검색창 숨김 */
+            }
+
+            .header-left .logo {
+                height: 35px;
+            }
+
+            .dropdown-menu {
+                top: 50px;
+                right: 10px;
+                width: 180px;
+            }
+
+            .side-menu {
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hamburger-menu {
+                font-size: 20px;
+            }
+
+            .logo {
+                height: 30px;
+            }
+
+            .profile-pic {
+                height: 35px;
+                width: 35px;
+            }
+
+            .dropdown-menu {
+                top: 45px;
+                right: 5px;
+                width: 160px;
+            }
+
+            .side-menu {
+                width: 200px;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        #side-box {
+            width: 460px;
+            background-color: #fff !important;
+        }
+
+        #side-profile-box {
+            border-radius: 10px !important;
+            border: 1px solid #d9d9d9;
+            height: 450px;
+            width: 400px;
+            padding-top: 40px;
+        }
+
+        #side-prof-img {
+            width: 160px;
+            height: 160px;
+        }
+
+        #side-prof-id {
+            padding-top: 10px;
+            /* font-weight: 700; */
+        }
+
+        #side-prfo-icon {
+            flex-direction: column;
+            justify-content: center;
+            color: #697390 !important;
+            margin-bottom: 5px;
+            /* 아이콘과 텍스트 사이 간격 */
+        }
+
+        #side-icon-clr {
+            color: #697390 !important;
+        }
+
+        #side-menu-list {
+            border-bottom: 1px solid #d9d9d9;
+            padding-bottom: 14px;
+            padding-top: 10px;
+            margin-right: 70px;
+        }
+
+        /* Main Container */
+        .user-container {
+            display: flex;
+            margin-top: 20px;
+            padding: 0 40px;
+            /* 왼쪽과 오른쪽에 40px의 여백 추가 */
+            max-width: 1200px;
+            /* 전체 페이지의 최대 너비 설정 */
+            margin-left: auto;
+            /* 자동으로 중앙 정렬 */
+            margin-right: auto;
+            /* 자동으로 중앙 정렬 */
+        }
+
+        /* 프로필 섹션 스타일 */
+        .profile {
+            text-align: center;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            /* 보더 추가 */
+            border-radius: 8px;
+            /* 둥근 모서리 추가 */
+            /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+            /* 그림자 추가 */
+        }
+
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+
+        .profile h3 {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* 프로필 편집 및 친구 추가 버튼 */
+        /* 프로필 아이콘 및 텍스트 */
+        .profile-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            /* 아이콘 사이 간격 */
+        }
+
+        .button {
+            text-align: center;
+        }
+
+        .icon {
+            width: 50px;
+            height: 50px;
+            background-color: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 5px;
+        }
+
+        .icon img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .button span {
+            display: block;
+            font-size: 14px;
+            color: #333;
+        }
+
+        /* 사이드바 메뉴 기본 스타일 */
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .menu-item img {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            /* 아이콘과 텍스트 사이 간격 */
+        }
+
+        .menu-item span {
+            flex-grow: 1;
+            /* 텍스트가 남은 공간을 차지 */
+        }
+
+
+        .menu-item:hover {
+            background-color: #e0e0e0;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .sidebar nav ul li {
+            margin-bottom: 15px;
+        }
+
+        .menu-item,
+        .sidebar nav ul li a {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            font-size: 16px;
+            color: #333;
+            text-decoration: none;
+            border-bottom: 1px solid #e0e0e0;
+            cursor: pointer;
+        }
+
+        .menu-item.active,
+        .sidebar nav ul li.active a {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            border-left: 4px solid black;
+        }
+
+        .menu-item img,
+        .sidebar nav ul li a img {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        .page-header {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .page-header h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin: 0;
+        }
+
+        .tabs-container {
+            display: flex;
+            justify-content: flex-start;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 20px;
+        }
+
+        .tabs {
+            display: flex;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: color 0.3s ease, border-bottom 0.3s ease;
+        }
+
+        .tab.active {
+            font-weight: bold;
+            color: black;
+            border-bottom: 2px solid black;
+        }
+
+        .tab:not(.active):hover {
+            color: gray;
+        }
+
+        .tab:not(.active) {
+            color: #888;
+        }
+
+        .sort-dropdown {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+        }
+
+        .sort-dropdown select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* 카드 리스트 스타일 */
+        .item-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            /* 한 줄에 두 개의 카드 */
+            gap: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+
+        /* 카드 스타일 */
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            padding: 0;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            box-sizing: border-box;
+            width: 100%;
+            height: 150px;
+        }
+
+        /* 텍스트와 이미지 영역의 크기 조정 */
+        .item-details {
+            flex: 1;
+            padding: 20px;
+            /* 텍스트 영역에만 패딩 추가 */
+            margin-right: 0;
+            /* 이미지와의 여백을 없앰 */
+        }
+
+        .item-details h2 {
+            font-size: 18px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .item-details p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .item-img {
+            width: 150px;
+            height: 100%;
+            object-fit: fill;
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        /* 즐겨찾기 버튼 */
+        .bookmark {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #f0ad4e;
+            cursor: pointer;
+        }
+
+        /* 반응형 디자인을 위한 설정 */
+        @media (max-width: 768px) {
+            .item-list {
+                grid-template-columns: 1fr;
+                /* 화면이 좁을 때는 한 줄에 한 개 */
+            }
+        }
     </style>
 </head>
-<!-- 네비게이션 바 -->
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">KimiNoMenu</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/}">홈</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/reviews/write}">리뷰 작성</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/profile}">마이 페이지</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"
-                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">로그아웃</a>
-                    <form id="logout-form" th:action="@{/logout}" method="post" style="display:none;"></form>
-                </li>
-            </ul>
+<!-- 통합된 헤더 -->
+<header>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+          integrity="sha512-dYq6CjV0i0y5+v/tTcnQm4M0W1KSkAoz1iQmB5F3Y5u/SxOf7HBLt/NZkMZy8Lg1E4CgVEoWdjvB5qRCbMqw2w=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Header Content -->
+    <div class="header-left">
+        <button class="hamburger-menu" id="hamburger" aria-label="메뉴 열기" aria-expanded="false">&#9776;</button>
+        <a th:href="@{/}">
+            <img th:src="@{/images/logo.png}" alt="사이트 로고" class="logo">
+        </a>
+    </div>
+
+    <div class="header-center">
+        <div class="header-search d-flex align-items-center">
+            <form action="/stores/keywordsearch" method="get" class="d-flex align-items-center w-100">
+                <input type="text" name="keyword" class="search-bar flex-grow-1" placeholder="식당, 메뉴 검색" required>
+                <button type="submit" id="header-btn" class="btn btn-primary ml-2" aria-label="검색">
+                    <i class="fas fa-search" style="font-size: 16px;"></i>
+                </button>
+            </form>
+            <span class="divider"></span>
+            <span class="location-text" id="user-address">현재 주소</span>
         </div>
     </div>
-</nav>
+
+    <div class="header-right">
+        <!-- 로그인하지 않은 사용자에게 표시 -->
+        <div sec:authorize="!isAuthenticated()">
+            <a th:href="@{/user/loginForm}" class="btn btn-primary">로그인</a>
+            <a th:href="@{/user/joinForm}" class="btn btn-secondary">회원가입</a>
+        </div>
+
+        <!-- 로그인한 사용자에게 표시 -->
+        <div sec:authorize="isAuthenticated()" class="user-menu">
+            <div class="welcome-message" sec:authorize="isAuthenticated()"
+                 th:text="|${#authentication.principal.name}님 환영합니다|"></div>
+            <span class="user-avatar" id="profile-menu-btn" aria-haspopup="true" aria-expanded="false" tabindex="0">
+                    <img th:src="@{${profilePhotoUrl}}" alt="User Avatar" id="header-profile-pic">
+                </span>
+
+            <div class="dropdown-menu dropdown-menu-right" id="dropdown-menu">
+                <ul class="list-unstyled mb-0">
+
+                    <li><a class="dropdown-item" th:href="@{/mypage}"><i class="fas fa-user me-2"></i>
+                        마이페이지</a></li>
+                    <li><a class="dropdown-item" th:href="@{/friendships/list}"><i
+                            class="fas fa-user-friends me-2"></i> 친구
+                        찾기</a></li>
+                    <li><a class="dropdown-item" th:href="@{/user/logout}"><i class="fas fa-sign-out-alt me-2"></i>
+                        로그아웃</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
 
 <div class="content-wrapper">
     <!-- 메뉴 리스트 및 필터 영역 -->
@@ -335,6 +1061,51 @@
     </div>
 </div>
 
+<!-- 오버레이 -->
+<div id="overlay" class="overlay"></div>
+
+<!-- 사이드 메뉴 -->
+<nav id="hbgMenu" class="side-menu">
+    <!-- 로그인한 사용자의 프로필 섹션 -->
+    <div class="profile-section" sec:authorize="isAuthenticated()">
+        <div class="profile-image-container">
+            <img th:src="@{${profilePhotoUrl}}" alt="프로필 사진" class="profile-image" />
+        </div>
+        <div class="user-info">
+            <span class="user-name" th:text="${#authentication.name}">사용자 이름</span>
+            <a th:href="@{/mypage}" class="edit-profile-link">프로필 편집</a>
+        </div>
+    </div>
+
+    <!-- 로그인된 사용자용 메뉴 -->
+    <div class="user-links" sec:authorize="isAuthenticated()">
+        <a href="/friendships/list" class="user-link">
+            <i class="fas fa-users"></i> 친구
+            <span class="badgeIcon" th:text="${friendCount}">0</span>
+        </a>
+        <a href="/merchant/stores" class="user-link">
+            <i class="fas fa-store"></i> 사장님 가게 페이지
+        </a>
+    </div>
+
+    <ul class="menu-list">
+        <li><a th:href="@{/}"><i class="fas fa-home"></i> 홈</a></li>
+        <th:block sec:authorize="isAuthenticated()">
+            <li><a th:href="@{/mypage}"><i class="fas fa-user"></i> 마이페이지</a></li>
+            <li><a th:href="@{/recommendations/map}"><i class="fas fa-utensils"></i> 메뉴 추천</a></li>
+            <li><a th:href="@{/reviews/write}"><i class="fas fa-edit"></i> 리뷰쓰기</a></li>
+            <li><a th:href="@{/meetings/schedule}"><i class="fas fa-utensils"></i> 약속잡기</a></li>
+        </th:block>
+        <!-- 추가 메뉴 항목 -->
+    </ul>
+
+    <div class="logout-container" sec:authorize="isAuthenticated()">
+        <a th:href="@{/user/logout}" class="logout-button">
+            <i class="fas fa-sign-out-alt"></i> 로그아웃
+        </a>
+    </div>
+</nav>
+
 <!-- 1위 메뉴 팝업 -->
 <div class="modal fade" id="topMenuModal" tabindex="-1" aria-labelledby="topMenuModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered"> <!-- modal-dialog-centered 클래스 추가 -->
@@ -366,12 +1137,90 @@
 <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=t06c4jgb48&submodules=geocoder"></script>
 
 <script>
+
+    // src/main/resources/static/js/header.js
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // 햄버거 메뉴 관련 요소
+        const hamburger = document.getElementById('hamburger');
+        const sideMenu = document.getElementById('hbgMenu');
+        const overlay = document.getElementById('overlay');
+
+        // 햄버거 메뉴 클릭 시 사이드 메뉴와 오버레이 토글
+        hamburger.addEventListener('click', () => {
+            sideMenu.classList.toggle('open');
+            if (sideMenu.classList.contains('open')) {
+                overlay.style.display = 'block';
+                hamburger.setAttribute('aria-expanded', 'true');
+            } else {
+                overlay.style.display = 'none';
+                hamburger.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // 오버레이 클릭 시 사이드 메뉴와 오버레이 숨김
+        overlay.addEventListener('click', () => {
+            sideMenu.classList.remove('open');
+            overlay.style.display = 'none';
+            hamburger.setAttribute('aria-expanded', 'false');
+        });
+
+        // 드롭다운 메뉴 관련 요소
+        const profileMenuBtn = document.getElementById('profile-menu-btn');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+
+        // 프로필 메뉴 버튼 클릭 시 드롭다운 메뉴 토글
+        profileMenuBtn.addEventListener('click', (event) => {
+            event.stopPropagation(); // 클릭 이벤트가 상위로 전파되는 것을 방지
+            dropdownMenu.classList.toggle('show'); // 'show' 클래스 토글
+            // aria-expanded 속성 업데이트
+            const isExpanded = dropdownMenu.classList.contains('show');
+            profileMenuBtn.setAttribute('aria-expanded', isExpanded);
+        });
+
+        // 드롭다운 메뉴 내 클릭 시 이벤트 전파 방지
+        dropdownMenu.addEventListener('click', (event) => {
+            event.stopPropagation();
+        });
+
+        // 외부 클릭 시 드롭다운 메뉴 닫기
+        window.addEventListener('click', (event) => {
+            if (!profileMenuBtn.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.classList.remove('show');
+                profileMenuBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // 키보드 접근성: Enter 또는 Space 키로 드롭다운 메뉴 토글
+        profileMenuBtn.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                dropdownMenu.classList.toggle('show');
+                const isExpanded = dropdownMenu.classList.contains('show');
+                profileMenuBtn.setAttribute('aria-expanded', isExpanded);
+            }
+        });
+    });
+
+
     $(document).ready(function () {
         let map;
         let markers = [];
         let appointmentMarker = null;
         let selectedFriends = [];
         let appointmentLocation = null;
+
+        // 헤더의 사용자 메뉴 토글
+        $("#profile-menu-btn").on("click", function () {
+            $("#dropdown-menu").toggleClass("show");
+        });
+
+        // 헤더 외부 클릭 시 사용자 메뉴 닫기
+        $(document).on("click", function (event) {
+            if (!$(event.target).closest("#profile-menu-btn, #dropdown-menu").length) {
+                $("#dropdown-menu").removeClass("show");
+            }
+        });
 
         // 지도 초기화
         function initMap() {
@@ -447,10 +1296,10 @@
                     selectedFriends.push(ui.item.value);
                     $("#selected-friends").append(
                         `<span class="selected-friend" data-id="${ui.item.value}">
-                            <img src="${ui.item.profilePhotoUrl}" alt="${ui.item.name}" class="friend-photo" />
-                            <span>${ui.item.name}</span>
-                            <i class="fas fa-times remove-friend"></i>
-                        </span>`
+                                <img src="${ui.item.profilePhotoUrl}" alt="${ui.item.name}" class="friend-photo" />
+                                <span>${ui.item.name}</span>
+                                <i class="fas fa-times remove-friend"></i>
+                            </span>`
                     );
                 } else {
                     alert("이미 선택된 친구입니다.");
@@ -461,9 +1310,9 @@
         }).autocomplete("instance")._renderItem = function (ul, item) {
             return $("<li>")
                 .append(`<div>
-                        <img src="${item.profilePhotoUrl}" alt="${item.name}" />
-                        <span>${item.label}</span>
-                     </div>`)
+                            <img src="${item.profilePhotoUrl}" alt="${item.name}" />
+                            <span>${item.label}</span>
+                         </div>`)
                 .appendTo(ul);
         };
 
@@ -533,16 +1382,16 @@
             slider.empty();
             menus.forEach(menu => {
                 slider.append(`
-                <div class="card">
-                    <img src="${menu.pictureUrl || '/images/default-menu.png'}" class="card-img-top menu-photo" alt="${menu.name}">
-                    <div class="card-body">
-                        <h5 class="card-title">${menu.name}</h5>
-                        <p class="card-text">가격: ${menu.price}원</p>
-                        <p class="card-text">${menu.categories.map(c => c.categoryName).join(", ")}</p>
-                        <a href="/stores/${menu.storeId}" class="btn btn-primary">가게 보러가기</a>
+                    <div class="card">
+                        <img src="${menu.pictureUrl || '/images/default-menu.png'}" class="card-img-top menu-photo" alt="${menu.name}">
+                        <div class="card-body">
+                            <h5 class="card-title">${menu.name}</h5>
+                            <p class="card-text">가격: ${menu.price}원</p>
+                            <p class="card-text">${menu.categories.map(c => c.categoryName).join(", ")}</p>
+                            <a href="/stores/${menu.storeId}" class="btn btn-primary">가게 보러가기</a>
+                        </div>
                     </div>
-                </div>
-            `);
+                `);
             });
 
             // 기존 슬릭 인스턴스 제거
@@ -576,16 +1425,16 @@
         // 1위 메뉴 팝업 표시
         function showTopMenuPopup(topMenu) {
             const modalContent = `
-            <div class="card">
-                <img src="${topMenu.pictureUrl || '/images/default-menu.png'}" class="card-img-top menu-photo" alt="${topMenu.name}">
-                <div class="card-body">
-                    <h5 class="card-title">${topMenu.name}</h5>
-                    <p class="card-text">가격: ${topMenu.price}원</p>
-                    <p class="card-text">${topMenu.categories.map(c => c.categoryName).join(", ")}</p>
-                    <a href="/stores/${topMenu.storeId}" class="btn btn-primary">가게 보러가기</a>
+                <div class="card">
+                    <img src="${topMenu.pictureUrl || '/images/default-menu.png'}" class="card-img-top menu-photo" alt="${topMenu.name}">
+                    <div class="card-body">
+                        <h5 class="card-title">${topMenu.name}</h5>
+                        <p class="card-text">가격: ${topMenu.price}원</p>
+                        <p class="card-text">${topMenu.categories.map(c => c.categoryName).join(", ")}</p>
+                        <a href="/stores/${topMenu.storeId}" class="btn btn-primary">가게 보러가기</a>
+                    </div>
                 </div>
-            </div>
-        `;
+            `;
             $("#topMenuContent").html(modalContent);
             new bootstrap.Modal(document.getElementById('topMenuModal')).show();
         }
@@ -596,17 +1445,17 @@
             storeList.empty();
             stores.forEach(store => {
                 storeList.append(`
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="${store.photoUrls[0] || '/images/default-store.png'}" class="card-img-top menu-photo" alt="${store.name}">
-                        <div class="card-body">
-                            <h5 class="card-title">${store.name}</h5>
-                            <p class="card-text">${store.category}</p>
-                            <p class="card-text">${store.phoneNumber}</p>
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img src="${store.photoUrls[0] || '/images/default-store.png'}" class="card-img-top menu-photo" alt="${store.name}">
+                            <div class="card-body">
+                                <h5 class="card-title">${store.name}</h5>
+                                <p class="card-text">${store.category}</p>
+                                <p class="card-text">${store.phoneNumber}</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `);
+                `);
             });
         }
 
@@ -629,12 +1478,12 @@
                 naver.maps.Event.addListener(marker, 'click', function () {
                     const infoWindow = new naver.maps.InfoWindow({
                         content: `
-                        <div style="padding:10px;min-width:200px;">
-                            <h5>${store.name}</h5>
-                            <p>${store.category}</p>
-                            <p>${store.phoneNumber}</p>
-                        </div>
-                    `
+                            <div style="padding:10px;min-width:200px;">
+                                <h5>${store.name}</h5>
+                                <p>${store.category}</p>
+                                <p>${store.phoneNumber}</p>
+                            </div>
+                        `
                     });
                     infoWindow.open(map, marker);
                 });
