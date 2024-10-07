@@ -20,6 +20,7 @@ import com.scit45.kiminomenyuwa.domain.entity.ReviewEntity;
 import com.scit45.kiminomenyuwa.domain.entity.ReviewPhotoEntity;
 import com.scit45.kiminomenyuwa.domain.entity.StoreEntity;
 import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
+import com.scit45.kiminomenyuwa.domain.entity.verification.ReceiptVerificationEntity;
 import com.scit45.kiminomenyuwa.domain.repository.ProfilePhotoRepository;
 import com.scit45.kiminomenyuwa.domain.repository.ReceiptVerificationRepository;
 import com.scit45.kiminomenyuwa.domain.repository.ReviewPhotoRepository;
@@ -61,7 +62,7 @@ public class ReviewService {
 		// ReceiptVerificationEntity receiptVerification = receiptVerificationRepository.findByReviewerAndTargetStore(
 		//                 reviewer, store)
 		//         .orElseThrow(() -> new IllegalArgumentException("인증 내역이 존재하지 않습니다."));
-		//
+
 		// // 3. 이미 리뷰가 작성된 인증 내역인지 확인
 		// if (receiptVerification.getReview() != null) {
 		//     throw new IllegalArgumentException("A review has already been submitted for this receipt verification.");
