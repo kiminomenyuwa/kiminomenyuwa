@@ -248,6 +248,10 @@ public class StoreSearchService {
 		final Set<Integer> finalFavoritedStoreIds = favoritedStoreIds;
 		List<StoreResponseDTO> dtoList = storeEntities.stream().map(store -> {
 			StoreResponseDTO dto = mapToDTO(store);
+			List<StorePhotoEntity> photoEntities = storePhotoRepository.findByStore(store);
+			List<String> photoUrls = photoEntities.stream()
+				.map(StorePhotoEntity::getPhotoUrl)
+				.toList();
 			dto.setFavorited(finalFavoritedStoreIds.contains(store.getStoreId()));
 			return dto;
 		}).collect(Collectors.toList());

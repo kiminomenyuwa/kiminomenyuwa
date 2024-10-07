@@ -27,6 +27,11 @@ a {
     font-size: 12px;
 }
 
+#our-p {
+    color: #8f8f8f;
+    font-size: 14px;
+}
+
 button {
     cursor: pointer;
 }
@@ -34,4 +39,89 @@ button {
 button>i,
 button>i::before {
     pointer-events: none;
+}
+
+/* 홈 화면 메인 컨테이너와 푸터간의 마진 조절  */
+#index-container {
+    margin-bottom: 130px;
+}
+
+/* -------------f o o t e r------------ */
+footer {
+    /* position: absolute; */
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #111;
+    height: auto;
+    width: 100vw;
+    padding-top: 40px;
+    color: #fff;
+}
+
+.footer-cont {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.footer-cont h3 {
+    font-size: 1.8rem;
+    font-weight: 400;
+    text-transform: capitalize;
+    line-height: 3rem;
+}
+
+.footer-cont {
+    max-width: 500px;
+    margin: 10px auto;
+    line-height: 28px;
+    font-size: 14px;
+}
+
+.members {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.members li {
+    margin: 0 10px;
+}
+
+.members a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.members a i {
+    font-size: 1.1rem;
+    transition: color .4s ease;
+}
+
+.members a:hover i {
+    color: aqua;
+}
+
+.footer-bottom {
+    background: #000;
+    width: 100vw;
+    height: 60px;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer-bottom p {
+    font-size: 14px;
+    word-spacing: 2px;
+    text-transform: capitalize;
+}
+
+.footer-bottom span {
+    text-transform: uppercase;
+    opacity: .4;
+    font-weight: 200;
 }

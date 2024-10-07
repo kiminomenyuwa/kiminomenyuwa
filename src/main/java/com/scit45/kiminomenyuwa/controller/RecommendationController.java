@@ -22,6 +22,7 @@ import com.scit45.kiminomenyuwa.domain.dto.BudgetDTO;
 import com.scit45.kiminomenyuwa.domain.dto.CategoryCountDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MiniGameMenuRatingDTO;
+import com.scit45.kiminomenyuwa.domain.dto.ProfilePhotoDTO;
 import com.scit45.kiminomenyuwa.domain.dto.StoreResponseDTO;
 import com.scit45.kiminomenyuwa.domain.dto.UserDTO;
 import com.scit45.kiminomenyuwa.domain.dto.recommendation.MenuRecommendationDTO;
@@ -30,6 +31,7 @@ import com.scit45.kiminomenyuwa.service.BudgetRecommendService;
 import com.scit45.kiminomenyuwa.service.MenuService;
 import com.scit45.kiminomenyuwa.service.MiniGameService;
 import com.scit45.kiminomenyuwa.service.MyPageService;
+import com.scit45.kiminomenyuwa.service.ProfilePhotoService;
 import com.scit45.kiminomenyuwa.service.RecommendService;
 import com.scit45.kiminomenyuwa.service.StoreSearchService;
 import com.scit45.kiminomenyuwa.service.UserService;
@@ -53,6 +55,7 @@ public class RecommendationController {
 	private final BudgetRecommendService budgetRecommendService;
 	private final RecommendService recommendService;
 	private final UserService userService;
+	private final ProfilePhotoService profilePhotoService;
 
 	@PostMapping("/nearby-menus")
 	@ResponseBody
@@ -97,6 +100,10 @@ public class RecommendationController {
 			.map(Map.Entry::getKey)
 			.toList();
 
+		// 먹어보지 않은 카테고리 기반 추천
+		List<MenuDTO> recommendedByUntriedCategories = recommendService.recommendMenusByUntriedCategory(user.getId(),
+			nearbyMenus);
+
 		// 두 리스트를 포함하는 맵을 생성하여 반환합니다.
 		Map<String, Object> response = new HashMap<>();
 		response.put("nearbyStores", nearbyStores);
@@ -107,12 +114,28 @@ public class RecommendationController {
 			recommendedByUserAgeGroup.subList(0, Math.min(recommendedByUserAgeGroup.size(), 9)));
 		response.put("recommendedByMinigameScores",
 			recommendedByMinigameScores.subList(0, Math.min(recommendedByMinigameScores.size(), 9)));
+		response.put("recommendedByUntriedCategories",
+			recommendedByUntriedCategories.subList(0, Math.min(recommendedByUntriedCategories.size(), 9)));
 
 		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping("map")
-	public String map() {
+	public String map(Model model, @AuthenticationPrincipal AuthenticatedUser user) {
+
+		// 현재 로그인한 사용자의 프로필 사진 URL 추가
+		if (user != null) {
+			String userId = user.getUsername(); // 로그인한 사용자의 ID 가져오기
+			ProfilePhotoDTO profilePhotoDTO = profilePhotoService.getUserProfilePhotoInfo(userId);
+			if (profilePhotoDTO != null) {
+				// 프로필 사진의 URL을 모델에 추가
+				String profilePhotoUrl = "/files/" + profilePhotoDTO.getSavedName();
+				model.addAttribute("profilePhotoUrl", profilePhotoUrl);
+			} else {
+				// 프로필 사진이 없는 경우 기본 이미지를 사용하도록 설정
+				model.addAttribute("profilePhotoUrl", "/images/default-profile.png");
+			}
+		}
 		return "recommendView/map";
 	}
 
@@ -344,11 +367,10 @@ public class RecommendationController {
 		model.addAttribute("menuScoreMap", menuScoreMap);
 		log.debug("menuScoreMap: {}", menuScoreMap);
 
-
 		// menuScoreMap을 정렬된 리스트로 변환 (Map 구조라서 아래의 별도 작업이 필요했음ㄷㄷ)
 		List<Map.Entry<MenuDTO, Integer>> sortedMenuList = new ArrayList<>(menuScoreMap.entrySet());
 		sortedMenuList.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue())); // 내림차순 정렬
-		model.addAttribute("sortedMenuList", sortedMenuList); // 정렬된 리스트 추가
+		model.addAttribute("sortedMenuList", sortedMenuList);
 
 		return "recommendView/recTest";
 	}
