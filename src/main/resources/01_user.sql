@@ -8,12 +8,55 @@ delete
 from profile_photo
 where user_id like '%user%';
 
-INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`, `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
-VALUES ('aaa', '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS', '김철수', '1998-10-15', 'male', 'testuser01@example.com', '서울시 강남구', '테헤란로 123', '06234', '010-1234-5678', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
-INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`, `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
-VALUES ('bbb', '$2a$10$kz9me5s4fHK50IGx/L.R2exLsxnfvH9msIulhpn.Em8ctaBPm3vAS', '최재원', '1995-02-11', 'male', 'japol@naver.com', '서울 강남구 봉은사로13길 10', '26동 1011호', '06122', '070-9114-3194', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
-INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`, `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
-VALUES ('ccc', '$2a$10$9J/wHkfdw2/4ix3ZX74ZkeFkM4BviPLbgONDNiaJDQ6dxFqUZVHFG', '카리나', '2002-06-15', 'female', 'karina@daum.net', '서울 송파구 올림픽로4길 42', '6동 907호', '05571', '010-3333-3333', 'http://example.com/photo.jpg', 'ROLE_USER', 1);
+-- 신일
+INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`,
+                    `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
+VALUES ('tlsdlf9502', '$2a$10$EVkG11VJBoWUV.ZiBY5gzeiAEdZS/Ap/W1JnuHdtwzQSkVUnOhc/.', '김신일', '1995-02-02', 'male',
+        'tlsdlf9502@gmail.com', '경기 성남시 분당구 판교원로 207', '507동 2803호', '13485', '010-5033-2707',
+        '20241007_14bf3b18-3707-43dd-8819-27581ceee7c3.jpg', 'ROLE_USER', 1);
+INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`,
+                    `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
+VALUES ('hyunji123', '$2a$10$CCeSuSHUiHAH48Nnu/.6De1xU0xAYJsiUqSURM1FBwnHWiOIOjl5e', '박현지', '1997-09-11', 'female',
+        'ossor322@gmail.com', '경기 성남시 분당구 판교역로 4', 'OOO호', '13536', '010-1234-5678',
+        '20241007_6a122e2b-5ab0-4eea-9219-4bf44b8563a8.jpg', 'ROLE_MERCHANT', 1);
+
+-- 최재원
+INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`,
+                    `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
+VALUES ('japol', '$2a$10$Z5T.N5kAmGdBxROPhbTfee41IgzH3ob15QuxQf9UYKJcLSc.1IZ.6', '최재원', '1995-02-11', 'male',
+        'japol@naver.com', '경기 고양시 덕양구 화신로 170', '0000동 0000호', '10484', '010-9114-3194',
+        '20241007_a7515e4d-eafd-4c29-9dd1-eeead167dcca.jpeg', 'ROLE_USER', 1);
+
+select *
+from profile_photo;
+INSERT INTO `profile_photo`(`user_id`, `original_name`, `saved_name`)
+VALUES ('tlsdlf9502', '20241007_14bf3b18-3707-43dd-8819-27581ceee7c3.jpg',
+        '20241007_14bf3b18-3707-43dd-8819-27581ceee7c3.jpg');
+INSERT INTO `profile_photo`(`user_id`, `original_name`, `saved_name`)
+VALUES ('hyunji123', '20241007_14bf3b18-3707-43dd-8819-27581ceee7c3.jpg',
+        '20241007_6a122e2b-5ab0-4eea-9219-4bf44b8563a8.jpg');
+INSERT INTO `profile_photo`(`user_id`, `original_name`, `saved_name`)
+VALUES ('japol', '20241007_a7515e4d-eafd-4c29-9dd1-eeead167dcca.jpeg',
+        '20241007_a7515e4d-eafd-4c29-9dd1-eeead167dcca.jpeg');
+
+
+select *
+from user;
+INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`,
+                    `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
+VALUES ('aaa', '$2a$10$IqLsIOXCXOcJjMg2Gz7gW.vEBJP02BfIT6kWfcBVdWkraI5/Y.1JS', '김철수', '1998-10-15', 'male',
+        'testuser01@example.com', '서울시 강남구', '테헤란로 123', '06234', '010-1234-5678', 'http://example.com/photo.jpg',
+        'ROLE_USER', 1);
+INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`,
+                    `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
+VALUES ('bbb', '$2a$10$kz9me5s4fHK50IGx/L.R2exLsxnfvH9msIulhpn.Em8ctaBPm3vAS', '최재원', '1995-02-11', 'male',
+        'japol@naver.com', '서울 강남구 봉은사로13길 10', '26동 1011호', '06122', '070-9114-3194', 'http://example.com/photo.jpg',
+        'ROLE_USER', 1);
+INSERT INTO `user` (`user_id`, `password_hash`, `name`, `birth_date`, `gender`, `email`, `road_name_address`,
+                    `detail_address`, `zipcode`, `phone_number`, `profile_img_uuid`, `role`, `enabled`)
+VALUES ('ccc', '$2a$10$9J/wHkfdw2/4ix3ZX74ZkeFkM4BviPLbgONDNiaJDQ6dxFqUZVHFG', '카리나', '2002-06-15', 'female',
+        'karina@daum.net', '서울 송파구 올림픽로4길 42', '6동 907호', '05571', '010-3333-3333', 'http://example.com/photo.jpg',
+        'ROLE_USER', 1);
 
 
 
@@ -1055,21 +1098,20 @@ VALUES ('user60', '111.jpg', '111.jpg');
 
 -- 친구 관계 추가
 INSERT INTO friendships (user_id, friend_id, status)
-VALUES
-    ('user01', 'user02', 'ACCEPTED'),
-    ('user01', 'user03', 'ACCEPTED'),
-    ('user02', 'user03', 'ACCEPTED'),
-    ('user02', 'user04', 'ACCEPTED'),
-    ('user03', 'user04', 'PENDING'),
-    ('user04', 'user05', 'ACCEPTED'),
-    ('user05', 'user06', 'ACCEPTED'),
-    ('user06', 'user07', 'ACCEPTED'),
-    ('user07', 'user08', 'PENDING'),
-    ('user08', 'user09', 'ACCEPTED'),
-    ('user09', 'user10', 'DECLINED'),
-    ('user01', 'user05', 'ACCEPTED'),
-    ('user02', 'user06', 'BLOCKED'),
-    ('user03', 'user07', 'ACCEPTED'),
-    ('user04', 'user08', 'PENDING'),
-    ('user05', 'user09', 'ACCEPTED'),
-    ('user06', 'user10', 'DECLINED');
+VALUES ('user01', 'user02', 'ACCEPTED'),
+       ('user01', 'user03', 'ACCEPTED'),
+       ('user02', 'user03', 'ACCEPTED'),
+       ('user02', 'user04', 'ACCEPTED'),
+       ('user03', 'user04', 'PENDING'),
+       ('user04', 'user05', 'ACCEPTED'),
+       ('user05', 'user06', 'ACCEPTED'),
+       ('user06', 'user07', 'ACCEPTED'),
+       ('user07', 'user08', 'PENDING'),
+       ('user08', 'user09', 'ACCEPTED'),
+       ('user09', 'user10', 'DECLINED'),
+       ('user01', 'user05', 'ACCEPTED'),
+       ('user02', 'user06', 'BLOCKED'),
+       ('user03', 'user07', 'ACCEPTED'),
+       ('user04', 'user08', 'PENDING'),
+       ('user05', 'user09', 'ACCEPTED'),
+       ('user06', 'user10', 'DECLINED');
