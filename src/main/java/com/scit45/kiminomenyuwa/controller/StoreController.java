@@ -15,9 +15,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.scit45.kiminomenyuwa.domain.dto.CategoryTypeDTO;
 import com.scit45.kiminomenyuwa.domain.dto.FoodCategoryDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
+import com.scit45.kiminomenyuwa.domain.dto.ProfilePhotoDTO;
 import com.scit45.kiminomenyuwa.domain.dto.store.StoreInfoDTO;
 import com.scit45.kiminomenyuwa.domain.dto.store.StoreRegistrationDTO;
 import com.scit45.kiminomenyuwa.security.AuthenticatedUser;
+import com.scit45.kiminomenyuwa.service.ProfilePhotoService;
 import com.scit45.kiminomenyuwa.service.StoreService;
 
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 public class StoreController {
 
 	private final StoreService storeService;
+	private final ProfilePhotoService profilePhotoService;
 
 	/**
 	 * 사장님 페이지로 이동
@@ -52,9 +55,22 @@ public class StoreController {
 	public String getStoreDetails(@PathVariable("storeId") Integer storeId
 		, @AuthenticationPrincipal AuthenticatedUser user
 		, Model model) {
-		String userId = user.getId();
-		StoreInfoDTO storeDto = storeService.getStoreById(storeId, userId);
-		model.addAttribute("store", storeDto);
+		// 현재 로그인한 사용자의 프로필 사진 URL 추가
+		if (user != null) {
+			String userId = user.getUsername(); // 로그인한 사용자의 ID 가져오기
+			ProfilePhotoDTO profilePhotoDTO = profilePhotoService.getUserProfilePhotoInfo(userId);
+			if (profilePhotoDTO != null) {
+				// 프로필 사진의 URL을 모델에 추가
+				String profilePhotoUrl = "/files/" + profilePhotoDTO.getSavedName();
+				model.addAttribute("profilePhotoUrl", profilePhotoUrl);
+				StoreInfoDTO storeDto = storeService.getStoreById(storeId, userId);
+				model.addAttribute("store", storeDto);
+			} else {
+				// 프로필 사진이 없는 경우 기본 이미지를 사용하도록 설정
+				model.addAttribute("profilePhotoUrl", "/images/default-profile.png");
+			}
+		}
+
 		return "store/storeInfo";
 	}
 
