@@ -1,8 +1,11 @@
 package com.scit45.kiminomenyuwa.service;
 
+import java.time.LocalDateTime;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,12 +20,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.StoreResponseDTO;
+import com.scit45.kiminomenyuwa.domain.dto.store.StoreWithMenusDTO;
 import com.scit45.kiminomenyuwa.domain.entity.FavoriteEntity;
 import com.scit45.kiminomenyuwa.domain.entity.StoreEntity;
 import com.scit45.kiminomenyuwa.domain.entity.StorePhotoEntity;
 import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
 import com.scit45.kiminomenyuwa.domain.repository.FavoriteRepository;
+import com.scit45.kiminomenyuwa.domain.repository.MenuRepository;
 import com.scit45.kiminomenyuwa.domain.repository.StorePhotoRepository;
 import com.scit45.kiminomenyuwa.domain.repository.StoreRepository;
 import com.scit45.kiminomenyuwa.domain.repository.UserRepository;
@@ -39,6 +45,7 @@ public class StoreSearchService {
 	private final StoreRepository storeRepository;
 	private final FavoriteRepository favoriteRepository;
 	private final StorePhotoRepository storePhotoRepository;
+	private final MenuRepository menuRepository;
 
 	/**
 	 * 특정 위치와 반경을 기준으로 주변 상점을 검색하고 DTO로 매핑합니다.
@@ -108,6 +115,13 @@ public class StoreSearchService {
 		dto.setDescription(store.getDescription());
 		dto.setEnabled(store.getEnabled());
 
+		// 상점의 사진 URLs 추가
+		List<StorePhotoEntity> photoEntities = storePhotoRepository.findByStore(store);
+		List<String> photoUrls = photoEntities.stream()
+			.map(StorePhotoEntity::getPhotoUrl)
+			.collect(Collectors.toList());
+		dto.setPhotoUrls(photoUrls);
+
 		// 위치 정보 추출
 		if (store.getLocation() != null) {
 			dto.setLongitude(store.getLocation().getCoordinate().getX());
@@ -136,21 +150,18 @@ public class StoreSearchService {
 
 		// 찜한 상점 목록 조회
 		List<FavoriteEntity> favorites = favoriteRepository.findByUser(user);
-		List<StoreResponseDTO> favoritedStores
-			= favorites.stream()
-			.map(f -> {
-				StoreResponseDTO dto = mapToDTO(f.getStore());
-				dto.setFavorited(true);
-				dto.setFavoritedTime(f.getCreatedAt());
+		List<StoreResponseDTO> favoritedStores = favorites.stream().map(f -> {
+			StoreResponseDTO dto = mapToDTO(f.getStore());
+			dto.setFavorited(true);
+			dto.setFavoritedTime(f.getCreatedAt());
 
-				dto.setPhotoUrls(storePhotoRepository.findAllByStoreStoreId(f.getStore().getStoreId())
-					.stream()
-					.map(StorePhotoEntity::getPhotoUrl).toList());
+			dto.setPhotoUrls(storePhotoRepository.findAllByStoreStoreId(f.getStore().getStoreId())
+				.stream()
+				.map(StorePhotoEntity::getPhotoUrl)
+				.toList());
 
-				return dto;
-			})
-			.collect(Collectors.toList());
-
+			return dto;
+		}).collect(Collectors.toList());
 
 		// 정렬 적용
 		switch (sortBy.toLowerCase()) {
@@ -235,14 +246,90 @@ public class StoreSearchService {
 
 		// StoreEntity를 StoreResponseDTO로 매핑하면서 favorited 필드 설정
 		final Set<Integer> finalFavoritedStoreIds = favoritedStoreIds;
-		List<StoreResponseDTO> dtoList = storeEntities.stream()
-			.map(store -> {
-				StoreResponseDTO dto = mapToDTO(store);
-				dto.setFavorited(finalFavoritedStoreIds.contains(store.getStoreId()));
-				return dto;
-			})
-			.collect(Collectors.toList());
+		List<StoreResponseDTO> dtoList = storeEntities.stream().map(store -> {
+			StoreResponseDTO dto = mapToDTO(store);
+			List<StorePhotoEntity> photoEntities = storePhotoRepository.findByStore(store);
+			List<String> photoUrls = photoEntities.stream()
+				.map(StorePhotoEntity::getPhotoUrl)
+				.toList();
+			dto.setFavorited(finalFavoritedStoreIds.contains(store.getStoreId()));
+			return dto;
+		}).collect(Collectors.toList());
 
 		return new PageImpl<>(dtoList, pageable, storeEntities.getTotalElements());
 	}
+
+	@Transactional(readOnly = true)
+	public List<StoreWithMenusDTO> getNearByStoresWithMenus(double latitude, double longitude, double radius) {
+		// Point 객체 생성 (경도, 위도 순)
+		GeometryFactory geometryFactory = new GeometryFactory();
+		Point point = geometryFactory.createPoint(new Coordinate(longitude, latitude));
+		point.setSRID(4326); // WGS 84 좌표계
+
+		// Point 객체를 WKT로 변환
+		String pointWKT = point.toText(); // 예: "POINT(126.9855771 37.5728571)"
+
+		// 반경 내의 StoreEntity 리스트 조회
+		List<StoreEntity> storeEntities = storeRepository.findStoresWithinRadius(pointWKT, radius);
+
+		// 현재 인증된 사용자 가져오기
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String userId = null;
+		Map<Integer, LocalDateTime> favoritedStoresMap = new HashMap<>();
+
+		if (authentication != null && authentication.isAuthenticated() && !authentication.getPrincipal()
+			.equals("anonymousUser")) {
+			userId = authentication.getName();
+			// 사용자의 찜한 상점 목록 조회
+			UserEntity user = userRepository.findById(userId).orElse(null);
+			if (user != null) {
+				List<FavoriteEntity> favorites = favoriteRepository.findByUser(user);
+				favoritedStoresMap = favorites.stream()
+					.collect(Collectors.toMap(fav -> fav.getStore().getStoreId(), FavoriteEntity::getCreatedAt,
+						(existing, replacement) -> existing));
+			}
+		}
+
+		// StoreEntity를 StoreWithMenusDTO로 매핑하면서 favorited 필드 및 메뉴 리스트 설정
+		Map<Integer, LocalDateTime> finalFavoritedStoresMap = favoritedStoresMap;
+		return storeEntities.stream().map(store -> {
+			StoreWithMenusDTO dto = StoreWithMenusDTO.builder()
+				.storeId(store.getStoreId())
+				.name(store.getName())
+				.roadNameAddress(store.getRoadNameAddress())
+				.detailAddress(store.getDetailAddress())
+				.zipcode(store.getZipcode())
+				.phoneNumber(store.getPhoneNumber())
+				.category(store.getCategory())
+				.description(store.getDescription())
+				.latitude(store.getLocation().getCoordinate().getY()) // WKT의 Y는 위도
+				.longitude(store.getLocation().getCoordinate().getX()) // WKT의 X는 경도
+				.favorited(finalFavoritedStoresMap.containsKey(store.getStoreId()))
+				.favoritedTime(finalFavoritedStoresMap.get(store.getStoreId()))
+				.build();
+
+			// 상점의 사진 URLs 추가
+			List<StorePhotoEntity> photoEntities = storePhotoRepository.findByStore(store);
+			List<String> photoUrls = photoEntities.stream()
+				.map(StorePhotoEntity::getPhotoUrl)
+				.collect(Collectors.toList());
+			dto.setPhotoUrls(photoUrls);
+
+			// 상점의 메뉴 리스트 조회 및 DTO로 매핑
+			List<MenuDTO> menuDTOs = menuRepository.findByStore(store)
+				.stream()
+				.map(menu -> MenuDTO.builder()
+					.menuId(menu.getMenuId())
+					.name(menu.getName())
+					.price(menu.getPrice())
+					.pictureUrl(menu.getPictureUrl())
+					.enabled(menu.getEnabled())
+					.build())
+				.collect(Collectors.toList());
+			dto.setMenus(menuDTOs);
+
+			return dto;
+		}).collect(Collectors.toList());
+	}
+
 }

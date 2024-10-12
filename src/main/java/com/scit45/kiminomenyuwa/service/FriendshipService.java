@@ -7,9 +7,12 @@ import java.util.Set;
 
 import org.springframework.stereotype.Service;
 
+import com.scit45.kiminomenyuwa.domain.dto.recommendation.UserSimpleDTO;
 import com.scit45.kiminomenyuwa.domain.entity.FriendshipEntity;
 import com.scit45.kiminomenyuwa.domain.entity.FriendshipEntity.FriendshipStatus;
+import com.scit45.kiminomenyuwa.domain.entity.UserEntity;
 import com.scit45.kiminomenyuwa.domain.repository.FriendshipRepository;
+import com.scit45.kiminomenyuwa.domain.repository.ProfilePhotoRepository;
 import com.scit45.kiminomenyuwa.domain.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -27,6 +30,7 @@ public class FriendshipService {
 
 	private final FriendshipRepository friendshipRepository; // 친구 관계 관련 DB 처리를 담당하는 리포지토리
 	private final UserRepository userRepository; // 사용자 관련 DB 처리를 담당하는 리포지토리
+	private final ProfilePhotoRepository profilePhotoRepository;
 
 	/**
 	 * 사용자 ID 존재 여부 확인
@@ -272,4 +276,24 @@ public class FriendshipService {
 		return true; // 삭제 성공
 	}
 
+	/**
+	 * 친구 검색 기능
+	 *
+	 * @param currentUserId 현재 사용자의 ID
+	 * @param query 검색어 (이름 또는 이메일)
+	 * @return 검색된 친구 목록
+	 */
+	public List<UserSimpleDTO> searchFriends(String currentUserId, String query) {
+		return friendshipRepository.findFriendshipEntitiesByUserIdAndFriendIdContaining(currentUserId, query)
+			.stream().map(friendship -> {
+				UserEntity friend = userRepository.findByUserId(friendship.getFriendId()).get();
+				log.debug(friend.getUserId());
+				return UserSimpleDTO.builder()
+					.userId(friend.getUserId())
+					.profilePhotoUrl(
+						"/files/" + profilePhotoRepository.findByUserId(friend.getUserId()).get().getSavedName())
+					.userName(friend.getName())
+					.build();
+			}).toList();
+	}
 }

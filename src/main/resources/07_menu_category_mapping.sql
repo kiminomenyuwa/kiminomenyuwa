@@ -1,1360 +1,300 @@
+# -- 카테고리 매핑 템플릿
+# INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+# SELECT 0000, `category_id` FROM `food_category` WHERE `category_name` IN ('', '', '', '', '', '', '');
+#                                                                      (대분류, 소분류, 재료, 조리방법, 식이제한, 음식특성, 식사시간)
 -- 이마트 테스트 데이터
 INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 1000, `category_id`
-FROM `food_category`
-WHERE `category_name` = '중식';
+SELECT 1000, `category_id` FROM `food_category` WHERE `category_name` IN ('중식', '볶음밥', '모짜렐라치즈', '볶음', '저칼로리', '짠', '점심');
 INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 1000, `category_id`
-FROM `food_category`
-WHERE `category_name` = '볶음밥';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 1000, `category_id`
-FROM `food_category`
-WHERE `category_name` = '모짜렐라치즈';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 1000, `category_id`
-FROM `food_category`
-WHERE `category_name` = '볶음';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 1000, `category_id`
-FROM `food_category`
-WHERE `category_name` = '저칼로리';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 1000, `category_id`
-FROM `food_category`
-WHERE `category_name` = '짠';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 1000, `category_id`
-FROM `food_category`
-WHERE `category_name` = '점심';
+SELECT 1001, `category_id` FROM `food_category` WHERE `category_name` IN ('중식', '짜장면', '돼지고기', '볶음', '오가닉', '짠', '점심');
 
+-- 맥도날드
 INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 1001, `category_id`
-FROM `food_category`
-WHERE `category_name` = '중식';
+SELECT 1101, `category_id` FROM `food_category` WHERE `category_name` IN ('패스트푸드', '햄버거', '소고기', '구이', '제한없음', '짠', '점심');
 INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 1001, `category_id`
-FROM `food_category`
-WHERE `category_name` = '짜장면';
+SELECT 1102, `category_id` FROM `food_category` WHERE `category_name` IN ('패스트푸드', '햄버거', '닭고기', '구이', '제한없음', '짠', '점심');
 INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 1001, `category_id`
-FROM `food_category`
-WHERE `category_name` = '돼지고기';
+SELECT 1103, `category_id` FROM `food_category` WHERE `category_name` IN ('패스트푸드', '햄버거', '소고기', '구이', '제한없음', '짠', '점심');
 INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 1001, `category_id`
-FROM `food_category`
-WHERE `category_name` = '볶음';
+SELECT 1104, `category_id` FROM `food_category` WHERE `category_name` IN ('패스트푸드', '햄버거', '불고기', '구이', '제한없음', '짠', '점심');
 INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 1001, `category_id`
-FROM `food_category`
-WHERE `category_name` = '오가닉';
+SELECT 1105, `category_id` FROM `food_category` WHERE `category_name` IN ('패스트푸드', '햄버거', '소고기', '구이', '제한없음', '짠', '점심');
 INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 1001, `category_id`
-FROM `food_category`
-WHERE `category_name` = '짠';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 1001, `category_id`
-FROM `food_category`
-WHERE `category_name` = '점심';
+SELECT 1106, `category_id` FROM `food_category` WHERE `category_name` IN ('패스트푸드', '햄버거', '새우', '구이', '제한없음', '짠', '점심');
 
--- 대분류
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2856, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2857, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2858, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2859, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2860, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2861, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2862, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2863, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2864, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2865, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2866, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2867, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2868, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2869, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2870, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2871, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2872, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2873, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2874, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2875, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2876, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2877, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2878, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2879, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2880, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2881, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2882, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2883, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2884, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2885, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2886, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2887, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2888, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2889, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2890, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2891, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2892, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2893, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2894, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2895, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2896, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2897, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2898, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2899, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2900, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2901, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2902, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2903, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2904, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2905, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2906, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2907, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2908, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2909, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2910, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2911, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2912, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2913, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2914, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2915, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2916, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2917, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2918, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2919, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2920, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2921, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2922, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2923, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2924, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2925, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2926, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2927, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2928, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2929, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2930, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2931, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2932, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2933, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2934, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2935, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2936, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2937, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2938, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2939, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2940, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2941, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2942, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2943, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2944, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2945, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2946, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2947, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2948, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2949, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2950, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2951, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 2952, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3472, `category_id`
-FROM `food_category`
-WHERE `category_name` = '양식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3473, `category_id`
-FROM `food_category`
-WHERE `category_name` = '양식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3474, `category_id`
-FROM `food_category`
-WHERE `category_name` = '양식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3475, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3476, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3477, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3478, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3479, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3480, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3481, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3482, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3483, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3484, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3485, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3486, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3487, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3488, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3489, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3490, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3491, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3492, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3493, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3494, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3495, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3496, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3497, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3498, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3499, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3500, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3501, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3502, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3503, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3504, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3505, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3506, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3507, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3508, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3509, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3510, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3511, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3512, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3513, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3514, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3515, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3931, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3932, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3933, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3934, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3935, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3936, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3937, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3938, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3939, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3940, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3941, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3942, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3943, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3944, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3945, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3946, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3947, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3948, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3949, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3950, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3951, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3952, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3953, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3954, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3955, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3956, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3957, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3958, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3959, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3960, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3961, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3962, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3963, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3964, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3965, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3966, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3967, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3968, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3969, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3970, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3971, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3972, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3973, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3974, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3975, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3976, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3977, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3978, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3979, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3980, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3981, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3982, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3983, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3984, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3985, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3986, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3987, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3988, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3989, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3990, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3991, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3992, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3993, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3994, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3995, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3996, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3997, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3998, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 3999, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4000, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4001, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4002, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4003, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4004, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4005, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4006, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4007, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4008, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4009, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4010, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4011, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4012, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4013, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4014, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4015, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4016, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4017, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4018, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4019, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4020, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4021, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4022, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4023, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4024, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4025, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4026, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4027, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4028, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4029, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4030, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4031, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4032, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4033, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4034, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4035, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4036, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4037, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4038, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4039, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4040, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4041, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4042, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4454, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4455, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4456, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4457, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4458, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4825, `category_id`
-FROM `food_category`
-WHERE `category_name` = '양식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4826, `category_id`
-FROM `food_category`
-WHERE `category_name` = '양식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4827, `category_id`
-FROM `food_category`
-WHERE `category_name` = '양식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4828, `category_id`
-FROM `food_category`
-WHERE `category_name` = '양식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4829, `category_id`
-FROM `food_category`
-WHERE `category_name` = '양식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4830, `category_id`
-FROM `food_category`
-WHERE `category_name` = '양식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4831, `category_id`
-FROM `food_category`
-WHERE `category_name` = '양식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4832, `category_id`
-FROM `food_category`
-WHERE `category_name` = '양식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4833, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4834, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4835, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4836, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4837, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4838, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4839, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4840, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4841, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4842, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4843, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4844, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4845, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4846, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4847, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4848, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4849, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4850, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4851, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4852, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4853, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4854, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4855, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4856, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4857, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4858, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4859, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4860, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4861, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4862, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4863, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4864, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4865, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 4866, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5268, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5269, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5270, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5271, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5272, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5273, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5274, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5275, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5276, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5277, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5278, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5279, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5280, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5281, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5282, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5283, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5284, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5285, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5286, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5287, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5288, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5289, `category_id`
-FROM `food_category`
-WHERE `category_name` = '음료류';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5290, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5291, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
-INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
-SELECT 5292, `category_id`
-FROM `food_category`
-WHERE `category_name` = '한식';
+-- 반포식스포스코사거리점
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1201, `category_id` FROM `food_category` WHERE `category_name` IN ('베트남식', '월남쌈', '야채', '생', '저칼로리', '담백한', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1202, `category_id` FROM `food_category` WHERE `category_name` IN ('베트남식', '쌀국수', '쌀', '삶음', '저칼로리', '풍미가득', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1203, `category_id` FROM `food_category` WHERE `category_name` IN ('태국식', '튀김', '새우', '튀김', '제한없음', '고소한', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1204, `category_id` FROM `food_category` WHERE `category_name` IN ('베트남식', '샐러드', '야채', '생', '저칼로리', '새콤달콤', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1205, `category_id` FROM `food_category` WHERE `category_name` IN ('베트남식', '볶음밥', '쌀', '볶음', '제한없음', '고소한', '점심');
+
+-- 기기커피
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1301, `category_id` FROM `food_category` WHERE `category_name` IN ('음료류', '커피', '커피', '추출', '저칼로리', '쓴', '아침');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1302, `category_id` FROM `food_category` WHERE `category_name` IN ('음료류', '스무디', '우유', '블렌딩', '제한없음', '단', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1303, `category_id` FROM `food_category` WHERE `category_name` IN ('음료류', '주스', '수박', '블렌딩', '제한없음', '단', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1304, `category_id` FROM `food_category` WHERE `category_name` IN ('음료류', '커피', '커피', '추출', '저칼로리', '쓴', '아침');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1305, `category_id` FROM `food_category` WHERE `category_name` IN ('음료류', '라떼', '딸기', '블렌딩', '제한없음', '고소한', '점심');
+
+-- 밥스키친
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1401, `category_id` FROM `food_category` WHERE `category_name` IN ('한식', '튀김', '돼지고기', '튀김', '제한없음', '짠', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1402, `category_id` FROM `food_category` WHERE `category_name` IN ('한식', '튀김', '돼지고기', '튀김', '제한없음', '고소한', '점심');
+
+-- KFC코엑스Mall
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1501, `category_id` FROM `food_category` WHERE `category_name` IN ('패스트푸드', '치킨', '닭고기', '튀김', '제한없음', '짠', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1502, `category_id` FROM `food_category` WHERE `category_name` IN ('패스트푸드', '치킨', '닭고기', '튀김', '제한없음', '짠', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1503, `category_id` FROM `food_category` WHERE `category_name` IN ('패스트푸드', '햄버거', '닭고기', '구이', '제한없음', '짠', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1504, `category_id` FROM `food_category` WHERE `category_name` IN ('패스트푸드', '햄버거', '닭고기', '구이', '제한없음', '짠', '점심');
+
+-- 폴바셋
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1601, `category_id` FROM `food_category` WHERE `category_name` IN ('음료류', '커피', '커피', '추출', '저칼로리', '쓴', '아침');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1602, `category_id` FROM `food_category` WHERE `category_name` IN ('음료류', '라떼', '우유', '블렌딩', '제한없음', '고소한', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1603, `category_id` FROM `food_category` WHERE `category_name` IN ('제과류', '디저트', '우유', '베이킹', '제한없음', '단', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1604, `category_id` FROM `food_category` WHERE `category_name` IN ('양식', '샌드위치', '베이컨', '구이', '제한없음', '짠', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1605, `category_id` FROM `food_category` WHERE `category_name` IN ('양식', '샌드위치', '베이컨', '구이', '제한없음', '짠', '아침');
+
+-- 신사골감자탕
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1701, `category_id` FROM `food_category` WHERE `category_name` IN ('한식', '국', '돼지고기', '끓임', '제한없음', '짠', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1702, `category_id` FROM `food_category` WHERE `category_name` IN ('한식', '탕', '돼지고기', '끓임', '제한없음', '짠', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1703, `category_id` FROM `food_category` WHERE `category_name` IN ('한식', '국', '생선', '끓임', '제한없음', '짠', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1704, `category_id` FROM `food_category` WHERE `category_name` IN ('한식', '찜', '돼지고기', '끓임', '제한없음', '짠', '저녁');
+
+-- 고씨떡볶이삼성점
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1801, `category_id` FROM `food_category` WHERE `category_name` IN ('한식', '떡볶이', '떡', '볶음', '제한없음', '매운', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1802, `category_id` FROM `food_category` WHERE `category_name` IN ('한식', '순대', '돼지내장', '삶음', '제한없음', '짠', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1803, `category_id` FROM `food_category` WHERE `category_name` IN ('한식', '튀김', '오징어', '튀김', '제한없음', '짠', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1804, `category_id` FROM `food_category` WHERE `category_name` IN ('한식', '볶음밥', '쌀', '볶음', '제한없음', '짠', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1805, `category_id` FROM `food_category` WHERE `category_name` IN ('음료류', '주스', '복숭아', '제한없음', '단', '점심');
+
+-- 153구포국수
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1901, `category_id` FROM `food_category` WHERE `category_name` IN ('한식', '국수', '소면', '삶음', '저칼로리', '담백한', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1902, `category_id` FROM `food_category` WHERE `category_name` IN ('한식', '김밥', '계란', '구이', '저칼로리', '담백한', '아침');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1903, `category_id` FROM `food_category` WHERE `category_name` IN ('한식', '국수', '소면', '삶음', '저칼로리', '담백한', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1904, `category_id` FROM `food_category` WHERE `category_name` IN ('한식', '국수', '소면', '삶음', '저칼로리', '담백한', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 1905, `category_id` FROM `food_category` WHERE `category_name` IN ('한식', '국수', '소면', '삶음', '저칼로리', '매운', '저녁');
+
+-- 치킨잇수다
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2001, `category_id` FROM `food_category` WHERE `category_name` IN ('패스트푸드', '치킨', '닭고기', '튀김', '제한없음', '짠', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2002, `category_id` FROM `food_category` WHERE `category_name` IN ('패스트푸드', '치킨', '닭고기', '튀김', '제한없음', '짠', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2003, `category_id` FROM `food_category` WHERE `category_name` IN ('패스트푸드', '치킨', '닭고기', '튀김', '제한없음', '짠', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2004, `category_id` FROM `food_category` WHERE `category_name` IN ('패스트푸드', '치킨', '닭고기', '튀김', '제한없음', '짠', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2005, `category_id` FROM `food_category` WHERE `category_name` IN ('음료류', '맥주', '제한없음', '쓴', '저녁');
+
+-- 공차코엑스몰점
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2101, `category_id` FROM `food_category` WHERE `category_name` IN ('음료류', '밀크티', '우유', '블렌딩', '제한없음', '단', '간식');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2102, `category_id` FROM `food_category` WHERE `category_name` IN ('음료류', '밀크티', '초콜릿', '블렌딩', '제한없음', '단', '간식');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2103, `category_id` FROM `food_category` WHERE `category_name` IN ('음료류', '밀크티', '브라운슈가', '블렌딩', '제한없음', '단', '간식');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2104, `category_id` FROM `food_category` WHERE `category_name` IN ('음료류', '스무디', '우유', '블렌딩', '제한없음', '단', '간식');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2105, `category_id` FROM `food_category` WHERE `category_name` IN ('음료류', '스무디', '딸기', '블렌딩', '제한없음', '단', '간식');
+
+-- 팀호완삼성점
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2201, `category_id` FROM `food_category` WHERE `category_name` IN ('중식', '만두', '새우', '찜', '저칼로리', '담백한', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2202, `category_id` FROM `food_category` WHERE `category_name` IN ('중식', '만두', '돼지고기', '찜', '저칼로리', '담백한', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2203, `category_id` FROM `food_category` WHERE `category_name` IN ('중식', '라이스롤', '돼지고기', '구이', '저칼로리', '담백한', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2204, `category_id` FROM `food_category` WHERE `category_name` IN ('중식', '만두', '새우', '찜', '저칼로리', '담백한', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2205, `category_id` FROM `food_category` WHERE `category_name` IN ('중식', '라이스롤', '새우', '구이', '저칼로리', '담백한', '점심');
+
+-- 토리키치
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2301, `category_id` FROM `food_category` WHERE `category_name` IN ('일식', '야키토리', '닭고기', '구이', '제한없음', '짠', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2302, `category_id` FROM `food_category` WHERE `category_name` IN ('일식', '꼬치', '닭고기', '구이', '제한없음', '짠', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2303, `category_id` FROM `food_category` WHERE `category_name` IN ('일식', '꼬치', '닭고기', '구이', '제한없음', '매운', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2304, `category_id` FROM `food_category` WHERE `category_name` IN ('일식', '해물탕', '해산물', '끓임', '제한없음', '짠', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2305, `category_id` FROM `food_category` WHERE `category_name` IN ('음료류', '맥주', '제한없음', '쓴', '저녁');
+
+-- 아웃백스테이크하우스
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2401, `category_id` FROM `food_category` WHERE `category_name` IN ('양식', '스테이크', '소고기', '구이', '제한없음', '짠', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2402, `category_id` FROM `food_category` WHERE `category_name` IN ('양식', '스테이크', '소고기', '구이', '제한없음', '짠', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2403, `category_id` FROM `food_category` WHERE `category_name` IN ('양식', '감자튀김', '감자', '튀김', '제한없음', '짠', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2404, `category_id` FROM `food_category` WHERE `category_name` IN ('양식', '스테이크', '소고기', '구이', '제한없음', '짠', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2405, `category_id` FROM `food_category` WHERE `category_name` IN ('제과류', '빵', '제한없음', '담백한', '간식');
+
+-- 노브랜드버거
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2501, `category_id` FROM `food_category` WHERE `category_name` IN ('패스트푸드', '햄버거', '새우', '구이', '제한없음', '짠', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2502, `category_id` FROM `food_category` WHERE `category_name` IN ('패스트푸드', '햄버거', '소고기', '구이', '제한없음', '짠', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2503, `category_id` FROM `food_category` WHERE `category_name` IN ('패스트푸드', '햄버거', '소고기', '구이', '제한없음', '짠', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2504, `category_id` FROM `food_category` WHERE `category_name` IN ('패스트푸드', '사이드', '양파', '튀김', '제한없음', '짠', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2505, `category_id` FROM `food_category` WHERE `category_name` IN ('패스트푸드', '사이드', '닭고기', '튀김', '제한없음', '짠', '점심');
+
+-- 니뽕내뽕코엑스점
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2601, `category_id` FROM `food_category` WHERE `category_name` IN ('일식', '짬뽕', '소고기', '삶음', '제한없음', '매운', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2602, `category_id` FROM `food_category` WHERE `category_name` IN ('일식', '짬뽕', '해산물', '삶음', '제한없음', '매운', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2603, `category_id` FROM `food_category` WHERE `category_name` IN ('일식', '짬뽕', '돼지고기', '삶음', '제한없음', '매운', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2604, `category_id` FROM `food_category` WHERE `category_name` IN ('일식', '짬뽕', '해산물', '삶음', '제한없음', '매운', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 2605, `category_id` FROM `food_category` WHERE `category_name` IN ('일식', '짬뽕', '해산물', '삶음', '제한없음', '매운', '저녁');
+
+-- 공씨네주먹밥
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3000, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '주먹밥', '쌀', '삶음', '제한없음', '담백한', '점심', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3007, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '주먹밥', '날치알', '치즈', '삶음', '제한없음', '고소한', '점심', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3001, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '라면', '면', '끓임', '제한없음', '매운', '점심', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3002, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '라면', '면', '끓임', '제한없음', '담백한', '점심', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3004, `category_id` FROM `food_category`
+WHERE `category_name` IN ('일식', '우동', '어묵', '삶음', '제한없음', '고소한', '점심', '저녁');
+
+-- 이맛콩나물국밥
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3010, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '탕', '갈비', '낙지', '끓임', '제한없음', '담백한', '점심', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3011, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '국밥', '콩나물', '낙지', '끓임', '제한없음', '매운', '점심', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3012, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '국', '소고기', '끓임', '제한없음', '매운', '점심', '저녁');
+
+-- 이태리부대찌개
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3013, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '전골', '햄', '끓임', '제한없음', '매운', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3014, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '볶음', '햄', '볶음', '제한없음', '매운', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3015, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '전골', '햄', '끓임', '제한없음', '고소한', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3016, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '찌개', '햄', '끓임', '제한없음', '매운', '저녁');
+
+-- 순대실록
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3017, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '국', '순대', '끓임', '제한없음', '담백한', '점심', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3018, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '국', '머릿고기', '끓임', '제한없음', '담백한', '점심', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3019, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '국', '곱창', '순대', '끓임', '제한없음', '매운', '점심', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3020, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '순대', '삶음', '제한없음', '고소한', '점심', '저녁');
+
+-- 오봉집
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3021, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '모둠', '해산물', '구이', '제한없음', '풍미가득', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3022, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '오징어', '해산물', '구이', '제한없음', '풍미가득', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3023, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '보쌈', '매생이', '찜', '제한없음', '고소한', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3024, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '탕', '매생이', '끓임', '제한없음', '담백한', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3025, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '낙지', '볶음', '직화', '제한없음', '매운', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3026, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '오징어', '볶음', '직화', '제한없음', '매운', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3027, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '제육', '볶음', '직화', '제한없음', '매운', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3028, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '보쌈', '정식', '삶음', '제한없음', '고소한', '점심');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3029, `category_id` FROM `food_category`
+WHERE `category_name` IN ('한식', '막국수', '면', '삶음', '제한없음', '새콤달콤', '점심', '저녁');
+
+-- 에그슬럿
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3030, `category_id` FROM `food_category`
+WHERE `category_name` IN ('양식', '햄버거', '고기', '구이', '제한없음', '풍미가득', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3031, `category_id` FROM `food_category`
+WHERE `category_name` IN ('약식', '햄버거', '고기', '구이', '제한없음', '풍미가득', '저녁');
+
+-- 리칭본점
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3032, `category_id` FROM `food_category`
+WHERE `category_name` IN ('중식', '짬뽕', '면', '삶음', '제한없음', '매운', '점심', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3033, `category_id` FROM `food_category`
+WHERE `category_name` IN ('중식', '짜장면', '면', '볶음', '제한없음', '짠', '단', '점심', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3034, `category_id` FROM `food_category`
+WHERE `category_name` IN ('중식', '볶음밥', '밥', '볶음', '제한없음', '짠', '단', '점심', '저녁');
+INSERT INTO `menu_category_mapping` (`menu_id`, `category_id`)
+SELECT 3033, `category_id` FROM `food_category`
+WHERE `category_name` IN ('중식', '탕수육', '고기', '튀김', '제한없음', '새콤달콤', '점심', '저녁');

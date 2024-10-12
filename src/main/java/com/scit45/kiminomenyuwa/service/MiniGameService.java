@@ -300,6 +300,53 @@ public class MiniGameService {
 		return menuScoreMap;
 	}
 
+	/**
+	 * 미니게임 점수 기반으로 사용자의 메뉴 점수 측정표
+	 * @param userId 현재 로그인 중인 userId
+	 * @return 사용자 맞춤 메뉴 점수
+	 */
+	public Map<MenuDTO, Integer> getMenuScoreMap(String userId, List<MenuDTO> nearByMenus) {
+		// 1. 사용자 카테고리 점수 불러오기 (내림차순으로 정렬됨)
+		List<CategoryCountDTO> categoryScores = getCategoryScoresByUserId(userId);
+
+		// 2. 모든 메뉴 불러오기
+		// List<MenuDTO> allMenus = menuService.getAllMenus();
+		// 모든 메뉴 불러오는 대신 메뮤 리스트를 받아서 거기서 필터링 하도록 변경
+
+		// 3. 카테고리 점수를 빠르게 조회하기 위한 Map 생성
+		Map<String, Integer> categoryScoreMap = new HashMap<>();
+		for (CategoryCountDTO categoryScore : categoryScores) {
+			categoryScoreMap.put(categoryScore.getCategoryName(), categoryScore.getCategoryCount().intValue());
+		}
+
+		// 4. 각 메뉴별 점수를 저장할 Map 생성
+		Map<MenuDTO, Integer> menuScoreMap = new HashMap<>();
+
+		// 5. 각 메뉴의 카테고리 점수를 합산하여 메뉴 점수 계산
+		for (MenuDTO menu : nearByMenus) {
+			int totalScore = 0;
+
+			if (menu.getCategories() != null) {
+				for (FoodCategoryDTO category : menu.getCategories()) {
+					// 카테고리가 categoryScoreMap에 존재하면 해당 카테고리의 점수를 더함
+					if (categoryScoreMap.containsKey(category.getCategoryName())) {
+						totalScore += categoryScoreMap.get(category.getCategoryName());
+					}
+				}
+			}
+
+			// 로그 추가: 메뉴 이름과 계산된 점수 확인
+			log.debug("Menu Name: {}, Calculated Score: {}", menu.getName(), totalScore);
+
+			// 메뉴의 총 점수를 Map에 저장
+			menuScoreMap.put(menu, totalScore);
+		}
+
+		// 6. menuScoreMap을 반환
+		return menuScoreMap;
+	}
+
+
 	public MenuDTO getRandomMenuByLocation(double latitude, double longitude, double radius) {
 		String pointWKT = String.format("POINT(%s %s)", longitude, latitude);
 		MenuEntity randomMenu = menuRepository.findRandomMenuWithinRadius(pointWKT, radius);
@@ -307,7 +354,7 @@ public class MiniGameService {
 		if (randomMenu != null) {
 			return convertToMenuDTO(randomMenu);
 		} else {
-			return null; // 반경 내에 메뉴가 없는 경우
+			return new MenuDTO(); // 반경 내에 메뉴가 없는 경우
 		}
 	}
 

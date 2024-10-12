@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>미니게임 컨텐츠</title>
+    <link rel="stylesheet" href="/css/home.css" />
+    <style>
+      /* 미니게임 컨텐츠의 황금비율 적용 (사진 배경) */
+      .mini-game-content {
+        position: relative;
+        width: 100%;
+        max-width: 1000px;
+        height: calc(1000px / 1.618); /* 황금비율 적용 */
+        margin: 50px auto 0;
+        border: 5px solid rgba(255, 120, 120, 1); /* 대표 컬러로 테두리 */
+        border-radius: 10px;
+
+        /* 이미지를 크기에 맞춰 조정 및 중앙에 위치 */
+        background-size: cover; /* 사진이 클 경우 잘라서 맞추기 (비율 유지) */
+        background-position: center; /* 사진을 중앙에 맞춤 */
+        background-repeat: no-repeat; /* 반복 안 함 */
+      }
+
+      /* 상단 왼쪽 [회원용] */
+      .member-label {
+        position: absolute;
+        top: -40px; /* 사진 바깥쪽 */
+        left: 10px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: black;
+        background-color: transparent;
+      }
+
+      /* 상단 오른쪽 위치 정보 */
+      .location-container {
+        position: absolute;
+        top: -40px; /* 사진 바깥쪽 */
+        right: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background-color: transparent;
+        color: black;
+      }
+
+      /* 메뉴 이름 (사진 안쪽 상단 오른쪽) */
+      .menu-name {
+        position: absolute;
+        top: 10px; /* 사진 안쪽 */
+        right: 10px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white; /* 사진 안쪽이므로 흰색 */
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* 가독성을 위한 텍스트 그림자 */
+      }
+
+      /* 버튼 컨테이너 (오른쪽 하단 사진 안쪽) */
+      .button-container {
+        position: absolute;
+        bottom: 20px; /* 사진 안쪽 */
+        right: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+      }
+
+      /* 체크박스 스타일 */
+      .fixed-rating {
+        margin-bottom: 10px;
+        font-size: 1rem;
+        color: white;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* 가독성을 위한 그림자 */
+      }
+
+      /* 좋아요, 싫어요 버튼 스타일 (대표 컬러 적용) */
+      .button {
+        width: 150px;
+        height: 50px;
+        margin-bottom: 10px;
+        font-size: 16px;
+        border: 2px solid rgba(255, 120, 120, 1); /* 대표 컬러로 테두리 */
+        border-radius: 5px;
+        background-color: rgba(255, 120, 120, 1); /* 대표 컬러로 배경 */
+        color: white; /* 버튼 텍스트를 흰색으로 */
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      /* 버튼 hover 시 색상 변화 */
+      .button:hover {
+        background-color: #ff5e5e; /* 대표 컬러의 어두운 버전 */
+        border-color: #ff5e5e;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- 미니게임 컨텐츠 -->
+    <div class="mini-game-content" id="menu-background">
+      <!-- 상단 왼쪽 [회원용] -->
+      <div class="member-label">[회원용]</div>
+
+      <!-- 상단 오른쪽 위치 정보 -->
+      <div class="location-container">
+        <span class="current-location">현재 위치: 위치 불러오는 중...</span>
+        <label for="radius-select">반경 선택:</label>
+        <select id="radius-select">
+          <option value="300">300m</option>
+          <option value="500" selected>500m</option>
+          <option value="1000">1000m</option>
+          <option value="2000">2000m</option>
+        </select>
+      </div>
+
+      <!-- 메뉴 이름 (사진 안쪽 상단 오른쪽) -->
+      <div class="menu-name" id="menu-name">메뉴 이름</div>
+
+      <!-- 좋아요 / 싫어요 버튼 및 체크박스 (오른쪽 하단) -->
+      <div class="button-container">
+        <div class="fixed-rating">
+          <input type="checkbox" id="fixed-rating-checkbox" />
+          <label for="fixed-rating-checkbox">좋아요 3점 고정</label>
+        </div>
+
+        <!-- 좋아요 버튼 -->
+        <button class="button" id="like-button">좋아요</button>
+
+        <!-- 싫어요 버튼 -->
+        <button class="button" id="dislike-button">싫어요</button>
+      </div>
+    </div>
+
+    <script>
+      // 메뉴 이미지를 동적으로 변경하는 예시 코드
+      document.getElementById("menu-background").style.backgroundImage =
+        "url('/path/to/your/menu-image.jpg')";
+    </script>
+  </body>
+</html>

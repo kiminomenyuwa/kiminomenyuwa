@@ -1,3 +1,4 @@
+-- SQLBook: Code
 use kiminomenyuwa;
 -- 외래 키 제약을 비활성화
 SET FOREIGN_KEY_CHECKS = 0;
@@ -22,6 +23,8 @@ DROP TABLE IF EXISTS store_photo;
 DROP TABLE IF EXISTS favorite;
 DROP TABLE IF EXISTS budget;
 DROP TABLE IF EXISTS discount;
+DROP TABLE IF EXISTS meeting;
+DROP TABLE IF EXISTS meeting_participants;
 
 -- 외래 키 제약을 다시 활성화
 SET FOREIGN_KEY_CHECKS = 1;
@@ -72,7 +75,7 @@ CREATE TABLE `store`
     `store_id`          INT AUTO_INCREMENT NOT NULL,           -- 상점의 고유 식별자
     `user_id`           VARCHAR(20)        NOT NULL,           -- 상점 소유자의 사용자 ID (변경된 필드 이름)
     `name`              VARCHAR(30)        NOT NULL,           -- 상점 이름
-    `certification`     VARCHAR(100)       NOT NULL,           -- 인증 정보
+    `certification`     VARCHAR(100),                          -- 인증 정보
     `road_name_address` VARCHAR(100),                          -- 도로명 주소
     `detail_address`    VARCHAR(100),                          -- 상세 주소
     `zipcode`           VARCHAR(20),                           -- 우편번호
@@ -92,7 +95,7 @@ CREATE TABLE `menu`
     `store_id`    INT        NOT NULL,           -- 메뉴가 속한 상점의 ID
     `name`        VARCHAR(50),                   -- 메뉴 이름
     `price`       INT,                           -- 메뉴 가격
-    `picture_url` VARCHAR(100),                  -- 메뉴 사진 URL
+    `picture_url` VARCHAR(1000),                 -- 메뉴 사진 URL
     `enabled`     TINYINT(1) NOT NULL DEFAULT 1, -- 메뉴 활성화 여부
     PRIMARY KEY (`menu_id`),                     -- 기본 키 설정
     FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`)
@@ -192,7 +195,6 @@ CREATE TABLE receipt_verification
     store_id                INT         NOT NULL,               -- 가게 ID (StoreEntity와 외래키 관계)
     review_id               INT,                                -- 리뷰 ID (ReviewEntity와 외래키 관계)
     verification_date       DATETIME DEFAULT CURRENT_TIMESTAMP, -- 인증 날짜 (기본값: 현재 시간)
-
     CONSTRAINT FK_user FOREIGN KEY (user_id) REFERENCES User (user_id),
     CONSTRAINT FK_store FOREIGN KEY (store_id) REFERENCES Store (store_id),
     CONSTRAINT FK_review FOREIGN KEY (review_id) REFERENCES review (review_id)
@@ -205,7 +207,6 @@ CREATE TABLE purchased_menu
     receipt_verification_id BIGINT NOT NULL,                   -- 영수증 인증 ID (ReceiptVerificationEntity와 외래키 관계)
     menu_id                 INT    NOT NULL,                   -- 메뉴 ID (MenuEntity와 외래키 관계)
     quantity                INT,                               -- 구매 수량
-
     CONSTRAINT FK_receipt_verification FOREIGN KEY (receipt_verification_id) REFERENCES receipt_verification (receipt_verification_id),
     CONSTRAINT FK_menu FOREIGN KEY (menu_id) REFERENCES `menu` (menu_id)
 );
@@ -271,3 +272,27 @@ ALTER TABLE discount
 ALTER TABLE discount
     MODIFY COLUMN discounted_price DECIMAL(10, 2) NOT NULL;
 
+CREATE TABLE `meeting`
+(
+    `meeting_id`   INT AUTO_INCREMENT PRIMARY KEY,                                  -- 약속의 고유 ID
+    `host_user_id` VARCHAR(20)  NOT NULL,                                           -- 약속을 생성한 사용자 ID
+    `title`        VARCHAR(100) NOT NULL,                                           -- 약속 제목
+    `description`  TEXT,                                                            -- 약속 설명
+    `meeting_date` DATETIME     NOT NULL,                                           -- 약속 날짜 및 시간
+    `location`     VARCHAR(255) NOT NULL,                                           -- 약속 장소 (예: 상점 ID 또는 주소)
+    `created_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                             -- 약속 생성 시간
+    `updated_time` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- 약속 수정 시간
+    FOREIGN KEY (`host_user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE
+);
+
+CREATE TABLE `meeting_participants`
+(
+    `meeting_participant_id` INT AUTO_INCREMENT PRIMARY KEY,                                     -- 참여 ID
+    `meeting_id`             INT         NOT NULL,                                               -- 약속 ID
+    `user_id`                VARCHAR(20) NOT NULL,                                               -- 참여 사용자 ID
+    `status`                 ENUM ('INVITED', 'ACCEPTED', 'DECLINED') DEFAULT 'INVITED',         -- 참여 상태
+    `invited_time`           TIMESTAMP                                DEFAULT CURRENT_TIMESTAMP, -- 초대 시간
+    FOREIGN KEY (`meeting_id`) REFERENCES `meeting` (`meeting_id`) ON DELETE CASCADE,
+    FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE,
+    UNIQUE KEY `unique_participant` (`meeting_id`, `user_id`)
+);

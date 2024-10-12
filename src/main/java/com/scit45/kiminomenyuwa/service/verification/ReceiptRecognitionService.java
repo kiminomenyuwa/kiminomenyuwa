@@ -162,7 +162,8 @@ public class ReceiptRecognitionService {
 			DateTimeFormatter.ofPattern("dd-MM-yyyy"),
 			DateTimeFormatter.ofPattern("dd/MM/yyyy"),
 			DateTimeFormatter.ofPattern("MM-dd-yyyy"),
-			DateTimeFormatter.ofPattern("MM/dd/yyyy")
+			DateTimeFormatter.ofPattern("MM/dd/yyyy"),
+			DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm")
 			// 필요에 따라 추가적인 형식을 여기에 추가
 		);
 
@@ -187,10 +188,10 @@ public class ReceiptRecognitionService {
 			}
 		}
 
-		if (!parsed) {
-			throw new IllegalArgumentException(
-				"영수증 날짜 형식이 유효하지 않습니다. 지원되는 형식: yyyy-MM-dd, yyyy/MM/dd, dd-MM-yyyy, dd/MM/yyyy, MM-dd-yyyy, MM/dd/yyyy 등");
-		}
+		// if (!parsed) {
+		// 	throw new IllegalArgumentException(
+		// 		"영수증 날짜 형식이 유효하지 않습니다. 지원되는 형식: yyyy-MM-dd, yyyy/MM/dd, dd-MM-yyyy, dd/MM/yyyy, MM-dd-yyyy, MM/dd/yyyy 등");
+		// }
 
 		return transactionDate;
 	}

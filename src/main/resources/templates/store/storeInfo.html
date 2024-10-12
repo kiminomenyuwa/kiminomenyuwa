@@ -1,18 +1,36 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title th:text="${store.name} + ' - 가게 정보'">가게 정보</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- 헤더 전용 CSS 파일 포함 -->
+    <link rel="stylesheet" th:href="@{/css/common/common.css}">
+    <link rel="stylesheet" th:href="@{/css/common/header.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage/sidebar.css}">
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <style>
+        #store-ctn {
+            max-width: 1200px;
+        }
+
         /* 배너 이미지 위에 가게 이름을 더 돋보이게 하기 위한 스타일 */
         .carousel-caption {
             background: rgba(0, 0, 0, 0.5);
             padding: 10px;
             border-radius: 5px;
+        }
+
+        #store-hero {
+            border-radius: 12px;
+        }
+
+        #store-hero-img {
+            height: 250px;
         }
 
         /* 메뉴 이미지 고정 높이 및 객체 맞춤 */
@@ -47,301 +65,283 @@
         }
     </style>
 </head>
+
 <body>
-<!-- 상단 Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">가게 정보</a>
-        <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
-                data-bs-target="#navbarSupportedContent" data-bs-toggle="collapse" type="button">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <form class="d-flex ms-auto" method="get" th:action="@{/search}">
-                <input aria-label="Search" class="form-control me-2" name="query" placeholder="가게 검색" type="search">
-                <button class="btn btn-outline-success" type="submit">검색</button>
-            </form>
-        </div>
-    </div>
-</nav>
+    <!-- 헤더 프래그먼트 포함 -->
+    <div th:replace="~{/fragments/common/header :: header}"></div>
+    <div th:replace="~{/fragments/common/sidebar :: sidebar}"></div>
 
-<div class="container mt-4">
-    <!-- 배너 섹션 (Carousel) -->
-    <section class="banner mb-4">
-        <div class="carousel slide" data-bs-ride="carousel" id="storeCarousel">
-            <div class="carousel-inner">
-                <div class="carousel-item" th:classappend="${iterStat.index == 0} ? ' active' : ''"
-                     th:each="photoUrl, iterStat : ${store.photoUrls}">
-                    <img alt="가게 사진" class="d-block w-100 banner-image" th:src="${photoUrl}">
+    <div id="store-ctn" class="container mt-4">
+        <!-- 배너 섹션 (Carousel) -->
+        <section class="banner mb-4">
+            <div class="carousel slide" data-bs-ride="carousel" id="storeCarousel">
+                <div id="store-hero" class="carousel-inner">
+                    <div id="store-hero-img" class="carousel-item"
+                        th:classappend="${iterStat.index == 0} ? ' active' : ''"
+                        th:each="photoUrl, iterStat : ${store.photoUrls}">
+                        <img alt="가게 사진" class="d-block w-100 banner-image" th:src="${photoUrl}">
+                    </div>
+                    <div class="carousel-item active" th:if="${#lists.isEmpty(store.photoUrls)}">
+                        <img alt="가게 사진 없음" class="d-block w-100 banner-image"
+                            src="https://via.placeholder.com/800x400?text=No+Image">
+                    </div>
                 </div>
-                <div class="carousel-item active" th:if="${#lists.isEmpty(store.photoUrls)}">
-                    <img alt="가게 사진 없음" class="d-block w-100 banner-image"
-                         src="https://via.placeholder.com/800x400?text=No+Image">
+
+                <!-- 배너 위에 가게 이름 오버레이 -->
+                <div class="carousel-caption d-none d-md-block">
+                    <h1 th:text="${store.name}">가게 이름</h1>
                 </div>
             </div>
-            <button class="carousel-control-prev" data-bs-slide="prev" data-bs-target="#storeCarousel" type="button">
-                <span aria-hidden="true" class="carousel-control-prev-icon"></span>
-                <span class="visually-hidden">이전</span>
-            </button>
-            <button class="carousel-control-next" data-bs-slide="next" data-bs-target="#storeCarousel" type="button">
-                <span aria-hidden="true" class="carousel-control-next-icon"></span>
-                <span class="visually-hidden">다음</span>
-            </button>
-            <!-- 배너 위에 가게 이름 오버레이 -->
-            <div class="carousel-caption d-none d-md-block">
-                <h1 th:text="${store.name}">가게 이름</h1>
-            </div>
-        </div>
 
-        <!--버튼 섹션 -->
-        <section class="favorite-section mb-4">
-            <div th:if="${store.favorited != null}">
-                <button
-                        class="btn btn-outline-secondary me-2"
-                        th:id="'unfavorite-btn-' + ${store.storeId}"
-                        th:if="${store.favorited}"
-                        th:onclick="'unfavoriteStore(' + ${store.storeId} + ')'">
-                    <i class="bi bi-chat-square-heart-fill"></i>
-                    찜 취소
-                </button>
-                <button
-                        class="btn btn-outline-secondary"
-                        th:id="'favorite-btn-' + ${store.storeId}"
-                        th:if="${!store.favorited}"
-                        th:onclick="'favoriteStore(' + ${store.storeId} + ')'">
-                    <i class="bi bi-chat-square-heart"></i>
-                    찜하기
-                </button>
-                <!-- 리뷰 쓰기 버튼 추가 -->
-                <a class="btn btn-outline-secondary" th:href="@{/reviews/write}">
-                    <i class="bi bi-pencil-square"></i> 리뷰 쓰기
-                </a>
-            </div>
-            <div th:if="${store.favorited == null}">
-                <p>찜 기능을 사용하려면 <a class="link-primary" th:href="@{/login}">로그인</a>해주세요.</p>
-            </div>
+            <!--버튼 섹션 -->
+            <section class="favorite-section mb-4" style="
+            margin-top: 15px;
+        ">
+                <div th:if="${store.favorited != null}">
+                    <button class="btn btn-outline-secondary me-2" th:id="'unfavorite-btn-' + ${store.storeId}"
+                        th:if="${store.favorited}" th:onclick="'unfavoriteStore(' + ${store.storeId} + ')'">
+                        <i class="bi bi-chat-square-heart-fill"></i>
+                        찜 취소
+                    </button>
+                    <button class="btn btn-outline-secondary" th:id="'favorite-btn-' + ${store.storeId}"
+                        th:if="${!store.favorited}" th:onclick="'favoriteStore(' + ${store.storeId} + ')'">
+                        <i class="bi bi-chat-square-heart"></i>
+                        찜하기
+                    </button>
+                    <!-- 리뷰 쓰기 버튼 추가 -->
+                    <a class="btn btn-outline-secondary" th:href="@{/reviews/write}">
+                        <i class="bi bi-pencil-square"></i> 리뷰 쓰기
+                    </a>
+                </div>
+                <div th:if="${store.favorited == null}">
+                    <p>찜 기능을 사용하려면 <a class="link-primary" th:href="@{/login}">로그인</a>해주세요.</p>
+                </div>
+            </section>
         </section>
-    </section>
 
-    <!-- 메인 콘텐츠 영역 -->
-    <div class="row">
-        <!-- 왼쪽: 가게 상세 정보 -->
-        <div class="col-md-4">
-            <section class="store-details mb-4">
-                <h3>상세 정보</h3>
-                <ul class="list-group">
-                    <!-- 지도 삽입 -->
-                    <li class="list-group-item">
-                        <div class="mt-3">
-                            <strong>오시는 길:</strong>
-                            <div class="mt-2">
-                                <div id="map" style="width: 100%; height: 300px;"></div>
+        <!-- 메인 콘텐츠 영역 -->
+        <div class="row">
+            <!-- 왼쪽: 가게 상세 정보 -->
+            <div class="col-md-4">
+                <section class="store-details mb-4">
+                    <h1 id="our-h1">상세 정보</h1>
+                    <ul class="list-group">
+                        <!-- 지도 삽입 -->
+                        <li class="list-group-item">
+                            <div class="mt-3">
+                                <strong>오시는 길:</strong>
+                                <div class="mt-2">
+                                    <div id="map" style="width: 100%; height: 300px;"></div>
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item"><strong>설명:</strong> <span th:text="${store.description}">상점 설명</span>
-                    </li>
-                    <li class="list-group-item"><strong>주소:</strong>
-                        <span th:text="${store.roadNameAddress}">도로명 주소</span>,
-                        <span th:text="${store.detailAddress}">상세 주소</span>,
-                        <span th:text="${store.zipcode}">우편번호</span>
-                    </li>
-                    <li class="list-group-item"><strong>전화번호:</strong> <span th:text="${store.phoneNumber}">전화번호</span>
-                    </li>
-                    <li class="list-group-item"><strong>카테고리:</strong> <span th:text="${store.category}">카테고리</span>
-                    </li>
-                </ul>
-            </section>
-        </div>
+                        </li>
+                        <li class="list-group-item"><strong>설명:</strong> <span th:text="${store.description}">상점
+                                설명</span>
+                        </li>
+                        <li class="list-group-item"><strong>주소:</strong>
+                            <span th:text="${store.roadNameAddress}">도로명 주소</span>,
+                            <span th:text="${store.detailAddress}">상세 주소</span>,
+                            <span th:text="${store.zipcode}">우편번호</span>
+                        </li>
+                        <li class="list-group-item"><strong>전화번호:</strong> <span
+                                th:text="${store.phoneNumber}">전화번호</span>
+                        </li>
+                        <li class="list-group-item"><strong>카테고리:</strong> <span th:text="${store.category}">카테고리</span>
+                        </li>
+                    </ul>
+                </section>
+            </div>
 
-        <!-- 오른쪽: 메뉴 리스트 -->
-        <div class="col-md-8">
-            <section class="menu-list mb-4">
-                <h3>메뉴 리스트</h3>
-                <div th:if="${store.menus != null} and ${not #lists.isEmpty(store.menus)}">
-                    <div class="row">
-                        <div class="col-md-4 mb-3" th:each="menu : ${store.menus}">
-                            <div class="card h-100">
-                                <img alt="메뉴 이미지" class="card-img-top menu-image clickable-image "
-                                     th:src="${menu.pictureUrl}">
-                                <div class="card-body">
-                                    <h5 class="card-title" th:text="${menu.name}">메뉴 이름</h5>
-                                    <p class="card-text"><strong>가격:</strong> <span th:text="${menu.price}">가격</span> 원
-                                    </p>
-                                    <p class="card-text" th:text="${menu.enabled} ? '판매 중' : '판매 중지'">판매 상태</p>
+            <!-- 오른쪽: 메뉴 리스트 -->
+            <div class="col-md-8">
+                <section class="menu-list mb-4">
+                    <h1 id="our-h1">메뉴 리스트</h1>
+                    <div th:if="${store.menus != null} and ${not #lists.isEmpty(store.menus)}">
+                        <div class="row">
+                            <div class="col-md-4 mb-3" th:each="menu : ${store.menus}">
+                                <div class="card h-100">
+                                    <img alt="메뉴 이미지" class="card-img-top menu-image clickable-image "
+                                        th:src="${menu.pictureUrl}">
+                                    <div class="card-body">
+                                        <h5 class="card-title" th:text="${menu.name}">메뉴 이름</h5>
+                                        <p class="card-text"><strong>가격:</strong> <span
+                                                th:text="${menu.price}">가격</span> 원
+                                        </p>
+                                        <p class="card-text" th:text="${menu.enabled} ? '판매 중' : '판매 중지'">판매 상태</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div th:if="${store.menus == null} or ${#lists.isEmpty(store.menus)}">
-                    <p>이 상점에는 현재 메뉴가 없습니다.</p>
-                </div>
-            </section>
-            <!-- 리뷰 섹션 -->
-            <section class="review-section mb-4">
-                <h3>리뷰</h3>
-                <div th:if="${store.reviews != null} and ${not #lists.isEmpty(store.reviews)}">
-                    <div class="list-group">
-                        <div class="list-group-item list-group-item-action flex-column align-items-start"
-                             th:each="review : ${store.reviews}">
-                            <div class="d-flex align-items-center">
-                                <img alt="사용자 사진" class="user-photo" th:src="${review.userProfileUrl}">
-                                <h5 class="mb-1" th:text="${review.userId}">작성자 이름</h5>
-                            </div>
+                    <div th:if="${store.menus == null} or ${#lists.isEmpty(store.menus)}">
+                        <p>이 상점에는 현재 메뉴가 없습니다.</p>
+                    </div>
+                </section>
+                <!-- 리뷰 섹션 -->
+                <section class="review-section mb-4">
+                    <h3>리뷰</h3>
+                    <div th:if="${store.reviews != null} and ${not #lists.isEmpty(store.reviews)}">
+                        <div class="list-group">
+                            <div class="list-group-item list-group-item-action flex-column align-items-start"
+                                th:each="review : ${store.reviews}">
+                                <div class="d-flex align-items-center">
+                                    <img alt="사용자 사진" class="user-photo" th:src="${review.userProfileUrl}">
+                                    <h5 class="mb-1" th:text="${review.userId}">작성자 이름</h5>
+                                </div>
 
-                            <!-- 별점 표시 -->
-                            <div class="mb-1">
-                                <span th:each="i : ${#numbers.sequence(1,5)}">
-                                    <i th:classappend="${i <= review.rating} ? 'bi-star-fill text-warning' : 'bi-star text-warning'"></i>
-                                </span>
-                            </div>
-                            <!-- 리뷰 내용 -->
-                            <p class="mb-1" th:text="${review.comment}">리뷰 내용</p>
-                            <!-- 리뷰 사진 표시 -->
-                            <div th:if="${review.photoUrls != null} and ${not #lists.isEmpty(review.photoUrls)}">
-                                <div class="d-flex flex-wrap">
-                                    <img alt="리뷰 사진" class="review-photo clickable-image"
-                                         data-bs-toggle="modal"
-                                         onclick="openModal(this.src)"
-                                         th:attr="data-bs-target='@{#ids.next(id)}'"
-                                         th:each="photoUrl : ${review.photoUrls}"
-                                         th:src="${photoUrl}">
+                                <!-- 별점 표시 -->
+                                <div class="mb-1">
+                                    <span th:each="i : ${#numbers.sequence(1,5)}">
+                                        <i
+                                            th:classappend="${i <= review.rating} ? 'bi-star-fill text-warning' : 'bi-star text-warning'"></i>
+                                    </span>
+                                </div>
+                                <!-- 리뷰 내용 -->
+                                <p class="mb-1" th:text="${review.comment}">리뷰 내용</p>
+                                <!-- 리뷰 사진 표시 -->
+                                <div th:if="${review.photoUrls != null} and ${not #lists.isEmpty(review.photoUrls)}">
+                                    <div class="d-flex flex-wrap">
+                                        <img alt="리뷰 사진" class="review-photo clickable-image"
+                                             th:each="photoUrl : ${review.photoUrls}"
+                                             th:if="${photoUrl != null}" th:src="${photoUrl}"
+                                             data-bs-toggle="modal" onclick="openModal(this.src)" th:attr="data-bs-target='@{#ids.next(id)}'">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div th:if="${store.reviews == null} or ${#lists.isEmpty(store.reviews)}">
-                    <p>이 상점에 대한 리뷰가 아직 없습니다.</p>
-                </div>
-            </section>
-        </div>
-    </div>
-</div>
-
-<!-- TODO: 모달 띄우기 -->
-<!-- 리뷰 사진을 크게 볼 수 있는 모달 -->
-<div aria-hidden="true" aria-labelledby="photoModalLabel" class="modal fade" id="photoModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">리뷰 사진</h5>
-                <button aria-label="닫기" class="btn-close" data-bs-dismiss="modal" type="button"></button>
-            </div>
-            <div class="modal-body text-center">
-                <img alt="확대된 리뷰 사진" class="img-fluid" id="modalImage" src="#">
+                    <div th:if="${store.reviews == null} or ${#lists.isEmpty(store.reviews)}">
+                        <p>이 상점에 대한 리뷰가 아직 없습니다.</p>
+                    </div>
+                </section>
             </div>
         </div>
     </div>
-</div>
-<!-- 네이버 지도 API -->
-<script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=t06c4jgb48" type="text/javascript"></script>
 
-<!-- 네이버 지도 초기화 스크립트 -->
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    $(document).ready(function () {
-        // 서버에서 전달된 위도와 경도 값 가져오기
-        var latitude = /*[[${store.latitude}]]*/ 37.5665; // 기본값: 서울 시청
-        var longitude = /*[[${store.longitude}]]*/ 126.9780; // 기본값: 서울 시청
+    <!-- TODO: 모달 띄우기 -->
+    <!-- 리뷰 사진을 크게 볼 수 있는 모달 -->
+    <div aria-hidden="true" aria-labelledby="photoModalLabel" class="modal fade" id="photoModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">리뷰 사진</h5>
+                    <button aria-label="닫기" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img alt="확대된 리뷰 사진" class="img-fluid" id="modalImage" src="#">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 네이버 지도 API -->
+    <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=t06c4jgb48"
+        type="text/javascript"></script>
 
-        if (latitude && longitude) {
-            var map = new naver.maps.Map('map', {
-                center: new naver.maps.LatLng(latitude, longitude),
-                zoom: 19
-            });
+    <!-- 네이버 지도 초기화 스크립트 -->
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        $(document).ready(function () {
+            // 서버에서 전달된 위도와 경도 값 가져오기
+            var latitude = /*[[${store.latitude}]]*/ 37.5665; // 기본값: 서울 시청
+            var longitude = /*[[${store.longitude}]]*/ 126.9780; // 기본값: 서울 시청
 
-            // 마커 추가
-            var marker = new naver.maps.Marker({
-                position: new naver.maps.LatLng(latitude, longitude),
-                map: map
-            });
-        } else {
-            $('#map').text('위치 정보를 불러올 수 없습니다.');
-        }
-    });
-    /*]]>*/
-</script>
+            if (latitude && longitude) {
+                var map = new naver.maps.Map('map', {
+                    center: new naver.maps.LatLng(latitude, longitude),
+                    zoom: 19
+                });
 
-<script>
-    // 찜하기 버튼 클릭 시 호출되는 함수
-    function favoriteStore(storeId) {
-        fetch('/api/favorites/' + storeId, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
+                // 마커 추가
+                var marker = new naver.maps.Marker({
+                    position: new naver.maps.LatLng(latitude, longitude),
+                    map: map
+                });
+            } else {
+                $('#map').text('위치 정보를 불러올 수 없습니다.');
             }
-        })
-            .then(response => {
-                if (response.ok) {
-                    // 버튼 상태 변경
-                    const favoriteBtn = document.getElementById('favorite-btn-' + storeId);
-                    const unfavoriteBtn = document.getElementById('unfavorite-btn-' + storeId);
-                    if (favoriteBtn) favoriteBtn.style.display = 'none';
-                    if (unfavoriteBtn) {
-                        unfavoriteBtn.style.display = 'inline-block';
+        });
+        /*]]>*/
+    </script>
+
+    <script>
+        // 찜하기 버튼 클릭 시 호출되는 함수
+        function favoriteStore(storeId) {
+            fetch('/api/favorites/' + storeId, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // 버튼 상태 변경
+                        const favoriteBtn = document.getElementById('favorite-btn-' + storeId);
+                        const unfavoriteBtn = document.getElementById('unfavorite-btn-' + storeId);
+                        if (favoriteBtn) favoriteBtn.style.display = 'none';
+                        if (unfavoriteBtn) {
+                            unfavoriteBtn.style.display = 'inline-block';
+                        } else {
+                            // 새로운 찜 취소 버튼 생성
+                            const newUnfavoriteBtn = document.createElement('button');
+                            newUnfavoriteBtn.id = 'unfavorite-btn-' + storeId;
+                            newUnfavoriteBtn.className = 'btn btn-outline-secondary me-2';
+                            newUnfavoriteBtn.innerHTML = '<i class="bi bi-chat-square-heart-fill"></i> 찜 취소';
+                            newUnfavoriteBtn.onclick = () => unfavoriteStore(storeId);
+                            document.querySelector('.favorite-section').appendChild(newUnfavoriteBtn);
+                        }
+                    } else if (response.status === 401) {
+                        alert('로그인이 필요합니다.');
+                        window.location.href = '/login';
                     } else {
-                        // 새로운 찜 취소 버튼 생성
-                        const newUnfavoriteBtn = document.createElement('button');
-                        newUnfavoriteBtn.id = 'unfavorite-btn-' + storeId;
-                        newUnfavoriteBtn.className = 'btn btn-outline-secondary me-2';
-                        newUnfavoriteBtn.innerHTML = '<i class="bi bi-chat-square-heart-fill"></i> 찜 취소';
-                        newUnfavoriteBtn.onclick = () => unfavoriteStore(storeId);
-                        document.querySelector('.favorite-section').appendChild(newUnfavoriteBtn);
+                        alert('찜하기에 실패했습니다.');
                     }
-                } else if (response.status === 401) {
-                    alert('로그인이 필요합니다.');
-                    window.location.href = '/login';
-                } else {
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                     alert('찜하기에 실패했습니다.');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('찜하기에 실패했습니다.');
-            });
-    }
+                });
+        }
 
-    // 찜 취소 버튼 클릭 시 호출되는 함수
-    function unfavoriteStore(storeId) {
-        fetch('/api/favorites/' + storeId, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-            .then(response => {
-                if (response.ok) {
-                    // 버튼 상태 변경
-                    const unfavoriteBtn = document.getElementById('unfavorite-btn-' + storeId);
-                    const favoriteBtn = document.getElementById('favorite-btn-' + storeId);
-                    if (unfavoriteBtn) unfavoriteBtn.style.display = 'none';
-                    if (favoriteBtn) {
-                        favoriteBtn.style.display = 'inline-block';
-                    } else {
-                        // 새로운 찜하기 버튼 생성
-                        const newFavoriteBtn = document.createElement('button');
-                        newFavoriteBtn.id = 'favorite-btn-' + storeId;
-                        newFavoriteBtn.className = 'btn btn-outline-secondary';
-                        newFavoriteBtn.innerHTML = '<i class="bi bi-chat-square-heart"></i> 찜하기';
-                        newFavoriteBtn.onclick = () => favoriteStore(storeId);
-                        document.querySelector('.favorite-section').appendChild(newFavoriteBtn);
-                    }
-                } else if (response.status === 401) {
-                    alert('로그인이 필요합니다.');
-                    window.location.href = '/login';
-                } else {
-                    alert('찜 취소에 실패했습니다.');
+        // 찜 취소 버튼 클릭 시 호출되는 함수
+        function unfavoriteStore(storeId) {
+            fetch('/api/favorites/' + storeId, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
                 }
             })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('찜 취소에 실패했습니다.');
-            });
-    }
-</script>
+                .then(response => {
+                    if (response.ok) {
+                        // 버튼 상태 변경
+                        const unfavoriteBtn = document.getElementById('unfavorite-btn-' + storeId);
+                        const favoriteBtn = document.getElementById('favorite-btn-' + storeId);
+                        if (unfavoriteBtn) unfavoriteBtn.style.display = 'none';
+                        if (favoriteBtn) {
+                            favoriteBtn.style.display = 'inline-block';
+                        } else {
+                            // 새로운 찜하기 버튼 생성
+                            const newFavoriteBtn = document.createElement('button');
+                            newFavoriteBtn.id = 'favorite-btn-' + storeId;
+                            newFavoriteBtn.className = 'btn btn-outline-secondary';
+                            newFavoriteBtn.innerHTML = '<i class="bi bi-chat-square-heart"></i> 찜하기';
+                            newFavoriteBtn.onclick = () => favoriteStore(storeId);
+                            document.querySelector('.favorite-section').appendChild(newFavoriteBtn);
+                        }
+                    } else if (response.status === 401) {
+                        alert('로그인이 필요합니다.');
+                        window.location.href = '/login';
+                    } else {
+                        alert('찜 취소에 실패했습니다.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('찜 취소에 실패했습니다.');
+                });
+        }
+    </script>
 
 
 </body>
+
 </html>

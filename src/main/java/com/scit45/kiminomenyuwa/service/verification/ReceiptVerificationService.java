@@ -48,21 +48,21 @@ public class ReceiptVerificationService {
 		// 	throw new IllegalArgumentException("로그인된 사용자 ID가 제공되지 않았습니다.");
 		// }
 
-		// validateReceiptDTO(receipt);
-		// UserEntity userEntity = validateUser(loggedInUserId);
-		// StoreEntity storeEntity = validateStore(
-		// 	receipt.getMerchantName(),
-		// 	receipt.getMerchantAddress(),
-		// 	receipt.getMerchantPhoneNumber()
-		// );
-		// validateItems(receipt.getItems(), storeEntity.getStoreId());
-		// if (receipt.getTransactionDate() != null) {
-		// 	validateReceiptDate(receipt.getTransactionDate());
-		// }
+		validateReceiptDTO(receipt);
+		UserEntity user = validateUser(loggedInUserId);
+		StoreEntity store = validateStore(
+			receipt.getMerchantName(),
+			receipt.getMerchantAddress(),
+			receipt.getMerchantPhoneNumber()
+		);
+		validateItems(receipt.getItems(), store.getStoreId());
+		if (receipt.getTransactionDate() != null) {
+			validateReceiptDate(receipt.getTransactionDate());
+		}
 		// 검증 성공 시 영수증 인증 정보를 저장
 
-		UserEntity user = userRepository.findById("user01").get();
-		StoreEntity store = storeRepository.findById(5831).get();
+		// UserEntity user = userRepository.findById("user01").get();
+		// StoreEntity store = storeRepository.findById(5831).get();
 		receipt.setStoreId(store.getStoreId());
 		saveReceiptVerification(user, store);
 
@@ -103,9 +103,9 @@ public class ReceiptVerificationService {
 	 * @return 유효한 StoreEntity 객체
 	 */
 	private StoreEntity validateStore(String merchantName, String fullAddress, String merchantPhoneNumber) {
-		if (merchantName == null || fullAddress == null || merchantPhoneNumber == null) {
-			throw new IllegalArgumentException("가게 정보가 충분히 제공되지 않았습니다.");
-		}
+		// if (merchantName == null || fullAddress == null || merchantPhoneNumber == null) {
+		// 	throw new IllegalArgumentException("가게 정보가 충분히 제공되지 않았습니다.");
+		// }
 
 		// 전체 주소를 도로명 주소와 상세 주소로 분리
 		String roadNameAddress = null;
@@ -161,7 +161,7 @@ public class ReceiptVerificationService {
 				matchCount++;
 
 			// 두 개 이상의 정보가 일치하면 동일한 가게로 간주
-			if (matchCount >= 2) {
+			if (matchCount >= 1) {
 				log.info("Store matched: {}", storeEntity.getName());
 				return storeEntity;
 			}

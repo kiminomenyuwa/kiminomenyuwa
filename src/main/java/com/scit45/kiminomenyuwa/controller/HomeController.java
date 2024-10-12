@@ -3,6 +3,7 @@ package com.scit45.kiminomenyuwa.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -78,7 +79,7 @@ public class HomeController {
 				model.addAttribute("profilePhotoUrl", "/images/default-profile.png");
 			}
 		}
-		model.addAttribute("page", "home");
+
 		// 홈 페이지 템플릿으로 이동
 		return "homepage";
 	}
@@ -180,16 +181,17 @@ public class HomeController {
 	@PostMapping("/rate-menu")
 	@ResponseBody
 	public MenuDTO rateMenu(@RequestParam("menuId")
-	int menuId, @RequestParam("rating")
+	String menuId, @RequestParam("rating")
 	float rating, Authentication authentication) {
 		String userId = authentication.getName(); // 로그인한 사용자 ID를 가져옴
 		log.info("rateMenu 요청 - userId: {}, menuId: {}, rating: {}", userId, menuId, rating);
 
 		try {
 			// 평가를 저장
-			miniGameService.rateMenu(userId, menuId, rating);
-			log.info("평가 저장 성공");
-
+			if (!menuId.isEmpty()) {
+				miniGameService.rateMenu(userId, Integer.parseInt(menuId), rating);
+				log.info("평가 저장 성공");
+			}
 			// 점수가 매겨지지 않은 다음 메뉴를 추천
 			return miniGameService.getNextUnratedMenu(userId);
 		} catch (Exception e) {
@@ -214,6 +216,16 @@ public class HomeController {
 			return ResponseEntity.ok(menu);
 		} else {
 			return ResponseEntity.noContent().build(); // 반경 내에 메뉴가 없는 경우
+		}
+	}
+
+	@PostMapping("/get-random-menu2")
+	public ResponseEntity<MenuDTO> getRandomMenu() {
+		MenuDTO randomMenu = miniGameService.getRandomMenu();
+		if (randomMenu != null) {
+			return ResponseEntity.ok(randomMenu);
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 	}
 

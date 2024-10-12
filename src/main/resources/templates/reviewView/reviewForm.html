@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{homeLayout}">
 <head>
     <meta charset="UTF-8">
     <title>영수증 업로드 및 리뷰 작성</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Font Awesome (아이콘 추가를 원할 경우) -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -13,344 +15,679 @@
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-    <style>
-        body {
-            padding-top: 70px; /* 네비게이션 바 공간 확보 */
-        }
+    <th:block layout:fragment="styles">
+        <style>
+            .spinner-border {
+                width: 3rem;
+                height: 3rem;
+            }
 
-        .spinner-border {
-            width: 3rem;
-            height: 3rem;
-        }
+            #receiptInfo {
+                display: none;
+            }
 
-        #receiptInfo {
-            display: none; /* 초기에는 숨김 */
-        }
+            .star-rating i {
+                font-size: 2rem;
+                color: #ccc;
+                cursor: pointer;
+            }
 
-        .star-rating i {
-            font-size: 2rem; /* 별 크기 조절 */
-            color: #ccc; /* 기본 별 색 */
-            cursor: pointer;
-        }
-
-        .star-rating i.selected {
-            color: #ffc107; /* 선택된 별의 색상 */
-        }
-    </style>
+            .star-rating i.selected {
+                color: #ffc107;
+            }
+        </style>
+    </th:block>
 </head>
 <body>
-<!-- 네비게이션 바 -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">KimiNoMenu</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">홈</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">리뷰 작성</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">마이 페이지</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"
-                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">로그아웃</a>
-                    <form id="logout-form" th:action="@{/logout}" method="post" style="display:none;">
-                    </form>
-                </li>
-            </ul>
+<!-- 네비게이션 바는 기본 레이아웃에 포함되어 있다고 가정 -->
+
+<th:block layout:fragment="content">
+    <!-- 메인 컨테이너 -->
+    <div class="container">
+        <h2 class="mt-4 mb-4 text-center">영수증 인증 및 리뷰 작성</h2>
+
+        <!-- 영수증 정보 표시 섹션 -->
+        <div id="receiptInfo" class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-receipt me-2"></i>영수증 정보</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>가게 이름:</strong> <span id="merchantName"></span></p>
+                <p><strong>가게 주소:</strong> <span id="merchantAddress"></span></p>
+                <p><strong>전화번호:</strong> <span id="merchantPhoneNumber"></span></p>
+                <p><strong>거래 날짜:</strong> <span id="transactionDate"></span></p>
+                <p><strong>총액:</strong> <span id="totalPrice"></span> 원</p>
+                <h6>구매 항목:</h6>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>설명</th>
+                        <th>수량</th>
+                        <th>가격</th>
+                        <th>총 가격</th>
+                    </tr>
+                    </thead>
+                    <tbody id="itemsTableBody">
+                    <!-- 아이템 데이터가 여기에 추가됩니다 -->
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
-</nav>
 
-<!-- 메인 컨테이너 -->
-<div class="container">
-    <h2 class="mt-4 mb-4 text-center">영수증 업로드 및 리뷰 작성</h2>
-
-    <!-- 영수증 정보 표시 섹션 -->
-    <div id="receiptInfo" class="card mb-4">
-        <div class="card-header bg-info text-white">
-            <h5 class="mb-0"><i class="fas fa-receipt me-2"></i>영수증 정보</h5>
-        </div>
-        <div class="card-body">
-            <p><strong>가게 이름:</strong> <span id="merchantName"></span></p>
-            <p><strong>가게 주소:</strong> <span id="merchantAddress"></span></p>
-            <p><strong>전화번호:</strong> <span id="merchantPhoneNumber"></span></p>
-            <p><strong>거래 날짜:</strong> <span id="transactionDate"></span></p>
-            <p><strong>총액:</strong> <span id="totalPrice"></span> 원</p>
-            <h6>구매 항목:</h6>
-            <table class="table table-bordered">
-                <thead>
-                <tr>
-                    <th>설명</th>
-                    <th>수량</th>
-                    <th>가격</th>
-                    <th>총 가격</th>
-                </tr>
-                </thead>
-                <tbody id="itemsTableBody">
-                <!-- 아이템 데이터가 여기에 추가됩니다 -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="row">
-        <!-- AJAX 업로드 폼 -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0"><i class="fas fa-file-upload me-2"></i>AJAX로 업로드</h5>
-                </div>
-                <div class="card-body">
-                    <form id="receiptUploadForm">
-
-                        <div class="mb-3">
-                            <label for="ajaxReceiptFile" class="form-label">영수증 파일 선택</label>
-                            <input type="file" name="receiptFile" class="form-control" id="ajaxReceiptFile" required>
-                            <div class="form-text">JPEG 또는 PNG 파일만 업로드 가능합니다.</div>
-                        </div>
-                        <button type="submit" class="btn btn-success w-100"><i class="fas fa-upload me-2"></i>AJAX로 업로드
-                        </button>
-                    </form>
-                    <!-- 로딩 스피너 -->
-                    <div id="loadingSpinner" class="text-center my-3" style="display: none;">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
+        <div class="row">
+            <!-- 리뷰 작성 폼 -->
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-star me-2"></i>리뷰 작성</h5>
                     </div>
-                    <!-- 인증 완료 메시지 표시 영역 -->
-                    <div id="uploadResult" class="mt-3"></div>
+                    <div class="card-body">
+                        <form id="reviewForm" enctype="multipart/form-data" method="post" th:action='@{/reviews/write}'>
+                            <!-- 숨겨진 storeId 필드 -->
+                            <input type="hidden" id="storeId" name="storeId"/>
+
+                            <div class="mb-3">
+                                <label for="rating" class="form-label">평점:</label>
+                                <div id="starRating" class="star-rating">
+                                    <i class="fas fa-star" data-value="1"></i>
+                                    <i class="fas fa-star" data-value="2"></i>
+                                    <i class="fas fa-star" data-value="3"></i>
+                                    <i class="fas fa-star" data-value="4"></i>
+                                    <i class="fas fa-star" data-value="5"></i>
+                                </div>
+                                <!-- 실제로 제출되는 값은 숨김 input에서 관리 -->
+                                <input type="hidden" id="rating" name="rating" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="comment" class="form-label">리뷰 내용:</label>
+                                <textarea id="comment" name="comment" rows="4" required class="form-control"></textarea>
+                            </div>
+                            <!-- 사진 업로드 필드 추가 -->
+                            <div class="mb-3">
+                                <label for="photos" class="form-label">사진 업로드:</label>
+                                <input accept="image/*" id="photos" multiple name="photos" type="file"
+                                       class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-primary w-100"><i
+                                        class="fas fa-paper-plane me-2"></i>리뷰
+                                    제출
+                                </button>
+                            </div>
+                        </form>
+                        <!-- 리뷰 제출 결과 메시지 -->
+                        <div id="reviewResult" class="mt-3"></div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- 리뷰 작성 폼 -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="fas fa-star me-2"></i>리뷰 작성</h5>
-                </div>
-                <div class="card-body">
-                    <form id="reviewForm" enctype="multipart/form-data" method="post" th:action="@{/reviews/write}">
-                        <!-- 숨겨진 storeId 필드 -->
-                        <input type="hidden" id="storeId" name="storeId"/>
-
-                        <div class="mb-3">
-                            <label for="rating" class="form-label">평점:</label>
-                            <div id="starRating" class="star-rating">
-                                <i class="fas fa-star" data-value="1"></i>
-                                <i class="fas fa-star" data-value="2"></i>
-                                <i class="fas fa-star" data-value="3"></i>
-                                <i class="fas fa-star" data-value="4"></i>
-                                <i class="fas fa-star" data-value="5"></i>
+            <!-- AJAX 업로드 폼 -->
+            <div class="col-md-6 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-file-upload me-2"></i>영수증 인증</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="receiptUploadForm">
+                            <div class="mb-3">
+                                <label for="ajaxReceiptFile" class="form-label">영수증 파일 선택</label>
+                                <input type="file" name="receiptFile" class="form-control" id="ajaxReceiptFile"
+                                       required>
+                                <div class="form-text">JPEG 또는 PNG 파일만 업로드 가능합니다.</div>
                             </div>
-                            <!-- 실제로 제출되는 값은 숨김 input에서 관리 -->
-                            <input type="hidden" id="rating" name="rating" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="comment" class="form-label">리뷰 내용:</label>
-                            <textarea id="comment" name="comment" rows="4" required class="form-control"></textarea>
-                        </div>
-                        <!-- 사진 업로드 필드 추가 -->
-                        <div class="mb-3">
-                            <label for="photos" class="form-label">사진 업로드:</label>
-                            <input accept="image/*" id="photos" multiple name="photos" type="file" class="form-control">
-                        </div>
-                        <div class="mb-3">
-                            <button type="submit" class="btn btn-primary w-100"><i class="fas fa-paper-plane me-2"></i>리뷰
-                                제출
+                            <button type="submit" class="btn btn-success w-100"><i class="fas fa-upload me-2"></i>
+                                영수증 업로드
                             </button>
+                        </form>
+                        <!-- 로딩 스피너 -->
+                        <div id="loadingSpinner" class="text-center my-3" style="display: none;">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
                         </div>
-                    </form>
-                    <!-- 리뷰 제출 결과 메시지 -->
-                    <div id="reviewResult" class="mt-3"></div>
+                        <!-- 인증 완료 메시지 표시 영역 -->
+                        <div id="uploadResult" class="mt-3"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</th:block>
 
-<!-- Bootstrap JS Bundle (Popper 포함) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    $(document).ready(function () {
-        // 별점 선택 기능
-        $('#starRating i').on('click', function () {
-            var value = $(this).data('value'); // 클릭한 별의 값 (1~5)
+<th:block layout:fragment="scripts">
+    <!-- Bootstrap JS Bundle (Popper 포함) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            // 별점 선택 기능
+            $('#starRating i').on('click', function () {
+                var value = $(this).data('value'); // 클릭한 별의 값 (1~5)
 
-            // 모든 별에서 'selected' 클래스를 제거
-            $('#starRating i').removeClass('selected');
+                // 모든 별에서 'selected' 클래스를 제거
+                $('#starRating i').removeClass('selected');
 
-            // 클릭한 별과 그 이전 별들에 'selected' 클래스 추가
-            $('#starRating i').each(function (index, element) {
-                if (index < value) {
-                    $(element).addClass('selected');
-                }
+                // 클릭한 별과 그 이전 별들에 'selected' 클래스 추가
+                $('#starRating i').each(function (index, element) {
+                    if (index < value) {
+                        $(element).addClass('selected');
+                    }
+                });
+
+                // 숨겨진 input에 선택한 값 저장
+                $('#rating').val(value);
             });
 
-            // 숨겨진 input에 선택한 값 저장
-            $('#rating').val(value);
-        });
+            $('#receiptUploadForm').on('submit', function (e) {
+                e.preventDefault(); // 기본 폼 제출 방지
 
-        $('#receiptUploadForm').on('submit', function (e) {
-            e.preventDefault(); // 기본 폼 제출 방지
+                var formData = new FormData(this);
 
-            var formData = new FormData(this);
+                // 로딩 스피너 표시
+                $('#loadingSpinner').show();
+                // 이전 메시지 초기화
+                $('#uploadResult').html('');
+                // 리뷰 폼 초기화
+                $('#reviewForm')[0].reset();
+                $('#storeId').val('');
+                $('#reviewForm').hide(); // 리뷰 폼 숨기기
+                // 영수증 정보 초기화
+                $('#receiptInfo').hide();
+                $('#merchantName').text('');
+                $('#merchantAddress').text('');
+                $('#merchantPhoneNumber').text('');
+                $('#transactionDate').text('');
+                $('#totalPrice').text('');
+                $('#itemsTableBody').html('');
 
-// 로딩 스피너 표시
-            $('#loadingSpinner').show();
-// 이전 메시지 초기화
-            $('#uploadResult').html('');
-// 리뷰 폼 초기화
-            $('#reviewForm')[0].reset();
-            $('#storeId').val('');
-            $('#reviewForm').hide(); // 리뷰 폼 숨기기
-// 영수증 정보 초기화
-            $('#receiptInfo').hide();
-            $('#merchantName').text('');
-            $('#merchantAddress').text('');
-            $('#merchantPhoneNumber').text('');
-            $('#transactionDate').text('');
-            $('#totalPrice').text('');
-            $('#itemsTableBody').html('');
+                $.ajax({
+                    url: [[@{/receipts/uploadAjax}]],
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        console.log(response);
+                        if (response.success) {
+                            $('#uploadResult').html(
+                                '<div class="alert alert-success alert-dismissible fade show" role="alert">' +
+                                '<i class="fas fa-check-circle me-2"></i>' + response.message +
+                                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                                '</div>'
+                            );
 
-            $.ajax({
-                url: '[[@{/receipts/uploadAjax}]]',
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    console.log(response);
-                    if (response.success) {
-                        $('#uploadResult').html(
-                            '<div class="alert alert-success alert-dismissible fade show" role="alert">' +
-                            '<i class="fas fa-check-circle me-2"></i>' + response.message +
-                            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
-                            '</div>'
-                        );
+                            // 영수증 정보 표시
+                            var receipt = response.receipt;
+                            $('#merchantName').text(receipt.merchantName);
+                            $('#merchantAddress').text(receipt.merchantAddress);
+                            $('#merchantPhoneNumber').text(receipt.merchantPhoneNumber);
 
-                        // 영수증 정보 표시
-                        var receipt = response.receipt;
-                        $('#merchantName').text(receipt.merchantName);
-                        $('#merchantAddress').text(receipt.merchantAddress);
-                        $('#merchantPhoneNumber').text(receipt.merchantPhoneNumber);
+                            // 거래 날짜 포맷팅
+                            if (Array.isArray(receipt.transactionDate)) {
+                                var date = new Date(receipt.transactionDate[0], receipt.transactionDate[1] - 1, receipt.transactionDate[2],
+                                    receipt.transactionDate[3], receipt.transactionDate[4]);
+                                var formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                                $('#transactionDate').text(formattedDate);
+                            } else {
+                                $('#transactionDate').text(receipt.transactionDate);
+                            }
 
-                        // 거래 날짜 포맷팅
-                        if (Array.isArray(receipt.transactionDate)) {
-                            var date = new Date(receipt.transactionDate[0], receipt.transactionDate[1] - 1, receipt.transactionDate[2],
-                                receipt.transactionDate[3], receipt.transactionDate[4]);
-                            var formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-                            $('#transactionDate').text(formattedDate);
+                            $('#totalPrice').text(receipt.totalPrice.toLocaleString());
+
+                            // 아이템 테이블 채우기
+                            var items = receipt.items;
+                            var itemsHtml = '';
+                            items.forEach(function (item) {
+                                itemsHtml += '<tr>' +
+                                    '<td>' + item.description + '</td>' +
+                                    '<td>' + item.quantity + '</td>' +
+                                    '<td>' + item.price.toLocaleString() + '</td>' +
+                                    '<td>' + item.totalPrice.toLocaleString() + '</td>' +
+                                    '</tr>';
+                            });
+                            $('#itemsTableBody').html(itemsHtml);
+
+                            $('#receiptInfo').show();
+
+                            // 리뷰 폼 활성화 및 storeId 설정
+                            $('#storeId').val(receipt.storeId); // receipt에서 storeId 가져오기
+                            $('#reviewForm').show(); // 리뷰 폼 표시
                         } else {
-                            $('#transactionDate').text(receipt.transactionDate);
+                            $('#uploadResult').html(
+                                '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+                                '<i class="fas fa-exclamation-triangle me-2"></i>' + response.message +
+                                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                                '</div>'
+                            );
                         }
-
-                        $('#totalPrice').text(receipt.totalPrice.toLocaleString());
-
-                        // 아이템 테이블 채우기
-                        var items = receipt.items;
-                        var itemsHtml = '';
-                        items.forEach(function (item) {
-                            itemsHtml += '<tr>' +
-                                '<td>' + item.description + '</td>' +
-                                '<td>' + item.quantity + '</td>' +
-                                '<td>' + item.price.toLocaleString() + '</td>' +
-                                '<td>' + item.totalPrice.toLocaleString() + '</td>' +
-                                '</tr>';
-                        });
-                        $('#itemsTableBody').html(itemsHtml);
-
-                        $('#receiptInfo').show();
-
-                        // 리뷰 폼 활성화 및 storeId 설정
-                        $('#storeId').val(receipt.storeId); // receipt에서 storeId 가져오기
-                        $('#reviewForm').show(); // 리뷰 폼 표시
-                    } else {
+                    },
+                    error: function (xhr, status, error) {
+                        var errorMessage = '오류가 발생했습니다.';
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
                         $('#uploadResult').html(
                             '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
-                            '<i class="fas fa-exclamation-triangle me-2"></i>' + response.message +
+                            '<i class="fas fa-exclamation-circle me-2"></i>' + errorMessage +
+                            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                            '</div>'
+                        );
+                    },
+                    complete: function () {
+                        // 로딩 스피너 숨기기
+                        $('#loadingSpinner').hide();
+                    }
+                });
+            });
+
+            // 리뷰 폼 제출 처리
+            $('#reviewForm').on('submit', function (e) {
+                e.preventDefault(); // 기본 폼 제출 방지
+
+                var formData = new FormData(this);
+
+                // 리뷰 제출 결과 메시지 초기화
+                $('#reviewResult').html('');
+                var storeId = '[[${storeId}]]';
+                $.ajax({
+                    url: [[@{/reviews/write(storeId = ${storeId})}]],
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        if (response.redirect) {
+                            window.location.href = response.redirect;
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        var errorMessage = '오류가 발생했습니다.';
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+                        $('#reviewResult').html(
+                            '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+                            '<i class="fas fa-exclamation-circle me-2"></i>' + errorMessage +
                             '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
                             '</div>'
                         );
                     }
-                },
-                error: function (xhr, status, error) {
-                    var errorMessage = '오류가 발생했습니다.';
-                    if (xhr.responseJSON && xhr.responseJSON.message) {
-                        errorMessage = xhr.responseJSON.message;
+                });
+            });
+
+            // 파일 선택 시 미리보기 (옵션)
+            $('#ajaxReceiptFile').change(function () {
+                var input = this;
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        // 미리보기 기능을 추가하고 싶다면 아래에 구현
+                        // 예시:
+                        // $('#receiptPreview').attr('src', e.target.result).show();
                     }
-                    $('#uploadResult').html(
-                        '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
-                        '<i class="fas fa-exclamation-circle me-2"></i>' + errorMessage +
-                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
-                        '</div>'
-                    );
-                },
-                complete: function () {
-                    // 로딩 스피너 숨기기
-                    $('#loadingSpinner').hide();
+                    reader.readAsDataURL(input.files[0]);
                 }
             });
+
         });
-
-        // 리뷰 폼 제출 처리
-        $('#reviewForm').on('submit', function (e) {
-            e.preventDefault(); // 기본 폼 제출 방지
-
-            var formData = new FormData(this);
-
-            // 리뷰 제출 결과 메시지 초기화
-            $('#reviewResult').html('');
-            var storeId = '[[${storeId}]]';
-            $.ajax({
-                url: `[[@{/reviews/write(storeId = ${storeId})}]]`,
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    if (response.redirect) {
-                        window.location.href = response.redirect;
-                    }
-                },
-                error: function (xhr, status, error) {
-                    var errorMessage = '오류가 발생했습니다.';
-                    if (xhr.responseJSON && xhr.responseJSON.message) {
-                        errorMessage = xhr.responseJSON.message;
-                    }
-                    $('#reviewResult').html(
-                        '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
-                        '<i class="fas fa-exclamation-circle me-2"></i>' + errorMessage +
-                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
-                        '</div>'
-                    );
-                }
-            });
-        });
-
-        // 파일 선택 시 미리보기 (옵션)
-        $('#ajaxReceiptFile').change(function () {
-            var input = this;
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    // 미리보기 기능을 추가하고 싶다면 아래에 구현
-                    // 예시:
-                    // $('#receiptPreview').attr('src', e.target.result).show();
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        });
-
-    });
-</script>
+    </script>
+</th:block>
 </body>
 </html>
+
+
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>영수증 업로드 및 리뷰 작성</title>-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1">-->
+<!--    &lt;!&ndash; Font Awesome (아이콘 추가를 원할 경우) &ndash;&gt;-->
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">-->
+<!--    &lt;!&ndash; jQuery &ndash;&gt;-->
+<!--    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
+<!--    &lt;!&ndash; Bootstrap CSS &ndash;&gt;-->
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">-->
+<!--    &lt;!&ndash; Bootstrap Icons &ndash;&gt;-->
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">-->
+
+<!--    <style>-->
+<!--        body {-->
+<!--            padding-top: 70px; /* 네비게이션 바 공간 확보 */-->
+<!--        }-->
+
+<!--        .spinner-border {-->
+<!--            width: 3rem;-->
+<!--            height: 3rem;-->
+<!--        }-->
+
+<!--        #receiptInfo {-->
+<!--            display: none; /* 초기에는 숨김 */-->
+<!--        }-->
+
+<!--        .star-rating i {-->
+<!--            font-size: 2rem; /* 별 크기 조절 */-->
+<!--            color: #ccc; /* 기본 별 색 */-->
+<!--            cursor: pointer;-->
+<!--        }-->
+
+<!--        .star-rating i.selected {-->
+<!--            color: #ffc107; /* 선택된 별의 색상 */-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--&lt;!&ndash; 네비게이션 바 &ndash;&gt;-->
+<!--<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">-->
+<!--    <div class="container-fluid">-->
+<!--        <a class="navbar-brand" href="#">KimiNoMenu</a>-->
+<!--        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"-->
+<!--                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">-->
+<!--            <span class="navbar-toggler-icon"></span>-->
+<!--        </button>-->
+<!--        <div class="collapse navbar-collapse" id="navbarNav">-->
+<!--            <ul class="navbar-nav ms-auto">-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link active" aria-current="page" href="#">홈</a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link" href="#">리뷰 작성</a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link" href="#">마이 페이지</a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a class="nav-link" href="#"-->
+<!--                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">로그아웃</a>-->
+<!--                    <form id="logout-form" th:action="@{/logout}" method="post" style="display:none;">-->
+<!--                    </form>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</nav>-->
+
+<!--&lt;!&ndash; 메인 컨테이너 &ndash;&gt;-->
+<!--<div class="container">-->
+<!--    <h2 class="mt-4 mb-4 text-center">영수증 업로드 및 리뷰 작성</h2>-->
+
+<!--    &lt;!&ndash; 영수증 정보 표시 섹션 &ndash;&gt;-->
+<!--    <div id="receiptInfo" class="card mb-4">-->
+<!--        <div class="card-header bg-info text-white">-->
+<!--            <h5 class="mb-0"><i class="fas fa-receipt me-2"></i>영수증 정보</h5>-->
+<!--        </div>-->
+<!--        <div class="card-body">-->
+<!--            <p><strong>가게 이름:</strong> <span id="merchantName"></span></p>-->
+<!--            <p><strong>가게 주소:</strong> <span id="merchantAddress"></span></p>-->
+<!--            <p><strong>전화번호:</strong> <span id="merchantPhoneNumber"></span></p>-->
+<!--            <p><strong>거래 날짜:</strong> <span id="transactionDate"></span></p>-->
+<!--            <p><strong>총액:</strong> <span id="totalPrice"></span> 원</p>-->
+<!--            <h6>구매 항목:</h6>-->
+<!--            <table class="table table-bordered">-->
+<!--                <thead>-->
+<!--                <tr>-->
+<!--                    <th>설명</th>-->
+<!--                    <th>수량</th>-->
+<!--                    <th>가격</th>-->
+<!--                    <th>총 가격</th>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <tbody id="itemsTableBody">-->
+<!--                &lt;!&ndash; 아이템 데이터가 여기에 추가됩니다 &ndash;&gt;-->
+<!--                </tbody>-->
+<!--            </table>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <div class="row">-->
+<!--        &lt;!&ndash; AJAX 업로드 폼 &ndash;&gt;-->
+<!--        <div class="col-md-6 mb-4">-->
+<!--            <div class="card shadow-sm">-->
+<!--                <div class="card-header bg-success text-white">-->
+<!--                    <h5 class="mb-0"><i class="fas fa-file-upload me-2"></i>AJAX로 업로드</h5>-->
+<!--                </div>-->
+<!--                <div class="card-body">-->
+<!--                    <form id="receiptUploadForm">-->
+
+<!--                        <div class="mb-3">-->
+<!--                            <label for="ajaxReceiptFile" class="form-label">영수증 파일 선택</label>-->
+<!--                            <input type="file" name="receiptFile" class="form-control" id="ajaxReceiptFile" required>-->
+<!--                            <div class="form-text">JPEG 또는 PNG 파일만 업로드 가능합니다.</div>-->
+<!--                        </div>-->
+<!--                        <button type="submit" class="btn btn-success w-100"><i class="fas fa-upload me-2"></i>AJAX로 업로드-->
+<!--                        </button>-->
+<!--                    </form>-->
+<!--                    &lt;!&ndash; 로딩 스피너 &ndash;&gt;-->
+<!--                    <div id="loadingSpinner" class="text-center my-3" style="display: none;">-->
+<!--                        <div class="spinner-border text-primary" role="status">-->
+<!--                            <span class="visually-hidden">Loading...</span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    &lt;!&ndash; 인증 완료 메시지 표시 영역 &ndash;&gt;-->
+<!--                    <div id="uploadResult" class="mt-3"></div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; 리뷰 작성 폼 &ndash;&gt;-->
+<!--        <div class="col-md-6 mb-4">-->
+<!--            <div class="card shadow-sm">-->
+<!--                <div class="card-header bg-primary text-white">-->
+<!--                    <h5 class="mb-0"><i class="fas fa-star me-2"></i>리뷰 작성</h5>-->
+<!--                </div>-->
+<!--                <div class="card-body">-->
+<!--                    <form id="reviewForm" enctype="multipart/form-data" method="post" th:action="@{/reviews/write}">-->
+<!--                        &lt;!&ndash; 숨겨진 storeId 필드 &ndash;&gt;-->
+<!--                        <input type="hidden" id="storeId" name="storeId"/>-->
+
+<!--                        <div class="mb-3">-->
+<!--                            <label for="rating" class="form-label">평점:</label>-->
+<!--                            <div id="starRating" class="star-rating">-->
+<!--                                <i class="fas fa-star" data-value="1"></i>-->
+<!--                                <i class="fas fa-star" data-value="2"></i>-->
+<!--                                <i class="fas fa-star" data-value="3"></i>-->
+<!--                                <i class="fas fa-star" data-value="4"></i>-->
+<!--                                <i class="fas fa-star" data-value="5"></i>-->
+<!--                            </div>-->
+<!--                            &lt;!&ndash; 실제로 제출되는 값은 숨김 input에서 관리 &ndash;&gt;-->
+<!--                            <input type="hidden" id="rating" name="rating" required>-->
+<!--                        </div>-->
+<!--                        <div class="mb-3">-->
+<!--                            <label for="comment" class="form-label">리뷰 내용:</label>-->
+<!--                            <textarea id="comment" name="comment" rows="4" required class="form-control"></textarea>-->
+<!--                        </div>-->
+<!--                        &lt;!&ndash; 사진 업로드 필드 추가 &ndash;&gt;-->
+<!--                        <div class="mb-3">-->
+<!--                            <label for="photos" class="form-label">사진 업로드:</label>-->
+<!--                            <input accept="image/*" id="photos" multiple name="photos" type="file" class="form-control">-->
+<!--                        </div>-->
+<!--                        <div class="mb-3">-->
+<!--                            <button type="submit" class="btn btn-primary w-100"><i class="fas fa-paper-plane me-2"></i>리뷰-->
+<!--                                제출-->
+<!--                            </button>-->
+<!--                        </div>-->
+<!--                    </form>-->
+<!--                    &lt;!&ndash; 리뷰 제출 결과 메시지 &ndash;&gt;-->
+<!--                    <div id="reviewResult" class="mt-3"></div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; Bootstrap JS Bundle (Popper 포함) &ndash;&gt;-->
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>-->
+<!--<script>-->
+<!--    $(document).ready(function () {-->
+<!--        // 별점 선택 기능-->
+<!--        $('#starRating i').on('click', function () {-->
+<!--            var value = $(this).data('value'); // 클릭한 별의 값 (1~5)-->
+
+<!--            // 모든 별에서 'selected' 클래스를 제거-->
+<!--            $('#starRating i').removeClass('selected');-->
+
+<!--            // 클릭한 별과 그 이전 별들에 'selected' 클래스 추가-->
+<!--            $('#starRating i').each(function (index, element) {-->
+<!--                if (index < value) {-->
+<!--                    $(element).addClass('selected');-->
+<!--                }-->
+<!--            });-->
+
+<!--            // 숨겨진 input에 선택한 값 저장-->
+<!--            $('#rating').val(value);-->
+<!--        });-->
+
+<!--        $('#receiptUploadForm').on('submit', function (e) {-->
+<!--            e.preventDefault(); // 기본 폼 제출 방지-->
+
+<!--            var formData = new FormData(this);-->
+
+<!--// 로딩 스피너 표시-->
+<!--            $('#loadingSpinner').show();-->
+<!--// 이전 메시지 초기화-->
+<!--            $('#uploadResult').html('');-->
+<!--// 리뷰 폼 초기화-->
+<!--            $('#reviewForm')[0].reset();-->
+<!--            $('#storeId').val('');-->
+<!--            $('#reviewForm').hide(); // 리뷰 폼 숨기기-->
+<!--// 영수증 정보 초기화-->
+<!--            $('#receiptInfo').hide();-->
+<!--            $('#merchantName').text('');-->
+<!--            $('#merchantAddress').text('');-->
+<!--            $('#merchantPhoneNumber').text('');-->
+<!--            $('#transactionDate').text('');-->
+<!--            $('#totalPrice').text('');-->
+<!--            $('#itemsTableBody').html('');-->
+
+<!--            $.ajax({-->
+<!--                url: '[[@{/receipts/uploadAjax}]]',-->
+<!--                type: 'POST',-->
+<!--                data: formData,-->
+<!--                contentType: false,-->
+<!--                processData: false,-->
+<!--                success: function (response) {-->
+<!--                    console.log(response);-->
+<!--                    if (response.success) {-->
+<!--                        $('#uploadResult').html(-->
+<!--                            '<div class="alert alert-success alert-dismissible fade show" role="alert">' +-->
+<!--                            '<i class="fas fa-check-circle me-2"></i>' + response.message +-->
+<!--                            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +-->
+<!--                            '</div>'-->
+<!--                        );-->
+
+<!--                        // 영수증 정보 표시-->
+<!--                        var receipt = response.receipt;-->
+<!--                        $('#merchantName').text(receipt.merchantName);-->
+<!--                        $('#merchantAddress').text(receipt.merchantAddress);-->
+<!--                        $('#merchantPhoneNumber').text(receipt.merchantPhoneNumber);-->
+
+<!--                        // 거래 날짜 포맷팅-->
+<!--                        if (Array.isArray(receipt.transactionDate)) {-->
+<!--                            var date = new Date(receipt.transactionDate[0], receipt.transactionDate[1] - 1, receipt.transactionDate[2],-->
+<!--                                receipt.transactionDate[3], receipt.transactionDate[4]);-->
+<!--                            var formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();-->
+<!--                            $('#transactionDate').text(formattedDate);-->
+<!--                        } else {-->
+<!--                            $('#transactionDate').text(receipt.transactionDate);-->
+<!--                        }-->
+
+<!--                        $('#totalPrice').text(receipt.totalPrice.toLocaleString());-->
+
+<!--                        // 아이템 테이블 채우기-->
+<!--                        var items = receipt.items;-->
+<!--                        var itemsHtml = '';-->
+<!--                        items.forEach(function (item) {-->
+<!--                            itemsHtml += '<tr>' +-->
+<!--                                '<td>' + item.description + '</td>' +-->
+<!--                                '<td>' + item.quantity + '</td>' +-->
+<!--                                '<td>' + item.price.toLocaleString() + '</td>' +-->
+<!--                                '<td>' + item.totalPrice.toLocaleString() + '</td>' +-->
+<!--                                '</tr>';-->
+<!--                        });-->
+<!--                        $('#itemsTableBody').html(itemsHtml);-->
+
+<!--                        $('#receiptInfo').show();-->
+
+<!--                        // 리뷰 폼 활성화 및 storeId 설정-->
+<!--                        $('#storeId').val(receipt.storeId); // receipt에서 storeId 가져오기-->
+<!--                        $('#reviewForm').show(); // 리뷰 폼 표시-->
+<!--                    } else {-->
+<!--                        $('#uploadResult').html(-->
+<!--                            '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +-->
+<!--                            '<i class="fas fa-exclamation-triangle me-2"></i>' + response.message +-->
+<!--                            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +-->
+<!--                            '</div>'-->
+<!--                        );-->
+<!--                    }-->
+<!--                },-->
+<!--                error: function (xhr, status, error) {-->
+<!--                    var errorMessage = '오류가 발생했습니다.';-->
+<!--                    if (xhr.responseJSON && xhr.responseJSON.message) {-->
+<!--                        errorMessage = xhr.responseJSON.message;-->
+<!--                    }-->
+<!--                    $('#uploadResult').html(-->
+<!--                        '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +-->
+<!--                        '<i class="fas fa-exclamation-circle me-2"></i>' + errorMessage +-->
+<!--                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +-->
+<!--                        '</div>'-->
+<!--                    );-->
+<!--                },-->
+<!--                complete: function () {-->
+<!--                    // 로딩 스피너 숨기기-->
+<!--                    $('#loadingSpinner').hide();-->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+
+<!--        // 리뷰 폼 제출 처리-->
+<!--        $('#reviewForm').on('submit', function (e) {-->
+<!--            e.preventDefault(); // 기본 폼 제출 방지-->
+
+<!--            var formData = new FormData(this);-->
+
+<!--            // 리뷰 제출 결과 메시지 초기화-->
+<!--            $('#reviewResult').html('');-->
+<!--            var storeId = '[[${storeId}]]';-->
+<!--            $.ajax({-->
+<!--                url: `[[@{/reviews/write(storeId = ${storeId})}]]`,-->
+<!--                type: 'POST',-->
+<!--                data: formData,-->
+<!--                contentType: false,-->
+<!--                processData: false,-->
+<!--                success: function (response) {-->
+<!--                    if (response.redirect) {-->
+<!--                        window.location.href = response.redirect;-->
+<!--                    }-->
+<!--                },-->
+<!--                error: function (xhr, status, error) {-->
+<!--                    var errorMessage = '오류가 발생했습니다.';-->
+<!--                    if (xhr.responseJSON && xhr.responseJSON.message) {-->
+<!--                        errorMessage = xhr.responseJSON.message;-->
+<!--                    }-->
+<!--                    $('#reviewResult').html(-->
+<!--                        '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +-->
+<!--                        '<i class="fas fa-exclamation-circle me-2"></i>' + errorMessage +-->
+<!--                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +-->
+<!--                        '</div>'-->
+<!--                    );-->
+<!--                }-->
+<!--            });-->
+<!--        });-->
+
+<!--        // 파일 선택 시 미리보기 (옵션)-->
+<!--        $('#ajaxReceiptFile').change(function () {-->
+<!--            var input = this;-->
+<!--            if (input.files && input.files[0]) {-->
+<!--                var reader = new FileReader();-->
+<!--                reader.onload = function (e) {-->
+<!--                    // 미리보기 기능을 추가하고 싶다면 아래에 구현-->
+<!--                    // 예시:-->
+<!--                    // $('#receiptPreview').attr('src', e.target.result).show();-->
+<!--                }-->
+<!--                reader.readAsDataURL(input.files[0]);-->
+<!--            }-->
+<!--        });-->
+
+<!--    });-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->

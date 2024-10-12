@@ -1,366 +1,793 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      layout:decorate="~{homeLayout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorate="~{homeLayout}">
+<th:block layout:fragment="links">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+</th:block>
+
 <style layout:fragment="styles">
-    /* 게임 시작 버튼 스타일 설정 */
-    #user-start-game {
-        display: inline-block; /* 요소를 인라인 블록으로 설정 */
-        width: 150px; /* 버튼 너비 */
-        height: 50px; /* 버튼 높이 */
-        font-size: 16px; /* 버튼 텍스트 크기 */
-        border: 2px solid #ccc; /* 회색 테두리 */
-        border-radius: 5px; /* 모서리를 둥글게 처리 */
-        background-color: #f9f9f9; /* 배경색 설정 */
-        cursor: pointer; /* 마우스 커서를 포인터로 변경 */
-        text-align: center; /* 텍스트를 중앙 정렬 */
-        /* line-height: 50px; 텍스트를 버튼 높이에 맞춰 세로 중앙 정렬 */
-        font-weight: bold; /* 텍스트를 굵게 설정 */
+    .mini-game-content {
+        position: relative;
+        width: 100%;
+        max-width: 1000px;
+        height: calc(1000px / 1.618);
+        /* 황금비율 적용 */
+        margin: 50px auto 0;
+        border: 5px solid rgba(255, 120, 120, 1);
+        /* 대표 컬러로 테두리 */
+        border-radius: 10px;
+
+        /* 이미지를 배경으로 처리 (정비율 유지) */
+        background-size: cover;
+        /* 너비 기준으로 맞추고 비율을 유지 */
+        background-position: center;
+        /* 중앙 정렬 */
+        background-repeat: no-repeat;
+        /* 이미지 반복 안 함 */
+    }
+
+    #menu-background {
+        background-image: url("/images/menulogo.png");
+        /* 기본 배경 이미지 */
+        background-size: contain;
+        /* 원본 비율 유지하면서 보여줌 */
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    /* 배경 이미지가 작은 경우에도 너비 기준으로 정비율 확대 */
+    .mini-game-content[data-image-url] {
+        background-image: url("");
+        /* 자바스크립트에서 동적으로 이미지 설정 */
+    }
+
+    /* 상단 오른쪽 위치 정보 */
+    .location-container {
+        position: absolute;
+        top: -40px;
+        /* 사진 바깥쪽 */
+        right: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background-color: transparent;
+        color: black;
+    }
+
+    span#current-address {
+        display: block;
+    }
+
+    /* 상단 왼쪽 [회원용] */
+    .member-label {
+        position: absolute;
+        top: -40px;
+        /* 사진 바깥쪽 */
+        left: 10px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: black;
+        background-color: transparent;
+    }
+
+    /* 메뉴 이름 (사진 안쪽 상단 오른쪽) */
+    .menu-name {
+        position: absolute;
+        top: 10px;
+        /* 사진 안쪽 */
+        right: 10px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white;
+        /* 사진 안쪽이므로 흰색 */
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        /* 가독성을 위한 텍스트 그림자 */
+    }
+
+    /* 버튼 컨테이너 (오른쪽 하단 사진 안쪽) */
+    .button-container {
+        position: absolute;
+        bottom: 20px;
+        /* 사진 안쪽 */
+        right: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    /* 체크박스 스타일 */
+    .fixed-rating {
+        margin-bottom: 10px;
+        font-size: 1rem;
+        color: white;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        /* 가독성을 위한 그림자 */
+    }
+
+    #user-start-game,
+    #start-game {
+        width: 150px;
+        height: 50px;
+        margin-bottom: 0px;
+        font-size: 16px;
+        border: 2px solid rgba(255, 120, 120, 1);
+        /* 대표 컬러로 테두리 */
+        border-radius: 5px;
+        background-color: rgba(255, 120, 120, 1);
+        /* 대표 컬러로 배경 */
+        color: white;
+        /* 버튼 텍스트를 흰색으로 */
+        cursor: pointer;
+        font-weight: bold;
     }
 
     /* "좋아요" 버튼 스타일 설정 */
     #user-like-button {
-        display: inline-block; /* 요소를 인라인 블록으로 설정 */
-        width: 150px; /* 버튼 너비를 "싫어요" 버튼과 동일하게 설정 */
-        height: 50px; /* 버튼 높이를 "싫어요" 버튼과 동일하게 설정 */
-        font-size: 16px; /* 버튼 텍스트 크기 */
-        border: 2px solid #ccc; /* 회색 테두리 */
-        border-radius: 5px; /* 모서리를 둥글게 처리 */
-        background-color: #f9f9f9; /* 배경색 설정 */
-        cursor: pointer; /* 마우스 커서를 포인터로 변경 */
-        position: relative; /* 자식 요소의 위치 설정을 위한 상대적 위치 지정 */
-        text-align: center; /* 텍스트를 중앙 정렬 */
-        line-height: 50px; /* 텍스트를 버튼 높이에 맞춰 세로 중앙 정렬 */
-        font-weight: bold; /* 텍스트를 굵게 설정 */
-        overflow: hidden; /* 자식 요소가 버튼을 넘어가지 않도록 숨김 */
+        display: inline-block;
+        /* 요소를 인라인 블록으로 설정 */
+        width: 150px;
+        /* 버튼 너비를 "싫어요" 버튼과 동일하게 설정 */
+        height: 50px;
+        /* 버튼 높이를 "싫어요" 버튼과 동일하게 설정 */
+        font-size: 16px;
+        /* 버튼 텍스트 크기 */
+        border: 2px solid rgba(255, 120, 120, 1);
+        /* 대표 컬러로 테두리 */
+        border-radius: 5px;
+        background-color: rgba(255, 120, 120, 1);
+        /* 대표 컬러로 배경 */
+        color: white;
+        /* 버튼 텍스트를 흰색으로 */
+        cursor: pointer;
+        /* 마우스 커서를 포인터로 변경 */
+        position: relative;
+        /* 자식 요소의 위치 설정을 위한 상대적 위치 지정 */
+        text-align: center;
+        /* 텍스트를 중앙 정렬 */
+        line-height: 50px;
+        /* 텍스트를 버튼 높이에 맞춰 세로 중앙 정렬 */
+        font-weight: bold;
+        /* 텍스트를 굵게 설정 */
+        overflow: hidden;
+        /* 자식 요소가 버튼을 넘어가지 않도록 숨김 */
     }
 
     /* "싫어요" 버튼 스타일 설정 (좋아요 버튼과 동일한 크기로 설정) */
     #user-dislike-button {
-        display: inline-block; /* 요소를 인라인 블록으로 설정 */
-        width: 150px; /* 버튼 너비 */
-        height: 50px; /* 버튼 높이 */
-        font-size: 16px; /* 버튼 텍스트 크기 */
-        border: 2px solid #ccc; /* 회색 테두리 */
-        border-radius: 5px; /* 모서리를 둥글게 처리 */
-        background-color: #f9f9f9; /* 배경색 설정 */
-        cursor: pointer; /* 마우스 커서를 포인터로 변경 */
-        text-align: center; /* 텍스트를 중앙 정렬 */
+        display: inline-block;
+        /* 요소를 인라인 블록으로 설정 */
+        width: 150px;
+        /* 버튼 너비 */
+        height: 50px;
+        /* 버튼 높이 */
+        font-size: 16px;
+        /* 버튼 텍스트 크기 */
+        border: 2px solid rgba(255, 120, 120, 1);
+        /* 대표 컬러로 테두리 */
+        border-radius: 5px;
+        background-color: rgba(255, 120, 120, 1);
+        /* 대표 컬러로 배경 */
+        color: white;
+        /* 버튼 텍스트를 흰색으로 */
+        cursor: pointer;
+        /* 마우스 커서를 포인터로 변경 */
+        text-align: center;
+        /* 텍스트를 중앙 정렬 */
         /* line-height: 50px; 텍스트를 버튼 높이에 맞춰 세로 중앙 정렬 */
-        font-weight: bold; /* 텍스트를 굵게 설정 */
+        font-weight: bold;
+        /* 텍스트를 굵게 설정 */
     }
 
     /* 별점 컨테이너 스타일 설정 (기본적으로 숨김 처리) */
     .stars {
-        position: absolute; /* 부모 요소를 기준으로 절대 위치 지정 */
-        top: 50%; /* 부모 요소의 세로 중앙에 위치 */
-        left: 50%; /* 부모 요소의 가로 중앙에 위치 */
-        transform: translate(-50%, -50%); /* 정확한 중앙 위치를 위해 변환 */
-        display: flex; /* 별들을 플렉스 컨테이너로 설정 */
-        justify-content: center; /* 별들을 가로 중앙 정렬 */
-        align-items: center; /* 별들을 세로 중앙 정렬 */
-        font-size: 24px; /* 별의 크기 */
-        width: auto; /* 별 컨테이너의 너비를 내용에 맞게 자동 설정 */
-        height: 24px; /* 별 컨테이너의 높이 */
-        display: none; /* 기본적으로 숨김 처리 */
+        position: absolute;
+        /* 부모 요소를 기준으로 절대 위치 지정 */
+        top: 50%;
+        /* 부모 요소의 세로 중앙에 위치 */
+        left: 50%;
+        /* 부모 요소의 가로 중앙에 위치 */
+        transform: translate(-50%, -50%);
+        /* 정확한 중앙 위치를 위해 변환 */
+        display: flex;
+        /* 별들을 플렉스 컨테이너로 설정 */
+        justify-content: center;
+        /* 별들을 가로 중앙 정렬 */
+        align-items: center;
+        /* 별들을 세로 중앙 정렬 */
+        font-size: 24px;
+        /* 별의 크기 */
+        width: auto;
+        /* 별 컨테이너의 너비를 내용에 맞게 자동 설정 */
+        height: 24px;
+        /* 별 컨테이너의 높이 */
+        display: none;
+        /* 기본적으로 숨김 처리 */
     }
 
     /* 기본 별 스타일 설정 */
     .star {
-        color: #ccc; /* 별의 기본 색상 (회색) */
-        cursor: pointer; /* 마우스 커서를 포인터로 변경 */
-        margin: 0; /* 별 사이의 기본 간격 제거 */
-        letter-spacing: -3px; /* 별들 사이의 간격 조정 */
+        color: #ccc;
+        /* 별의 기본 색상 (회색) */
+        cursor: pointer;
+        /* 마우스 커서를 포인터로 변경 */
+        margin: 0;
+        /* 별 사이의 기본 간격 제거 */
+        letter-spacing: -3px;
+        /* 별들 사이의 간격 조정 */
     }
 
     /* 노란색으로 채워지는 별 스타일 설정 */
     .star.fill {
-        color: #ffcc00; /* 채워진 별의 색상을 노란색으로 설정 */
+        color: #ffcc00;
+        /* 채워진 별의 색상을 노란색으로 설정 */
     }
 
     /* user-rating-controls 내 콘텐츠들을 중앙에 정렬 */
+    /* 세로로 정렬되게 하는 코드 추가 */
     #user-rating-controls {
-        display: flex; /* 컨트롤을 플렉스 박스로 설정 */
-        justify-content: left; /* 버튼들을 왼쪽 정렬 */
-        align-items: center; /* 버튼들을 세로 중앙 정렬 */
-        gap: 10px; /* 버튼들 사이의 간격 조절 */
-    }
-
-    /* 슬롯머신 css */
-    .slot-machine {
-        /* display: flex; */
+        display: flex;
+        /* 컨트롤을 플렉스 박스로 설정 */
         flex-direction: column;
+        /* 버튼들을 세로로 정렬 */
+        justify-content: left;
+        /* 버튼들을 왼쪽 정렬 */
         align-items: center;
+        /* 버튼들을 세로 중앙 정렬 */
+        gap: 10px;
+        /* 버튼들 사이의 간격 조절 */
     }
 
-    .reels {
-        display: flex;
-        /* justify-content: center; */
-        margin-bottom: 20px;
+    /* 추가된 슬릭 슬라이더 스타일 */
+    .menu-card {
+        transition: transform 0.3s;
+        margin: 0 10px;
     }
 
-    .reel {
-        width: 150px;
-        height: 80px;
-        overflow: hidden;
-        border: 2px solid white;
-        background-color: #444;
-        position: relative;
+    .menu-card:hover {
+        transform: translateY(-5px);
     }
 
-    .symbols {
-        display: flex;
-        flex-direction: column;
-        animation: none;
+    .menu-photo {
+        height: 200px;
+        object-fit: cover;
+        width: 100%;
+    }
+
+    .slick-prev:before,
+    .slick-next:before {
+        color: #000;
+    }
+
+    .ranking-icon {
         position: absolute;
-        top: 0;
-        transition: top 1s ease-out;
-    }
-
-    .symbol {
-        width: 150px;
-        height: 80px;
+        top: 10px;
+        left: 10px;
+        border-radius: 50%;
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 1.2rem;
-        background-color: #444;
+        font-weight: bold;
         color: white;
-        text-align: center;
+        z-index: 10;
     }
 
-    button {
-        padding: 10px 20px;
+    .ranking-icon.gold {
+        background-color: #ffd700;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+
+    .ranking-icon.silver {
+        background-color: #c0c0c0;
+        width: 35px;
+        height: 35px;
+        font-size: 1.1rem;
+    }
+
+    .ranking-icon.bronze {
+        background-color: #cd7f32;
+        width: 30px;
+        height: 30px;
         font-size: 1rem;
-        background-color: #61dafb;
-        border: none;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
     }
 
-    button:hover {
-        background-color: #21a1f1;
-    }
-
-    .result {
-        margin-top: 20px;
-        font-size: 1.5rem;
+    .ranking-icon.normal {
+        background-color: rgba(0, 0, 0, 0.5);
+        width: 25px;
+        height: 25px;
+        font-size: 0.9rem;
     }
 </style>
+
 <div layout:fragment="content">
-    <!-- 로그인한 사용자에게 환영 메시지 표시 -->
-    <h2 sec:authorize="isAuthenticated()" th:text="|${#authentication.principal.name}님 환영합니다|"></h2>
-
-    <!-- 로그인한 사용자의 프로필 사진을 표시 -->
-    <div sec:authorize="isAuthenticated()">
-        <img th:src="@{/images/avatar.jpg}" alt="프로필 사진" style="width: 100px; height: 100px; border-radius: 50%"/>
-    </div>
-
-    <!-- 로그인된 사용자용 메뉴 -->
-    <div sec:authorize="isAuthenticated()">
-        <p>
-            <a href="/friendships/list">친구</a> <span th:text="${friendCount}">0</span>
-            <!-- DB에 저장된 친구 수 표시 -->
-        </p>
-        <p>
-            <a href="/merchant/stores">사장님 가게 페이지</a>
-        </p>
-        <ul>
-            <li><a href="recommend/test">메뉴추천(테스트페이지)</a></li>
-            <li><a href="recommend/recommendUntriedFood">안먹어본 메뉴 추천</a></li>
-            <li><a href="recommend/recommendByMinigame">미니게임 결과에 따른 메뉴 추천</a></li>
-        </ul>
-
-        <ul>
-            <li><a href="/recommendations/map">추천 검색 페이지</a></li>
-        </ul>
-    </div>
-
-    <!-- 비회원용 메뉴 추천 섹션 -->
-    <div sec:authorize="not isAuthenticated()" id="menu-section">
-        <!-- 위치와 반경 선택 -->
-        <div id="location-section">
-            <h3>현재 위치</h3>
-            <p id="current-address">위치를 불러오는 중...</p>
-            <label for="radius-select">반경 선택:</label>
-            <select id="radius-select">
-                <option value="300">300m</option>
-                <option value="500" selected>500m</option>
-                <option value="1000">1000m</option>
-                <option value="2000">2000m</option>
-            </select>
-        </div>
-
-        <!-- 메뉴 추천 메시지 및 결과 표시 -->
-        <div id="selected-menu">
-            <h2 id="menu-header">메뉴 룰렛을 누르세요</h2>
-            <img id="menu-image" src="" alt="메뉴 이미지" style="display: none; width: 200px; height: 200px"/>
-        </div>
-
-        <!-- 게임 시작 버튼 -->
-        <div id="menu-controls">
-            <button id="start-game">게임 시작</button>
-        </div>
-    </div>
-
-    <!-- 회원용 메뉴 추천 섹션 -->
-    <div sec:authorize="isAuthenticated()" id="user-menu-section">
-        <h2>[ 회원용 ]</h2>
-
-        <!-- 위치와 반경 선택 -->
-        <div id="user-location-section">
-            <h3>현재 위치</h3>
-            <p id="user-current-address">위치를 불러오는 중...</p>
-            <label for="user-radius-select">반경 선택:</label>
-            <select id="user-radius-select">
-                <option value="300">300m</option>
-                <option value="500" selected>500m</option>
-                <option value="1000">1000m</option>
-                <option value="2000">2000m</option>
-            </select>
-        </div>
-
-        <!-- 메뉴 추천 메시지 및 결과 표시 -->
-        <div id="user-selected-menu">
-            <h2 id="user-menu-header">메뉴 룰렛을 누르세요</h2>
-            <img id="user-menu-image" src="" alt="메뉴 이미지" style="display: none; width: 200px; height: 200px"/>
-        </div>
-
-        <!-- 회원용 게임 시작 버튼 -->
-        <div id="user-menu-controls">
-            <button id="user-start-game">게임 시작</button>
-        </div>
-
-        <!-- 좋아요/싫어요 버튼 -->
-        <div id="user-rating-controls" style="display: none">
-            <!-- 3점 고정 체크박스 -->
-            <div>
-                <input type="checkbox" id="fixed-rating-checkbox"/> <label for="fixed-rating-checkbox">좋아요 3점 고정</label>
+    <!-- 미니게임 컨텐츠 전체를 감싸는 div -->
+    <div class="mini-game-content" id="menu-background">
+        <!-- 비회원용 메뉴 추천 섹션 -->
+        <div sec:authorize="not isAuthenticated()" id="menu-section">
+<!--            <div class="member-label">[비회원용]</div>-->
+            <!-- 위치와 반경 선택 -->
+            <div class="location-container" id="location-section">
+                <span id="current-address">위치를 불러오는 중...</span>
+                <label for="radius-select">/ 반경 선택:</label>
+                <select id="radius-select">
+                    <option value="300">300m</option>
+                    <option value="500" selected>500m</option>
+                    <option value="1000">1000m</option>
+                    <option value="2000">2000m</option>
+                </select>
             </div>
 
-            <!-- 좋아요 버튼과 별점 컨트롤 -->
-            <div id="user-like-button">
-                좋아요
-                <div class="stars">
-                    <span class="star" data-value="1">★</span>
-                    <span class="star" data-value="2">★</span>
-                    <span class="star" data-value="3">★</span>
-                    <span class="star" data-value="4">★</span>
-                    <span class="star" data-value="5">★</span>
+            <!-- 메뉴 추천 메시지 및 결과 표시 -->
+            <div id="selected-menu">
+
+                <h2 class="menu-name" id="guest-menu-header">메뉴 룰렛을 누르세요</h2>
+            </div>
+
+            <!-- 게임 시작 버튼 -->
+            <div class="button-container">
+                <div class="button" id="menu-controls">
+                    <button id="start-game">게임 시작</button>
                 </div>
             </div>
+        </div>
 
-            <!-- 싫어요 버튼 -->
-            <button id="user-dislike-button">싫어요</button>
+        <!-- 회원용 메뉴 추천 섹션 -->
+        <div sec:authorize="isAuthenticated()" id="user-menu-section">
+<!--            <div class="member-label">[회원용]</div>-->
+
+            <!-- 위치와 반경 선택 -->
+            <div class="location-container">
+                <span id="user-current-address">위치를 불러오는 중...</span>
+                <label for="user-radius-select">/ 반경 선택:</label>
+                <select id="user-radius-select">
+                    <option value="300">300m</option>
+                    <option value="500" selected>500m</option>
+                    <option value="1000">1000m</option>
+                    <option value="2000">2000m</option>
+                </select>
+            </div>
+
+            <!-- 메뉴 추천 메시지 및 결과 표시 -->
+            <div id="user-selected-menu">
+                <h2 class="menu-name" id="user-menu-header">메뉴 룰렛을 누르세요</h2>
+                <!--                <img id="user-menu-image" src="" alt="메뉴 이미지" />-->
+            </div>
+
+            <div class="button-container">
+                <!-- 회원용 게임 시작 버튼 -->
+                <div class="button" id="user-menu-controls">
+                    <button id="user-start-game">게임 시작</button>
+                </div>
+
+                <!-- 좋아요/싫어요 버튼 -->
+                <div id="user-rating-controls" style="display: none">
+                    <!-- 3점 고정 체크박스 -->
+                    <div class="fixed-rating">
+                        <input type="checkbox" id="fixed-rating-checkbox" />
+                        <label for="fixed-rating-checkbox">좋아요 3점 고정</label>
+                    </div>
+
+                    <!-- 좋아요 버튼과 별점 컨트롤 -->
+                    <div class="button" id="user-like-button">
+                        좋아요
+                        <div class="stars">
+                            <span class="star" data-value="1">★</span>
+                            <span class="star" data-value="2">★</span>
+                            <span class="star" data-value="3">★</span>
+                            <span class="star" data-value="4">★</span>
+                            <span class="star" data-value="5">★</span>
+                        </div>
+                    </div>
+
+                    <!-- 싫어요 버튼 -->
+                    <button class="button" id="user-dislike-button">싫어요</button>
+                </div>
+            </div>
+            <!-- 미니게임컨텐츠 -->
+        </div>
+    </div>
+    <!--  슬라이더 슬릭  -->
+    <div id="index-container" class="container mt-5">
+        <!-- 더 많은 메뉴를 보고 싶다면? 버튼을 절대 위치로 설정 -->
+        <h1 id="our-h1" class="mb-4" style="
+        margin-bottom: 10px;
+    ">추천 메뉴 목록</h1>
+        <p id="our-p"> 취향에 맞춰 순위별로 메뉴를 추천해드려요
+            🥇영광의 금메달은 어떤 메뉴인지 확인해보세요</p>
+        <a th:href="@{/recommendations/map}" class="btn btn-lg d-flex align-items-center top-0 end-0 m-3">
+            <i class="fas fa-arrow-right me-2"></i> 더 많은 메뉴를 보고 싶다면? <span id="our-span" style="
+            margin-left: 10px;
+            border-bottom: 1px solid;
+        ">여기를 클릭하세요</span>
+        </a>
+        <!-- 슬라이더와 버튼을 감싸는 상대 위치의 컨테이너 -->
+        <div class="menu-slider-container position-relative">
+            <!-- 슬릭 슬라이더 -->
+            <div class="menu-slider">
+                <!-- 메뉴 카드들이 여기에 동적으로 추가됩니다 -->
+            </div>
         </div>
     </div>
 </div>
 
-<script layout:fragment="scripts">
-    $(document).ready(function () {
-        // 현재 위치 불러오기
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition, showError);
-        } else {
-            $('#current-address').text("Geolocation is not supported by this browser.");
-            $('#user-current-address').text("Geolocation is not supported by this browser.");
-        }
+<!-- 전체컨텐츠 -->
 
-        function showPosition(position) {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
+<th:block layout:fragment="scripts">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 
-            // 네이버 지도 Geocoder 사용하여 주소 변환
-            const geocoder = new naver.maps.Geocoder();
+    <script th:inline="javascript">
+        $(document).ready(function () {
+            // 위치 관련 변수 선언
+            let latitude, longitude;
+            let userLatitude, userLongitude;
 
-            geocoder.coord2Address(lng, lat, function (status, response) {
-                if (status === naver.maps.Service.Status.OK) {
-                    const address = response.v2.address.jibunAddress || response.v2.address.roadAddress;  // 지번 주소나 도로명 주소 중 사용
-                    $('#current-address').text(address);
-                    $('#user-current-address').text(address);
+            // 페이지 로드 시 위치 정보 가져오기
+            getLocation();
+
+            // 사용자의 현재 위치를 가져오는 함수
+            function getLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        function (position) {
+                            latitude = position.coords.latitude;
+                            longitude = position.coords.longitude;
+                            // userLatitude = latitude;
+                            // userLongitude = longitude;
+                            userLongitude = 127.06033711446;
+                            userLatitude = 37.51148310935;
+                            longitude = 127.06033711446;
+                            latitude = 37.51148310935;
+                            getAddressFromCoords(latitude, longitude, "#current-address"); // 비회원용 주소 가져오기
+                            getAddressFromCoords(
+                                userLatitude,
+                                userLongitude,
+                                "#user-current-address"
+                            ); // 회원용 주소 가져오기
+                        },
+                        function () {
+                            alert("위치를 불러오는데 실패했습니다.");
+                        }
+                    );
                 } else {
-                    $('#current-address').text("주소를 불러올 수 없습니다.");
-                    $('#user-current-address').text("주소를 불러올 수 없습니다.");
+                    alert("Geolocation을 지원하지 않는 브라우저입니다.");
+                }
+            }
+
+            // 네이버 지도 API를 이용하여 좌표를 주소로 변환하는 함수
+            function getAddressFromCoords(lat, lng, addressElementId) {
+                const coords = new naver.maps.LatLng(lat, lng);
+                naver.maps.Service.reverseGeocode(
+                    {
+                        coords: coords,
+                    },
+                    function (status, response) {
+                        if (status !== naver.maps.Service.Status.OK) {
+                            return alert("주소를 가져오는데 실패했습니다.");
+                        }
+                        const result = response.v2;
+                        const address =
+                            result.address.jibunAddress || result.address.roadAddress;
+                        $(addressElementId).text(`현재 위치: ${address}`);
+                    }
+                );
+            }
+
+            // 비회원용 "게임 시작" 버튼 클릭 이벤트 처리
+            $("#start-game").click(function () {
+                $.post("/get-random-menu", {}, function (menu) {
+                    if (menu) {
+                        console.log("Menu received:", menu); // 메뉴 정보 로그로 출력
+                        $("#guest-menu-header").text(menu.name); // 선택된 메뉴의 이름을 화면에 표시
+                        // 이미지 URL이 존재하는 경우 배경 이미지로 설정
+                        if (menu.pictureUrl) {
+                            $("#menu-background").css(
+                                "background-image",
+                                `url(${menu.pictureUrl})`
+                            );
+                        } else {
+                            // 이미지가 없으면 배경 이미지 제거
+                            $("#menu-background").css("background-image", "none");
+                        }
+                        $("#start-game").text("다시 시작");
+                        // selected-menu를 보이도록 display 스타일 수정
+                        $("#selected-menu").css("display", "block");
+                    } else {
+                        alert("메뉴가 없습니다.");
+                    }
+                }).fail(function (xhr, status, error) {
+                    alert("메뉴를 가져오는 데 실패했습니다.");
+                    console.log(status, error);
+                });
+            });
+
+            // 회원용 "게임 시작" 버튼 클릭 이벤트 처리
+            $("#user-start-game").click(function () {
+                $("#user-start-game").hide(); // "게임 시작" 버튼 숨기기
+                $("#user-rating-controls").show(); // "좋아요/싫어요" 버튼 표시
+                startGame(); // 게임 시작 함수 호출
+            });
+
+            // "싫어요" 버튼을 클릭하면 0점을 주고 메뉴 평가
+            $("#user-dislike-button").click(function () {
+                rateMenu(window.menuId, 0.0); // 0점으로 메뉴 평가
+            });
+
+            // "좋아요" 버튼 관련 변수 초기화
+            const likeButton = document.getElementById("user-like-button"); // "좋아요" 버튼
+            const starsContainer = likeButton.querySelector(".stars"); // 별점 컨테이너
+            const stars = starsContainer.querySelectorAll(".star"); // 각 별 요소
+            const buttonText = likeButton.firstChild; // "좋아요" 버튼의 텍스트 노드
+            const fixedRatingCheckbox = document.getElementById(
+                "fixed-rating-checkbox"
+            ); // 3점 고정 체크박스
+
+            // "좋아요" 버튼 클릭 이벤트
+            likeButton.addEventListener("click", () => {
+                if (fixedRatingCheckbox.checked) {
+                    // 체크박스가 선택된 경우 3점으로 평가
+                    rateMenu(window.menuId, 3); // 3점으로 평가
+                } else {
+                    // 체크박스가 선택되지 않은 경우 기존 별점 기능을 활성화
+                    starsContainer.style.display = "flex"; // 별점 컨테이너 표시
+                    buttonText.textContent = ""; // "좋아요" 텍스트 숨김
                 }
             });
-        }
 
-        function showError(error) {
-            switch (error.code) {
-                case error.PERMISSION_DENIED:
-                    $('#current-address').text("사용자가 위치 정보 제공을 거부했습니다.");
-                    $('#user-current-address').text("사용자가 위치 정보 제공을 거부했습니다.");
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    $('#current-address').text("위치 정보를 사용할 수 없습니다.");
-                    $('#user-current-address').text("위치 정보를 사용할 수 없습니다.");
-                    break;
-                case error.TIMEOUT:
-                    $('#current-address').text("위치 정보를 가져오는 데 시간이 초과되었습니다.");
-                    $('#user-current-address').text("위치 정보를 가져오는 데 시간이 초과되었습니다.");
-                    break;
-                case error.UNKNOWN_ERROR:
-                    $('#current-address').text("알 수 없는 오류가 발생했습니다.");
-                    $('#user-current-address').text("알 수 없는 오류가 발생했습니다.");
-                    break;
-            }
-        }
-
-        // 게임 시작 버튼 클릭 이벤트
-        $('#start-game, #user-start-game').click(function () {
-            // 임의의 메뉴 추천 로직 (예시)
-            const menus = [
-                {name: "김치찌개", image: "/images/kimchi_jjigae.jpg"},
-                {name: "비빔밥", image: "/images/bibimbap.jpg"},
-                {name: "불고기", image: "/images/bulgogi.jpg"},
-                {name: "삼겹살", image: "/images/samgyeopsal.jpg"},
-                {name: "떡볶이", image: "/images/tteokbokki.jpg"}
-            ];
-
-            const randomMenu = menus[Math.floor(Math.random() * menus.length)];
-
-            if ($(this).attr('id') === 'start-game') {
-                $('#menu-header').text(randomMenu.name);
-                $('#menu-image').attr('src', randomMenu.image).show();
-            } else if ($(this).attr('id') === 'user-start-game') {
-                $('#user-menu-header').text(randomMenu.name);
-                $('#user-menu-image').attr('src', randomMenu.image).show();
-                $('#user-rating-controls').show();
-            }
-        });
-
-        // 별점 선택 이벤트
-        $('.star').click(function () {
-            const rating = $(this).data('value');
-            $('.star').each(function () {
-                if ($(this).data('value') <= rating) {
-                    $(this).addClass('selected');
-                } else {
-                    $(this).removeClass('selected');
+            // "좋아요" 버튼에 마우스를 올렸을 때 별점 컨테이너 표시 및 텍스트 지움
+            likeButton.addEventListener("mouseover", () => {
+                if (!fixedRatingCheckbox.checked) {
+                    starsContainer.style.display = "flex";
+                    buttonText.textContent = "";
                 }
             });
-        });
 
-        // 싫어요 버튼 클릭 이벤트
-        $('#user-dislike-button').click(function () {
-            alert("싫어요를 선택하셨습니다.");
-        });
+            // "좋아요" 버튼에서 마우스를 뗐을 때 별점 컨테이너 숨김 및 텍스트 복원
+            likeButton.addEventListener("mouseout", () => {
+                if (!fixedRatingCheckbox.checked) {
+                    starsContainer.style.display = "none";
+                    buttonText.textContent = "좋아요";
+                    resetStars();
+                }
+            });
 
-        // 좋아요 3점 고정 체크박스 이벤트
-        $('#fixed-rating-checkbox').change(function () {
-            if ($(this).is(':checked')) {
-                $('.star').removeClass('selected');
-                $('.star').each(function () {
-                    if ($(this).data('value') <= 3) {
-                        $(this).addClass('selected');
+            // 별점에 마우스를 올렸을 때 별 채우기
+            stars.forEach((star) => {
+                star.addEventListener("mouseover", function () {
+                    const value = parseInt(star.getAttribute("data-value"));
+                    fillStars(value);
+                });
+
+                // 별점 클릭 시 평가
+                star.addEventListener("click", function () {
+                    const value = parseInt(star.getAttribute("data-value"));
+
+                    rateMenu(window.menuId, value);
+                });
+            });
+
+            // 별점 채우는 함수
+            function fillStars(value) {
+                resetStars();
+                stars.forEach((star) => {
+                    const starValue = parseInt(star.getAttribute("data-value"));
+                    if (starValue <= value) {
+                        star.classList.add("fill");
                     }
                 });
-                $('.star').css('pointer-events', 'none'); // 더 이상 클릭 불가능하게 설정
+            }
+
+            // 별점 초기화 함수
+            function resetStars() {
+                stars.forEach((star) => {
+                    star.classList.remove("fill");
+                });
+            }
+
+            // 회원용 게임 시작 함수
+            function startGame() {
+                const radius = $("#user-radius-select").val(); // 회원용 반경 값 가져오기
+
+                if (!userLatitude || !userLongitude) {
+                    alert("위치 정보를 가져오지 못했습니다.");
+                    return;
+                }
+
+                $.post(
+                    "/get-random-menu",
+                    {
+                        latitude: userLatitude,
+                        longitude: userLongitude,
+                        radius: radius,
+                    },
+                    function (menu) {
+                        if (menu) {
+                            $("#user-menu-header").text(menu.name);
+                            window.menuId = menu.menuId;
+
+                            // 이미지 표시
+                            if (menu.pictureUrl) {
+                                $("#user-menu-image").attr("src", menu.pictureUrl).show();
+                            } else {
+                                $("#user-menu-image").hide();
+                            }
+                        } else {
+                            alert("반경 내에 더 이상 메뉴가 없습니다!");
+                            $("#user-rating-controls").hide();
+                        }
+                    }
+                ).fail(function () {
+                    alert("오류가 발생했습니다. 다시 시도해주세요.");
+                });
+            }
+
+            // 메뉴 평가 함수
+            function rateMenu(menuId, rating) {
+                const radius = $("#user-radius-select").val(); // 회원용 반경 값 가져오기
+
+                $.post(
+                    "/rate-menu",
+                    { menuId: menuId, rating: rating, radius: radius },
+                    function (menu) {
+                        if (menu) {
+                            $("#user-menu-header").text(menu.name);
+                            window.menuId = menu.menuId;
+
+                            // 이미지 표시
+                            if (menu.pictureUrl) {
+                                // 배경 이미지로 설정
+                                $("#menu-background").css(
+                                    "background-image",
+                                    `url(${menu.pictureUrl})`
+                                );
+                            } else {
+                                // 이미지가 없으면 배경 이미지 제거
+                                $("#menu-background").css("background-image", "none");
+                            }
+                        } else {
+                            alert("반경 내에 더 이상 메뉴가 없습니다!");
+                            $("#user-rating-controls").hide();
+                        }
+                    }
+                ).fail(function () {
+                    alert("오류가 발생했습니다. 다시 시도해주세요.");
+                });
+            }
+
+            // 추천 메뉴 슬라이더 관련 스크립트 추가
+            let allRecommendations = {};
+
+            function fetchRecommendations(latitude, longitude) {
+                if ($("#user-menu-section").length > 0) {
+                    $.ajax({
+                        url: "/recommendations/nearby-menus",
+                        type: "POST",
+                        data: {
+                            latitude: latitude,
+                            longitude: longitude,
+                            radius: 1000,
+                            limit: 50,
+                        },
+                        success: function (response) {
+                            console.log("Received response:", response);
+
+                            if (!response || !response.recommendedMenus) {
+                                console.error("Invalid response structure:", response);
+                                alert("잘못된 데이터가 반환되었습니다. 다시 시도해주세요.");
+                                return;
+                            }
+
+                            allRecommendations = response.recommendedMenus;
+                            displayRecommendations(allRecommendations);
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Error fetching recommendations:", error);
+                            alert(
+                                "추천 메뉴를 가져오는 데 실패했습니다. 다시 시도해주세요."
+                            );
+                        },
+                    });
+                }
+            }
+
+            function displayRecommendations(menus) {
+                const menuSlider = $(".menu-slider");
+                menuSlider.empty();
+
+                if (menus.length === 0) {
+                    menuSlider.append("<p>추천 메뉴가 없습니다.</p>");
+                    return;
+                }
+
+                menus.forEach((menu, index) => {
+                    let rankingClass = "normal";
+                    if (index === 0) rankingClass = "gold";
+                    else if (index === 1) rankingClass = "silver";
+                    else if (index === 2) rankingClass = "bronze";
+
+                    const menuCard = `
+                        <div>
+                            <div class="card menu-card">
+                                <div class="ranking-icon ${rankingClass}">${index + 1
+                        }</div>
+                                <img src="${menu.pictureUrl || "/images/default-menu.png"
+                        }" class="card-img-top menu-photo" alt="${menu.name
+                        }">
+                                <div class="card-body">
+                                    <h5 class="card-title">${menu.name}</h5>
+                                    <p class="card-text">가격: ${Number(
+                            menu.price
+                        ).toLocaleString()}원</p>
+                                    <p class="card-text">${formatCategories(
+                            menu.categories
+                        )}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    menuSlider.append(menuCard);
+                });
+
+                initSlick();
+            }
+
+            function initSlick() {
+                $(".menu-slider").slick({
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                    autoplay: true,
+                    autoplaySpeed: 3000,
+                    dots: true,
+                    arrows: true,
+                    responsive: [
+                        {
+                            breakpoint: 992,
+                            settings: {
+                                slidesToShow: 2,
+                            },
+                        },
+                        {
+                            breakpoint: 576,
+                            settings: {
+                                slidesToShow: 1,
+                            },
+                        },
+                    ],
+                });
+            }
+
+            function formatCategories(categories) {
+                if (!categories || !Array.isArray(categories)) return "";
+                return categories
+                    .map(
+                        (category) =>
+                            `<span class="badge bg-secondary badge-category">${category.categoryName}</span>`
+                    )
+                    .join(" ");
+            }
+
+            // 페이지 로드 시 추천 메뉴 가져오기
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function (position) {
+                        // const latitude = position.coords.latitude;
+                        // const longitude = position.coords.longitude;
+                        const latitude = 37.51148310935;
+                        const longitude = 127.06033711446;
+                        fetchRecommendations(latitude, longitude);
+                    },
+                    function () {
+                        alert("위치 정보를 가져올 수 없습니다.");
+                    }
+                );
             } else {
-                $('.star').css('pointer-events', 'auto');
+                alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
             }
         });
-    });
-</script>
+    </script>
+</th:block>
+
 </html>

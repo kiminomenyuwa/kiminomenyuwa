@@ -1,499 +1,837 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" layout:decorate="~{homeLayout}">
+
 <head>
     <meta charset="UTF-8">
-    <meta content="IE=edge" http-equiv="X-UA-Compatible">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>내 위치</title>
-    <!-- Slick Slider CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" rel="stylesheet" type="text/css"/>
-    <!-- Slick Slider Theme CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" rel="stylesheet"
-          type="text/css"/>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Naver Map API Script -->
-    <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=t06c4jgb48&submodules=geocoder"
-            type="text/javascript"></script>
-
-    <style>
-        body {
-            padding-top: 70px;
-        }
-
-        .store-photo, .menu-photo {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            font-weight: bold;
-        }
-
-        .badge-category {
-            margin-right: 5px;
-        }
-
-        /* Slick Slider 커스터마이징 */
-        .slick-slide {
-            padding: 0 10px;
-        }
-
-        .slick-prev:before, .slick-next:before {
-            color: #000;
-        }
-
-        /* 스위치 스타일 */
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-        }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 24px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 18px;
-            width: 18px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: #66bb6a;
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(26px);
-        }
-    </style>
-</head>
-<body>
-<div class="container mt-5">
-    <h1>내 위치</h1>
-    <div id="coordinates">Latitude: 37.5665, Longitude: 126.9780</div>
-    <div id="map" style="width: 100%; height: 500px;"></div>
-
-    <!-- 추천 메뉴 목록 -->
-    <h3>추천 메뉴 목록</h3>
-    <div class="menu-slider">
-        <!-- 메뉴 카드가 여기서 동적으로 추가됩니다 -->
-    </div>
-
-    <!-- 메뉴 슬라이더 네비게이션 버튼 -->
-    <div class="d-flex justify-content-center mt-3">
-        <button class="btn btn-secondary mr-2 slick-prev-menu">이전</button>
-        <button class="btn btn-secondary slick-next-menu">다음</button>
-    </div>
-
-    <!-- 탭 네비게이션 시작 -->
-    <ul class="nav nav-tabs mt-5" id="storeTabs" role="tablist">
-        <li class="nav-item">
-            <a class="nav-link active" id="nearby-stores-tab" data-toggle="tab" href="#nearby-stores" role="tab"
-               aria-controls="nearby-stores" aria-selected="true">주변 가게 목록</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" id="minigame-recommendations-tab" data-toggle="tab"
-               href="#minigame-recommendations-tab-content" role="tab"
-               aria-controls="minigame-recommendations-tab-content" aria-selected="false">미니게임 기반 추천 목록</a>
-        </li>
-    </ul>
-    <!-- 탭 네비게이션 끝 -->
-
-    <!-- 탭 콘텐츠 시작 -->
-    <div class="tab-content" id="storeTabsContent">
-        <!-- 주변 가게 목록 탭 -->
-        <div class="tab-pane fade show active" id="nearby-stores" role="tabpanel" aria-labelledby="nearby-stores-tab">
-            <h3 class="mt-3">주변 가게 목록</h3>
-            <div class="row" id="store-list">
-                <!-- 가게 카드가 여기서 동적으로 추가됩니다 -->
-            </div>
-        </div>
-
-        <!-- 미니게임 기반 추천 목록 탭 -->
-        <div class="tab-pane fade" id="minigame-recommendations-tab-content" role="tabpanel"
-             aria-labelledby="minigame-recommendations-tab">
-            <h3 class="mt-3">미니게임 기반 추천 목록</h3>
-            <div class="budget-switch mb-3">
-                <input type="checkbox" id="budget-toggle-minigame"/>
-                <label for="budget-toggle-minigame">예산 고려</label>
-            </div>
-            <div id="minigame-recommendations">
-                <!-- 미니게임 추천 메뉴 카드가 여기서 동적으로 추가됩니다 -->
-            </div>
-        </div>
-    </div>
-    <!-- 탭 콘텐츠 끝 -->
-</div>
-
-<!-- jQuery, Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<!-- Slick Slider JS -->
-<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        let map;
-        let userMarker;
-        let storeMarkers = [];
-
-        // 추천 이유에 따른 이모티콘 매핑
-        const recommendationEmojiMap = {
-            "사용자가 선호하는 카테고리": "❤",
-            "유사한 사용자들이 선호하는 음식": "👨‍👩‍👧‍👦",
-            "사용자가 선호하는 음식": "❤",
-        };
-
-        // Slick Slider 초기화 함수
-        function initializeSlickSliders() {
-            // 추천 메뉴 슬라이더 초기화
-            $('.menu-slider').slick({
-                slidesToShow: 3, // 한 번에 3개씩 표시
-                slidesToScroll: 3, // 슬라이드 시 3개씩 이동
-                infinite: false,
-                dots: true, // 페이지네이션 활성화
-                arrows: false,
-                speed: 500, // 슬라이드 전환 속도 (밀리초)
-                cssEase: 'ease-in-out', // 슬라이드 전환 애니메이션
-                responsive: [
-                    {
-                        breakpoint: 1200,
-                        settings: {
-                            slidesToShow: 3,
-                            slidesToScroll: 3
-                        }
-                    },
-                    {
-                        breakpoint: 992,
-                        settings: {
-                            slidesToShow: 2,
-                            slidesToScroll: 2
-                        }
-                    },
-                    {
-                        breakpoint: 576,
-                        settings: {
-                            slidesToShow: 1,
-                            slidesToScroll: 1
-                        }
-                    }
-                ]
-            });
-        }
-
-        // Slick Slider 네비게이션 버튼 설정
-        function setSlickNavigation() {
-            // 추천 메뉴 네비게이션
-            $('.slick-prev-menu').click(function () {
-                $('.menu-slider').slick('slickPrev');
-            });
-            $('.slick-next-menu').click(function () {
-                $('.menu-slider').slick('slickNext');
-            });
-        }
-
-        // 초기 Slick Slider 및 네비게이션 설정
-        initializeSlickSliders();
-        setSlickNavigation();
-
-        // 초기 페이지 설정
-        let menuCurrentPage = 0;
-        let menuPageSize = 3; // 한 슬라이드당 3개씩 표시
-
-        // Check if Geolocation is supported
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition, showError);
-        } else {
-            alert("Geolocation은 이 브라우저에서 지원되지 않습니다.");
-        }
-
-        // 스위치 상태 변경 이벤트 핸들러 추가
-        $('#budget-toggle-minigame').change(function () {
-            const isChecked = $(this).is(':checked');
-            console.log('Budget toggle switched:', isChecked); // 스위치 상태 확인
-
-            // 현재 지도 위치의 위도와 경도 가져오기
-            if (map) {
-                const latitude = map.getCenter().lat();
-                const longitude = map.getCenter().lng();
-                fetchMinigameRecommendations(latitude, longitude, isChecked);
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메뉴 추천</title>
+    <th:block layout:fragment="styles">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css"
+              href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+        <link rel="stylesheet" type="text/css"
+              href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <style>
+            body,
+            html {
+                height: 100%;
+                overflow: hidden;
             }
-        });
 
-        // Show current position on map
-        function showPosition(position) {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
-
-            // Initialize Naver Map
-            map = new naver.maps.Map('map', {
-                center: new naver.maps.LatLng(latitude, longitude),
-                zoom: 15
-            });
-
-            // Add current location marker
-            userMarker = new naver.maps.Marker({
-                position: new naver.maps.LatLng(latitude, longitude),
-                map: map,
-                title: "내 위치"
-            });
-
-            // Fetch recommended menus and nearby stores based on current location
-            const isBudgetMinigame = $('#budget-toggle-minigame').is(':checked'); // 스위치 상태 확인
-            console.log('Budget toggle status at initial fetch:', isBudgetMinigame);
-            fetchRecommendedMenus(latitude, longitude);
-            fetchMinigameRecommendations(latitude, longitude, isBudgetMinigame);
-
-            // Add listener for map center change
-            naver.maps.Event.addListener(map, 'dragend', function () {
-                const newCenter = map.getCenter();
-                let coordinatesDisplay = document.getElementById('coordinates');
-                coordinatesDisplay.textContent = `Latitude: ${newCenter.lat()}, Longitude: ${newCenter.lng()}`;
-
-                // Fetch menus and recommendations based on updated map location and switch state
-                const updatedIsBudgetMinigame = $('#budget-toggle-minigame').is(':checked');
-                console.log('Budget toggle status after map drag:', updatedIsBudgetMinigame);
-                fetchRecommendedMenus(newCenter.lat(), newCenter.lng());
-                fetchMinigameRecommendations(newCenter.lat(), newCenter.lng(), updatedIsBudgetMinigame);
-            });
-        }
-
-        // Error handler for Geolocation
-        function showError(error) {
-            switch (error.code) {
-                case error.PERMISSION_DENIED:
-                    alert("위치 정보를 허용하지 않았습니다.");
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    alert("위치 정보를 사용할 수 없습니다.");
-                    break;
-                case error.TIMEOUT:
-                    alert("위치 정보를 가져오는 시간이 초과되었습니다.");
-                    break;
-                case error.UNKNOWN_ERROR:
-                    alert("알 수 없는 오류가 발생했습니다.");
-                    break;
+            .content-wrapper {
+                display: flex;
+                height: 100vh;
             }
-        }
 
-        // Function to fetch recommended menus and nearby stores from server
-        function fetchRecommendedMenus(latitude, longitude) {
-            $.ajax({
-                url: '/recommendations/nearby-menus',
-                type: 'POST',
-                data: {
-                    latitude: latitude,
-                    longitude: longitude,
-                    radius: 1000, // Example radius
-                    limit: 10    // Number of recommendations to fetch
-                },
-                success: function (response) {
-                    displayRecommendedMenus(response.recommendedMenus);
-                    displayNearbyStores(response.nearbyStores);
-                },
-                error: function (xhr, status, error) {
-                    alert("추천 메뉴 및 가게를 가져오는 중 오류가 발생했습니다.");
+            .menu-container {
+                width: 50%;
+                overflow-y: auto;
+                padding: 20px;
+            }
+
+            .map-container {
+                width: 50%;
+                position: relative;
+            }
+
+
+            #map {
+                height: 100%;
+            }
+
+            .menu-photo {
+                width: 100%;
+                height: 200px;
+                object-fit: cover;
+            }
+
+            .recommendation-section {
+                margin-bottom: 30px;
+            }
+
+            .map-buttons {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                z-index: 1000;
+                background-color: rgba(255, 255, 255, 0.8);
+                padding: 10px;
+                border-radius: 5px;
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .map-buttons .btn {
+                margin-bottom: 5px;
+            }
+
+            .filter-bar {
+                background-color: #f8f9fa;
+                padding: 15px;
+                margin-bottom: 20px;
+                border-radius: 5px;
+            }
+
+            .card {
+                cursor: pointer;
+                transition: transform 0.3s;
+                position: relative;
+            }
+
+            .card:hover {
+                transform: translateY(-5px);
+            }
+
+            .card-body {
+                padding: 10px;
+            }
+
+            .card-title {
+                font-size: 1rem;
+                margin-bottom: 5px;
+            }
+
+            .card-text {
+                font-size: 0.8rem;
+                margin-bottom: 3px;
+            }
+
+            .badge-category {
+                font-size: 12px;
+                border: 1px solid #e9e9ec;
+                border-radius: 18px;
+                background: rgba(var(--bgSurface), 1);
+                line-height: 24px;
+                padding: 0 11px;
+            }
+
+            .slick-slide {
+                margin: 0 10px;
+            }
+
+            .slick-list {
+                margin: 0 -10px;
+            }
+
+            .ranking-icon {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-weight: bold;
+                color: white;
+                z-index: 10;
+            }
+
+            .ranking-icon.gold {
+                background-color: #FFD700;
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .ranking-icon.silver {
+                background-color: #C0C0C0;
+                width: 35px;
+                height: 35px;
+                font-size: 1.1rem;
+            }
+
+            .ranking-icon.bronze {
+                background-color: #CD7F32;
+                width: 30px;
+                height: 30px;
+                font-size: 1rem;
+            }
+
+            .ranking-icon.normal {
+                background-color: rgba(0, 0, 0, 0.5);
+                width: 25px;
+                height: 25px;
+                font-size: 0.9rem;
+            }
+
+            .highlighted-marker {
+                animation: pulse 1.5s infinite;
+            }
+
+            @keyframes pulse {
+                0% {
+                    transform: scale(1);
                 }
-            });
-        }
 
-        // Function to display recommended menus on the page
-        function displayRecommendedMenus(menus) {
-            const menuSlider = $('.menu-slider');
-            // 슬라이더가 이미 초기화되었는지 확인
-            if (menuSlider.hasClass('slick-initialized')) {
-                menuSlider.slick('unslick'); // 슬라이더 파괴
+                50% {
+                    transform: scale(1.3);
+                }
+
+                100% {
+                    transform: scale(1);
+                }
             }
 
-            menuSlider.empty(); // 기존 슬라이드 제거
-
-            if (menus.length === 0) {
-                menuSlider.append('<div><p class="text-muted">추천 메뉴가 없습니다.</p></div>');
-                return;
+            /* 로딩 스피너 스타일 */
+            .loading-spinner {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                z-index: 2000;
+                display: none;
             }
 
-            menus.forEach(function (menu) {
-                const menuCard = `
-                        <div>
-                            <div class="card h-100">
-                                <img src="${menu.pictureUrl || '/images/default-menu.png'}" class="card-img-top menu-photo" alt="${menu.name}">
-                                <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title">${menu.name}</h5>
-                                    <p class="card-text"><strong>가격:</strong> ${menu.price}원</p>
-                                    <p class="card-text"><strong>카테고리:</strong> ${formatCategories(menu.categories)}</p>
-                                    <p class="card-text"><em>${formatRecommendationReasons(menu.recommendationReasons)}</em></p> <!-- 추천 이유 표시 -->
-                                    <a href="/menu/${menu.menuId}" class="btn btn-primary mt-auto">자세히 보기</a>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                menuSlider.append(menuCard);
-            });
+            /* 가격 슬라이더 스타일링 */
+            .price-slider-container {
+                position: relative;
+                padding: 0 15px;
+            }
 
-            // 슬라이더 다시 초기화
-            initializeSlickSliders();
-            setSlickNavigation();
-        }
+            .price-slider-container::before,
+            .price-slider-container::after {
+                content: '0원';
+                position: absolute;
+                top: 0;
+                font-size: 0.9rem;
+                color: #6c757d;
+            }
 
-        function formatRecommendationReasons(reasons) {
-            if (!reasons || reasons.length === 0) return '';
-            return reasons.map(reason => {
-                const emoji = recommendationEmojiMap[reason] || ''; // 매핑된 이모티콘 또는 빈 문자열
-                return `${emoji} ${reason}`;
-            }).join(' & ');
-        }
+            .price-slider-container::before {
+                left: 0;
+            }
 
-        // Function to format categories into badges
-        function formatCategories(categories) {
-            if (!categories || categories.length === 0) return '없음';
-            return categories.map(category => `<span class="badge badge-secondary badge-category">${category.categoryName}</span>`).join(' ');
-        }
+            .price-slider-container::after {
+                right: 0;
+                content: '100,000원';
+            }
 
-        // Function to display nearby stores on the page and add markers to the map
-        function displayNearbyStores(stores) {
-            const storeList = $('#store-list');
-            storeList.empty(); // Clear previous stores
+            #price-range {
+                width: 100%;
+                margin: 15px 0;
+                -webkit-appearance: none;
+                height: 8px;
+                border-radius: 5px;
+                background: #d3d3d3;
+                outline: none;
+                opacity: 0.7;
+                -webkit-transition: .2s;
+                transition: opacity .2s;
+            }
 
-            // Remove existing markers from the map
-            storeMarkers.forEach(marker => marker.setMap(null));
-            storeMarkers = [];
+            #price-range:hover {
+                opacity: 1;
+            }
 
-            stores.forEach(function (store) {
-                const storeCard = `
-                    <div class="col-md-4 mb-4">
-                        <div class="card h-100">
-                            <img src="${store.photoUrls && store.photoUrls.length > 0 ? store.photoUrls[0] : '/images/default-store.png'}" class="card-img-top store-photo" alt="${store.name}">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">${store.name}</h5>
-                                <p class="card-text"><strong>카테고리:</strong> ${store.category}</p>
-                                <p class="card-text"><strong>전화번호:</strong> ${store.phoneNumber}</p>
-                                <a href="/stores/${store.storeId}" class="btn btn-primary mt-auto">가게 보기</a>
-                            </div>
+            #price-range::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                background: #0d6efd;
+                cursor: pointer;
+                border: none;
+                box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+                position: relative;
+            }
+
+            #price-range::-moz-range-thumb {
+                width: 20px;
+                height: 20px;
+                border-radius: 50%;
+                background: #0d6efd;
+                cursor: pointer;
+                border: none;
+                box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+            }
+
+            /* 현재 선택된 가격 표시 */
+            #price-display {
+                display: block;
+                text-align: center;
+                font-weight: bold;
+                margin-top: -10px;
+                color: #0d6efd;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+<th:block layout:fragment="content">
+    <div class="content-wrapper">
+        <!-- 메뉴 리스트 및 필터 영역 -->
+        <div class="menu-container">
+            <h1 class="mt-4 mb-4">메뉴 추천</h1>
+
+            <!-- 필터링 및 카테고리 선택 바 -->
+            <div class="filter-bar">
+                <div class="row">
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <label for="category-filter" class="form-label">카테고리</label>
+                        <select id="category-filter" class="form-select">
+                            <option value="">모든 카테고리</option>
+                            <!-- 카테고리 옵션을 여기에 동적으로 추가 -->
+                            <option value="한식">한식</option>
+                            <option value="중식">중식</option>
+                            <option value="일식">일식</option>
+                            <option value="양식">양식</option>
+                            <option value="분식">분식</option>
+                            <!-- 필요에 따라 추가 -->
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <label for="price-range" class="form-label">가격 범위</label>
+                        <div class="price-slider-container">
+                            <input type="range" class="form-range" id="price-range" min="0" max="50000" step="1000"
+                                value="15000">
+                            <span id="price-display">15,000원</span>
                         </div>
                     </div>
-                `;
-                storeList.append(storeCard);
+                    <div class="col-md-2 d-flex flex-column align-items-stretch">
+                        <button id="apply-filters" class="btn btn-primary w-100 mb-2">필터 적용</button>
+                        <button id="reset-filters" class="btn btn-secondary w-100">필터 초기화</button>
+                    </div>
+                </div>
+            </div>
 
-                // Add marker for each store
-                const storeMarker = new naver.maps.Marker({
+            <!-- 메뉴 추천 영역 -->
+            <div class="recommendation-section">
+                <h3>추천 메뉴</h3>
+                <div class="menu-slider" id="hybrid-recommendations"></div>
+            </div>
+
+            <div class="recommendation-section">
+                <h3>카테고리 기반 추천</h3>
+                <div class="menu-slider" id="category-recommendations"></div>
+            </div>
+
+            <div class="recommendation-section">
+                <h3>연령대 기반 추천</h3>
+                <div class="menu-slider" id="age-recommendations"></div>
+            </div>
+
+            <div class="recommendation-section">
+                <h3>미니게임 기반 추천</h3>
+                <div class="menu-slider" id="minigame-recommendations"></div>
+            </div>
+        </div>
+
+        <!-- 지도 영역 -->
+        <div class="map-container">
+            <div id="map"></div>
+            <div class="map-buttons">
+                <button class="btn btn-primary btn-sm show-on-map active" data-recommendation-type="hybrid">
+                    일반 추천
+                </button>
+                <button class="btn btn-primary btn-sm show-on-map" data-recommendation-type="category">
+                    카테고리 기반
+                </button>
+                <button class="btn btn-primary btn-sm show-on-map" data-recommendation-type="age">
+                    연령대 기반
+                </button>
+                <button class="btn btn-primary btn-sm show-on-map" data-recommendation-type="minigame">
+                    미니게임 기반
+                </button>
+                <!-- 추천 받기 버튼 추가 -->
+                <button class="btn btn-success btn-sm get-recommendations" title="추천 받기">
+                    <i class="fas fa-sync-alt"></i> 추천 받기
+                </button>
+            </div>
+            <!-- 로딩 스피너 추가 -->
+            <div class="loading-spinner">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="scripts">
+    <!-- 필요한 스크립트 라이브러리 로드 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=t06c4jgb48&submodules=geocoder"></script>
+    <script>
+        $(document).ready(function () {
+            let map;
+            let markers = {};
+            let allRecommendations = {};
+            let allStores = {};
+            let highlightedMarker = null;
+            let currentInfoWindow = null;
+            let isFetching = false; // 중복 요청 방지
+
+            // 지도 초기화
+            function initMap() {
+                map = new naver.maps.Map('map', {
+                    center: new naver.maps.LatLng(37.5665, 126.9780),
+                    zoom: 15
+                });
+
+                // 지도 클릭 시 모든 인포윈도우 닫기
+                naver.maps.Event.addListener(map, 'click', function () {
+                    closeAllInfoWindows();
+                });
+            }
+
+            // 모든 인포윈도우 닫기 함수
+            function closeAllInfoWindows() {
+                if (currentInfoWindow) {
+                    currentInfoWindow.close();
+                    currentInfoWindow = null;
+                }
+            }
+
+            // 현재 위치 기반 추천 메뉴 가져오기
+            function fetchRecommendations(latitude, longitude) {
+                // 로딩 스피너 보이기
+                $('.loading-spinner').show();
+                isFetching = true;
+
+                $.ajax({
+                    url: '/recommendations/nearby-menus',
+                    type: 'POST',
+                    data: {
+                        latitude: latitude,
+                        longitude: longitude,
+                        radius: 1000,
+                        limit: 50 // 클라이언트 측에서 필터링할 수 있도록 더 많은 데이터를 가져옵니다.
+                    },
+                    success: function (response) {
+                        console.log("Received response:", response);
+
+                        // 응답 데이터 유효성 검증
+                        if (!response || !response.recommendedMenus || !response.nearbyStores) {
+                            console.error("Invalid response structure:", response);
+                            alert("잘못된 데이터가 반환되었습니다. 다시 시도해주세요.");
+                            $('.loading-spinner').hide();
+                            isFetching = false;
+                            return;
+                        }
+
+                        allRecommendations = {
+                            hybrid: response.recommendedMenus,
+                            category: response.recommendedByCategoryScores,
+                            age: response.recommendedByUserAgeGroup,
+                            minigame: response.recommendedByMinigameScores
+                        };
+
+                        // 모든 가게 정보를 업데이트
+                        response.nearbyStores.forEach(store => {
+                            allStores[store.storeId] = store;
+                        });
+
+                        console.log("Updated allStores:", allStores);
+
+                        // 필터를 적용하여 메뉴를 필터링하고 슬라이더를 업데이트합니다.
+                        applyFilters();
+
+                        // 지도에 마커 표시 (초기 로딩 시 기본 추천 유형)
+                        showRecommendationsOnMap('hybrid');
+
+                        // 결과가 없을 경우 사용자에게 알림
+                        // if (response.recommendedMenus.length === 0) {
+                        //     alert("추천 메뉴가 없습니다.");
+                        // }
+
+                        // 로딩 스피너 숨기기
+                        $('.loading-spinner').hide();
+                        isFetching = false; // 요청 완료
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error fetching recommendations:", error);
+                        // 로딩 스피너 숨기기
+                        $('.loading-spinner').hide();
+                        isFetching = false; // 요청 완료
+                        // alert("추천 메뉴를 가져오는 데 실패했습니다. 다시 시도해주세요.");
+                    }
+                });
+            }
+
+            // 필터를 적용하여 추천 메뉴를 필터링하고 슬라이더를 업데이트하는 함수
+            function applyFilters() {
+                const category = $('#category-filter').val();
+                const maxPrice = Number($('#price-range').val());
+
+                // 각 추천 유형에 대해 필터링된 메뉴를 생성
+                const filteredRecommendations = {
+                    hybrid: filterMenus(allRecommendations.hybrid, category, maxPrice),
+                    category: filterMenus(allRecommendations.category, category, maxPrice),
+                    age: filterMenus(allRecommendations.age, category, maxPrice),
+                    minigame: filterMenus(allRecommendations.minigame, category, maxPrice)
+                };
+
+                // 추천 메뉴 슬라이더 업데이트
+                displayRecommendations('hybrid', filteredRecommendations.hybrid);
+                displayRecommendations('category', filteredRecommendations.category);
+                displayRecommendations('age', filteredRecommendations.age);
+                displayRecommendations('minigame', filteredRecommendations.minigame);
+
+                // 지도에 마커 업데이트
+                const activeType = $('.show-on-map.active').data('recommendation-type');
+                showRecommendationsOnMap(activeType);
+            }
+
+            // 메뉴를 카테고리와 가격으로 필터링하는 함수
+            function filterMenus(menus, category, maxPrice) {
+                return menus.filter(menu => {
+                    const matchesCategory = category === '' || (menu.categories && menu.categories.some(cat => cat.categoryName === category));
+                    const matchesPrice = Number(menu.price) <= maxPrice;
+                    return matchesCategory && matchesPrice;
+                });
+            }
+
+            // 추천 메뉴 슬라이더 표시 함수
+            function displayRecommendations(type, menus) {
+                displayMenuSlider(`${type}-recommendations`, menus);
+            }
+
+            // 메뉴 슬라이더 생성 함수
+            function displayMenuSlider(containerId, menus) {
+                const container = $(`#${containerId}`);
+
+                // 슬라이더가 이미 초기화되어 있다면 파괴(unslick)
+                if (container.hasClass('slick-initialized')) {
+                    container.slick('unslick');
+                }
+
+                // 슬라이더 컨테이너 비우기
+                container.empty();
+
+                // 새로운 슬라이드 추가
+                if (menus.length === 0) {
+                    container.append('<p>해당 조건에 맞는 메뉴가 없습니다.</p>');
+                    return;
+                }
+
+                menus.forEach((menu, index) => {
+                    let rankingClass = 'normal';
+                    if (index === 0) rankingClass = 'gold';
+                    else if (index === 1) rankingClass = 'silver';
+                    else if (index === 2) rankingClass = 'bronze';
+
+                    const menuCard = `
+                <div class="card" data-menu-id="${menu.menuId}" data-store-id="${menu.storeId}">
+                    <div class="ranking-icon ${rankingClass}">${index + 1}</div>
+                    <img src="${menu.pictureUrl || '/images/default-menu.png'}" class="card-img-top menu-photo" alt="${menu.name}">
+                    <div class="card-body">
+                        <h5 class="card-title">${menu.name}</h5>
+                        <p class="card-text">가격: ${Number(menu.price).toLocaleString()}원</p>
+                        <p class="card-text">${formatCategories(menu.categories)}</p>
+                    </div>
+                </div>
+            `;
+                    container.append(menuCard);
+                });
+
+                // 슬라이더 초기화
+                container.slick({
+                    slidesToShow: 3,
+                    slidesToScroll: 1,
+                    autoplay: true,
+                    autoplaySpeed: 3000,
+                    dots: true,
+                    arrows: true,
+                    responsive: [
+                        {
+                            breakpoint: 768,
+                            settings: {
+                                slidesToShow: 2
+                            }
+                        },
+                        {
+                            breakpoint: 576,
+                            settings: {
+                                slidesToShow: 1
+                            }
+                        }
+                    ]
+                });
+
+                // 메뉴 카드 클릭 이벤트
+                container.off('click', '.card').on('click', '.card', function (e) {
+                    e.stopPropagation(); // 이벤트 버블링 방지
+                    const menuId = $(this).data('menu-id');
+                    const storeId = $(this).data('store-id');
+
+                    console.log(`Menu ID: ${menuId}, Store ID: ${storeId}`);
+
+                    // 로그를 통해 storeId가 제대로 전달되는지 확인
+                    if (!storeId) {
+                        console.warn(`Store ID is missing for Menu ID: ${menuId}`);
+                        alert(`해당 메뉴의 가게 정보가 누락되었습니다. 메뉴 ID: ${menuId}`);
+                        return;
+                    }
+
+                    highlightStoreOnMap(storeId);
+                });
+            }
+
+            // 카테고리 포맷팅 함수
+            function formatCategories(categories) {
+                if (!categories || !Array.isArray(categories)) return '';
+                return categories.map(category =>
+                    `<span class="badge bg-secondary badge-category">${category.categoryName}</span>`
+                ).join(' ');
+            }
+
+            // 특정 가게의 마커를 강조하고 지도 중심 이동
+            function highlightStoreOnMap(storeId) {
+                const store = allStores[storeId];
+                if (store) {
+                    // 이전에 강조된 마커가 있다면 원래 상태로 되돌림
+                    if (highlightedMarker) {
+                        highlightedMarker.setIcon(null);
+                        highlightedMarker.setZIndex(1);
+                        // 강조 애니메이션 제거
+                        highlightedMarker.getElement().classList.remove('highlighted-marker');
+                    }
+
+                    // 해당 가게의 마커를 찾아 강조
+                    let marker = markers[storeId];
+                    if (!marker) {
+                        console.warn(`Marker not found for Store ID: ${storeId}. Attempting to create marker.`);
+                        // 마커가 없으면 생성
+                        createMarkerForStore(storeId, store);
+                        marker = markers[storeId];
+                        if (!marker) {
+                            console.error(`Failed to create marker for Store ID: ${storeId}.`);
+                            alert(`해당 가게의 마커를 생성할 수 없습니다. Store ID: ${storeId}`);
+                            return;
+                        }
+                    }
+
+                    // 기존 아이콘 저장 (필요 시)
+                    const originalIcon = marker.getIcon();
+
+                    // 마커 아이콘 변경 (강조)
+                    marker.setIcon({
+                        url: 'https://navermaps.github.io/maps.js/docs/img/red_marker.png', // 강조할 마커 아이콘 URL
+                        size: new naver.maps.Size(40, 40),
+                        origin: new naver.maps.Point(0, 0),
+                        anchor: new naver.maps.Point(20, 40)
+                    });
+                    marker.setZIndex(100);
+                    // 강조 애니메이션 추가
+                    marker.getElement().classList.add('highlighted-marker');
+                    highlightedMarker = marker;
+
+                    // 지도 중심을 해당 마커로 이동
+                    map.setCenter(marker.getPosition());
+                    map.setZoom(17);  // 적절한 줌 레벨로 설정
+
+                    // 인포윈도우 열기
+                    if (marker.infoWindow) {
+                        marker.infoWindow.open(map, marker);
+                        currentInfoWindow = marker.infoWindow;
+                    }
+                } else {
+                    console.warn(`Store not found for Store ID: ${storeId}`);
+                    alert(`해당 Store ID에 대한 가게 정보를 찾을 수 없습니다. Store ID: ${storeId}`);
+                }
+            }
+
+            // 특정 가게의 마커를 생성하는 함수
+            function createMarkerForStore(storeId, store) {
+                if (!store) return;
+
+                const marker = new naver.maps.Marker({
                     position: new naver.maps.LatLng(store.latitude, store.longitude),
                     map: map,
                     title: store.name
                 });
 
-                storeMarkers.push(storeMarker);
-            });
-        }
+                const storeMenus = allRecommendations['hybrid'].filter(menu => menu.storeId === storeId);
+                const menuList = storeMenus.map(menu => `<li>${menu.name} - ${Number(menu.price).toLocaleString()}원</li>`).join('');
 
-        // 서버로부터 미니게임 기반 추천 메뉴 가져오기
-        function fetchMinigameRecommendations(latitude, longitude, budgetConsidered) {
-            if (budgetConsidered) {
-                // 예산을 고려한 미니게임 추천 메뉴 가져오기
-                $.ajax({
-                    url: '/recommendations/api/minigame/recommendations',
-                    type: 'GET',
-                    data: {
-                        latitude: latitude,
-                        longitude: longitude,
-                        budgetConsidered: true
-                    },
-                    success: function (data) {
-                        console.log('미니게임 추천 성공:', data); // 성공 시 데이터 확인
-                        if (data.budgetSet) {
-                            displayMinigameRecommendations(data.recommendedMenus);
-                        } else {
-                            alert(data.message);
-                            // 예산 스위치 해제
-                            $('#budget-toggle-minigame').prop('checked', false);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.log('미니게임 추천 실패:', error); // 실패 시 에러 확인
-                        alert("미니게임 기반 추천 메뉴를 가져오는 중 오류가 발생했습니다.");
+                const infoWindow = new naver.maps.InfoWindow({
+                    content: `
+                    <div class="info-window-content">
+                        <img src="${store.photoUrls[0] || '/images/default-store.png'}" alt="${store.name}" style="width:100%;max-height:150px;object-fit:cover;">
+                        <h5>${store.name}</h5>
+                        <p>카테고리: ${store.category}</p>
+                        <p>전화번호: ${store.phoneNumber}</p>
+                        <p>추천 메뉴:</p>
+                        <ul>${menuList}</ul>
+                        <a href="/stores/${store.storeId}" class="btn btn-primary btn-sm">가게 상세 보기</a>
+                    </div>
+                `
+                });
+
+                marker.infoWindow = infoWindow;
+
+                // 마커 클릭 이벤트
+                naver.maps.Event.addListener(marker, 'click', function () {
+                    if (currentInfoWindow && currentInfoWindow !== infoWindow) {
+                        currentInfoWindow.close();
                     }
+
+                    if (infoWindow.getMap()) {
+                        infoWindow.close();
+                        currentInfoWindow = null;
+                    } else {
+                        infoWindow.open(map, marker);
+                        currentInfoWindow = infoWindow;
+                    }
+                });
+
+                markers[storeId] = marker;
+
+                console.log(`Marker created for Store ID: ${storeId} via createMarkerForStore.`);
+            }
+
+            // 지도에 추천 메뉴 마커 표시 함수
+            function showRecommendationsOnMap(recommendationType) {
+                // 모든 마커 숨기기
+                Object.values(markers).forEach(marker => marker.setMap(null));
+
+                const menus = allRecommendations[recommendationType];
+                const storeIds = new Set(menus.map(menu => menu.storeId));
+
+                storeIds.forEach(storeId => {
+                    const store = allStores[storeId];
+                    if (store) {
+                        // 마커가 이미 생성되어 있다면 재사용
+                        if (markers[storeId]) {
+                            markers[storeId].setMap(map);
+                            return;
+                        }
+
+                        const marker = new naver.maps.Marker({
+                            position: new naver.maps.LatLng(store.latitude, store.longitude),
+                            map: map,
+                            title: store.name
+                        });
+
+                        const storeMenus = menus.filter(menu => menu.storeId === storeId);
+                        const menuList = storeMenus.map(menu => `<li>${menu.name} - ${Number(menu.price).toLocaleString()}원</li>`).join('');
+
+                        const infoWindow = new naver.maps.InfoWindow({
+                            content: `
+                            <div class="info-window-content">
+                                <img src="${store.photoUrls[0] || '/images/default-store.png'}" alt="${store.name}" style="width:100%;max-height:150px;object-fit:cover;">
+                                <h5>${store.name}</h5>
+                                <p>카테고리: ${store.category}</p>
+                                <p>전화번호: ${store.phoneNumber}</p>
+                                <p>추천 메뉴:</p>
+                                <ul>${menuList}</ul>
+                                <a href="/stores/${store.storeId}" class="btn btn-primary btn-sm">가게 상세 보기</a>
+                            </div>
+                        `
+                        });
+
+                        marker.infoWindow = infoWindow;
+
+                        // 마커 클릭 이벤트
+                        naver.maps.Event.addListener(marker, 'click', function () {
+                            if (currentInfoWindow && currentInfoWindow !== infoWindow) {
+                                currentInfoWindow.close();
+                            }
+
+                            if (infoWindow.getMap()) {
+                                infoWindow.close();
+                                currentInfoWindow = null;
+                            } else {
+                                infoWindow.open(map, marker);
+                                currentInfoWindow = infoWindow;
+                            }
+                        });
+
+                        markers[storeId] = marker;
+
+                        console.log(`Marker created for Store ID: ${storeId} via showRecommendationsOnMap.`);
+                    } else {
+                        console.warn(`Store not found for Store ID: ${storeId}`);
+                    }
+                });
+
+                // 지도에 마커가 있는 경우 경계 조정
+                if (storeIds.size > 0) {
+                    const bounds = new naver.maps.LatLngBounds();
+                    storeIds.forEach(storeId => {
+                        const store = allStores[storeId];
+                        if (store) {
+                            bounds.extend(new naver.maps.LatLng(store.latitude, store.longitude));
+                        }
+                    });
+                    map.fitBounds(bounds);
+                }
+            }
+
+            // 지도 초기화
+            initMap();
+
+            // 현재 위치 기반 추천 메뉴 가져오기 (초기 로딩)
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+
+                    map.setCenter(new naver.maps.LatLng(latitude, longitude));
+                    fetchRecommendations(latitude, longitude); // 모든 카테고리, 최대 가격 30,000원은 클라이언트 측 필터링
+                }, function () {
+                    alert("위치 정보를 가져올 수 없습니다.");
                 });
             } else {
-                // 예산을 고려하지 않은 미니게임 추천 메뉴 가져오기
-                $.ajax({
-                    url: '/recommendations/api/minigame/recommendations',
-                    type: 'GET',
-                    data: {
-                        latitude: latitude,
-                        longitude: longitude,
-                        budgetConsidered: false
-                    },
-                    success: function (data) {
-                        console.log('미니게임 추천 성공 (예산 미고려):', data); // 성공 시 데이터 확인
-                        displayMinigameRecommendations(data.recommendedMenus);
-                    },
-                    error: function (xhr, status, error) {
-                        console.log('미니게임 추천 실패 (예산 미고려):', error); // 실패 시 에러 확인
-                        alert("미니게임 기반 추천 메뉴를 가져오는 중 오류가 발생했습니다.");
-                    }
-                });
-            }
-        }
-
-        // 미니게임 기반 추천 메뉴를 페이지에 표시하는 함수
-        function displayMinigameRecommendations(menus) {
-            console.log('Displaying minigame recommendations:', menus);
-            const minigameRecommendations = $('#minigame-recommendations');
-            minigameRecommendations.empty(); // 이전 추천 목록 삭제
-
-            if (menus.length === 0) {
-                minigameRecommendations.append('<p class="text-muted">미니게임 기반 추천 메뉴가 없습니다.</p>');
-                return;
+                alert("이 브라우저에서는 위치 정보를 지원하지 않습니다.");
             }
 
-            let recommendedMenusHTML = `
-                <div class="row">
-            `;
-            menus.forEach(menu => {
-                recommendedMenusHTML += `
-                    <div class="col-md-4 mb-4">
-                        <div class="card h-100">
-                            <img src="${menu.pictureUrl || '/images/default-menu.png'}" class="card-img-top menu-photo" alt="${menu.name}">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">${menu.name}</h5>
-                                <p class="card-text"><strong>가격:</strong> ${menu.price}원</p>
-                                <p class="card-text"><strong>카테고리:</strong> ${formatCategories(menu.categories)}</p>
-                                <a href="/menu/${menu.menuId}" class="btn btn-primary mt-auto">자세히 보기</a>
-                            </div>
-                        </div>
-                    </div>
-                `;
+            // 필터 적용 버튼 클릭 이벤트
+            $('#apply-filters').click(function () {
+                applyFilters();
             });
-            recommendedMenusHTML += `
-                </div>
-            `;
-            minigameRecommendations.append(recommendedMenusHTML);
-        }
-    });
-</script>
+
+            // 필터 초기화 버튼 클릭 이벤트
+            $('#reset-filters').click(function () {
+                $('#category-filter').val('');
+                $('#price-range').val(15000); // 기본값을 15,000원으로 설정
+                $('#price-display').text('15,000원');
+
+                console.log(`Resetting filters - Category: All, Max Price: 15,000`);
+
+                applyFilters();
+            });
+
+            // 가격 범위 입력 시 표시 업데이트
+            $('#price-range').on('input', function () {
+                $('#price-display').text(Number($(this).val()).toLocaleString() + '원');
+            });
+
+            // 지도 추천 유형 버튼 클릭 이벤트
+            $('.show-on-map').click(function () {
+                $('.show-on-map').removeClass('active');
+                $(this).addClass('active');
+                const recommendationType = $(this).data('recommendation-type');
+                showRecommendationsOnMap(recommendationType);
+            });
+
+            // 추천 받기 버튼 클릭 이벤트
+            $('.get-recommendations').click(function () {
+                if (!isFetching) {
+                    const center = map.getCenter();
+                    const latitude = center.lat();
+                    const longitude = center.lng();
+                    fetchRecommendations(latitude, longitude);
+                }
+            });
+
+            // 문서 클릭 시 모든 인포윈도우 닫기
+            $(document).click(function (e) {
+                // 메뉴 카드나 지도를 제외한 곳을 클릭했을 때
+                if (!$(e.target).closest('.card').length && !$(e.target).closest('#map').length && !$(e.target).closest('.get-recommendations').length) {
+                    closeAllInfoWindows();
+                }
+            });
+        });
+    </script>
+</th:block>
 </body>
+
 </html>

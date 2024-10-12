@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{myPageLayout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{myPageLayout}">
 
 <th:block layout:fragment="styles">
     <meta charset="UTF-8">
@@ -9,20 +8,21 @@
 
     <!-- 필수 메타 태그 -->
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap" rel="stylesheet">
-
+    <!-- font -->
+    <link href="https://hangeul.pstatic.net/hangeul_static/css/nanum-square-neo.css" rel="stylesheet">
     <!-- FullCalendar CSS -->
-    <link rel='stylesheet' th:href="@{/fullcalendar/packages/core/main.css}"/>
-    <link rel='stylesheet' th:href="@{/fullcalendar/packages/daygrid/main.css}"/>
+    <link rel='stylesheet' th:href="@{/fullcalendar/packages/core/main.css}" />
+    <link rel='stylesheet' th:href="@{/fullcalendar/packages/daygrid/main.css}" />
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" th:href="@{/css/CalendarCss/bootstrap.min.css}">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" th:href="@{/css/CalendarCss/style.css}">
-    <link rel="stylesheet" th:href="@{/css/CalendarCss/header.css}">
+    <!-- 헤더 전용 CSS 파일 포함 -->
+    <link rel="stylesheet" th:href="@{/css/common/common.css}">
+    <link rel="stylesheet" th:href="@{/css/common/header.css}">
+    <link rel="stylesheet" th:href="@{/css/mypage/sidebar.css}">
 </th:block>
 
 <div layout:fragment="content">
@@ -31,7 +31,6 @@
         <section class="page-header">
             <h2>캘린더</h2>
         </section>
-
         <!-- Bootstrap 그리드 시스템을 사용하여 레이아웃 구성 -->
         <div class="row">
             <!-- 캘린더 섹션: 왼쪽 컬럼 (약 8칸) -->
@@ -327,7 +326,7 @@
                     $.ajax({
                         url: '/mypage/api/menus/store', // 절대 경로로 수정
                         method: 'GET',
-                        data: {storeName: storeName},
+                        data: { storeName: storeName },
                         success: function (menus) {
                             $('#menuContainer').show();
                             $('#menuList').empty();
@@ -411,5 +410,5 @@
     </script>
     </script>
 </div>
-</html>
 
+</html>

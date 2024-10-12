@@ -2,12 +2,12 @@ package com.scit45.kiminomenyuwa.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.scit45.kiminomenyuwa.domain.dto.CategoryCountDTO;
+import com.scit45.kiminomenyuwa.domain.dto.FoodCategoryDTO;
 import com.scit45.kiminomenyuwa.domain.dto.MenuDTO;
 import com.scit45.kiminomenyuwa.domain.dto.UserDiningHistoryDTO;
 import com.scit45.kiminomenyuwa.domain.entity.MenuEntity;
@@ -61,10 +61,8 @@ public class UserDiningHistoryService {
 	 * @param userId 로그인 중인 사용자의 id
 	 * @return 중복이 제거된 음식 내역의 menuId들
 	 */
-	public List<Long> getDistinctDiningHistory(String userId) {
-		List<Long> distinctDiningHistory = userDiningHistoryRepository.findDistinctMenuIdsByUserId(userId);
-
-		return distinctDiningHistory;
+	public List<Integer> getDistinctDiningHistory(String userId) {
+		return userDiningHistoryRepository.findDistinctMenuIdsByUserId(userId);
 	}
 
 	/**
@@ -72,28 +70,38 @@ public class UserDiningHistoryService {
 	 * @param userId 로그인 중인 사용자의 id
 	 * @return 사용자가 먹지 않은 메뉴 리스트
 	 */
-	public List<MenuDTO> getMenusNotTried(String userId) {
+	public List<MenuDTO> getMenusNotTried(String userId, List<MenuDTO> menus) {
 		// 사용자가 먹은 메뉴 ID 리스트를 가져오기
-		List<Long> eatenMenuIds = userDiningHistoryRepository.findDistinctMenuIdsByUserId(userId);
+		List<Integer> eatenMenuIds = userDiningHistoryRepository.findDistinctMenuIdsByUserId(userId);
 
 		// 사용자가 먹지 않은 메뉴들을 MenuRepository에서 가져오기
-		List<MenuEntity> availableMenus = menuRepository.findMenusNotInMenuIds(eatenMenuIds);
+		// -> 인근 가게들의 메뉴 목록에서 필터링 하도록 수정
+		// List<MenuEntity> availableMenus = menuRepository.findMenusNotInMenuIds(eatenMenuIds);
+		List<MenuDTO> availableMenus = menus.stream()
+			.filter(e -> !eatenMenuIds.contains(e.getMenuId()))
+			.toList();
 
 		// MenuEntity 리스트를 MenuDTO 리스트로 변환하여 반환
 		List<MenuDTO> menuDTOs = new ArrayList<>();
-		for (MenuEntity menuEntity : availableMenus) {
+		for (MenuDTO menu : availableMenus) {
 			// 각 메뉴에 해당하는 카테고리 리스트 가져오기
-			List<String> categories = menuCategoryMappingRepository.findCategoriesByMenuId(menuEntity.getMenuId());
+			List<FoodCategoryDTO> categories = menuCategoryMappingRepository.findCategoriesWithTypeByMenuId(
+					menu.getMenuId())
+				.stream().map(e -> FoodCategoryDTO.builder()
+					.categoryId(e.getFoodCategory().getCategoryId())
+					.typeId(e.getFoodCategory().getCategoryType().getTypeId())
+					.categoryName(e.getFoodCategory().getCategoryName())
+					.build()).toList();
 
 			// MenuDTO에 카테고리 리스트를 추가하여 생성
 			menuDTOs.add(MenuDTO.builder()
-				.menuId(menuEntity.getMenuId())
-				.storeId(menuEntity.getStore().getStoreId())
-				.name(menuEntity.getName())
-				.price(menuEntity.getPrice())
-				.pictureUrl(menuEntity.getPictureUrl())
-				.enabled(menuEntity.getEnabled())
-				// .categories(categories) // 카테고리 리스트 추가
+				.menuId(menu.getMenuId())
+				.storeId(menu.getStoreId())
+				.name(menu.getName())
+				.price(menu.getPrice())
+				.pictureUrl(menu.getPictureUrl())
+				.enabled(menu.getEnabled())
+				.categories(categories) // 카테고리 리스트 추가
 				.build());
 		}
 
@@ -122,11 +130,11 @@ public class UserDiningHistoryService {
 		UserEntity user = userRepository.findById(loggedInUserId)
 			.orElseThrow(() -> new EntityNotFoundException("해당 Id의 유져가 없습니다 : " + loggedInUserId));
 
-        UserDiningHistoryEntity userDiningHistory = UserDiningHistoryEntity.builder()
-            .user(user)
-            .menu(menu)
-            .diningDate(java.time.LocalDateTime.now())
-            .build();
-        userDiningHistoryRepository.save(userDiningHistory);
+		UserDiningHistoryEntity userDiningHistory = UserDiningHistoryEntity.builder()
+			.user(user)
+			.menu(menu)
+			.diningDate(java.time.LocalDateTime.now())
+			.build();
+		userDiningHistoryRepository.save(userDiningHistory);
 	}
 }

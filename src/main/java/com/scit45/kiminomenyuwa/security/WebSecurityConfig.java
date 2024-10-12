@@ -14,11 +14,19 @@ import org.springframework.security.web.SecurityFilterChain;
 public class WebSecurityConfig {
 	//로그인 없이 접근 가능 경로
 	private static final String[] PUBLIC_URLS = {
-		"/**"               //TODO 작업을 위해 HOME 화면 아래 모든 페이지 접근 허가 중
-		                    // 프로젝트 완성시 접근허가 경로 지정해야함
+		"/"               //TODO 작업을 위해 HOME 화면 아래 모든 페이지 접근 허가 중
+		// 프로젝트 완성시 접근허가 경로 지정해야함
+		, "/user/joinForm"
+		, "/user/idCheck"
 		, "/images/**"
+		, "/user/join"
 		, "/css/**"
 		, "/js/**"
+		, "/user/uploadProfile"
+		, "/files/**"
+		, "/user/**"
+		, "/get-random-menu"
+		, "/**"
 	};
 
 	@Bean
