@@ -1,8 +1,3 @@
-To help you structure and showcase your project more effectively, here’s an updated layout that includes placeholders for the menu structure and functionality demonstration GIFs. You can easily r
-eplace the placeholders with actual images and GIFs later.
-
----
-
 # 🎯 키미노메뉴와 (Kimi no Menu wa) 🍽️
 
 ![Project Banner](images/logo.png) <!-- 프로젝트 배너 이미지를 여기에 추가 -->
