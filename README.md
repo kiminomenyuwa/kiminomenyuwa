@@ -22,7 +22,7 @@
 
 | <center><img src="images/2.jpg" width="100px" height="100px"></center> | <center><img src="images/5.jpg" width="100px" height="100px"></center> | <center><img src="images/1.jpg" width="100px" height="100px"></center> | <center><img src="images/3.jpeg" width="100px" height="100px"></center> | <center><img src="images/4.jpg" width="100px" height="100px"></center> |
 |------------------------------------------------------------------------|------------------------------------------------------------------------|------------------------------------------------------------------------|-------------------------------------------------------------------------|------------------------------------------------------------------------|
-| <center>キム・シニル</center>                                              | <center>キム・ヒユン</center>                                              | <center>パク・ヒョンジ</center>                                              | <center>イ・ソリン</center>                                               | <center>チェ・ジェウォン</center>                                             |
+| <center>キム・シニル</center>                                              | <center>キム・ヒユン</center>                                              | <center>パク・ヒョンジ</center>                                              | <center>イ・ソルイン</center>                                               | <center>チェ・ジェウォン</center>                                             |
 
 ---
 
