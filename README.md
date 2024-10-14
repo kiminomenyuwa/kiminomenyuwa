@@ -1,11 +1,15 @@
+To help you structure and showcase your project more effectively, here’s an updated layout that includes placeholders for the menu structure and functionality demonstration GIFs. You can easily r
+eplace the placeholders with actual images and GIFs later.
+
+---
+
 # 🎯 키미노메뉴와 (Kimi no Menu wa) 🍽️
 
-![Project Banner](/images/logo.png) <!-- 프로젝트 배너 이미지를 여기에 추가 -->
+![Project Banner](images/logo.png) <!-- 프로젝트 배너 이미지를 여기에 추가 -->
 
 ## 📖 프로젝트 개요
 
-"키미노메뉴와"는 사용자 취향을 분석해 맞춤형 메뉴를 추천하는 서비스입니다. 사용자의 데이터에 기반하여 새로운 음식을 추천하고, 예산에 맞는 메뉴를 제안하며, 그룹 추천 기능도 제공하는 등 사용자의 식사 선택 고민을
-해결합니다.
+"키미노메뉴와"는 사용자 취향을 분석해 맞춤형 메뉴를 추천하는 서비스입니다. 사용자의 데이터에 기반하여 새로운 음식을 추천하고, 예산에 맞는 메뉴를 제안하며, 그룹 추천 기능도 제공하는 등 사용자의 식사 선택 고민을 해결합니다.
 
 ---
 
@@ -17,6 +21,34 @@
 - **📅 식사 내역 관리**: 사용자별 식사 내역을 기록하고 관리할 수 있는 캘린더 기능
 - **✍ 리뷰 작성 및 별점 부여**: 영수증 인증을 통해 자동으로 유저 데이터 업데이트 및 추천의 정확도 향상
 - **🛠 사장님 가게 관리**: 가게 정보 등록 및 할인 메뉴 추가 기능 제공
+
+---
+
+## 🗂 메뉴 구조도
+
+### **메인 메뉴 화면**
+![메뉴 구조도](images/menu-structure.png) <!-- 메뉴 구조도 이미지 추가 -->
+
+이 화면에서는 사용자가 개인 선호 메뉴, 그룹 추천, 예산 기반 추천을 볼 수 있으며, 메뉴 탐색 및 리뷰 기능으로 쉽게 이동할 수 있습니다.
+
+---
+
+## 🎥 기능별 시연 (GIF)
+
+### **맞춤형 메뉴 추천**
+![맞춤형 메뉴 추천 시연](gifs/menu-recommendation.gif) <!-- 맞춤형 메뉴 추천 기능 시연 GIF 추가 -->
+
+### **그룹 추천**
+![그룹 추천 시연](gifs/group-recommendation.gif) <!-- 그룹 추천 기능 시연 GIF 추가 -->
+
+### **예산 기반 메뉴 추천**
+![예산 기반 메뉴 추천 시연](gifs/budget-recommendation.gif) <!-- 예산 기반 메뉴 추천 기능 시연 GIF 추가 -->
+
+### **식사 내역 관리**
+![식사 내역 관리 시연](gifs/meal-history.gif) <!-- 식사 내역 관리 기능 시연 GIF 추가 -->
+
+### **리뷰 작성 및 별점 부여**
+![리뷰 작성 및 별점 부여 시연](gifs/review-and-rating.gif) <!-- 리뷰 작성 및 별점 부여 시연 GIF 추가 -->
 
 ---
 
@@ -54,7 +86,7 @@
 
 ## 📊 데이터베이스 구조 (ERD)
 
-![ERD Diagram](/images/erd.png) <!-- ERD 다이어그램 이미지 추가 -->
+![ERD Diagram](images/erd.png) <!-- ERD 다이어그램 이미지 추가 -->
 
 - **User (사용자)**: 사용자 정보를 저장하는 테이블
 - **Menu (메뉴)**: 음식 메뉴 데이터를 저장하는 테이블
