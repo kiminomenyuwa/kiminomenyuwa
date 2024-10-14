@@ -85,7 +85,3 @@
 - **Friendships (友達)**: ユーザーが管理する友達リストを保存
 - **Review (レビュー)**: ユーザーが作成した食品レビューと星評価を保存
 - **Store (店舗)**: 店舗情報を保存するテーブル
-
----
-
-This translation should work well for your README in Japanese while keeping all the links and image paths the same!
