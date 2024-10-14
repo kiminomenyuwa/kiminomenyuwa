@@ -19,6 +19,14 @@
 
 ---
 
+## 👥 팀원 소개
+
+| <center><img src="images/2.jpg" width="100px" height="100px"></center> | <center><img src="images/5.jpg" width="100px" height="100px"></center> | <center><img src="images/1.jpg" width="100px" height="100px"></center> | <center><img src="images/3.jpeg" width="100px" height="100px"></center> | <center><img src="images/4.jpg" width="100px" height="100px"></center> |
+|------------------------------------------------------------------------|------------------------------------------------------------------------|------------------------------------------------------------------------|-------------------------------------------------------------------------|------------------------------------------------------------------------|
+| <center>김신일</center>                                                   | <center>김희윤</center>                                                   | <center>박현지</center>                                                   | <center>이설인</center>                                                    | <center>최재원</center>                                                   |
+
+---
+
 ## 🗂 메뉴 구조도
 
 ![메뉴 구조도](images/menu-structure.jpg) <!-- 메뉴 구조도 이미지 추가 -->
@@ -44,13 +52,6 @@
 
 ---
 
-## 👥 팀원 소개
-
-| <center><img src="images/2.jpg" width="100px" height="100px"></center> | <center><img src="images/5.jpg" width="100px" height="100px"></center> | <center><img src="images/1.jpg" width="100px" height="100px"></center> | <center><img src="images/3.jpeg" width="100px" height="100px"></center> | <center><img src="images/4.jpg" width="100px" height="100px"></center> |
-|------------------------------------------------------------------------|------------------------------------------------------------------------|------------------------------------------------------------------------|-------------------------------------------------------------------------|------------------------------------------------------------------------|
-| <center>김신일</center>                                                   | <center>김희윤</center>                                                   | <center>박현지</center>                                                   | <center>이설인</center>                                                    | <center>최재원</center>                                                   |
-
----
 
 ## 🛠 기술 스택
 
