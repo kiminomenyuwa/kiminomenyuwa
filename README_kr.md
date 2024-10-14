@@ -69,8 +69,6 @@
 ![Spring JPA](https://img.shields.io/badge/Spring%20JPA-27AE60?style=for-the-badge&logo=spring&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-00758F?style=for-the-badge&logo=mysql&logoColor=white)
 ![Gradle](https://img.shields.io/badge/Gradle-1E8EAB?style=for-the-badge&logo=gradle&logoColor=white)
-
-### ☁️ **Infrastructure / Environment**
 ![Azure Document Intelligence](https://img.shields.io/badge/Azure%20Document%20Intelligence-0078D4?style=for-the-badge&logo=microsoft-azure&logoColor=white)
 ![Clova Map API](https://img.shields.io/badge/Clova%20Map%20API-00C73C?style=for-the-badge&logo=naver&logoColor=white)
 

@@ -3,6 +3,13 @@ use kiminomenyuwa;
 -- 외래 키 제약을 비활성화
 SET FOREIGN_KEY_CHECKS = 0;
 
+    select * from store where store.name = "키미노메뉴와";
+    delete from store where store.store_id = "30016";
+    delete from menu where store_id = '30016';
+    select * from menu where store_id = '30016';
+
+    delete from menu_category_mapping where menu_id = '3038';
+
 -- 테이블 삭제
 DROP TABLE IF EXISTS purchased_menu;
 DROP TABLE IF EXISTS receipt_verification;
