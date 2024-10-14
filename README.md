@@ -15,7 +15,7 @@
 - **👥 그룹 추천**: 그룹 내 친구들의 선호도에 맞춘 음식 추천
 - **💵 예산 기반 추천**: 학생 및 직장인들을 위한 예산에 맞춘 메뉴 추천
 - **📅 식사 내역 관리**: 사용자별 식사 내역을 기록하고 관리할 수 있는 캘린더 기능
-- **✍ 리뷰 작성 및 별점 부여**: 리뷰와 별점을 통해 추천의 정확도 향상
+- **✍ 리뷰 작성 및 별점 부여**: 영수증 인증을 통해 자동으로 유저 데이터 업데이트 및 추천의 정확도 향상
 - **🛠 사장님 가게 관리**: 가게 정보 등록 및 할인 메뉴 추가 기능 제공
 
 ---
@@ -30,11 +30,25 @@
 
 ## 🛠 기술 스택
 
-![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
-![Thymeleaf](https://img.shields.io/badge/Thymeleaf-005F0F?style=for-the-badge&logo=thymeleaf&logoColor=white)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white)
+### 🌐 **Front-End**
+![JavaScript](https://img.shields.io/badge/JavaScript-FFD700?style=for-the-badge&logo=javascript&logoColor=black)
+![jQuery](https://img.shields.io/badge/jQuery-0868AC?style=for-the-badge&logo=jquery&logoColor=white)
+![HTML](https://img.shields.io/badge/HTML-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS](https://img.shields.io/badge/CSS-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![Thymeleaf](https://img.shields.io/badge/Thymeleaf-39B54A?style=for-the-badge&logo=thymeleaf&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-8E44AD?style=for-the-badge&logo=bootstrap&logoColor=white)
+
+### 🖥 **Back-End**
+![Java](https://img.shields.io/badge/Java-17-F3913E?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.3-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)
+![Spring Security](https://img.shields.io/badge/Spring%20Security-1ABC9C?style=for-the-badge&logo=spring-security&logoColor=white)
+![Spring JPA](https://img.shields.io/badge/Spring%20JPA-27AE60?style=for-the-badge&logo=spring&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-00758F?style=for-the-badge&logo=mysql&logoColor=white)
+![Gradle](https://img.shields.io/badge/Gradle-1E8EAB?style=for-the-badge&logo=gradle&logoColor=white)
+
+### ☁️ **Infrastructure / Environment**
+![Azure Document Intelligence](https://img.shields.io/badge/Azure%20Document%20Intelligence-0078D4?style=for-the-badge&logo=microsoft-azure&logoColor=white)
+![Clova Map API](https://img.shields.io/badge/Clova%20Map%20API-00C73C?style=for-the-badge&logo=naver&logoColor=white)
 
 ---
 
